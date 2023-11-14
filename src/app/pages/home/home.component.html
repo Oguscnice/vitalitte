@@ -1,1 +1,42 @@
-<p>home works!</p>
+<div class="home-page">
+  <app-h1
+    [titleChild]="titleParentHome"
+    [backgroundImageChild]="backgroundImageParentHome"
+  ></app-h1>
+  <section>
+    <h2 class="pointer" routerLink="/atelier">Carnets Artisanaux</h2>
+    <p>
+      Pour vous organiser, vous détendre, égayer votre quotidien, ou simplement
+      garder une trace de vos moments inoubliables, vous trouverez à l'atelier
+      votre prochain agenda, album photos, bullet journal, carnet d’aquarelle,
+      de croquis, de notes, ou de partition.
+    </p>
+    <div class="images-preview flex space-around">
+      <div class="image-and-filter-color">
+        <img
+          src="../../../assets/images/figma/carnet02.jpg"
+          alt="Image d'un carnet fait à la main"
+        />
+        <div class="filter-color"></div>
+      </div>
+      <div class="image-and-filter-color">
+        <img
+          src="../../../assets/images/figma/carnet.jpeg"
+          alt="Image d'un carnet fait à la main"
+        />
+        <div class="filter-color"></div>
+      </div>
+      <div class="image-and-filter-color">
+        <img
+          src="../../../assets/images/figma/carnet03.jpg"
+          alt="Image d'un carnet fait à la main"
+        />
+        <div class="filter-color"></div>
+      </div>
+    </div>
+  </section>
+  <app-h1
+    [titleChild]="titleParentBio"
+    [backgroundImageChild]="backgroundImageParentBio"
+  ></app-h1>
+</div>

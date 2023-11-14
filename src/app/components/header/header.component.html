@@ -1,1 +1,38 @@
-<p>header works!</p>
+<nav class="flex space-between" #navBar>
+  <img
+    src="../../../assets/images/figma/icone.png"
+    alt="Logo du site VitaLitté"
+  />
+  <h3 class="flex center">VitaLitté</h3>
+  <ul
+    class="flex center space-around"
+    [ngClass]="
+      isMenuBurgerChecked && !initialLoad
+        ? 'menu-burger-visible'
+        : !isMenuBurgerChecked && !initialLoad
+        ? 'menu-burger-hidden'
+        : ''
+    "
+  >
+    <li
+      (click)="changeMenuBurgerVisibility()"
+      *ngFor="let item of navbarUser; let index = index"
+      routerLink="{{ item.routerLink }}"
+      class="flex center"
+    >
+      <p
+        class="flex center"
+        [ngClass]="index !== navbarUser.length - 1 ? 'underline' : ''"
+      >
+        {{ item.name }}
+      </p>
+    </li>
+  </ul>
+  <input type="checkbox" id="checkbox" (click)="changeMenuBurgerVisibility()" />
+  <label for="checkbox" class="toggle">
+    <div class="bars" id="bar1"></div>
+    <div class="bars" id="bar2"></div>
+    <div class="bars" id="bar3"></div>
+    <div class="bars" id="bar4"></div>
+  </label>
+</nav>

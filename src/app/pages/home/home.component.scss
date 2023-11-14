@@ -1,0 +1,46 @@
+@import "../../scss/variables.scss";
+
+.home-page {
+  p {
+    padding: 0 $fourth-padding;
+  }
+  .images-preview {
+    line-height: 0;
+    margin: $triple-padding 0;
+    .image-and-filter-color {
+      height: 100px;
+      img {
+        margin: auto;
+        height: 100px;
+        width: 100px;
+        border-radius: 8px;
+        border: 2px solid $lilac-dark;
+        box-shadow: 4px 4px 4px rgba($lilac-light, 0.8);
+        z-index: $z-index;
+      }
+      .filter-color {
+        z-index: $z-index + 1;
+        top: calc(
+          -100px - 4px
+        ); //car 2px de border à l'image, pour tout couvrir
+        height: calc(100px + 2px + 2px);
+        width: calc(
+          100px + 2px + 2px
+        ); //car 2px de border à l'image, pour tout couvrir
+        border-radius: 8px;
+      }
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1235px) {
+}

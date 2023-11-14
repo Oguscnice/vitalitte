@@ -1,0 +1,185 @@
+@import "../../scss/variables.scss";
+@import "../../../styles.scss";
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100% - ($double-padding * 2));
+  padding: $normal-padding $double-padding;
+  background-color: $white;
+  z-index: 999;
+  h3 {
+    font-family: $font-family-title;
+    font-size: $fourth-font-size;
+    letter-spacing: 0.2rem;
+  }
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
+
+  ul {
+    border-top: 1px solid $black;
+    position: fixed;
+    top: var(--height-header);
+    left: -100%;
+    height: calc(100vh - var(--height-header));
+    width: 100%;
+    flex-direction: column;
+    background-color: $white;
+    opacity: 0;
+    z-index: -1;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+    li {
+      height: 100%;
+      width: 100%;
+      background-color: $white;
+      transition: 0.4s all;
+      p {
+        width: 80%;
+        height: 100%;
+        font-size: $fourth-font-size;
+      }
+      .underline {
+        border-bottom: 4px solid $lilac;
+      }
+    }
+
+    li:hover {
+      background-color: $lilac;
+      // color: $white;
+    }
+  }
+
+  .menu-burger-visible {
+    animation-name: fadeInMenu;
+  }
+
+  .menu-burger-hidden {
+    animation-name: fadeOutMenu;
+  }
+
+  //---------------------------------------
+  //----for menu burger--------------------
+  //---------------------------------------
+  #checkbox {
+    display: none;
+  }
+
+  .toggle {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition-duration: 0.5s;
+  }
+
+  .bars {
+    width: 100%;
+    height: 4px;
+    background-color: $lilac;
+    border-radius: 4px;
+  }
+
+  #bar2,
+  #bar4 {
+    transition-duration: 0.8s;
+  }
+
+  #bar1,
+  #bar3 {
+    width: 70%;
+  }
+
+  #checkbox:checked + .toggle .bars {
+    position: absolute;
+    transition-duration: 0.5s;
+  }
+
+  #checkbox:checked + .toggle #bar2,
+  #checkbox:checked + .toggle #bar4 {
+    transform: scaleX(0);
+    transition-duration: 0.5s;
+  }
+
+  #checkbox:checked + .toggle #bar1 {
+    width: 100%;
+    transform: rotate(45deg);
+    transition-duration: 0.5s;
+  }
+
+  #checkbox:checked + .toggle #bar3 {
+    width: 100%;
+    transform: rotate(-45deg);
+    transition-duration: 0.5s;
+  }
+
+  #checkbox:checked + .toggle {
+    transition-duration: 0.5s;
+    transform: rotate(180deg);
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+  nav {
+    .img-and-name {
+      width: 20vw;
+      h3 {
+        padding-left: $double-padding;
+      }
+    }
+    ul {
+      width: 60vw;
+    }
+  }
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1235px) {
+}
+
+//Animation Menu Burger
+@keyframes fadeInMenu {
+  0% {
+    opacity: 0;
+    z-index: -1;
+    left: -100%;
+  }
+  1% {
+    left: 0vw;
+    z-index: 999;
+  }
+  100% {
+    left: 0vw;
+    z-index: 999;
+    opacity: 1;
+  }
+}
+@keyframes fadeOutMenu {
+  0% {
+    opacity: 1;
+    z-index: 999;
+    left: 0vw;
+  }
+  99% {
+    left: 0vw;
+    opacity: 0;
+  }
+  100% {
+    left: -100%;
+    z-index: -1;
+  }
+}
