@@ -113,6 +113,7 @@ html {
   scrollbar-color: transparent;
 }
 body {
+  overflow-x: hidden;
   line-height: 1.2;
   margin-top: var(--height-header);
 }
@@ -183,6 +184,11 @@ table {
 h1,
 h2 {
   font-family: $font-family-title;
+}
+
+h1,
+h2,
+h3 {
   width: 100%;
   text-align: center;
 }
@@ -200,12 +206,19 @@ h2 {
   margin: $triple-padding 0;
 }
 
+h3 {
+  font-size: $triple-font-size;
+  letter-spacing: 0.2rem;
+  margin: $double-padding 0;
+}
+
 p {
   font-family: $font-family-text;
   font-size: $double-font-size;
   text-align: center;
 }
-img{
+
+img {
   object-fit: cover;
   object-position: center;
 }
@@ -222,8 +235,14 @@ h1 {
 }
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
+  p {
+    font-size: $normal-font-size;
+    text-align: left;
+    line-height: 1.4;
+    letter-spacing: 0.2px;
+  }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1235px) {
+@media screen and (min-width: 1400px) {
 }

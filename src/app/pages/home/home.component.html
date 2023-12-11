@@ -1,4 +1,4 @@
-<div class="home-page">
+<div class="home-page flex column center">
   <app-h1
     [titleChild]="titleParentHome"
     [backgroundImageChild]="backgroundImageParentHome"
@@ -11,7 +11,7 @@
       votre prochain agenda, album photos, bullet journal, carnet d’aquarelle,
       de croquis, de notes, ou de partition.
     </p>
-    <div class="images-preview flex space-around">
+    <div class="images-preview flex">
       <div class="image-and-filter-color">
         <img
           src="../../../assets/images/figma/carnet02.jpg"
@@ -35,8 +35,66 @@
       </div>
     </div>
   </section>
-  <app-h1
-    [titleChild]="titleParentBio"
-    [backgroundImageChild]="backgroundImageParentBio"
-  ></app-h1>
+  <app-values></app-values>
+  <section>
+    <h2 class="pointer" routerLink="/atelier">Ateliers</h2>
+    <p>
+      Bienvenue dans notre atelier artisanal où la créativité rencontre
+      l'expertise. Ici, chaque pièce est façonnée à la main avec passion et
+      dévouement, reflétant l'art intemporel de l'artisanat. Découvrez nos
+      artisans talentueux et plongez dans l'univers magique où naissent des
+      œuvres uniques, empreintes d'authenticité et d'amour du métier.
+    </p>
+    <div class="images-preview flex space-around">
+      <div class="image-and-filter-color">
+        <img
+          src="../../../assets/images/figma/atelier.jpg"
+          alt="Image d'un carnet fait à la main"
+        />
+        <div class="filter-color"></div>
+      </div>
+      <div class="image-and-filter-color">
+        <img
+          src="../../../assets/images/figma/atelier02.jpg"
+          alt="Image d'un carnet fait à la main"
+        />
+        <div class="filter-color"></div>
+      </div>
+      <div class="image-and-filter-color">
+        <img
+          src="../../../assets/images/figma/atelier01.jpg"
+          alt="Image d'un carnet fait à la main"
+        />
+        <div class="filter-color"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="image-and-filter-color image-biography"
+       routerLink="/qui-suis-je">
+    <img  class="pointer"
+    [src]="backgroundImageBio" alt="Photo de l'artiste">
+    <h2 class="flex center">A Propos...</h2>
+    <div class="filter-color"></div>
+  </div>
+
+  <section class="booktique-section flex">
+    <div class="booktique-title-and-text flex column" #booktiqueSectionMonitored>
+      <h2>Booktique</h2>
+      <p>
+        Explorez notre boutique exquise, où chaque objet raconte une histoire.
+        Découvrez des trésors uniques, conçus avec passion, qui éveilleront vos
+        sens et éblouiront votre quotidien.
+      </p>
+    </div>
+    <div class="image-and-filter-color flex">
+      <img
+        src="../../../assets/images/figma/booktique.jpg"
+        alt="Image d'une boutique d'artiste"
+        #imgMonitored
+      />
+      <div class="filter-color pointer" routerLink="/booktique"></div>
+    </div>
+  </section>
+  <button class="btn-normal pointer" routerLink="/booktique">Accéder à la Booktique</button>
 </div>

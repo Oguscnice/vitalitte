@@ -1,0 +1,99 @@
+@import "../../scss/variables.scss";
+
+.biography-page {
+  section {
+    width: calc(100vw - ($fourth-padding * 2));
+    .image-and-filter-color {
+      padding: $fourth-padding;
+      @include one-third-picture;
+      img {
+        z-index: $z-index;
+        @include outline-picture;
+        @include one-third-picture;
+        object-position: center;
+      }
+      .filter-color {
+        z-index: $z-index + 1;
+        border-radius: 8px;
+        top: calc( 0px - (var(--height-img-monitored) + 2px));
+        left: 2px;
+        width: var(--width-img-monitored);
+        min-height: var(--height-img-monitored);
+        height: var(--height-img-monitored);
+      }
+    }
+  }
+  .bio-titles-and-image {
+    h3 {
+      margin-top: 0;
+    }
+    img {
+      float: right;
+      margin-left: 16px; /* Ajoute une marge à gauche pour séparer l'image du texte */
+      margin-bottom: 16px;
+      max-width: calc(100vw * (1 / 3) - $fourth-padding);
+      max-height: 320px;
+    }
+    .padding-none {
+      padding: 0;
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+
+  .biography-page {
+    section{
+      width: 100vw;
+      max-width: 650px;
+      p {
+      padding: 0;
+      }
+      .image-and-filter-color {
+        max-width: 650px;
+        max-height: calc(650px / 3);
+        img {
+          max-width: 650px;
+          max-height: calc(650px / 3);
+        }
+        .filter-color {
+          max-width: 650px;
+          min-height: calc(650px / 3);
+          max-height: calc(650px / 3);
+          top: calc((-650px / 3) - 2px);
+        }
+      }
+    }
+    .bio-titles-and-image {
+      padding: 0;
+    }
+
+  }
+}
+
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+  .biography-page {
+    section{
+      max-width: 800px;
+      p {
+      padding: 0;
+      }
+      .image-and-filter-color {
+        max-width: 800px;
+        img{
+          max-width: 800px;
+        }
+        .filter-color{
+          max-width: 800px;
+        }
+      }
+    }
+  }
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+}

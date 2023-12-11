@@ -1,4 +1,7 @@
-<div class="h1-image-container">
+<div
+  class="h1-image-container"
+  [ngClass]="titleChild === 'A propos...' ? 'thumbnail-h1-home' : ''"
+>
   <img
     src="{{ backgroundImageChild }}"
     alt="Image de fond pour la page {{ titleChild }}"

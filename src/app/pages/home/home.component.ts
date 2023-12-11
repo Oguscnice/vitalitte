@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -8,9 +8,27 @@ import { Component } from '@angular/core';
 export class HomeComponent {
   titleParentHome: string = 'Bienvenue';
   backgroundImageParentHome: string =
-  '../../../assets/images/figma/school-work.jpg';
+    '../../../assets/images/figma/school-work.jpg';
 
-  titleParentBio: string = 'A propos...';
-  backgroundImageParentBio: string =
-  '../../../assets/images/figma/woman.jpg';
+  backgroundImageBio: string = '../../../assets/images/loryane.jpg';
+
+  @ViewChild('imgMonitored') imgMonitored!: ElementRef;
+  @ViewChild('booktiqueSectionMonitored')
+  booktiqueSectionMonitored!: ElementRef;
+
+  ngAfterViewInit() {
+    const imgElement: HTMLImageElement = this.imgMonitored.nativeElement;
+
+    imgElement.onload = () => {
+      document.documentElement.style.setProperty(
+        '--height-img-monitored',
+        imgElement.offsetHeight + 'px'
+      );
+
+      document.documentElement.style.setProperty(
+        '--width-img-monitored',
+        imgElement.width + 'px'
+      );
+    };
+  }
 }

@@ -1,0 +1,20 @@
+@import "../scss/variables.scss";
+
+.btn-normal{
+  @include outline-picture;
+  background-color: $lilac-light;
+  margin: $half-margin;
+  padding: $double-padding;
+  font-family: $font-family-text;
+  font-size: $normal-font-size;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 8px 8px 4px rgba($lilac-light, 0.8);
+  color: $white;
+  text-shadow: 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
+  0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
+  0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
+  0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
+  0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
+  0 0 0.7px $black;
+}

@@ -1,15 +1,8 @@
 @import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
 
-footer {
-  margin-top: $triple-padding;
-  height: 60px;
-  background-color: $lilac;
-  i {
-    color: $white;
-    font-size: $triple-font-size;
-  }
-}
-
+// Breackpoint list
+// Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
 }
 // Tablettes vers ordinateurs portables :

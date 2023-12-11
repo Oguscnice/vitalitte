@@ -17,6 +17,17 @@ import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { H1Component } from './components/h1/h1.component';
+import { ValuesComponent } from './components/values/values.component';
+import { ContactFormComponent } from './components/contact-form/contact-form.component';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { NgIf } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 
 @NgModule({
   declarations: [
@@ -32,6 +43,8 @@ import { H1Component } from './components/h1/h1.component';
     BooktiqueComponent,
     ContactComponent,
     H1Component,
+    ValuesComponent,
+    ContactFormComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [AuthGuard, httpInterceptorProviders],

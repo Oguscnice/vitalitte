@@ -6,12 +6,13 @@ img,
 h1 {
   line-height: 0;
   height: 50vh;
-  width: 100%;
+  width: 100vw;
 }
 
 .h1-image-container {
   img {
     z-index: $z-index;
+    object-position: top;
   }
   .filter-color {
     z-index: $z-index + 1;
@@ -20,5 +21,64 @@ h1 {
   h1 {
     top: -100vh;
     z-index: $z-index + 2;
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+  .h1-image-container,
+  img,
+  .filter-color,
+  h1 {
+    height: 80vh;
+  }
+
+  .h1-image-container {
+    img {
+      z-index: $z-index;
+    }
+    .filter-color {
+      top: -80vh;
+    }
+    h1 {
+      top: -160vh;
+    }
+  }
+  .thumbnail-h1-home {
+    height: 50vh;
+    width: calc(100% - ($desktop-padding * 2));
+    max-width: 800px;
+
+    img,
+    .filter-color,
+    h1 {
+      line-height: 0;
+      height: 50vh;
+      max-width: 800px;
+    }
+    .filter-color {
+      top: -50vh;
+    }
+    h1 {
+      top: -100vh;
+    }
+  }
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+  .h1-image-container,
+  .thumbnail-h1-home {
+    @include screen-more-1400px;
+    img,
+    .filter-color,
+    h1 {
+      @include screen-more-1400px;
+    }
   }
 }

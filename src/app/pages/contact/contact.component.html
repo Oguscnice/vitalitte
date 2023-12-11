@@ -1,1 +1,24 @@
-<p>contact works!</p>
+<div class="contact-page flex column center">
+  <app-h1
+    [titleChild]="titleParentHome"
+    [backgroundImageChild]="backgroundImageParentHome"
+  ></app-h1>
+
+    <h2>Infos Pratiques </h2>
+    <section class="flex center space-between">
+    <div>
+      <h3>Horaires</h3>
+      <p>Lundi -> Vendredi : 8h - 16h</p>
+      <h3>Adresse</h3>
+      <p>130 rue de Gerland</p>
+      <p>69007 Lyon</p>
+  </div>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d174.0548777973845!2d4.839142840363113!3d45.73354051956652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ea24ed0467d3%3A0x37efdcfc4f4d546f!2sRoyal%20Burger!5e0!3m2!1sfr!2sfr!4v1700845395818!5m2!1sfr!2sfr"
+      allowfullscreen=""
+      loading="lazy">
+    </iframe>
+  </section>
+
+  <app-contact-form></app-contact-form>
+            
+</div>

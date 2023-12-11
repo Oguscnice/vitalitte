@@ -1,0 +1,82 @@
+@import "../../scss/variables.scss";
+
+.values-container {
+  width: 90vw;
+  justify-content: space-around;
+
+  .value-icone-and-name {
+    // width: 24vw;
+
+    i,
+    span {
+      height: 84px;
+      width: 84px;
+      border: 2px solid $lilac;
+      border-radius: 50%;
+      color: $lilac;
+    }
+    span {
+      font-size: calc($fourth-font-size * 1.4);
+    }
+    i {
+      font-size: $fourth-font-size;
+    }
+    p {
+      max-width: 80px;
+      margin-top: $normal-margin;
+      font-size: $normal-font-size;
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  .values-container {
+    width: 100vw;
+    max-width: 650px;
+    justify-content: space-between;
+    .value-icone-and-name {
+      // width: 0vw;
+      // width: 100%;
+      i,
+      span {
+        height: 96px;
+        width: 96px;
+      }
+      p {
+        max-width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+  .values-container {
+    max-width: 800px;
+    .value-icone-and-name {
+      i,
+      span {
+        height: 96px;
+        width: 96px;
+      }
+    }
+  }
+}
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+  .values-container {
+    @include screen-more-1400px;
+    .value-icone-and-name {
+      i,
+      span {
+        height: 96px;
+        width: 96px;
+      }
+      p {
+        max-width: 80px;
+      }
+    }
+  }
+}

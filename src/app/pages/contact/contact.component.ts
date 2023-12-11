@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent {
+  titleParentHome: string = 'Contact';
+  backgroundImageParentHome: string =
+    '../../../assets/images/figma/contact.jpg';
 
 }

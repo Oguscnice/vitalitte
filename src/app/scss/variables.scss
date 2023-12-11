@@ -1,7 +1,13 @@
+// ----- height-footer-and-header;
+:root {
+  --height-footer: 0px;
+  --height-header: 0px;
+  --height-booktique-section-monitored: 0px;
+  --height-img-monitored: 0px;
+  --width-img-monitored: 0px;
+}
+
 // ----- color -----
-/* TODO : A DEFINIR AVEC LE FIGMA 
-*  et définir ce qu'on veut
-*/
 $white: #ffffff;
 $black: #000000;
 $lilac: rgba(182, 100, 210);
@@ -14,6 +20,8 @@ $double-padding: 2 * $normal-padding;
 $triple-padding: 3 * $normal-padding;
 $fourth-padding: 4 * $normal-padding;
 $half-padding: calc($normal-padding / 2);
+$tablet-padding: 16vw;
+$desktop-padding: 24vw;
 
 // ----- margin -----
 $normal-margin: 8%;
@@ -46,8 +54,21 @@ $font-family-text: "Helvetica", sans-serif;
 
 $z-index: 1;
 
-// ----- height-footer-and-header;
-:root {
-  --height-footer: 0px;
-  --height-header: 0px;
+@mixin outline-picture {
+  border-radius: 8px;
+  border: 2px solid $lilac-dark;
+  box-shadow: 4px 4px 4px rgba($lilac-light, 0.8);
+  z-index: $z-index;
+}
+
+@mixin one-third-picture {
+  width: calc(100vw - (2 * $fourth-padding));
+  height: calc((100vw - (2 * $fourth-padding)) / 3);
+}
+
+@mixin screen-more-1400px {
+  padding: 0;
+  padding: 0vw;
+  width: 100vw;
+  max-width: 800px;
 }

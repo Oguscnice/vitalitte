@@ -1,46 +1,192 @@
 @import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
+
+:root {
+  --height-img-monitored: 0px;
+  --width-img-monitored: 0px;
+}
 
 .home-page {
-  p {
-    padding: 0 $fourth-padding;
+  section {
+    p {
+      padding: 0 $fourth-padding;
+    }
+    .images-preview {
+      justify-content: space-around;
+      line-height: 0;
+      margin: $normal-margin 0;
+      .image-and-filter-color {
+        height: 120px;
+        img {
+          @include outline-picture;
+          margin: auto;
+          height: 120px;
+          width: 120px;
+        }
+        .filter-color {
+          z-index: $z-index + 1;
+          border-radius: 8px;
+          top: calc(
+            -120px - 4px
+          ); //car 2px de border à l'image, pour tout couvrir
+          height: calc(120px + 2px + 2px);
+          width: calc(
+            120px + 2px + 2px
+          ); //car 2px de border à l'image, pour tout couvrir
+        }
+      }
+    }
   }
-  .images-preview {
-    line-height: 0;
-    margin: $triple-padding 0;
+  .image-biography{
+    @include outline-picture;
+    max-width: 100vw;
+    height: 32vh;
+    overflow: hidden;
+    img{
+      height: 32vh;
+      max-width: 80vw;
+      z-index: $z-index;
+      object-position: top;
+    }
+    h2{
+      position : relative;
+      height: 32vh;
+      color: $white;
+      top: -32vh;
+      z-index: $z-index + 2;
+      margin: 0px;
+    }
+    .filter-color{
+      z-index: $z-index + 1;
+      height: 32vh;
+      top: calc(-64vh - 4px);
+    }
+  }
+  .booktique-section {
+    width: 100%;
+    .booktique-title-and-text {
+      width: calc(100vw * (2 / 3));
+      p {
+        padding: 0 $fourth-padding;
+      }
+    }
     .image-and-filter-color {
-      height: 100px;
+      padding-top: $fourth-padding;
+      width: calc(100vw * (1 / 3));
+      height: 100%;
       img {
-        margin: auto;
-        height: 100px;
-        width: 100px;
-        border-radius: 8px;
-        border: 2px solid $lilac-dark;
-        box-shadow: 4px 4px 4px rgba($lilac-light, 0.8);
         z-index: $z-index;
+        @include outline-picture;
+        height: 40vw;
+        max-height: 175px;
       }
       .filter-color {
         z-index: $z-index + 1;
-        top: calc(
-          -100px - 4px
-        ); //car 2px de border à l'image, pour tout couvrir
-        height: calc(100px + 2px + 2px);
-        width: calc(
-          100px + 2px + 2px
-        ); //car 2px de border à l'image, pour tout couvrir
         border-radius: 8px;
+        left: calc(0px - (var(--width-img-monitored) + 2px));
+        width: var(--width-img-monitored);
+        min-width: var(--width-img-monitored);
+        height: var(--height-img-monitored);
       }
     }
+  }
+  button{
+
   }
 }
 
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
+  .home-page {
+    section {
+      max-width: 650px;
+      p {
+        padding: 0;
+      }
+      .images-preview {
+        justify-content: space-between;
+        .image-and-filter-color {
+          height: 180px;
+          img {
+            height: 180px;
+            width: 180px;
+          }
+          .filter-color {
+            top: calc(
+              -180px - 4px
+            ); //car 2px de border à l'image, pour tout couvrir
+            height: calc(180px + 2px + 2px);
+            width: calc(
+              180px + 2px + 2px
+            ); //car 2px de border à l'image, pour tout couvrir
+          }
+        }
+      }
+    }
+    .booktique-section {
+      align-items: center;
+      width: 100vw;
+      .booktique-title-and-text {
+        max-width: calc(650px * (2 / 3));
+      }
+      .image-and-filter-color {
+        max-width: calc(650px * (1 / 3));
+
+      }
+    }
+  }
 }
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
+  .home-page {
+    section {
+      max-width: 800px;
+      .images-preview {
+        .image-and-filter-color {
+          height: 220px;
+          img {
+            height: 220px;
+            width: 220px;
+          }
+          .filter-color {
+            top: calc(
+              -220px - 4px
+            ); //car 2px de border à l'image, pour tout couvrir
+            height: calc(220px + 2px + 2px);
+            width: calc(
+              220px + 2px + 2px
+            ); //car 2px de border à l'image, pour tout couvrir
+          }
+        }
+      }
+    }
+    .booktique-section {
+      .booktique-title-and-text {
+        max-width: calc(800px * (2 / 3));
+        p {
+          padding-left: 0;
+        }
+      }
+      .image-and-filter-color {
+        max-width: calc(800px * (1 / 3));        
+        max-width: 100%;
+        img {
+          max-height: 160px;
+          max-width: 100%;
+        }
+      }
+    }
+  }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1235px) {
+@media screen and (min-width: 1400px) {
+  .home-page {
+    @include screen-more-1400px;
+    margin: 0 auto;
+    section {
+      @include screen-more-1400px;
+    }
+  }
 }
