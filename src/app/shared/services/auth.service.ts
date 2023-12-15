@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { FormGroup } from '@angular/forms';
-import { URLAPI } from '../variables';
+import { URLAPI } from '../variables/others';
 import { Observable } from 'rxjs';
 
 @Injectable({

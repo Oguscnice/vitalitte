@@ -1,7 +1,7 @@
 import { ActivePageService } from './../../shared/services/active-page.service';
 import { Component, ElementRef, ViewChild, Renderer2  } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
-import { NAVBAR_USER } from 'src/app/shared/variables';
+import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
 
 @Component({
   selector: 'app-header',
@@ -33,9 +33,10 @@ export class HeaderComponent {
   }
 
   openSubmenu(itemClicked : Menu){
+    const actualState = itemClicked.submenu?.isOpen
     this.closeSubmenu()
     if(itemClicked.submenu){
-      itemClicked.submenu.isOpen = !itemClicked.submenu.isOpen
+      itemClicked.submenu.isOpen = !actualState
     }
   }
 

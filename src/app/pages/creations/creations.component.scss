@@ -1,7 +1,69 @@
-.page{
-  display: flex;
-  justify-content: center;
+@import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
+@import "../../../styles.scss";
+
+$customization-picture-size : 120px;
+
+.creations-page{
+  .cards-choice{
+    margin-top: $normal-margin;
+    width: 100vw;
+  }
+  .user-choice{
+    margin-top: $normal-margin;
+    padding: 0 $fourth-padding;
+    h4{
+      font-size: $triple-font-size;
+      padding: $fourth-padding 0;
+    }
+    .similar-title{
+      font-family: $font-family-title;
+      font-size: $fourth-font-size;
+      padding: $fourth-padding 0;
+      letter-spacing: 4px;
+    }
+    .customization{
+      .custom-card{
+        padding-bottom : $fourth-padding;
+        .image-and-filter-color{
+          height: calc($customization-picture-size * 2);
+          width: $customization-picture-size;
+          img{
+            @include outline-picture;
+            min-height: calc($customization-picture-size * 2);
+            min-width: $customization-picture-size;
+          }
+          .filter-color {
+            z-index: $z-index + 1;
+            border-radius: 8px;
+            top: calc(0px - ($customization-picture-size * 2 ) - 4px);
+            min-height: calc($customization-picture-size * 2);
+            width: calc($customization-picture-size + 2px + 2px);
+          }
+        }
+        .title-description{
+          padding-left: $fourth-padding;
+          h4{
+            height : 20%;
+            padding: 0px;
+            display: flex;
+            align-items: center;
+          }
+          p{
+            height: 80%;
+            text-align: left;
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
 }
+
+  //---------------------------------------
+  //----for card animation-----------------
+  //---------------------------------------
 .card {
   position: relative;
   width: 190px;
@@ -15,7 +77,7 @@
   gap: 12px;
   border-radius: 8px;
   cursor: pointer;
-  color: white;
+  color: $white;
 }
 
 .card::before {
@@ -27,7 +89,7 @@
   width: 200px;
   height: 264px;
   border-radius: 10px;
-  background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100% );
+  background: linear-gradient(-45deg, $lilac-dark 0%, $lilac-light 100% );
   z-index: -10;
   pointer-events: none;
   transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -38,15 +100,16 @@
   z-index: -1;
   position: absolute;
   inset: 0;
-  background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100% );
+  background: linear-gradient(-45deg, $lilac-dark 0%, $lilac-light 100% );
   transform: translate3d(0, 0, 0) scale(0.95);
   filter: blur(20px);
 }
 
 .heading {
-  font-size: 20px;
-  text-transform: capitalize;
+  font-size: $triple-font-size;
   font-weight: 700;
+  font-family: $font-family-title;
+  letter-spacing: 3px;
 }
 
 .card p:not(.heading) {
@@ -54,8 +117,10 @@
 }
 
 .card p:last-child {
-  color: #e81cff;
+  color: $lilac-light;
   font-weight: 600;
+  width: 100%;
+  text-align: left;
 }
 
 .card:hover::after {
@@ -66,3 +131,22 @@
   transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
 }
 
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  .creations-page{
+    .cards-choice{
+      max-width: 650px;
+    }
+    .user-choice{
+      max-width: 650px;
+    }
+  }
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+}

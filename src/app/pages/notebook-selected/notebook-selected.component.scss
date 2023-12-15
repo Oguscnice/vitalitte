@@ -1,6 +1,13 @@
 @import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
 @import "../../../styles.scss";
 
+.notebook-selected-page{
+  padding: 0 $fourth-padding;
+  .components-list{
+    flex-wrap: wrap;
+  }
+}
 
 // Breackpoint list
 // Mobiles vers Tablettes :

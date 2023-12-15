@@ -1,0 +1,63 @@
+@import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
+@import "../../../styles.scss";
+
+$notebook-picture-size : calc(100vw - ($fourth-padding * 2));
+
+.notebooks-list{
+  h5{
+    font-size: $double-font-size;
+    padding-bottom: $triple-padding;
+    width: 100%;
+  }
+  p{
+    padding: $double-padding 0;
+    text-align: left;
+    font-size: $normal-font-size;
+  }
+  .image-and-filter-color {
+    height: $notebook-picture-size;
+    width: $notebook-picture-size;
+    img {
+      @include outline-picture;
+      min-height: $notebook-picture-size;
+      min-width: $notebook-picture-size;
+    }
+    .filter-color {
+      z-index: $z-index + 1;
+      border-radius: 8px;
+      top: calc( 0px - $notebook-picture-size - 4px);
+      min-height: calc($notebook-picture-size + 2px + 2px);
+      width: calc($notebook-picture-size + 2px + 2px);
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  $notebook-picture-size : 650px;
+  .notebooks-list{
+    max-width: 650px;
+    .image-and-filter-color {
+      max-width: 650px;
+      max-height: 650px;
+      img{
+        min-width: 650px;
+        min-height: 650px;
+      }
+      .filter-color {
+        top: calc( -650px - 4px);
+        min-height: calc(650px + 2px + 2px);
+        width: calc(650px + 2px + 2px);
+      }
+    }
+  }
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+}

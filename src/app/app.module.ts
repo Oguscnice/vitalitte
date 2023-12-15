@@ -27,6 +27,11 @@ import { NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoaderComponent } from './components/loader/loader.component';
+import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
+import { NotebooksComponent } from './pages/notebooks/notebooks.component';
+import { NotebookSelectedComponent } from './pages/notebook-selected/notebook-selected.component';
+import { NotebooksListComponent } from './components/notebooks-list/notebooks-list.component';
 
 
 @NgModule({
@@ -45,8 +50,24 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     H1Component,
     ValuesComponent,
     ContactFormComponent,
+    LoaderComponent,
+    FormulaireEnvoyeComponent,
+    NotebooksComponent,
+    NotebookSelectedComponent,
+    NotebooksListComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgIf,
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule
+  ],
   providers: [AuthGuard, httpInterceptorProviders],
   bootstrap: [AppComponent],
 })

@@ -2,18 +2,13 @@
 @import "../../scss/buttons.scss";
 @import "../../../styles.scss";
 
-.contact-page{
-  section {
-    flex-direction: column;
-    iframe{
-      margin-top: $triple-padding;
-      @include outline-picture;
-      height: 400px;
-      width: 80vw;
-      max-width: 500px;
+.form-send-page{
+  height: calc(100vh - (var(--height-header) + var(--height-footer) + $double-padding) + 2px);
+  div{
+    p{
+      padding: $fourth-padding;
     }
   }
-
 }
 
 // Breackpoint list
@@ -22,17 +17,6 @@
 }
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
-  .contact-page{
-    section {
-      width: 100vw;
-      max-width: 650px;
-      flex-direction: row;
-      iframe{
-        max-height: 320px;
-        max-width: 320px;
-      }
-    }
-  }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :

@@ -1,7 +1,8 @@
 @import "../../scss/variables.scss";
+@import "../../../styles.scss";
 
 footer {
-  margin-top: $triple-padding;
+  margin-top: $normal-margin;
   height: 60px;
   background-color: $lilac;
   i {

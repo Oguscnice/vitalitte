@@ -7,6 +7,9 @@ import { CreationsComponent } from './pages/creations/creations.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
+import { NotebooksComponent } from './pages/notebooks/notebooks.component';
+import { NotebookSelectedComponent } from './pages/notebook-selected/notebook-selected.component';
 
 const routes: Routes = [
   {
@@ -26,6 +29,9 @@ const routes: Routes = [
   { path: 'booktique', component: BooktiqueComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'page-404', component: Page404Component },
+  { path: 'formulaire-envoye', component : FormulaireEnvoyeComponent},
+  { path: 'carnets/:notebookSlug', component : NotebookSelectedComponent},
+  { path: 'carnets', component : NotebooksComponent},
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: 'page-404' },
 ];

@@ -246,3 +246,6 @@ h1 {
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

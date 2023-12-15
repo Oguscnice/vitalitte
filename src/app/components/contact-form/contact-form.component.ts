@@ -54,7 +54,7 @@ export class ContactFormComponent {
   
   validatePhone(): boolean {
     const phoneRegex = /^[0-9]{10}$/;
-    return this.phoneValue.match(phoneRegex) !== null;
+    return (this.phoneValue.match(phoneRegex) !== null);
   }
   
   checkStringValidity(value: string, min: number, max: number): boolean {
@@ -84,8 +84,9 @@ export class ContactFormComponent {
     ) {
       this.hasErrors = false;
       return true;
+    }else{
+      this.hasErrors = true;
+      return false;
     }
-    this.hasErrors = true;
-    return false;
   }
 }

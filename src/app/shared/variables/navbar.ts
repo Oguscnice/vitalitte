@@ -1,6 +1,5 @@
-import { Menu } from './interfaces/Menu';
+import { Menu } from '../interfaces/Menu';
 
-export const URLAPI = 'http://localhost:8080/api';
 export const NAVBAR_USER: Menu[] = [
   {
     name: 'Accueil',

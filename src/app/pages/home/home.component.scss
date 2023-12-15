@@ -1,5 +1,6 @@
 @import "../../scss/variables.scss";
 @import "../../scss/buttons.scss";
+@import "../../../styles.scss";
 
 :root {
   --height-img-monitored: 0px;
@@ -26,13 +27,9 @@
         .filter-color {
           z-index: $z-index + 1;
           border-radius: 8px;
-          top: calc(
-            -120px - 4px
-          ); //car 2px de border à l'image, pour tout couvrir
+          top: calc(-120px - 4px); //car 2px de border à l'image, pour tout couvrir
           height: calc(120px + 2px + 2px);
-          width: calc(
-            120px + 2px + 2px
-          ); //car 2px de border à l'image, pour tout couvrir
+          width: calc(120px + 2px + 2px); //car 2px de border à l'image, pour tout couvrir
         }
       }
     }
@@ -89,9 +86,6 @@
         height: var(--height-img-monitored);
       }
     }
-  }
-  button{
-
   }
 }
 
