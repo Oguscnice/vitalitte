@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValuesComponent } from './values.component';
+import { CreateNotebookComponent } from './create-notebook.component';
 
-describe('ValuesComponent', () => {
-  let component: ValuesComponent;
-  let fixture: ComponentFixture<ValuesComponent>;
+describe('CreateNotebookComponent', () => {
+  let component: CreateNotebookComponent;
+  let fixture: ComponentFixture<CreateNotebookComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ValuesComponent ]
+      declarations: [ CreateNotebookComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ValuesComponent);
+    fixture = TestBed.createComponent(CreateNotebookComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -5,7 +5,6 @@
 img,
 .filter-color,
 h1 {
-  line-height: 0;
   height: 50vh;
   width: 100vw;
 }
@@ -17,11 +16,11 @@ h1 {
   }
   .filter-color {
     z-index: $z-index + 1;
-    top: -50vh;
+    top: calc(-50vh - 4px);
   }
   h1 {
-    top: -100vh;
     z-index: $z-index + 2;
+    top: calc(-100vh - 4px);
   }
 }
 
@@ -44,10 +43,10 @@ h1 {
       z-index: $z-index;
     }
     .filter-color {
-      top: -80vh;
+      top: calc(-80vh - 4px);
     }
     h1 {
-      top: -160vh;
+      top: calc(-160vh - 4px);
     }
   }
   .thumbnail-h1-home {

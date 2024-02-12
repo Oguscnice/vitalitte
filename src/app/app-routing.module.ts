@@ -10,6 +10,7 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
 import { NotebooksComponent } from './pages/notebooks/notebooks.component';
 import { NotebookSelectedComponent } from './pages/notebook-selected/notebook-selected.component';
+import { CreateNotebookComponent } from './pages/create-notebook/create-notebook.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'booktique', component: BooktiqueComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'page-404', component: Page404Component },
+  { path: 'imaginer-mon-carnet', component: CreateNotebookComponent },
   { path: 'formulaire-envoye', component : FormulaireEnvoyeComponent},
   { path: 'carnets/:notebookSlug', component : NotebookSelectedComponent},
   { path: 'carnets', component : NotebooksComponent},

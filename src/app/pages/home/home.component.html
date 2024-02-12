@@ -1,8 +1,12 @@
 <div class="home-page flex column center">
+
+  <app-news-headband></app-news-headband>
+
   <app-h1
     [titleChild]="titleParentHome"
     [backgroundImageChild]="backgroundImageParentHome"
   ></app-h1>
+
   <section>
     <h2 class="pointer" routerLink="/atelier">Carnets Artisanaux</h2>
     <p>
@@ -11,29 +15,8 @@
       votre prochain agenda, album photos, bullet journal, carnet d’aquarelle,
       de croquis, de notes, ou de partition.
     </p>
-    <div class="images-preview flex">
-      <div class="image-and-filter-color">
-        <img
-          src="../../../assets/images/figma/carnet02.jpg"
-          alt="Image d'un carnet fait à la main"
-        />
-        <div class="filter-color"></div>
-      </div>
-      <div class="image-and-filter-color">
-        <img
-          src="../../../assets/images/figma/carnet.jpeg"
-          alt="Image d'un carnet fait à la main"
-        />
-        <div class="filter-color"></div>
-      </div>
-      <div class="image-and-filter-color">
-        <img
-          src="../../../assets/images/figma/carnet03.jpg"
-          alt="Image d'un carnet fait à la main"
-        />
-        <div class="filter-color"></div>
-      </div>
-    </div>
+    <app-images-preview [picturesArray]="handmadeNotebooksPictures">
+    </app-images-preview>
   </section>
   <app-values></app-values>
   <section>
@@ -45,37 +28,24 @@
       artisans talentueux et plongez dans l'univers magique où naissent des
       œuvres uniques, empreintes d'authenticité et d'amour du métier.
     </p>
-    <div class="images-preview flex space-around">
-      <div class="image-and-filter-color">
-        <img
-          src="../../../assets/images/figma/atelier.jpg"
-          alt="Image d'un carnet fait à la main"
-        />
-        <div class="filter-color"></div>
-      </div>
-      <div class="image-and-filter-color">
-        <img
-          src="../../../assets/images/figma/atelier02.jpg"
-          alt="Image d'un carnet fait à la main"
-        />
-        <div class="filter-color"></div>
-      </div>
-      <div class="image-and-filter-color">
-        <img
-          src="../../../assets/images/figma/atelier01.jpg"
-          alt="Image d'un carnet fait à la main"
-        />
-        <div class="filter-color"></div>
-      </div>
-    </div>
+    <app-images-preview [picturesArray]="workshopPictures" >
+    </app-images-preview>
   </section>
 
   <div class="image-and-filter-color image-biography"
        routerLink="/qui-suis-je">
-    <img  class="pointer"
+    <!-- <img  class="pointer"
     [src]="backgroundImageBio" alt="Photo de l'artiste">
     <h2 class="flex center">A Propos...</h2>
-    <div class="filter-color"></div>
+    <div class="filter-color"></div> -->
+
+      <img
+      class="pointer"
+      [src]="backgroundImageBio" alt="Photo de l'artiste"
+      />
+      <div class="filter-color"></div>
+
+
   </div>
 
   <section class="booktique-section flex">

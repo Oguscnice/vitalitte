@@ -7,7 +7,7 @@ export const NAVBAR_USER: Menu[] = [
     submenu : null
   },
   {
-    name: "L'atelier",
+    name: "L'univers",
     routerLink: '/atelier',
     submenu : {
       isOpen : false,

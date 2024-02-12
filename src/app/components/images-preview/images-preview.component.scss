@@ -1,0 +1,69 @@
+@import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
+@import "../../../styles.scss";
+
+.images-preview {
+  justify-content: space-around;
+  line-height: 0;
+  margin: $normal-margin 0;
+  .image-and-filter-color {
+    height: 120px;
+    img {
+      @include outline-picture;
+      margin: auto;
+      height: 120px;
+      width: 120px;
+    }
+    .filter-color {
+      z-index: $z-index + 1;
+      border-radius: 8px;
+      top: calc(-120px - 4px); //car 2px de border à l'image, pour tout couvrir
+      height: calc(120px + 2px + 2px);
+      width: calc(120px + 2px + 2px); //car 2px de border à l'image, pour tout couvrir
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  .image-and-filter-color {
+    height: 180px;
+    img {
+      height: 180px;
+      width: 180px;
+    }
+    .filter-color {
+      top: calc(
+        -180px - 4px
+      ); //car 2px de border à l'image, pour tout couvrir
+      height: calc(180px + 2px + 2px);
+      width: calc(
+        180px + 2px + 2px
+      ); //car 2px de border à l'image, pour tout couvrir
+    }
+  }
+}
+
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+  .image-and-filter-color {
+    height: 220px;
+    img {
+      height: 220px;
+      width: 220px;
+    }
+    .filter-color {
+      top: calc(
+        -220px - 4px
+      ); //car 2px de border à l'image, pour tout couvrir
+      height: calc(220px + 2px + 2px);
+      width: calc(
+        220px + 2px + 2px
+      ); //car 2px de border à l'image, pour tout couvrir
+    }
+  }
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {}

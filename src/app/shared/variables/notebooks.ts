@@ -7,22 +7,20 @@ export const NOTEBOOKS: Notebook[] = [
   mainPicture : '../../../assets/images/figma/carnet.jpeg',
   introduction : `Un trésor artisanal dans les tons apaisants de bleu océan. Fabriqué à la main avec amour et respect de l'environnement, chaque page offre une toile pour vos pensées créatives. Inspiré par la mer, ce carnet biodégradable vous invite à explorer vos idées tout en préservant notre planète, une page à la fois.`, 
   price : 9.90,
+  pictures : [],
   descriptions:[
-    `incarne l'essence même de la nature authentique et durable. Sa couverture, confectionnée à la main avec des matériaux écologiques, évoque la chaleur du soleil méditerranéen à travers des tons terreux et des motifs inspirés de la flore locale.`,
-    `À l'ouverture, les pages du carnet révèlent un papier recyclé de haute qualité, offrant une texture douce et un support idéal pour l'expression artistique ou l'écriture. Chaque feuille raconte l'histoire de la Méditerranée, avec des détails subtils tels que des empreintes végétales discrètes ou des encres à base de pigments naturels, créant ainsi une expérience sensorielle unique à chaque utilisation.`,
-    `L'âme de la Méditerranée est capturée à travers des illustrations délicates et des citations inspirantes dispersées à travers les pages, invitant à la contemplation et à la réflexion. Des motifs de vignes, d'oliviers et de vagues rappellent le paysage pittoresque de la région, tandis que des teintes de bleu et de vert évoquent la mer scintillante et les collines verdoyantes.`,
-    `Chaque carnet artisanal bio sur le thème de la Méditerranée est le fruit d'un savoir-faire traditionnel transmis de génération en génération, soulignant l'importance de la préservation de l'environnement et de la culture locale. En tenant ce carnet entre vos mains, vous vous connectez directement à la beauté intemporelle de la Méditerranée, tout en participant à la promotion d'une approche éthique et respectueuse de la fabrication artisanale.`
+    ``
     ],
-    components : [
-      'Papier recyclé et durable',
-      'papier mâché',
-      'cuir végétalien',
-      'carton recyclé',
-      'Encres végétales',
-      'reliure à la française',
-      'motifs végétaux',
-      'attaches en corde',
-      'ornements végétaux séchés'
+  components : [
+    'Papier recyclé et durable',
+    'papier mâché',
+    'cuir végétalien',
+    'carton recyclé',
+    'Encres végétales',
+    'reliure à la française',
+    'motifs végétaux',
+    'attaches en corde',
+    'ornements végétaux séchés'
     ]
   },
   {
@@ -31,6 +29,7 @@ export const NOTEBOOKS: Notebook[] = [
     mainPicture : '../../../assets/images/figma/carnet01.jpg',
     introduction : `Une immersion dans la nature à chaque page. Teintes vertes apaisantes évoquent les feuillages luxuriants. Fait main avec un engagement écologique, chaque carnet offre un espace pour vos pensées créatives. Inspiré par la nature, ce carnet biodégradable vous encourage à cultiver vos idées tout en préservant notre environnement, page après page.`, 
     price : 8.90,
+    pictures : [],
     descriptions : [
       `une célébration de la nature et de la durabilité. Sa couverture, réalisée à la main à partir de matériaux écologiques, reflète la richesse de la vie végétale avec des motifs floraux délicats et des teintes organiques. Chaque détail est une ode à la beauté naturelle, mettant en lumière la diversité des plantes qui peuplent notre planète.`,
       `À l'intérieur, les pages en papier recyclé offrent une toile respectueuse de l'environnement pour capturer les pensées, les croquis ou les notes. La texture douce du papier invite à l'exploration créative, tandis que des empreintes végétales subtiles rappellent le lien intrinsèque entre l'homme et la nature.`,
@@ -54,6 +53,7 @@ export const NOTEBOOKS: Notebook[] = [
     mainPicture : '../../../assets/images/figma/carnet02.jpg',
     introduction : `Une odyssée enflammée à chaque écriture. Les teintes chaudes évoquent les flammes dansantes. Réalisé à la main avec passion, chaque page offre un espace pour vos pensées ardentes. Inspiré par le feu, ce carnet biodégradable vous invite à graver vos idées tout en préservant notre planète, chaque mot s'embrasant sur ses pages.`, 
     price : 12.50,
+    pictures : [],
     descriptions : [
       ` évoque la puissance primitive et réconfortante du feu. Sa couverture, méticuleusement conçue à la main à partir de matériaux écologiques, reflète la lueur chaleureuse des braises avec des nuances de rouge, d'orange et de noir. Les motifs captivent l'esprit, évoquant le mouvement hypnotique des flammes dansantes.`,
       `À l'intérieur, les pages en papier recyclé révèlent une toile résistante mais délicate, prête à accueillir les pensées ardentes et les idées passionnées. Chaque feuille semble prête à s'embraser, créant une toile où l'expression artistique ou l'écriture prend vie de manière flamboyante.`,
@@ -76,6 +76,7 @@ export const NOTEBOOKS: Notebook[] = [
     mainPicture: '../../../assets/images/figma/carnet03.jpg',
     introduction: `Une plongée envoûtante dans les profondeurs marines. Ce carnet artisanal bio, teinté des nuances apaisantes du bleu océan, est créé à la main avec un profond respect pour l'environnement. Chaque page vous offre une toile pour vos pensées créatives, tandis que les motifs inspirés de la mer vous invitent à explorer votre propre océan d'idées.`,
     price: 11.90,
+    pictures : [],
     descriptions: [
       `La couverture, élaborée avec des matériaux écologiques, capture la beauté mystérieuse des fonds marins. Des motifs marins tels que les vagues, les coquillages et les étoiles de mer ornent la couverture, évoquant la richesse et la diversité de la vie sous-marine.`,
       `Les pages du carnet révèlent un papier recyclé de haute qualité, offrant une surface lisse pour exprimer vos pensées et créations. Chaque feuille devient une fenêtre vers l'océan, avec des détails subtils tels que des reflets irisés ou des empreintes d'algues marines.`,
@@ -96,6 +97,7 @@ export const NOTEBOOKS: Notebook[] = [
     mainPicture: '../../../assets/images/figma/carnet04.jpg',
     introduction: `Un carnet féerique où chaque page est une invitation à explorer un jardin magique. Les teintes pastel et les motifs floraux délicats créent une ambiance enchanteresse. Fabriqué à la main avec un engagement écologique, ce carnet biodégradable offre un espace créatif pour cultiver vos idées et laisser fleurir votre imagination.`,
     price: 10.50,
+    pictures : [],
     descriptions: [
       `La couverture, ornée de motifs floraux et de papillons, transporte le regard dans un monde féerique. Réalisée avec des matériaux respectueux de l'environnement, elle incarne la beauté naturelle et éphémère d'un jardin enchanté.`,
       `Les pages en papier recyclé offrent une toile douce et texturée pour vos écrits et croquis. Les détails délicats, tels que des empreintes de pétales et des motifs végétaux, ajoutent une touche de magie à chaque page, invitant à la rêverie.`,
@@ -124,6 +126,7 @@ export const NOTEBOOKS: Notebook[] = [
     mainPicture: '../../../assets/images/figma/carnet05.jpg',
     introduction: `Explorez l'infini avec le carnet "Le Cosmos Mystique". Sa couverture constellée et ses pages noires invitent à l'exploration cosmique. Chaque feuille devient une étoile où vos pensées brillent comme des galaxies lointaines. Un carnet biodégradable pour ceux qui rêvent au-delà des limites.`,
     price: 14.90,
+    pictures : [],
     descriptions: [
       `La couverture noire profonde, ornée d'étoiles scintillantes, capture la majesté de l'univers. Chaque page est un voyage stellaire, avec des détails subtils tels que des constellations discrètes et des bords galactiques.`,
       `Les pages noires offrent un contraste saisissant pour l'écriture ou le dessin blanc. Les illustrations de planètes lointaines et de nébuleuses époustouflantes parsèment le carnet, créant une expérience immersive dans le cosmos.`,
@@ -146,6 +149,7 @@ export const NOTEBOOKS: Notebook[] = [
     mainPicture: '../../../assets/images/figma/carnet06.jpg',
     introduction: `Plongez dans les méandres du temps avec le carnet "Le Voyageur Temporel". Sa couverture énigmatique, inspirée par les engrenages du temps, vous invite à explorer des époques lointaines. Chaque page devient une chronique où vos pensées transcendent les limites du présent.`,
     price: 16.50,
+    pictures : [],
     descriptions: [
       `La couverture en cuir vieilli, ornée de motifs d'engrenages et de symboles mystérieux, évoque l'atmosphère d'une machine temporelle. Chaque détail invite à l'aventure dans les époques passées et futures.`,
       `Les pages écrues, au grain délicat, sont une toile pour capturer vos pensées et visions temporelles. Des marques subtiles, telles que des empreintes d'horloges anciennes, ajoutent une dimension artistique et rappellent le passage du temps.`,
@@ -167,6 +171,7 @@ export const NOTEBOOKS: Notebook[] = [
     mainPicture: '../../../assets/images/figma/carnet07.jpg',
     introduction: `Plongez dans la magie de "La Forêt Enchantée", un carnet où les mystères de la nature s'entrelacent avec des histoires enchantées. La couverture, ornée de motifs floraux et d'animaux mystiques, invite à explorer un royaume féerique à chaque page.`,
     price: 13.90,
+    pictures : [],
     descriptions: [
       `La couverture, faite à la main avec du cuir végétalien, évoque la texture douce de l'écorce des arbres enchantés. Des détails tels que des fées dansantes et des animaux fantastiques ajoutent une touche de magie à chaque regard.`,
       `Les pages, en papier recyclé et durable, offrent une toile naturelle pour vos idées créatives. Des empreintes délicates de feuilles et des motifs végétaux créent une expérience immersive, transportant chaque utilisateur au cœur de la forêt enchantée.`,

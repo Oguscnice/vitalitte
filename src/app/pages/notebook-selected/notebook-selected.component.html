@@ -1,22 +1,26 @@
-<div class="notebook-selected-page flex center column">
+<div class="notebook-selected-page flex column center">
 
   <app-h1 [titleChild]="notebookSelected.title.toUpperCase()"
       [backgroundImageChild]="notebookSelected.mainPicture">
   </app-h1>
 
-  <h2>Carnet : {{ notebookSelected.title | titlecase }}</h2>
-  <h6>{{notebookSelected.introduction}}</h6>
-  <div class="flex column">
-    <p [style.display]="notebookSelected.descriptions.length > 0 ? 'flex' : 'none'"
-      *ngFor="let paragraph of notebookSelected.descriptions">
-      {{paragraph}}</p>
-    </div>
-  <div class="components-list flex">
-    <p [style.display]="notebookSelected.components.length > 0 ? 'flex' : 'none'"
-        *ngFor="let component of notebookSelected.components; let index = index">
-        <span *ngIf="index === 0">Composants : </span>
-        {{component | titlecase}}{{index +1 !== notebookSelected.components.length ? ',' : '.'}}
-      </p>
-  </div>
+  <div>
+    <h2 class="flex center">Carnet : {{ notebookSelected.title | titlecase }}</h2>
+    <p>{{notebookSelected.introduction}}</p>
 
+    <div class="flex column descriptions-list">
+      <p [style.display]="notebookSelected.descriptions.length > 0 ? 'flex' : 'none'"
+        class ="description"
+        *ngFor="let paragraph of notebookSelected.descriptions">
+        {{paragraph}}</p>
+    </div>
+
+    <p class="components-list flex wrap">Composants : 
+      <span [style.display]="notebookSelected.components.length > 0 ? 'flex' : 'none'"
+            *ngFor="let component of notebookSelected.components; let last = last">
+            {{component | titlecase}}{{ !last ? ', ' : '.' }}
+      </span>
+    </p>
+  </div>
+  
 </div>

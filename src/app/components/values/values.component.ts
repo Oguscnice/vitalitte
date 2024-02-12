@@ -3,7 +3,21 @@ import { Value } from 'src/app/shared/interfaces/Value';
 
 @Component({
   selector: 'app-values',
-  templateUrl: './values.component.html',
+  template: `<div class="values-container flex">
+              <div
+                class="value-icone-and-name flex column center"
+                *ngFor="let value of valuesList">
+                <span
+                  *ngIf="value.source === 'fonts.google'"
+                  class="material-symbols-outlined flex center">
+                  {{ value.icone }}
+                </span>
+                <i
+                  *ngIf="value.source === 'fontawesome'"
+                  class="{{ value.icone }} flex center"></i>
+                <p>{{ value.name }}</p>
+              </div>
+            </div>`,
   styleUrls: ['./values.component.scss'],
 })
 export class ValuesComponent {
@@ -20,7 +34,7 @@ export class ValuesComponent {
       source: 'fontawesome',
     },
     {
-      name: 'FourthValue To Find',
+      name: 'FourthValue',
       icone: 'psychology_alt',
       source: 'fonts.google',
     },

@@ -1,0 +1,130 @@
+<div class="create-notebook-page flex column center">
+
+  <app-h1
+    [titleChild]="titleParentHome"
+    [backgroundImageChild]="backgroundImageParentHome"
+  ></app-h1>
+
+  <form
+    action="https://formsubmit.io/send/guillaume.cometto@gmail.com"
+    method="POST"
+    class="flex column"
+    id="contactform"
+  >
+    <fieldset>
+      <mat-form-field>
+        <mat-label>Type de couverture...</mat-label>
+        <mat-select name="cover" id="cover">
+          <mat-option
+            (click)="changeCoverValue('Cuir')"
+            value="Cuir"
+            >Cuir (5 euros)</mat-option
+          >
+          <mat-option
+            (click)="changeCoverValue('Carton')"
+            value="Carton"
+            >Carton</mat-option
+          >
+          <mat-option (click)="changeCoverValue('Papier')"
+          value="Papier"
+            >Papier</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <div class="errors" *ngIf="isFormClicked && hasErrors">
+        <small *ngIf="!titleValue">
+          Le thème est <strong>obligatoire</strong>.</small
+        >
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <mat-form-field>
+        <mat-label>Type de reliure...</mat-label>
+        <mat-select name="booBinding" id="booBinding">
+          <mat-option
+            (click)="changeBookBindingValue('Chinoise')"
+            value="Chinoise"
+            >Chinoise</mat-option
+          >
+          <mat-option
+            (click)="changeBookBindingValue('Egyptienne')"
+            value="Egyptienne"
+            >Egyptienne</mat-option
+          >
+          <mat-option (click)="changeBookBindingValue('Classique')"
+            >Classique</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <div class="errors" *ngIf="isFormClicked && hasErrors">
+        <small *ngIf="!titleValue">
+          Le thème est <strong>obligatoire</strong>.</small
+        >
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <mat-form-field>
+        <mat-label>Papier...</mat-label>
+        <mat-select name="paper" id="booBipapernding">
+          <mat-option
+            (click)="changePaperValue('Papier Recyclé')"
+            value="Papier Recyclé"
+            >Papier Recyclé</mat-option
+          >
+          <mat-option
+            (click)="changePaperValue('Papier Classique')"
+            value="Papier Classique"
+            >Papier Classique</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <div class="errors" *ngIf="isFormClicked && hasErrors">
+        <small *ngIf="!titleValue">
+          Le thème est <strong>obligatoire</strong>.</small
+        >
+      </div>
+    </fieldset>
+    
+    <fieldset>
+      <mat-form-field >
+        <mat-label>Titre... (facultatif)</mat-label>
+        <input
+          matInput
+          type="text"
+          name="title"
+          id="title"
+          (keyup)="changeTitleValue($event)"
+        />
+      </mat-form-field>
+      <div class="errors" *ngIf="isFormClicked && hasErrors">
+        <small *ngIf="titleValue && titleValue.length > 255">
+          Le nom ne doit pas comporter plus de
+          <strong>255 caractères</strong>.
+        </small>
+        <small *ngIf="titleValue && titleValue.length <= 2">
+          Le nom doit comporter plus de
+          <strong>2 caractères</strong>.
+        </small>
+        <small *ngIf="!titleValue">
+          Le nom est
+          <strong>obligatoire</strong>.
+        </small>
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="preview-picture flex">
+    <img class="binding-src" src="../../../assets/images/figma/nopeLibre/{{bookBindingValue}}.jpg" alt="">
+    <div class="flex column">
+      <p class="cover-src" [style.background-image]="'url(../../../assets/images/figma/nopeLibre/' + coverValue + '.jpg)'">
+        {{titleValue}}
+    </p>
+    <img class="paper-src" src="../../../assets/images/figma/nopeLibre/{{paperValue}}.jpg" alt="">
+    </div>
+  </div>
+
+</div>

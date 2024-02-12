@@ -23,7 +23,7 @@
         'separator': index !== navbarUser.length - 1 }"
       (click)="item.submenu ?
                 openSubmenu(item) :
-                closeMenuBurger(menuCheckbox, item.routerLink) "
+                closeMenuBurger(menuCheckbox, item.routerLink, $event) "
     >
       <p class="flex center"
          [ngClass]="{
@@ -38,7 +38,7 @@
         <a class="flex center"
           *ngFor="let subItem of item.submenu.items"
           [href]="item.routerLink + '#' + subItem.anchor"
-          (click)="closeMenuBurger(menuCheckbox, item.routerLink)">
+          (click)="closeMenuBurger(menuCheckbox, item.routerLink, $event)">
           {{subItem.name}}
         </a>
       </div>

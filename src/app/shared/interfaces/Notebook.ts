@@ -4,6 +4,7 @@ export interface Notebook {
   mainPicture : string,
   introduction : string,
   price : number,
+  pictures : string[],
   descriptions : string[],
   components : string[],
 }

@@ -9,6 +9,7 @@ import { ActivePageService } from './shared/services/active-page.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+
   constructor(
     private router: Router,
     private activePageService: ActivePageService
@@ -19,6 +20,7 @@ export class AppComponent {
   ngOnInit() {
     this.checkCurrentUrl();
   }
+
   checkCurrentUrl() {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))

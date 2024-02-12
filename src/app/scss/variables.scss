@@ -13,6 +13,7 @@ $black: #000000;
 $lilac: rgba(182, 100, 210);
 $lilac-light: rgb(217, 117, 250);
 $lilac-dark: rgb(140, 76, 161);
+$brown : brown;
 
 // ----- padding -----
 $normal-padding: 8px;
@@ -72,3 +73,12 @@ $z-index: 1;
   width: 100vw;
   max-width: 800px;
 }
+
+@mixin text-shadow ($height, $color) {
+  text-shadow : 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
+        0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
+        0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
+        0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
+        0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
+        0 0 $height, $color;
+} 

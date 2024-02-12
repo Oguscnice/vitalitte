@@ -2,7 +2,7 @@
   <app-h1
   [titleChild]="titleParentCreations"
   [backgroundImageChild]="backgroundImageParentCreations"
-></app-h1>
+  ></app-h1>
   <div class="cards-choice flex space-around">
       <div class="card" (click)="userChoiceSelected('notebook')">
         <p class="heading">Carnets</p>
@@ -33,8 +33,8 @@
         notre précieuse planète.</p>
       <h4>Modèles :</h4>
       <app-notebooks-list
-      [notebooksListChild]="notebooksListParent"></app-notebooks-list>
-
+      [notebooksListChild]="notebooksListPage"></app-notebooks-list>
+      <h4>Encore plus de modèle içi...</h4>
       <button class="btn-normal pointer"
               routerLink="/carnets">
               Voir tous les modèles</button>
@@ -115,7 +115,7 @@
           </div>
         </div>
       </div>
-      <button class="btn-normal pointer"> Créer mon carnet</button>
+      <button class="btn-normal pointer" routerLink="/imaginer-mon-carnet"> Créer mon carnet</button>
     </section>
     <section class="user-choice flex column center"
             *ngIf="userChoice === 'workshop'">

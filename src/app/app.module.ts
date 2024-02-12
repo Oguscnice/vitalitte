@@ -32,6 +32,10 @@ import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-
 import { NotebooksComponent } from './pages/notebooks/notebooks.component';
 import { NotebookSelectedComponent } from './pages/notebook-selected/notebook-selected.component';
 import { NotebooksListComponent } from './components/notebooks-list/notebooks-list.component';
+import { CreateNotebookComponent } from './pages/create-notebook/create-notebook.component';
+import { ImagesPreviewComponent } from './components/images-preview/images-preview.component';
+import { NewsHeadbandComponent } from './components/news-headband/news-headband.component';
+import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
 
 
 @NgModule({
@@ -55,6 +59,10 @@ import { NotebooksListComponent } from './components/notebooks-list/notebooks-li
     NotebooksComponent,
     NotebookSelectedComponent,
     NotebooksListComponent,
+    CreateNotebookComponent,
+    ImagesPreviewComponent,
+    NewsHeadbandComponent,
+    UpArrowComponent,
   ],
   imports: [
     BrowserModule,

@@ -23,6 +23,11 @@
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .contact-page{
+    div{
+      a{
+        color: $black;
+      }
+    }
     section {
       width: 100vw;
       max-width: 650px;

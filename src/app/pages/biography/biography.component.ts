@@ -1,11 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { BaseComponent } from 'src/app/base.component';
 
 @Component({
   selector: 'app-biography',
   templateUrl: './biography.component.html',
   styleUrls: ['./biography.component.scss'],
 })
-export class BiographyComponent {
+export class BiographyComponent extends BaseComponent{
   titleParentHome = 'Qui suis je ?';
   backgroundImageParentHome = '../../../assets/images/figma/couverture.jpg';
 

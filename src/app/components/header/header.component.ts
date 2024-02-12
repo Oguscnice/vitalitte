@@ -25,6 +25,8 @@ export class HeaderComponent {
       '--height-header',
       this.navBar.nativeElement.offsetHeight + 'px'
     );
+    console.log(this.navBar.nativeElement.offsetHeight + 'px');
+    
   }
 
   changeMenuBurgerVisibility(): void {
@@ -40,10 +42,12 @@ export class HeaderComponent {
     }
   }
 
-  closeMenuBurger(menuCheckbox : HTMLInputElement, routerLinkClicked: string): void {
+  closeMenuBurger(menuCheckbox : HTMLInputElement, routerLinkClicked: string, event : Event): void {
+
     if (menuCheckbox.checked) {
       this.renderer.setProperty(menuCheckbox, 'checked', false);
     }
+    event.stopPropagation()
     this.isMenuBurgerChecked = false;
     this.activePageService.changeActivePage(routerLinkClicked);
     this.closeSubmenu()
@@ -51,6 +55,8 @@ export class HeaderComponent {
 
 
   closeSubmenu(){
+
+    
     for(let item of this.navbarUser){
       if(item.submenu){
         item.submenu.isOpen = false

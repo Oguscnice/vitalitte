@@ -1,0 +1,49 @@
+@import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
+@import "../../../styles.scss";
+
+.create-notebook-page{
+  .preview-picture{
+    height : 400px;
+    width: 300px;
+    background-color: red;
+    .binding-src{
+      height : 400px;
+      width: 40px;
+      background-color: blue;
+    }
+    div{
+      height : 400px;
+      width: 260px;
+      .cover-src{
+        height : 400px;
+        width: 260px;
+        background-color: green ;
+        padding-top : 100px;
+        
+      }
+      .paper-src{
+        position: relative;
+        top : -300px;
+        left: 240px;
+        height : 40px;
+        width: 40px;
+        @include outline-picture;
+        border-radius: 100%;
+      }
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+}

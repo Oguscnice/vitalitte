@@ -1,0 +1,55 @@
+@import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
+@import "../../../styles.scss";
+
+.news-headband {
+  overflow: hidden;
+  width: 100vw;
+  flex-direction: column;
+  .fixed-text {
+    padding: 0 $normal-padding;
+    background-color: $lilac;
+    color: $white;
+    font-size: $double-font-size;
+    width: 20%;
+    text-align: center;
+    z-index: $z-index + 1;
+    width: 100vw;
+  }
+  .rolling-news {
+    z-index: $z-index;
+    white-space: nowrap;
+    animation: scrollNews 10s linear infinite;
+    .news-item {
+      padding: 0 20px;
+      border-left: 1px solid $lilac-dark;
+    }
+    .border-right{
+      border-right: 1px solid $lilac-dark;
+    }
+  }
+}
+
+@keyframes scrollNews {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+
+  .news-headband {
+    flex-direction: row;
+  }
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+}

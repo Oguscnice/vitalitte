@@ -106,18 +106,15 @@
   <mat-form-field>
     <mat-label>Choisir un thème...</mat-label>
     <mat-select name="theme" id="theme">
-      <mat-option (click)="changeThemeValue('Remorquage')" value="Remorquage"
-        >Remorquage</mat-option
+      <mat-option
+        (click)="changeThemeValue('Carnets')"
+        value="Carnets"
+        >Carnets</mat-option
       >
       <mat-option
-        (click)="changeThemeValue('Véhicule : rachat / revente')"
-        value="Véhicule : rachat / revente"
-        >Véhicule : rachat / revente</mat-option
-      >
-      <mat-option
-        (click)="changeThemeValue('Enlèvement épave(s)')"
-        value="Enlèvement d'épave(s)"
-        >Enlèvement d'épave(s)</mat-option
+        (click)="changeThemeValue('Ateliers')"
+        value="Ateliers"
+        >Ateliers</mat-option
       >
       <mat-option (click)="changeThemeValue('Autre sujet...')"
         >Autre sujet...</mat-option

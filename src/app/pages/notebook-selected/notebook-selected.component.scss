@@ -4,14 +4,38 @@
 
 .notebook-selected-page{
   padding: 0 $fourth-padding;
-  .components-list{
-    flex-wrap: wrap;
+  div{
+    h2{
+      width: 100%;
+    }
+    p{
+      font-size: $triple-font-size;
+    }
+    .descriptions-list{
+      margin: $normal-margin 0;
+      .description{
+        font-size: $double-font-size;
+        text-align: left;
+      }
+    }
+    .components-list{
+      width: 100%;
+      font-size: calc($normal-font-size * 1.2);
+      span{
+        margin-right: 4px;
+      }
+    }
   }
 }
 
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
+  .notebook-selected-page{
+    div{ 
+      max-width: 650px;
+    }
+  }
 }
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
