@@ -6,7 +6,7 @@ export const NOTEBOOKS: Notebook[] = [
   slug : 'le-meditteranee',
   mainPicture : '../../../assets/images/figma/carnet.jpeg',
   introduction : `Un trésor artisanal dans les tons apaisants de bleu océan. Fabriqué à la main avec amour et respect de l'environnement, chaque page offre une toile pour vos pensées créatives. Inspiré par la mer, ce carnet biodégradable vous invite à explorer vos idées tout en préservant notre planète, une page à la fois.`, 
-  price : 9.90,
+  price : 1,
   pictures : [],
   descriptions:[
     ``
@@ -28,7 +28,7 @@ export const NOTEBOOKS: Notebook[] = [
     slug : 'le-vegetal',
     mainPicture : '../../../assets/images/figma/carnet01.jpg',
     introduction : `Une immersion dans la nature à chaque page. Teintes vertes apaisantes évoquent les feuillages luxuriants. Fait main avec un engagement écologique, chaque carnet offre un espace pour vos pensées créatives. Inspiré par la nature, ce carnet biodégradable vous encourage à cultiver vos idées tout en préservant notre environnement, page après page.`, 
-    price : 8.90,
+    price : 1.50,
     pictures : [],
     descriptions : [
       `une célébration de la nature et de la durabilité. Sa couverture, réalisée à la main à partir de matériaux écologiques, reflète la richesse de la vie végétale avec des motifs floraux délicats et des teintes organiques. Chaque détail est une ode à la beauté naturelle, mettant en lumière la diversité des plantes qui peuplent notre planète.`,
@@ -94,7 +94,7 @@ export const NOTEBOOKS: Notebook[] = [
   {
     title: 'Le Jardin Enchanté',
     slug: 'le-jardin-enchante',
-    mainPicture: '../../../assets/images/figma/carnet04.jpg',
+    mainPicture: '../../../assets/images/figma/carnet.jpeg',
     introduction: `Un carnet féerique où chaque page est une invitation à explorer un jardin magique. Les teintes pastel et les motifs floraux délicats créent une ambiance enchanteresse. Fabriqué à la main avec un engagement écologique, ce carnet biodégradable offre un espace créatif pour cultiver vos idées et laisser fleurir votre imagination.`,
     price: 10.50,
     pictures : [],
@@ -123,7 +123,7 @@ export const NOTEBOOKS: Notebook[] = [
   {
     title: 'Le Cosmos Mystique',
     slug: 'le-cosmos-mystique',
-    mainPicture: '../../../assets/images/figma/carnet05.jpg',
+    mainPicture: '../../../assets/images/figma/carnet01.jpg',
     introduction: `Explorez l'infini avec le carnet "Le Cosmos Mystique". Sa couverture constellée et ses pages noires invitent à l'exploration cosmique. Chaque feuille devient une étoile où vos pensées brillent comme des galaxies lointaines. Un carnet biodégradable pour ceux qui rêvent au-delà des limites.`,
     price: 14.90,
     pictures : [],
@@ -146,7 +146,7 @@ export const NOTEBOOKS: Notebook[] = [
   {
     title: 'Le Voyageur Temporel',
     slug: 'le-voyageur-temporel',
-    mainPicture: '../../../assets/images/figma/carnet06.jpg',
+    mainPicture: '../../../assets/images/figma/carnet02.jpg',
     introduction: `Plongez dans les méandres du temps avec le carnet "Le Voyageur Temporel". Sa couverture énigmatique, inspirée par les engrenages du temps, vous invite à explorer des époques lointaines. Chaque page devient une chronique où vos pensées transcendent les limites du présent.`,
     price: 16.50,
     pictures : [],
@@ -168,7 +168,7 @@ export const NOTEBOOKS: Notebook[] = [
   {
     title: 'La Forêt Enchantée',
     slug: 'la-foret-enchantee',
-    mainPicture: '../../../assets/images/figma/carnet07.jpg',
+    mainPicture: '../../../assets/images/figma/carnet03.jpg',
     introduction: `Plongez dans la magie de "La Forêt Enchantée", un carnet où les mystères de la nature s'entrelacent avec des histoires enchantées. La couverture, ornée de motifs floraux et d'animaux mystiques, invite à explorer un royaume féerique à chaque page.`,
     price: 13.90,
     pictures : [],

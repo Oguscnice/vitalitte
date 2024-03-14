@@ -14,39 +14,6 @@
   transition: opacity;
 }
 
-.arrow-visible{
-  animation: arrowAppear 2s linear forwards;
-}
-
-.arrow-invisible{
-  animation: arrowDisappear 1s linear forwards;
-}
-
-@keyframes arrowAppear {
-  0% {
-    z-index: $z-index + 10;
-    opacity: 0;
-  }
-  100% {
-    z-index: $z-index + 10;
-    opacity: 1;
-  }
-}
-
-@keyframes arrowDisappear {
-  0% {
-    z-index: $z-index + 10;
-    opacity: 1;
-  }
-  99%{
-    z-index: $z-index + 10;
-    opacity: 0;
-  }
-  100% {
-    z-index: $z-index - 1;
-  }
-}
-
 @media screen and (min-width: 768px) {
 }
 // Tablettes vers ordinateurs portables :

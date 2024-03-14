@@ -1,0 +1,29 @@
+@import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
+@import "../../../styles.scss";
+
+.shopping-notebooks-list{
+  .shopping-notebooks-container{
+    width: calc(100vw - ($fourth-padding * 2));
+    min-height: calc((100vw - ($fourth-padding * 2)) / 4);
+    img{
+      width: calc((100vw - ($fourth-padding * 2)) / 2);
+    }
+    .title-and-price{
+      width: calc((100vw - ($fourth-padding * 2)) / 2);
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+}

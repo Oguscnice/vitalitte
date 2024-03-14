@@ -1,6 +1,10 @@
 @import "../../scss/variables.scss";
 @import "../../../styles.scss";
 
+:root {
+  --height-footer: 0px;
+}
+
 footer {
   margin-top: $normal-margin;
   height: 60px;

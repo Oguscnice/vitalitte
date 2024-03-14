@@ -15,12 +15,12 @@
   }
   .image-biography{
     @include outline-picture;
-    max-width: 100vw;
+    width: 100vw;
     height: 32vh;
     overflow: hidden;
     img{
       height: 32vh;
-      max-width: 80vw;
+      width: 100vw;
       z-index: $z-index;
       object-position: top;
     }
@@ -34,7 +34,7 @@
     }
     .filter-color{
       z-index: $z-index + 1;
-      height: 32vh;
+      height: 100vh;
       top: calc(-64vh - 4px);
     }
   }

@@ -2,6 +2,7 @@
 :root {
   --height-footer: 0px;
   --height-header: 0px;
+  --height-booktique-page: 0px;
   --height-booktique-section-monitored: 0px;
   --height-img-monitored: 0px;
   --width-img-monitored: 0px;
@@ -13,7 +14,9 @@ $black: #000000;
 $lilac: rgba(182, 100, 210);
 $lilac-light: rgb(217, 117, 250);
 $lilac-dark: rgb(140, 76, 161);
+$orange : orange;
 $brown : brown;
+$yellow : yellow;
 
 // ----- padding -----
 $normal-padding: 8px;

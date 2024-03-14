@@ -1,0 +1,42 @@
+<div class="title-functionality flex">
+  <h4>Créer un nouveau Matériel</h4>
+  <i class="fa-solid fa-circle-plus"
+    (click)="isFormVisible = !isFormVisible"
+    [ngClass]="{'rotated45': isFormVisible}"></i>
+</div>
+
+<form
+  *ngIf="isFormVisible"
+  (ngSubmit)="(newMaterialForm.valid)"
+  [formGroup]="newMaterialForm"
+  #myForm="ngForm"
+>
+  <fieldset class="flex column">
+    <label for="name">Libellé :</label>
+    <input
+      type="text"
+      id="name"
+      placeholder="Nom..."
+      formControlName="name"
+      autocomplete="off"
+    />
+
+    <div *ngIf="myForm.submitted && newMaterialForm.controls['name'].invalid">
+      <small *ngIf="newMaterialForm.controls.name.errors?.['required']">Le libellé du matériel est obligatoire.</small>
+      <small *ngIf="newMaterialForm.controls.name.errors?.['maxlength']">Le libellé du matériel ne doit pas dépasser 255 charactères.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="materialType">Quel Type de Matériel ?</label>
+    <select name="materialType"
+            id="materialType"
+            (change)="onMaterialTypeSelected($event)">
+      <option value="">--Choissir une option--</option>
+      <option *ngFor="let item of materialTypes"
+              [value]="item">{{item}}</option>
+    </select>
+  </fieldset>
+
+  <button type="submit" (click)="submitNewMaterialForm()">Soumettre</button>
+  </form>

@@ -1,0 +1,20 @@
+@import "../../scss/admin-general.scss";
+
+.admin-home-page{
+  height: 100%;
+  .btns-admin-home{
+    gap: 16px;
+    height: 50vh;
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1235px) {
+}

@@ -1,0 +1,47 @@
+@import "../../../scss/variables.scss";
+
+.btn-admin {
+  background-color: $lilac;
+  color: $white;
+  border-radius: $border-radius;
+  border: solid 0.5px $lilac;
+  padding: $double-padding;
+}
+
+.btn-submit-admin{
+  @extend .btn-admin;
+  background-color: $lilac-light;
+  border : $white;
+  color: $white;
+  font-size: $fourth-font-size;
+  font-weight: bolder;
+  transition: background-color 0.2s linear;
+  letter-spacing: 2px;
+}
+
+.btn-submit-admin:hover{
+  background-color: $lilac;
+}
+
+.btn-direction{
+  background-color: $lilac;
+  color: $white;
+  border-radius: $border-radius;
+  padding: $double-padding;
+  font-size: $fourth-font-size;
+  width: 80vw;
+  max-width: 400px;
+  box-shadow: 4px 4px 4px $lilac-dark;
+  text-align: center;
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1235px) {
+}

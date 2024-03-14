@@ -1,4 +1,5 @@
-import { Component, HostListener } from "@angular/core";
+import { Component } from "@angular/core";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-base',
@@ -9,6 +10,9 @@ import { Component, HostListener } from "@angular/core";
 })
 
 export class BaseComponent {
+
+  protected messageResponseFromBackend!: string;
+  protected subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
     this.scrollToTop();
@@ -24,5 +28,9 @@ export class BaseComponent {
         clearInterval(scrollInterval);
       }
     }, 15);
+  }
+
+  protected unsubscribeAll() {
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 } 

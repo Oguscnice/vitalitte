@@ -1,6 +1,7 @@
 import { ActivePageService } from './../../shared/services/active-page.service';
 import { Component, ElementRef, ViewChild, Renderer2  } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
+import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
 import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
 
 @Component({
@@ -13,7 +14,8 @@ export class HeaderComponent {
 
   constructor(
     public activePageService: ActivePageService,
-    private renderer: Renderer2) {}
+    private renderer: Renderer2,
+    public shoppingCartService : ShoppingCartService) {}
 
   navbarUser: Menu[] = NAVBAR_USER;
   isMenuBurgerChecked: boolean = false;
@@ -25,8 +27,6 @@ export class HeaderComponent {
       '--height-header',
       this.navBar.nativeElement.offsetHeight + 'px'
     );
-    console.log(this.navBar.nativeElement.offsetHeight + 'px');
-    
   }
 
   changeMenuBurgerVisibility(): void {
@@ -53,10 +53,7 @@ export class HeaderComponent {
     this.closeSubmenu()
   }
 
-
   closeSubmenu(){
-
-    
     for(let item of this.navbarUser){
       if(item.submenu){
         item.submenu.isOpen = false

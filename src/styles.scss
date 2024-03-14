@@ -114,7 +114,6 @@ html {
 body {
   overflow-x: hidden;
   line-height: 1.2;
-  margin-top: var(--height-header);
 }
 ol,
 ul {
@@ -232,6 +231,48 @@ h1 {
   background-color: rgba($brown, 0.2);
 }
 
+.visible-linear{
+  animation: appearLinear 2s linear forwards;
+}
+
+.invisible-linear{
+  animation: disappearLinear 1s linear forwards;
+}
+
+@keyframes appearLinear {
+  0% {
+    z-index: $z-index + 10;
+    opacity: 0;
+  }
+  100% {
+    z-index: $z-index + 10;
+    opacity: 1;
+  }
+}
+
+@keyframes disappearLinear {
+  0% {
+    z-index: $z-index + 10;
+    opacity: 1;
+  }
+  99%{
+    z-index: $z-index + 10;
+    opacity: 0;
+  }
+  100% {
+    z-index: $z-index - 1;
+  }
+}
+
+// cible l'élément juste après le router-outlet
+// (donc la page appelée)
+router-outlet + * {
+  display: flex;
+  flex-direction: column;
+  //hauteur minimum de toute la page, moins celle du header et footer, auquelle on ajoute leurs bordures de 1px
+  min-height: calc(100vh - (var(--height-header) + var(--height-footer)));
+  margin : var(--height-header) $triple-margin 0 $triple-margin;
+}
 
 // Breackpoint list
 // Mobiles vers Tablettes :
