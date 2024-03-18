@@ -41,6 +41,8 @@ import { NgxPayPalModule } from 'ngx-paypal';
 import { ShoppingCartService } from './shared/services/shopping-cart.service';
 import { ShoppingNotebooksListComponent } from './components/shopping-notebooks-list/shopping-notebooks-list.component';
 import { ChoicesPersonalizedCreationComponent } from './components/choices-personalized-creation/choices-personalized-creation.component';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { AnguilleComponent } from './shared/components/anguille/anguille.component';
 
 
 @NgModule({
@@ -84,8 +86,12 @@ import { ChoicesPersonalizedCreationComponent } from './components/choices-perso
     MatIconModule,
     MatSelectModule,
     NgxPayPalModule,
+    AnguilleComponent
   ],
-  providers: [AuthGuard, httpInterceptorProviders],
+  providers: [
+    AuthGuard,
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

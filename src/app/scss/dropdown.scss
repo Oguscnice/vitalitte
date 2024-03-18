@@ -1,0 +1,31 @@
+@import "../scss/variables.scss";
+
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+
+  .items-list {
+    @include inputStyleBorder;
+    line-height: 1.15;
+    display: none;
+    position: absolute;
+    z-index: 2;
+    list-style: none;
+    min-width: 50%;
+    overflow: hidden;
+
+    li {
+      padding: 8px 16px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $lilac;
+        color: $white;
+      }
+    }
+  }
+
+  .dropdown-visible {
+    display: block;
+  }
+}

@@ -19,7 +19,7 @@ export class ChoicesPersonalizedCreationComponent extends BaseComponent {
   materials! : MaterialDto[];
 
   override ngOnInit(): void{
-    this.geAllMaterialsAvailable()
+    this.geAllMaterials()
   }
 
   ngOnDestroy() {
@@ -29,9 +29,9 @@ export class ChoicesPersonalizedCreationComponent extends BaseComponent {
   logSelectedValue(possibilityName: string, itemName : any) {
       console.log("Option sélectionnée pour", possibilityName + " // event : " + itemName);
   }
-  geAllMaterialsAvailable(): void{
+  geAllMaterials(): void{
     this.subscriptions.push(
-      this.apiRequestsService.getAllMaterialsAvailable().subscribe({
+      this.apiRequestsService.geAllMaterials().subscribe({
         next: (materials) => {
           this.materials = materials;
           console.log(materials);

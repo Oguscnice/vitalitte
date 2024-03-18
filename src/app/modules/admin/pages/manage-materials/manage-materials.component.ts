@@ -1,55 +1,61 @@
+import { TransformToEditableService } from './../../services/transform-to-editable.service';
+import { ApiRequestsService } from './../../../../shared/services/api-requests.service';
 import { ApiMaterialAdminService } from './../../services/api-material-admin.service';
 import { Component } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
-import { EMaterialType } from 'src/app/shared/interfaces/EMaterialType';
 import { CreateMaterial, MaterialDto } from 'src/app/shared/interfaces/Material';
+import { MaterialEditable } from '../../interfaces/EditableObject';
 
 @Component({
   selector: 'app-manage-materials',
-  template: ` <app-post-material
+  template: `<app-post-material
                 [materialTypes]="materialTypes"
                 (newMaterial)="postMaterial($event)"
               >
               </app-post-material>
               <app-edit-delete-material
-                [materialsChild]="materials"
+                [materialsEditableChild]="materialsEditable"
                 [materialTypes]="materialTypes"
                 
                 (materialToEdit)="putMaterial($event)"
                 (materialSlugToDelete)="deleteMaterial($event)"
               >
-              </app-edit-delete-material>`,
+              </app-edit-delete-material>
+              <anguille [message]="messageResponseFromBackend" />`,
   styleUrls: ['./manage-materials.component.scss']
 })
 export class ManageMaterialsComponent extends BaseComponent{
 
   constructor(
-    private apiMaterialAdminService : ApiMaterialAdminService
+    private apiMaterialAdminService : ApiMaterialAdminService,
+    private apiRequestsService : ApiRequestsService,
+    private transformToEditableService : TransformToEditableService
   ){
     super()
   }
 
-  materials! : MaterialDto[]
-  materialTypes : (keyof typeof EMaterialType)[] = [];
+  materialsEditable! : MaterialEditable[];
+  materialTypes : string[] = [];
 
   override ngOnInit(): void {
     this.getAllMaterials();
-    this.createEnumMaterialTypeArray();
-  }
-
-  createEnumMaterialTypeArray(): void{
-    for (const [key, value] of Object.entries(EMaterialType)){
-      this.materialTypes.push(value)
-    }
+    this.getAllMaterialsTypes();
   }
 
   getAllMaterials(): void{
     this.subscriptions.push(
-      this.apiMaterialAdminService.getAll().subscribe({
-        next: (materials) => {
-          this.materials = materials;
-        },
-        error: (err) => (this.messageResponseFromBackend = err.error.message)
+      this.apiRequestsService.geAllMaterials().subscribe({
+        next: (materials) => this.materialsEditable = this.transformToEditableService.materialDtoToEditable(materials),
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  getAllMaterialsTypes(): void{
+    this.subscriptions.push(
+      this.apiRequestsService.getAllMaterialsTypes().subscribe({
+        next: (materialsTypes) => this.materialTypes = materialsTypes,
+        error: (err) => (this.changeMessage(err.error.message))
       })
     )
   }
@@ -58,10 +64,10 @@ export class ManageMaterialsComponent extends BaseComponent{
     this.subscriptions.push(
       this.apiMaterialAdminService.post(newMaterial).subscribe({
         next: (res) => {
-          this.messageResponseFromBackend = res.message;
+          this.changeMessage(res.message);
           this.getAllMaterials();
         },
-        error: (err) => (this.messageResponseFromBackend = err.error.message)
+        error: (err) => (this.changeMessage(err.error.message))
       })
     )
   }
@@ -70,10 +76,10 @@ export class ManageMaterialsComponent extends BaseComponent{
     this.subscriptions.push(
       this.apiMaterialAdminService.put(materialToEdit).subscribe({
         next: (res) => {
-          this.messageResponseFromBackend = res.message;
+          this.changeMessage(res.message);
           this.getAllMaterials();
         },
-        error: (err) => (this.messageResponseFromBackend = err.error.message)
+        error: (err) => (this.changeMessage(err.error.message))
       })
     )
   }
@@ -82,10 +88,10 @@ export class ManageMaterialsComponent extends BaseComponent{
     this.subscriptions.push(
       this.apiMaterialAdminService.delete(materialSlug).subscribe({
         next: (res) => {
-          this.messageResponseFromBackend = res.message;
-          this.materials = this.materials.filter(material => material.slug !== materialSlug)
+          this.changeMessage(res.message);
+          this.materialsEditable = this.materialsEditable.filter(material => material.slug !== materialSlug)
         },
-        error: (err) => (this.messageResponseFromBackend = err.error.message)
+        error: (err) => (this.changeMessage(err.error.message))
       })
     )
   }

@@ -11,6 +11,8 @@ import { PostMaterialComponent } from './components/material/post-material/post-
 import { EditDeleteMaterialComponent } from './components/material/edit-delete-material/edit-delete-material.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditorModule, TINYMCE_SCRIPT_SRC  } from '@tinymce/tinymce-angular';
+import { AppModule } from 'src/app/app.module';
+import { AnguilleComponent } from 'src/app/shared/components/anguille/anguille.component';
 
 
 @NgModule({
@@ -21,14 +23,15 @@ import { EditorModule, TINYMCE_SCRIPT_SRC  } from '@tinymce/tinymce-angular';
     ManagePublicationsComponent,
     ManageActivitiesComponent,
     PostMaterialComponent,
-    EditDeleteMaterialComponent
+    EditDeleteMaterialComponent,
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    EditorModule
+    EditorModule,
+    AnguilleComponent
   ],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

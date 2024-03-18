@@ -21,7 +21,7 @@
       autocomplete="off"
     />
 
-    <div *ngIf="myForm.submitted && newMaterialForm.controls['name'].invalid">
+    <div *ngIf="isFormSubmit && myForm.submitted && newMaterialForm.controls['name'].invalid">
       <small *ngIf="newMaterialForm.controls.name.errors?.['required']">Le libellé du matériel est obligatoire.</small>
       <small *ngIf="newMaterialForm.controls.name.errors?.['maxlength']">Le libellé du matériel ne doit pas dépasser 255 charactères.</small>
     </div>
@@ -29,13 +29,88 @@
 
   <fieldset class="flex column">
     <label for="materialType">Quel Type de Matériel ?</label>
-    <select name="materialType"
-            id="materialType"
-            (change)="onMaterialTypeSelected($event)">
-      <option value="">--Choissir une option--</option>
-      <option *ngFor="let item of materialTypes"
-              [value]="item">{{item}}</option>
-    </select>
+    <div class="dropdown-container">
+      <input 
+        type="text"
+        id="materialType"
+        formControlName="materialType"
+        placeholder="Choississez le type de matériel..."
+        autocomplete="off"
+        class="pointer"
+        (click)="toogleDropdown()"
+        readonly
+      />
+
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownOpen}">
+        <li *ngFor="let type of materialTypes" (click)="materialTypeClicked(type); toogleDropdown() ">
+            {{ type | titlecase }}
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="isFormSubmit && newMaterialForm.controls['materialType'].invalid">
+      <small *ngIf="newMaterialForm.controls.materialType.errors?.['required']">Le type de matériel est obligatoire.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="price">Quel prix ?</label>
+    <input
+      type="number"
+      id="price"
+      formControlName="price"
+      placeholder="0"
+    />
+    <div *ngIf="isFormSubmit && newMaterialForm.controls['price'].invalid">
+      <small *ngIf="newMaterialForm.controls.price.errors?.['invalidPriceFormat']">Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
+      <small *ngIf="newMaterialForm.controls.price.errors?.['invalidPrice']">Le prix ne peut pas être inférieur à 0€.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="description">Description du matériel : </label>
+    <editor
+      [init]="toolBarConfig"
+
+      placeholder="Description du matériel.."
+      formControlName="description"
+      autocomplete="off">
+    </editor>
+    
+    <div *ngIf="isFormSubmit && newMaterialForm.controls['description'].invalid">
+      <small *ngIf="newMaterialForm.controls.description.errors?.['required']">La descritpion du matériel est requise.</small>
+      <small *ngIf="newMaterialForm.controls.description.errors?.['maxlength']">La descritpion du matériel ne doit pas dépasser 1.000 charactères.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="picture">Photo : </label>
+    <small>Privilégier un format PNG</small>
+    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+    <input
+      class="display-none"
+      type="file"
+      accept="image/png, image/jpeg, image/bmp, image/gif"
+      (change)="onFileSelected($event)"
+      #fileUpload
+    />
+    <input
+      type="text"
+      id="picture"
+      formControlName="picture"
+      value="{{ imageToDisplay }}"
+      (keyup)="changeImageValue($event)"
+      placeholder="URL de l'image..."
+    />
+    <div *ngIf="isFormSubmit && newMaterialForm.controls['picture'].invalid">
+      <small *ngIf="fileSize > fileSizeMax">Votre fichier dépasse les {{ fileSizeMax / 1048576 }} Méga-octects.</small>
+    </div>
+
+    <img
+      class="pointer"
+      (click)="fileUpload.click()"
+      src="{{ imageToDisplay }}"
+      alt="Photo à choisir pour le matériel"
+    />
   </fieldset>
 
   <button type="submit" (click)="submitNewMaterialForm()">Soumettre</button>

@@ -1,11 +1,9 @@
-import { EMaterialType } from "./EMaterialType";
-
 export interface CreateMaterial {
     name : string,
     price : number,
     description : string,
     picture : string,
-    materialType : keyof typeof EMaterialType;
+    materialType : string;
 }
 
 export interface MaterialDto extends CreateMaterial {

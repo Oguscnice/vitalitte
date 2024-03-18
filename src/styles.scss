@@ -212,6 +212,10 @@ h3 {
   margin: $double-padding 0;
 }
 
+h4{
+  font-size: $double-font-size;
+}
+
 p {
   font-family: $font-family-text;
   font-size: $double-font-size;
@@ -237,6 +241,27 @@ h1 {
 
 .invisible-linear{
   animation: disappearLinear 1s linear forwards;
+}
+
+//pour la rotation des "+" aux formulaire de création
+i{
+  transition: all 0.4s linear;
+}
+
+.rotated45 {
+  transform: rotate(45deg);
+}
+
+.rotated180 {
+  transform: rotate(180deg);
+}
+
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
 }
 
 @keyframes appearLinear {
