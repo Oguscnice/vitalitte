@@ -44,7 +44,7 @@ export class ManageMaterialsComponent extends BaseComponent{
 
   getAllMaterials(): void{
     this.subscriptions.push(
-      this.apiRequestsService.geAllMaterials().subscribe({
+      this.apiRequestsService.getAllMaterials().subscribe({
         next: (materials) => this.materialsEditable = this.transformToEditableService.materialDtoToEditable(materials),
         error: (err) => (this.changeMessage(err.error.message))
       })

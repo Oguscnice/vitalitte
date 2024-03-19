@@ -15,9 +15,9 @@ table{
     tr{
       td{
         border-bottom: 1px solid $lilac-dark;
-        font-size: $double-font-size;
         font-weight: bold; 
         p{
+          font-size: $normal-font-size;
           padding: $normal-padding;
         }
       }
@@ -33,6 +33,7 @@ table{
           max-height: 80px;
         }
         p{
+          font-size: $normal-font-size;
           padding: $normal-padding;
         }
         .article-title{

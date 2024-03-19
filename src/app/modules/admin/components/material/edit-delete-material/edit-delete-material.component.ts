@@ -25,6 +25,14 @@ export class EditDeleteMaterialComponent {
   isTableVisible: boolean = false;
   isDropdownOpen : boolean = false;
 
+  public toolBarConfig = {
+    base_url: '/tinymce',
+    suffix: '.min',
+    plugins : 'lists',
+    menubar: false,
+    toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
+  };
+
   changeValue(event: KeyboardEvent, materialSelected : MaterialEditable, data : string): void {
     const inputElement = event.target as HTMLInputElement;
     if (data === 'name') {

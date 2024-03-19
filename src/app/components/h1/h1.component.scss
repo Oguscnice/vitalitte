@@ -52,14 +52,11 @@ h1 {
   .thumbnail-h1-home {
     height: 50vh;
     width: calc(100% - ($desktop-padding * 2));
-    max-width: 800px;
-
     img,
     .filter-color,
     h1 {
       line-height: 0;
       height: 50vh;
-      max-width: 800px;
     }
     .filter-color {
       top: -50vh;
@@ -72,13 +69,4 @@ h1 {
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
-  .h1-image-container,
-  .thumbnail-h1-home {
-    @include screen-more-1400px;
-    img,
-    .filter-color,
-    h1 {
-      @include screen-more-1400px;
-    }
-  }
 }

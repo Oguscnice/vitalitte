@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditorModule, TINYMCE_SCRIPT_SRC  } from '@tinymce/tinymce-angular';
 import { AppModule } from 'src/app/app.module';
 import { AnguilleComponent } from 'src/app/shared/components/anguille/anguille.component';
+import { EditMaterialComponent } from './pages/edit-material/edit-material.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { AnguilleComponent } from 'src/app/shared/components/anguille/anguille.c
     ManageActivitiesComponent,
     PostMaterialComponent,
     EditDeleteMaterialComponent,
+    EditMaterialComponent,
   ],
   imports: [
     CommonModule,

@@ -6,6 +6,7 @@ import { ManageMaterialsComponent } from './pages/manage-materials/manage-materi
 import { ManageNotebooksComponent } from './pages/manage-notebooks/manage-notebooks.component';
 import { ManageActivitiesComponent } from './pages/manage-activities/manage-activities.component';
 import { ManagePublicationsComponent } from './pages/manage-publications/manage-publications.component';
+import { EditMaterialComponent } from './pages/edit-material/edit-material.component';
 
 const routes: Routes = [
   // { path: '', component: AdminHomeComponent, canActivate: [AdminGuard] },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'gestion-des-carnets', component: ManageNotebooksComponent },
   { path: 'gestion-des-activites', component: ManageActivitiesComponent },
   { path: 'gestion-des-publications', component: ManagePublicationsComponent },
+  { path: 'editer-materiel/:materielSlug', component : EditMaterialComponent},
   { path: '', component: AdminHomeComponent },
 ];
 

@@ -33,74 +33,32 @@
   </thead>
 
   <tbody>
-    <tr *ngFor="let material of materialsEditableChild; let index = index" [ngClass]="index % 2 ? 'bg-dark' : ''">
+    <tr *ngFor="let material of materialsEditableChild; let index = index"
+        [ngClass]="index % 2 ? 'bg-dark' : ''">
       <td>
         <p *ngIf="!material.canEdit">{{ material.name | titlecase }}</p>
-        <input
-          *ngIf="material.canEdit"
-          type="text"
-          value="{{ material.name }}"
-          (keyup)="changeValue($event, material, 'name')"
-        />
       </td>
       <td>
-        <p *ngIf="!material.canEdit" class="article-title">
+        <p class="article-title">
           {{ material.materialType | titlecase }}
         </p>
-        <div class="dropdown-container" *ngIf="material.canEdit">
-          <input 
-            type="text"
-            id="materialType"
-            value="{{material.materialType | titlecase}}"
-            autocomplete="off"
-            class="pointer"
-            (click)="toogleDropdown()"
-            readonly
-          />
-    
-          <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownOpen}">
-            <li *ngFor="let type of materialTypes" (click)="materialTypeClicked(material, type); toogleDropdown() ">
-                {{ type | titlecase }}
-            </li>
-          </ul>
-        </div>
       </td>
       <td>
-        <p *ngIf="!material.canEdit" class="article-title">
+        <p class="article-title">
           {{ material.price | number: '0.2' }}
         </p>
-        <input
-          *ngIf="material.canEdit"
-          type="number"
-          id="price"
-          (keyup)="changeValue($event, material, 'price')"
-          placeholder="{{ material.price | number: '0.2' }}"
-        />
+      </td>
+      <td>
+        <i class="fa-solid fa-file-lines"></i>
       </td>
       <td>
         <img
           src="{{material.picture}}"
           alt="Photo de {{material.name}}"
-          (click)="material.canEdit ? fileUpload.click() : ''"
         >
-        <input
-          *ngIf="material.canEdit"
-          type="text"
-          value="{{ material.picture }}"
-          (keyup)="changeValue($event, material, 'picture')"
-        />
-        <input
-          class="display-none"
-          type="file"
-          accept="image/png, image/jpeg, image/bmp, image/gif"
-          (change)="onFileSelected($event, material)"
-          #fileUpload
-        />
       </td>
       <td>
-        <i *ngIf="!material.canEdit" (click)="canEdit(material)" class="fa-solid fa-pencil"></i>
-          <i *ngIf="material.canEdit" (click)="edit(material)" class="fa-solid fa-check-circle"></i>
-          <i *ngIf="material.canEdit" (click)="cancelEditing(material)" class="fa-solid fa-circle-xmark"></i>
+        <i [routerLink]="'/admin/editer-materiel/' + material.slug" class="fa-solid fa-pencil"></i>
       </td>
       <td>
         <i (click)="delete(material.slug)" class="fa-solid fa-trash-can flex center"></i>

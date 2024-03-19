@@ -10,7 +10,7 @@ import { URLAPI } from '../variables/others';
 export class ApiRequestsService {
   constructor(private http: HttpClient) {}
 
-  geAllMaterials(): Observable<MaterialDto[]>{
+  getAllMaterials(): Observable<MaterialDto[]>{
     return this.http.get<MaterialDto[]>(URLAPI + "/materials")
   }
 

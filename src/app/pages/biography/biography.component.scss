@@ -3,7 +3,6 @@
 
 .biography-page {
   section {
-    width: calc(100vw - ($fourth-padding * 2));
     .image-and-filter-color {
       padding: $fourth-padding;
       @include one-third-picture;
@@ -47,8 +46,6 @@
 
   .biography-page {
     section{
-      width: 100vw;
-      max-width: 650px;
       p {
       padding: 0;
       }
@@ -77,7 +74,6 @@
 @media screen and (min-width: 992px) {
   .biography-page {
     section{
-      max-width: 800px;
       p {
       padding: 0;
       }

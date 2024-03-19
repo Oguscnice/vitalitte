@@ -112,6 +112,9 @@ html {
   scrollbar-color: transparent;
 }
 body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow-x: hidden;
   line-height: 1.2;
 }
@@ -302,9 +305,15 @@ router-outlet + * {
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
+  router-outlet + * {
+    max-width: 650px;
+  }
 }
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
+  router-outlet + * {
+    max-width: 800px;
+  }
   p {
     font-size: $normal-font-size;
     text-align: left;
@@ -315,12 +324,40 @@ router-outlet + * {
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
+  router-outlet + * {
+    max-width: 1000px;
+  }
 }
 
-html, body { 
-  height: 100%;
-}
 body {
-  // margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* --------- Width % --------- */
+.width10 {
+  width: 10%;
+}
+.width20 {
+  width: 20%;
+}
+.width30 {
+  width: 30%;
+}
+.width40 {
+  width: 40%;
+}
+.width50 {
+  width: 50%;
+}
+.width60 {
+  width: 60%;
+}
+.width70 {
+  width: 70%;
+}
+.width80 {
+  width: 80%;
+}
+.width90 {
+  width: 90%;
 }

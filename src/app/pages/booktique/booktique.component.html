@@ -5,20 +5,18 @@
     [backgroundImageChild]="backgroundImageParentHome"
   ></app-h1>
 
-  <section>
-    <div class="cards-choice flex space-around">
-      <div class="card" (click)="userChoiceSelected('classic')">
-        <p class="heading">Carnets</p>
-        <p class="sub-heading">Thématique</p>
-        <p>&nbsp;</p>
-        <p>Sélectionner</p>
-      </div>
-      <div class="card" (click)="userChoiceSelected('personnalised')">
-        <p class="heading">Personnalisé</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p>Sélectionner</p>
-      </div>
+  <section class="cards-choice flex space-around">
+    <div class="card" (click)="userChoiceSelected('classic')">
+      <p class="heading">Carnets</p>
+      <p class="sub-heading">Thématique</p>
+      <p>&nbsp;</p>
+      <p>Sélectionner</p>
+    </div>
+    <div class="card" (click)="userChoiceSelected('personnalised')">
+      <p class="heading">Personnalisé</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>Sélectionner</p>
     </div>
   </section>
 

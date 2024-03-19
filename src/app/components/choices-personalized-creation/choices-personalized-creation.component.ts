@@ -31,11 +31,8 @@ export class ChoicesPersonalizedCreationComponent extends BaseComponent {
   }
   geAllMaterials(): void{
     this.subscriptions.push(
-      this.apiRequestsService.geAllMaterials().subscribe({
-        next: (materials) => {
-          this.materials = materials;
-          console.log(materials);
-        },
+      this.apiRequestsService.getAllMaterials().subscribe({
+        next: (materials) => this.materials = materials,
         error: (err) => (this.messageResponseFromBackend = err.error.message)
       })
     )

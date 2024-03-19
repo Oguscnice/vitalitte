@@ -19,8 +19,7 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
 
     if (request.url.startsWith('https://api.cloudinary.com/') 
-        || request.url.startsWith('https://api.imgbb.com/')
-        || request.url.includes('tinymce')) {
+        || request.url.startsWith('https://api.imgbb.com/')) {
       return next.handle(request);
     } else {
       let headers = new HttpHeaders().append(

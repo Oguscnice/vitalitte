@@ -47,6 +47,7 @@ $double-font-size: 1.5 * $normal-font-size;
 $triple-font-size: 2 * $normal-font-size;
 $fourth-font-size: 3 * $normal-font-size;
 $max-font-size: 4 * $normal-font-size;
+$half-font-size: calc($normal-font-size / 2);
 
 // ----- height-h1-component;
 $mobile-h1-component: 240px;
@@ -72,12 +73,6 @@ $z-index: 1;
   height: calc((100vw - (2 * $fourth-padding)) / 3);
 }
 
-@mixin screen-more-1400px {
-  padding: 0;
-  padding: 0vw;
-  width: 100vw;
-  max-width: 800px;
-}
 
 @mixin text-shadow ($height, $color) {
   text-shadow : 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,

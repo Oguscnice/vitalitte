@@ -8,12 +8,12 @@ $notebook-picture-size : calc(100vw - ($fourth-padding * 2));
   h5{
     font-size: $double-font-size;
     padding-bottom: $triple-padding;
-    width: 100%;
   }
   p{
     padding: $double-padding 0;
     text-align: left;
     font-size: $normal-font-size;
+    max-width: $notebook-picture-size;
   }
   .image-and-filter-color {
     height: $notebook-picture-size;
@@ -36,20 +36,26 @@ $notebook-picture-size : calc(100vw - ($fourth-padding * 2));
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
+
   $notebook-picture-size : 650px;
+
   .notebooks-list{
-    max-width: 650px;
+    max-width: $notebook-picture-size;
+    h5{
+      width: 100%;
+      text-align: left;
+    }
     .image-and-filter-color {
-      max-width: 650px;
-      max-height: 650px;
+      max-width: $notebook-picture-size;
+      max-height: $notebook-picture-size;
       img{
-        min-width: 650px;
-        min-height: 650px;
+        min-width: $notebook-picture-size;
+        min-height: $notebook-picture-size;
       }
       .filter-color {
         top: calc( -650px - 4px);
-        min-height: calc(650px + 2px + 2px);
-        width: calc(650px + 2px + 2px);
+        min-height: calc($notebook-picture-size + 2px + 2px);
+        width: calc($notebook-picture-size + 2px + 2px);
       }
     }
   }

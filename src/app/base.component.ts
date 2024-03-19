@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-base',
@@ -13,26 +13,15 @@ export class BaseComponent {
 
   protected messageResponseFromBackend!: string;
   protected subscriptions: Subscription[] = [];
-  protected messageSubscriber: BehaviorSubject<string>;
-
-  constructor(){
-    this.messageSubscriber = new BehaviorSubject<string>(this.messageResponseFromBackend);
-  }
 
   ngOnInit(): void {
     this.scrollToTop();
-    this.messageSubscriber.subscribe(newMessage => {
-      console.log('La nouvelle valeur de message est :', newMessage);
-      // Ajoutez ici les actions que vous souhaitez effectuer à chaque changement de message
-    });
   }
 
   changeMessage(newMessage: string): void {
     this.messageResponseFromBackend = newMessage;
-    this.messageSubscriber.next(newMessage);
     setTimeout(() => {
       this.messageResponseFromBackend = "";
-      this.messageSubscriber.next(this.messageResponseFromBackend); // Émettre la nouvelle valeur aux abonnés
     }, 5000);
   }
 

@@ -33,7 +33,5 @@ export class NotebookSelectedComponent extends BaseComponent{
         this.notebookSelected = notebook
       }
     }
-    console.log(this.notebookSelected);
-    
   }
 }

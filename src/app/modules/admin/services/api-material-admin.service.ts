@@ -16,6 +16,10 @@ export class ApiMaterialAdminService {
     return this.http.get<MaterialDto[]>(URLAPI + "/materials")
   }
 
+  getBySlug(materialSlug : MaterialDto['slug']): Observable<MaterialDto>{
+    return this.http.get<MaterialDto>(URLAPI + "/materials/" + materialSlug)
+  }
+
   post(material : CreateMaterial): Observable<ResponseEntity>{
     return this.http.post<ResponseEntity>(URLAPI + "/materials", material)
   }
