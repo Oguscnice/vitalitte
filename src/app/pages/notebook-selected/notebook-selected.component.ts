@@ -1,8 +1,8 @@
-import { NOTEBOOKS } from 'src/app/shared/variables/notebooks';
+import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Notebook } from 'src/app/shared/interfaces/Notebook';
 import { BaseComponent } from 'src/app/base.component';
+import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 
 @Component({
   selector: 'app-notebook-selected',
@@ -12,26 +12,28 @@ import { BaseComponent } from 'src/app/base.component';
 export class NotebookSelectedComponent extends BaseComponent{
 
   notebookSlug! : string
-  notebookSelected! : Notebook
-  notebooks = NOTEBOOKS
+  notebookSelected! : NotebookDto
 
-  constructor(public route: ActivatedRoute){
+  constructor(
+    public route: ActivatedRoute,
+    private apiRequestsService : ApiRequestsService
+    ){
     super()
   }
 
-  override ngOnInit(){
+  ngOnInit(){
     this.route.params.subscribe((params) => {
       this.notebookSlug = params['notebookSlug'];
       this.findNotebook()
     });
-    super.ngOnInit();
   }
 
   findNotebook():void{
-    for(let notebook of NOTEBOOKS){
-      if(this.notebookSlug === notebook.slug){
-        this.notebookSelected = notebook
-      }
-    }
+    this.subscriptions.push(
+      this.apiRequestsService.getNotebookBySlug(this.notebookSlug).subscribe({
+        next: (notebook) => this.notebookSelected = notebook,
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
   }
 }

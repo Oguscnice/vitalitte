@@ -1,3 +1,4 @@
+import { AddDataSqlService } from './../../shared/services/add-data-sql.service';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
@@ -8,6 +9,17 @@ import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent extends BaseComponent{
+
+  constructor(
+    private addData : AddDataSqlService
+  ){
+    super()
+  }
+
+  ngOnInit(): void{
+    // this.addData.createAll()
+  }
+
   titleParentHome: string = 'Bienvenue';
   backgroundImageParentHome: string =
     '../../../assets/images/figma/school-work.jpg';

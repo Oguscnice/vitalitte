@@ -1,15 +1,20 @@
+import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { Injectable } from '@angular/core';
 import { ShoppingCart } from '../interfaces/ShoppingCart';
-import { NOTEBOOKS } from '../variables/notebooks';
+import { NotebookDto } from '../interfaces/Notebook';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService {
 
-  userShoppingCart : ShoppingCart[] = []
-  counertQuantityUserShoppingCart : number = 0
-  notebooks = NOTEBOOKS
+  constructor(
+    private apiRequestsService : ApiRequestsService
+  ){}
+
+  userShoppingCart : ShoppingCart[] = [];
+  counertQuantityUserShoppingCart : number = 0;
+  notebooks! : NotebookDto[];
 
   haveCartInLocalStorage() : ShoppingCart[]{
     return  localStorage.getItem('userCartVittalite') ? 

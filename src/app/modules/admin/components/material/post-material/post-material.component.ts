@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { CreateMaterial } from 'src/app/shared/interfaces/Material';
 import { FileUploadService } from '../../../services/file-upload.service';
 import { urlValidator } from '../../../validators/urlValidators';
 import { priceValidator } from '../../../validators/priceValidators';
 import { FileInfo } from '../../../interfaces/FileInfo';
 import { TransformApiPostService } from '../../../services/transform-api-post.service';
+import { CreateMaterial } from '../../../interfaces/Material';
 
 @Component({
   selector: 'app-post-material',

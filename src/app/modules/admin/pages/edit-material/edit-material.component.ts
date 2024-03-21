@@ -1,6 +1,6 @@
 import { ApiMaterialAdminService } from './../../services/api-material-admin.service';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { FileUploadService } from '../../services/file-upload.service';
@@ -24,7 +24,8 @@ export class EditMaterialComponent extends BaseComponent{
     private apiRequestsService : ApiRequestsService,
     private fileUploadService: FileUploadService,
     private formBuilder: FormBuilder,
-    private transformApiPutService : TransformApiPutService
+    private transformApiPutService : TransformApiPutService,
+    private router: Router
   ){
     super()
   }
@@ -36,6 +37,8 @@ export class EditMaterialComponent extends BaseComponent{
   imageToDisplay! : string;
   isDropdownOpen : boolean = false;
   isFormSubmit : boolean = false;
+  modalVisible : boolean = false;
+  modalText! : string;
 
   fileSizeMax: number = this.fileUploadService.SIZE_MAX;
   fileSize!: number;
@@ -56,13 +59,12 @@ export class EditMaterialComponent extends BaseComponent{
     picture: ['', [Validators.required, urlValidator]]
   });
 
-  override ngOnInit(){
+  ngOnInit(){
     this.route.params.subscribe((params) => {
       this.materialSlug = params['materielSlug'];
       this.getMaterial();
       this.getAllMaterialsTypes();
     });
-    super.ngOnInit();
   }
 
   getMaterial():void{
@@ -80,10 +82,7 @@ export class EditMaterialComponent extends BaseComponent{
   getAllMaterialsTypes(): void{
     this.subscriptions.push(
       this.apiRequestsService.getAllMaterialsTypes().subscribe({
-        next: (materialsTypes) => {
-          this.materialTypes = materialsTypes
-          this.updateTypeFormValueValue();
-        },
+        next: (materialsTypes) => this.materialTypes = materialsTypes,
         error: (err) => (this.changeMessage(err.error.message))
       })
     )
@@ -92,13 +91,10 @@ export class EditMaterialComponent extends BaseComponent{
   updateEditFormValueValue(): void {
     this.editMaterialForm.get('name')!.setValue(this.materialSelected.name);
     this.editMaterialForm.get('price')!.setValue(this.materialSelected.price.toString());
+    this.editMaterialForm.get('materialType')!.setValue(this.materialSelected.materialType);
     this.editMaterialForm.get('description')!.setValue(this.materialSelected.description);
     this.editMaterialForm.get('picture')!.setValue(this.materialSelected.picture);
     this.imageToDisplay = this.materialSelected.picture;
-  }
-
-  updateTypeFormValueValue(): void {
-    this.editMaterialForm.get('materialType')!.setValue(this.materialSelected.materialType);
   }
 
   toogleDropdown(): void{
@@ -147,11 +143,17 @@ export class EditMaterialComponent extends BaseComponent{
     }
   }
 
+  responseForModal(response : boolean): void{
+    this.router.navigate(['/admin/gestion-des-materiaux']);
+  }
+
   putMaterial(materialToEdit : MaterialDto): void{
     this.subscriptions.push(
       this.apiMaterialAdminService.put(materialToEdit).subscribe({
         next: (res) => {
-          this.changeMessage(res.message);
+          this.modalText = res.message;
+          // Après avoir envoyé, on vérouille le formulaire pour empêcher une nouvelle modif sur un slug non existant
+          this.modalVisible = true;
           // Après avoir envoyé, on remet les variables à zéro
           this.isFormSubmit = false;
         },

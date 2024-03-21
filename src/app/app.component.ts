@@ -21,7 +21,7 @@ export class AppComponent {
 
   ngOnInit() : void {
     this.checkCurrentUrl();
-    this.shoppingCartService.haveCartInLocalStorage()
+    this.shoppingCartService.haveCartInLocalStorage();
   }
 
   checkCurrentUrl() {

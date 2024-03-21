@@ -41,7 +41,6 @@ import { NgxPayPalModule } from 'ngx-paypal';
 import { ShoppingCartService } from './shared/services/shopping-cart.service';
 import { ShoppingNotebooksListComponent } from './components/shopping-notebooks-list/shopping-notebooks-list.component';
 import { ChoicesPersonalizedCreationComponent } from './components/choices-personalized-creation/choices-personalized-creation.component';
-import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { AnguilleComponent } from './shared/components/anguille/anguille.component';
 
 
@@ -50,7 +49,6 @@ import { AnguilleComponent } from './shared/components/anguille/anguille.compone
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    ModalComponent,
     HomeComponent,
     LoginComponent,
     Page404Component,
@@ -86,7 +84,8 @@ import { AnguilleComponent } from './shared/components/anguille/anguille.compone
     MatIconModule,
     MatSelectModule,
     NgxPayPalModule,
-    AnguilleComponent
+    AnguilleComponent,
+    ModalComponent
   ],
   providers: [
     AuthGuard,

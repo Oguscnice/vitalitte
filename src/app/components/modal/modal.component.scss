@@ -1,0 +1,83 @@
+@import "../../modules/admin/scss/admin-general.scss";
+
+.modal-confirmation-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: $lilac-light-opacity-low;
+  backdrop-filter: blur(5px);
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0;
+
+  .content-text-and-buttons {
+    background-color: $white;
+    width: 80vw;
+    max-width: 300px;
+    border-radius: 10px;
+    border: 2px solid $lilac-dark;
+    padding: 20px;
+    box-shadow: 4px 4px 8px $lilac-dark;
+    p {
+      padding: $fourth-padding 0;
+      font-size: $triple-font-size;
+      color: $lilac-dark;
+    }
+
+    .btn-direction{
+      font-size: $triple-font-size;
+      width: 100%;
+    }
+  }
+}
+
+.modal-visible{
+  animation: fade-in 0.8s forwards;
+}
+
+.modal-invisible{
+  animation: fade-out 0.8s forwards;
+}
+
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1235px) {
+}
+
+@keyframes fade-in {
+  0% { 
+    z-index: -1;
+    opacity: 0;
+  }
+  1%{
+    z-index: 9999;
+    opacity: 0.1;
+  }
+  100% {
+    z-index: 9999;
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% { 
+    z-index: 9999;
+    opacity: 1;
+  }
+  99%{
+    z-index: 9999;
+    opacity: 0.1;
+  }
+  100% {
+    z-index: -1;
+    opacity: 0;
+  }
+}

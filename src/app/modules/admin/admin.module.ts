@@ -11,9 +11,12 @@ import { PostMaterialComponent } from './components/material/post-material/post-
 import { EditDeleteMaterialComponent } from './components/material/edit-delete-material/edit-delete-material.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditorModule, TINYMCE_SCRIPT_SRC  } from '@tinymce/tinymce-angular';
-import { AppModule } from 'src/app/app.module';
 import { AnguilleComponent } from 'src/app/shared/components/anguille/anguille.component';
 import { EditMaterialComponent } from './pages/edit-material/edit-material.component';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { ReturnAdminHomeComponent } from './components/return-admin-home/return-admin-home.component';
+import { PostNotebookComponent } from './components/notebook/post-notebook/post-notebook.component';
+import { EditDeleteNotebookComponent } from './components/notebook/edit-delete-notebook/edit-delete-notebook.component';
 
 
 @NgModule({
@@ -26,6 +29,9 @@ import { EditMaterialComponent } from './pages/edit-material/edit-material.compo
     PostMaterialComponent,
     EditDeleteMaterialComponent,
     EditMaterialComponent,
+    ReturnAdminHomeComponent,
+    PostNotebookComponent,
+    EditDeleteNotebookComponent,
   ],
   imports: [
     CommonModule,
@@ -33,7 +39,8 @@ import { EditMaterialComponent } from './pages/edit-material/edit-material.compo
     ReactiveFormsModule,
     FormsModule,
     EditorModule,
-    AnguilleComponent
+    AnguilleComponent,
+    ModalComponent
   ],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

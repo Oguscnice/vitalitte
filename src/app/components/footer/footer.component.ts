@@ -3,10 +3,12 @@ import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-footer',
-  template: `<footer class="flex space-around center" #footer>
-              <i class="fa-brands fa-square-facebook"></i>
-              <i class="fa-brands fa-instagram"></i>
-              <i class="fa-solid fa-envelope"></i>
+  template: `<footer class="flex center" #footer>
+                <div class="footer-container flex space-around center">
+                  <i class="fa-brands fa-square-facebook"></i>
+                  <i class="fa-brands fa-instagram"></i>
+                  <i class="fa-solid fa-envelope"></i>
+                </div>
             </footer>`,
   styleUrls: ['./footer.component.scss']
 })

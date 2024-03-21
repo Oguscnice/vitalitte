@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Notebook } from 'src/app/shared/interfaces/Notebook';
+import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { ShoppingCart } from 'src/app/shared/interfaces/ShoppingCart';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
 
@@ -9,9 +9,9 @@ import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.servi
               <div *ngFor="let notebook of notebooksListChild"
                   class="shopping-notebooks-container flex">
                 <img src="{{notebook.mainPicture}}"
-                    alt="Image du Carnet {{notebook.title}}">
+                    alt="Image du Carnet {{notebook.name}}">
                 <div class="title-and-price flex column center">
-                  <h4>{{notebook.title | titlecase }}</h4>
+                  <h4>{{notebook.name | titlecase }}</h4>
                   <p>{{notebook.price | number: '0.2'}} €</p>
                   <div class="shopping-cart-gestion flex">
                     <button (click)="subtractNotebookToShoppingCart(notebook.slug)">-</button>
@@ -25,7 +25,7 @@ import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.servi
 })
 export class ShoppingNotebooksListComponent {
 
-  @Input() notebooksListChild! : Notebook[];
+  @Input() notebooksListChild! : NotebookDto[];
 
   constructor(
     public shoppingCartService : ShoppingCartService

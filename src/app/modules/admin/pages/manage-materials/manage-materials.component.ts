@@ -1,43 +1,42 @@
-import { TransformToEditableService } from './../../services/transform-to-editable.service';
 import { ApiRequestsService } from './../../../../shared/services/api-requests.service';
 import { ApiMaterialAdminService } from './../../services/api-material-admin.service';
 import { Component } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
-import { CreateMaterial, MaterialDto } from 'src/app/shared/interfaces/Material';
-import { MaterialEditable } from '../../interfaces/EditableObject';
+import { MaterialDto } from 'src/app/shared/interfaces/Material';
+import { CreateMaterial } from '../../interfaces/Material';
 
 @Component({
   selector: 'app-manage-materials',
-  template: `<app-post-material
+  template: ` <app-return-admin-home/>
+              <app-post-material
                 [materialTypes]="materialTypes"
                 (newMaterial)="postMaterial($event)"
               >
               </app-post-material>
               <app-edit-delete-material
-                [materialsEditableChild]="materialsEditable"
+                [materials]="materials"
                 [materialTypes]="materialTypes"
                 
                 (materialToEdit)="putMaterial($event)"
                 (materialSlugToDelete)="deleteMaterial($event)"
               >
               </app-edit-delete-material>
-              <anguille [message]="messageResponseFromBackend" />`,
+              <anguille [message]="messageResponseFromBackend"/>`,
   styleUrls: ['./manage-materials.component.scss']
 })
 export class ManageMaterialsComponent extends BaseComponent{
 
   constructor(
     private apiMaterialAdminService : ApiMaterialAdminService,
-    private apiRequestsService : ApiRequestsService,
-    private transformToEditableService : TransformToEditableService
+    private apiRequestsService : ApiRequestsService
   ){
     super()
   }
 
-  materialsEditable! : MaterialEditable[];
+  materials! : MaterialDto[];
   materialTypes : string[] = [];
 
-  override ngOnInit(): void {
+  ngOnInit(): void {
     this.getAllMaterials();
     this.getAllMaterialsTypes();
   }
@@ -45,7 +44,7 @@ export class ManageMaterialsComponent extends BaseComponent{
   getAllMaterials(): void{
     this.subscriptions.push(
       this.apiRequestsService.getAllMaterials().subscribe({
-        next: (materials) => this.materialsEditable = this.transformToEditableService.materialDtoToEditable(materials),
+        next: (materials) => this.materials = materials,
         error: (err) => (this.changeMessage(err.error.message))
       })
     )
@@ -89,7 +88,7 @@ export class ManageMaterialsComponent extends BaseComponent{
       this.apiMaterialAdminService.delete(materialSlug).subscribe({
         next: (res) => {
           this.changeMessage(res.message);
-          this.materialsEditable = this.materialsEditable.filter(material => material.slug !== materialSlug)
+          this.materials = this.materials.filter(material => material.slug !== materialSlug)
         },
         error: (err) => (this.changeMessage(err.error.message))
       })

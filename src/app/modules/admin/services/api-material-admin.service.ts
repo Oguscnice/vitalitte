@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateMaterial, MaterialDto } from 'src/app/shared/interfaces/Material';
+import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { ResponseEntity } from 'src/app/shared/interfaces/ResponseEntity';
 import { URLAPI } from 'src/app/shared/variables/others';
+import { CreateMaterial } from '../interfaces/Material';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,6 @@ import { URLAPI } from 'src/app/shared/variables/others';
 export class ApiMaterialAdminService {
 
   constructor(private http: HttpClient) {}
-
-  getAll(): Observable<MaterialDto[]>{
-    return this.http.get<MaterialDto[]>(URLAPI + "/materials")
-  }
 
   getBySlug(materialSlug : MaterialDto['slug']): Observable<MaterialDto>{
     return this.http.get<MaterialDto>(URLAPI + "/materials/" + materialSlug)

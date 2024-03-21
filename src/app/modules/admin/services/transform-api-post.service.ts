@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { CreateMaterial } from 'src/app/shared/interfaces/Material';
+import { CreateMaterial } from '../interfaces/Material';
 
 @Injectable({
   providedIn: 'root'

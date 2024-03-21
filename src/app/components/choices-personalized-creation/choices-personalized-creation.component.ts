@@ -18,7 +18,7 @@ export class ChoicesPersonalizedCreationComponent extends BaseComponent {
 
   materials! : MaterialDto[];
 
-  override ngOnInit(): void{
+  ngOnInit(): void{
     this.geAllMaterials()
   }
 

@@ -1,24 +1,24 @@
 <div class="notebook-selected-page flex column center">
 
-  <app-h1 [titleChild]="notebookSelected.title.toUpperCase()"
+  <app-h1 [titleChild]="notebookSelected.name.toUpperCase()"
       [backgroundImageChild]="notebookSelected.mainPicture">
   </app-h1>
 
   <div>
-    <h2 class="flex center">Carnet : {{ notebookSelected.title | titlecase }}</h2>
+    <h2 class="flex center">Carnet : {{ notebookSelected.name | titlecase }}</h2>
     <p>{{notebookSelected.introduction}}</p>
 
     <div class="flex column descriptions-list">
-      <p [style.display]="notebookSelected.descriptions.length > 0 ? 'flex' : 'none'"
+      <p [style.display]="notebookSelected.description ? 'flex' : 'none'"
         class ="description"
-        *ngFor="let paragraph of notebookSelected.descriptions">
+        *ngFor="let paragraph of notebookSelected.description">
         {{paragraph}}</p>
     </div>
 
     <p class="components-list flex wrap">Composants : 
-      <span [style.display]="notebookSelected.components.length > 0 ? 'flex' : 'none'"
-            *ngFor="let component of notebookSelected.components; let last = last">
-            {{component | titlecase}}{{ !last ? ', ' : '.' }}
+      <span [style.display]="notebookSelected.materialsDto.length > 0 ? 'flex' : 'none'"
+            *ngFor="let material of notebookSelected.materialsDto; let last = last">
+            {{ material.name| titlecase}}{{ !last ? ', ' : '.' }}
       </span>
     </p>
   </div>

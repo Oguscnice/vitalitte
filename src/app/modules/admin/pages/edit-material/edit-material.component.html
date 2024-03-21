@@ -1,4 +1,5 @@
 <anguille [message]="messageResponseFromBackend" />
+<app-return-admin-home/>
 <form
   (ngSubmit)="(editMaterialForm.valid)"
   [formGroup]="editMaterialForm"
@@ -107,10 +108,16 @@
   </fieldset>
 
   <button
-    class="btn-direction"
+    class="btn-direction pointer"
     type="submit"
     (click)="submitEditMaterialForm()"
   >
     Créer
   </button>
 </form>
+<app-modal
+  [modalVisible]="modalVisible"
+  [modalText]="modalText"
+  (responseForModal)="responseForModal($event)"
+>
+</app-modal>

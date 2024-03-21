@@ -25,7 +25,7 @@
                       'models-visible':'handmades-visible'">
     <div class="models">
       <h3>Liste des modèles</h3>
-      <app-shopping-notebooks-list [notebooksListChild]="notebooksListParent"></app-shopping-notebooks-list>
+      <app-shopping-notebooks-list [notebooksListChild]="notebooks"></app-shopping-notebooks-list>
     </div>
 
     <div class="handmades">
@@ -35,7 +35,7 @@
   </section>
 
   <section>
-    <p>Montant total : {{shoppingCartService.totalPrice() | number: '0.2'}} €</p>
+    <p>Montant total : {{ shoppingCartService.totalPrice() | number: '0.2'}} €</p>
     <app-paypal></app-paypal>
   </section>
 

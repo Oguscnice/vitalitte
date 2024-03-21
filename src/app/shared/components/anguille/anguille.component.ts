@@ -19,6 +19,7 @@ import { Component, Input } from '@angular/core';
               padding : $fourth-padding;
               max-width: 80vw;
               transition: right linear 1s;
+              z-index : 999;
             }
 
             .hors-roche {
