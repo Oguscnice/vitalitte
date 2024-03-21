@@ -20,17 +20,17 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
                     OK !
                   </button>
 
-                  <div [class]="multipleChoice ? 'two-buttons' : 'display-none'">
+                  <div [class]="multipleChoice ? 'two-buttons flex center space-between' : 'display-none'">
                     <button
                       (click)="closeModalAndSendResponseIfExist('false')"
-                      class="button-cancel"
+                      class="btn-admin-cancel"
                     >
                       Annuler
                     </button>
 
                     <button
                       (click)="closeModalAndSendResponseIfExist('true')"
-                      class="button-valid"
+                      class="btn-admin-valid"
                     >
                       Valider
                     </button>

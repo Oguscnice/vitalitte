@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
-import { MaterialEditable } from '../interfaces/EditableObject';
+import { CategoryEditable, MaterialEditable } from '../interfaces/EditableObject';
+import { CategoryDto } from 'src/app/shared/interfaces/Category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransformToEditableService {
 
-  materialDtoToEditable(materialsDto : MaterialDto[]): MaterialEditable[]{
-    return materialsDto.map(material => ({
-        ...material,
+  materialsDtoToEditable(materialsDto : MaterialDto[]): MaterialEditable[]{
+    return materialsDto.map(materialDto => ({
+        ...materialDto,
+        canEdit: false
+      }));
+  }
+  categoriesDtoToEditable(categoriesDto : CategoryDto[]): CategoryEditable[]{
+    return categoriesDto.map(categoryDto => ({
+        ...categoryDto,
         canEdit: false
       }));
   }

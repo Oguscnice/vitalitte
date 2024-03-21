@@ -17,6 +17,10 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ReturnAdminHomeComponent } from './components/return-admin-home/return-admin-home.component';
 import { PostNotebookComponent } from './components/notebook/post-notebook/post-notebook.component';
 import { EditDeleteNotebookComponent } from './components/notebook/edit-delete-notebook/edit-delete-notebook.component';
+import { ManageCategoriesComponent } from './pages/manage-categories/manage-categories.component';
+import { PostCategoryComponent } from './components/category/post-category/post-category.component';
+import { EditDeleteCategoryComponent } from './components/category/edit-delete-category/edit-delete-category.component';
+import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 
 
 @NgModule({
@@ -32,6 +36,10 @@ import { EditDeleteNotebookComponent } from './components/notebook/edit-delete-n
     ReturnAdminHomeComponent,
     PostNotebookComponent,
     EditDeleteNotebookComponent,
+    ManageCategoriesComponent,
+    PostCategoryComponent,
+    EditDeleteCategoryComponent,
+    CounterZeroIfEmpty
   ],
   imports: [
     CommonModule,

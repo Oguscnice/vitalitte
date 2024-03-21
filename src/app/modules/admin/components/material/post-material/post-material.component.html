@@ -75,6 +75,7 @@
       formControlName="description"
       autocomplete="off">
     </editor>
+    <p [style.color]=" this.newMaterialForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.newMaterialForm.get('description')!.value | counterZeroIfEmpty }} caractères / 1000 </p>
     
     <div *ngIf="isFormSubmit && newMaterialForm.controls['description'].invalid">
       <small *ngIf="newMaterialForm.controls.description.errors?.['required']">La descritpion du matériel est requise.</small>
@@ -85,7 +86,6 @@
   <fieldset class="flex column">
     <label for="picture">Photo : </label>
     <small>Privilégier un format PNG</small>
-    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
     <input
       class="display-none"
       type="file"
@@ -101,20 +101,22 @@
       (keyup)="changeImageValue($event)"
       placeholder="URL de l'image..."
     />
-    <div *ngIf="isFormSubmit && newMaterialForm.controls['picture'].invalid">
-      <small *ngIf="fileSize > fileSizeMax">Votre fichier dépasse les {{ fileSizeMax / 1048576 }} Méga-octects.</small>
-    </div>
-
     <img
       class="pointer"
       (click)="fileUpload.click()"
       src="{{ imageToDisplay }}"
       alt="Photo à choisir pour le matériel"
     />
+    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+
+    <div *ngIf="isFormSubmit && newMaterialForm.controls['picture'].invalid">
+      <small *ngIf="fileSize > fileSizeMax">Votre fichier dépasse les {{ fileSizeMax / 1048576 }} Méga-octects.</small>
+    </div>
+
   </fieldset>
 
   <button
-    class="btn-direction"
+    class="btn-submit-admin"
     type="submit"
     (click)="submitNewMaterialForm()"
   >

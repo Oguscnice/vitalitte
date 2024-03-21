@@ -7,6 +7,11 @@ export const NAVBAR_ADMIN: Menu[] = [
     submenu : null
   },
   {
+    name: 'Catégories',
+    routerLink: '/admin/gestion-des-categories',
+    submenu : null
+  },
+  {
     name: 'Carnets',
     routerLink: '/admin/gestion-des-carnets',
     submenu : null

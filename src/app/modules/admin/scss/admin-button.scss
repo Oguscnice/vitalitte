@@ -35,6 +35,18 @@
   text-align: center;
 }
 
+.btn-admin-cancel,
+.btn-admin-valid{
+  @extend .btn-admin;
+}
+
+.btn-admin-cancel {
+  background-color: $red;
+}
+.btn-admin-valid {
+  background-color: $lilac-light;
+}
+
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {

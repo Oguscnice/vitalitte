@@ -14,7 +14,16 @@ import { NAVBAR_ADMIN } from '../../variables/Navbar';
                   </div>
                 </div>
               </div>`,
-  styleUrls: ['./admin-home.component.scss']
+  styles: [`
+            @import "../../scss/admin-general.scss";
+
+            .admin-home-page{
+              .btns-admin-home{
+                min-height: 50vh;
+                gap: 24px;
+              }
+            }
+          `]
 })
 export class AdminHomeComponent {
   navbarAdmin : Menu[] = NAVBAR_ADMIN

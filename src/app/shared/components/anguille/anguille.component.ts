@@ -15,7 +15,7 @@ import { Component, Input } from '@angular/core';
             .anguille {
               position: fixed;
               top : calc($normal-margin + var(--height-header));
-              background-color: $lilac;
+              background-color: $lilac-light;
               padding : $fourth-padding;
               max-width: 80vw;
               transition: right linear 1s;

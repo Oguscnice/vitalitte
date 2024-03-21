@@ -10,7 +10,9 @@ import { CreateMaterial } from '../../../interfaces/Material';
 @Component({
   selector: 'app-post-material',
   templateUrl: './post-material.component.html',
-  styleUrls: ['./post-material.component.scss']
+  styles: [`
+            @import "../../../scss/admin-general.scss";
+          `]
 })
 export class PostMaterialComponent {
 
@@ -19,7 +21,6 @@ export class PostMaterialComponent {
     private formBuilder: FormBuilder,
     private transformApiPostService : TransformApiPostService
   ){}
-
 
   @Input() materialTypes! : string[];
   @Output() newMaterial: EventEmitter<CreateMaterial> = new EventEmitter();

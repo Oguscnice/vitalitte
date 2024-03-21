@@ -6,7 +6,9 @@ import { FileUploadService } from '../../../services/file-upload.service';
 @Component({
   selector: 'app-edit-delete-material',
   templateUrl: './edit-delete-material.component.html',
-  styleUrls: ['./edit-delete-material.component.scss']
+  styles: [`
+            @import "../../../scss/admin-general.scss";
+          `]
 })
 export class EditDeleteMaterialComponent {
 
@@ -24,6 +26,8 @@ export class EditDeleteMaterialComponent {
   isTableVisible: boolean = false;
   isDropdownOpen : boolean = false;
 
+  materialSlugToDeleteSelected! : MaterialDto['slug'];
+
   modalVisible : boolean = false;
   modalText! : string;
 
@@ -40,10 +44,6 @@ export class EditDeleteMaterialComponent {
     this.modalText = materialDescription;
   }
 
-  responseForModal(response : boolean): void{
-    this.modalVisible = false;
-  }
-
   edit(materialToEdit : MaterialDto): void{
     let materialEdited : MaterialDto = {
       ...materialToEdit
@@ -51,5 +51,16 @@ export class EditDeleteMaterialComponent {
     this.materialToEdit.emit(materialEdited);
   }
 
-  delete = (materialSlug : MaterialDto['slug']) => this.materialSlugToDelete.emit(materialSlug);
+  delete(materialSlug : MaterialDto['slug']): void {
+    this.materialSlugToDeleteSelected = materialSlug;
+    this.modalText = `Confirmer vouloir supprimer le matériel : "${materialSlug}"`
+    this.modalVisible = true;
+  }
+
+  responseForModal(response : boolean): void{
+    this.modalVisible = false;
+    if(response){
+      this.materialSlugToDelete.emit(this.materialSlugToDeleteSelected);
+    }
+  }
 }

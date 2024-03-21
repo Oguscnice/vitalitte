@@ -22,7 +22,9 @@ import { CreateMaterial } from '../../interfaces/Material';
               >
               </app-edit-delete-material>
               <anguille [message]="messageResponseFromBackend"/>`,
-  styleUrls: ['./manage-materials.component.scss']
+  styles: [`
+            @import "../../scss/admin-general.scss";
+          `]
 })
 export class ManageMaterialsComponent extends BaseComponent{
 
@@ -39,6 +41,10 @@ export class ManageMaterialsComponent extends BaseComponent{
   ngOnInit(): void {
     this.getAllMaterials();
     this.getAllMaterialsTypes();
+  }
+
+  ngOnDestroy() {
+    this.unsubscribeAll();
   }
 
   getAllMaterials(): void{
