@@ -27,7 +27,7 @@ export class PostMaterialComponent {
 
   isFormVisible : boolean = false;
   imageToDisplay : string = this.fileUploadService.imageMaterialDefault
-  isDropdownOpen : boolean = false;
+  isDropdownCategoryOpen : boolean = false;
   isFormSubmit : boolean = false;
 
   fileSizeMax: number = this.fileUploadService.SIZE_MAX;
@@ -44,14 +44,23 @@ export class PostMaterialComponent {
   newMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     materialType : ['', [Validators.required]],
-    price: ['', [priceValidator()]],
+    price: ['', [priceValidator]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
     picture: ['', [Validators.required, urlValidator]]
   });
 
-  toogleDropdown(): void{
-    this.isDropdownOpen = !this.isDropdownOpen
+  toggleDropdown(): void{
+    this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen
   }
+
+  addEuroSign(event: any) {
+    const input = event.target;
+    const value = input.value;
+
+    if (!isNaN(value)) {
+        input.value = value + " €";
+    }
+}
 
   materialTypeClicked(valueClicked : string){
     this.newMaterialForm.controls['materialType'].setValue(valueClicked);

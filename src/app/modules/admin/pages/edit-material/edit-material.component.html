@@ -24,19 +24,29 @@
   <fieldset class="flex column">
     <label for="materialType">Quel Type de Matériel ?</label>
     <div class="dropdown-container">
-      <input 
-        type="text"
-        id="materialType"
-        formControlName="materialType"
-        placeholder="Choississez le type de matériel..."
-        autocomplete="off"
-        class="pointer"
-        (click)="toogleDropdown()"
-        readonly
-      />
+      <div class="input-and-arrow flex">
+        <input type="text"
+               id="materialType"
+               formControlName="materialType"
+               placeholder="Choississez le type de matériel..."
+               autocomplete="off"
+               class="pointer"
+               (click)="toggleDropdown()"
+               (focus)="toggleDropdown()"
+               (blur)="toggleDropdown()"
+               readonly/>
+        <div class="arrow-icone flex center">
+          <i class="fa-solid fa-circle-chevron-down pointer"
+              *ngIf="isDropdownCategoryOpen"
+              (click)="toggleDropdown()"></i>
+          <i class="fa-solid fa-circle-chevron-up pointer"
+              *ngIf="!isDropdownCategoryOpen"
+            (click)="toggleDropdown()"></i>
+        </div>
+      </div>
 
-      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownOpen}">
-        <li *ngFor="let type of materialTypes" (click)="materialTypeClicked(type); toogleDropdown() ">
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownCategoryOpen}">
+        <li *ngFor="let type of materialTypes" (click)="materialTypeClicked(type); toggleDropdown() ">
             {{ type | titlecase }}
         </li>
       </ul>

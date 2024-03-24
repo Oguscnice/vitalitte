@@ -21,7 +21,7 @@ import { ManageCategoriesComponent } from './pages/manage-categories/manage-cate
 import { PostCategoryComponent } from './components/category/post-category/post-category.component';
 import { EditDeleteCategoryComponent } from './components/category/edit-delete-category/edit-delete-category.component';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
-
+import { AddEuroCurrency } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
 
 @NgModule({
   declarations: [
@@ -39,7 +39,8 @@ import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-i
     ManageCategoriesComponent,
     PostCategoryComponent,
     EditDeleteCategoryComponent,
-    CounterZeroIfEmpty
+    CounterZeroIfEmpty,
+    AddEuroCurrency
   ],
   imports: [
     CommonModule,

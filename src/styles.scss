@@ -4,6 +4,7 @@
 @import "../src/app/scss/buttons.scss";
 @import "../src/app/scss/table.scss";
 @import "../src/app/scss/variables.scss";
+@import "/src/app/scss/dropdown.scss";
 
 html,
 body,
@@ -107,23 +108,32 @@ nav,
 section {
   display: block;
 }
+
 html {
   // width: 100%;
   scrollbar-color: transparent;
 }
-body {
 
+body {
   overflow-x: hidden;
   line-height: 1.2;
 }
+
+editor {
+  z-index: $z-index;
+}
+
 ol,
 ul {
+  z-index: $z-index + 1;
   list-style: none;
 }
+
 blockquote,
 q {
   quotes: none;
 }
+
 blockquote:before,
 blockquote:after,
 q:before,
@@ -131,6 +141,7 @@ q:after {
   content: "";
   content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -239,17 +250,19 @@ h1 {
   background-color: rgba($brown, 0.2);
 }
 
-.visible-linear{
+.visible-linear {
   animation: appearLinear 2s linear forwards;
 }
 
-.invisible-linear{
+.invisible-linear {
   animation: disappearLinear 1s linear forwards;
 }
 
 //pour la rotation des "+" aux formulaire de création
-i{
+i {
   transition: all 0.4s linear;
+  color: $lilac;
+  font-size: $double-font-size;
 }
 
 .rotated45 {

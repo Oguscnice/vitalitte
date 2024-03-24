@@ -35,7 +35,7 @@ export class EditMaterialComponent extends BaseComponent{
   materialTypes : string[] = [];
 
   imageToDisplay! : string;
-  isDropdownOpen : boolean = false;
+  isDropdownCategoryOpen : boolean = false;
   isFormSubmit : boolean = false;
   modalVisible : boolean = false;
   modalText! : string;
@@ -59,7 +59,7 @@ export class EditMaterialComponent extends BaseComponent{
     picture: ['', [Validators.required, urlValidator]]
   });
 
-  ngOnInit(){
+  ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.materialSlug = params['materielSlug'];
       this.getMaterial();
@@ -67,7 +67,7 @@ export class EditMaterialComponent extends BaseComponent{
     });
   }
 
-  getMaterial():void{
+  getMaterial(): void {
     this.subscriptions.push(
       this.apiMaterialAdminService.getBySlug(this.materialSlug).subscribe({
         next: (material) =>{
@@ -79,7 +79,7 @@ export class EditMaterialComponent extends BaseComponent{
     )
   }
 
-  getAllMaterialsTypes(): void{
+  getAllMaterialsTypes(): void {
     this.subscriptions.push(
       this.apiRequestsService.getAllMaterialsTypes().subscribe({
         next: (materialsTypes) => this.materialTypes = materialsTypes,
@@ -97,11 +97,11 @@ export class EditMaterialComponent extends BaseComponent{
     this.imageToDisplay = this.materialSelected.picture;
   }
 
-  toogleDropdown(): void{
-    this.isDropdownOpen = !this.isDropdownOpen
+  toggleDropdown(): void{
+    this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen
   }
 
-  materialTypeClicked(valueClicked : string){
+  materialTypeClicked(valueClicked : string): void {
     this.editMaterialForm.controls['materialType'].setValue(valueClicked);
   }
 
@@ -132,7 +132,7 @@ export class EditMaterialComponent extends BaseComponent{
     }
   }
 
-  submitEditMaterialForm(): void{
+  submitEditMaterialForm(): void {
 
     this.editMaterialForm.get('picture')!.setValue(this.imageToDisplay);
     this.isFormSubmit = true
@@ -143,7 +143,7 @@ export class EditMaterialComponent extends BaseComponent{
     }
   }
 
-  responseForModal(response : boolean): void{
+  responseForModal(response : boolean): void {
     this.router.navigate(['/admin/gestion-des-materiaux']);
   }
 

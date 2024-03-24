@@ -28,11 +28,11 @@ export class EditDeleteCategoryComponent {
     category.canEdit = true;
   }
 
-  cancelEditing(categoryCancelEditing: CategoryEditable): void {
-    categoryCancelEditing.canEdit = false;
+  cancelEditing(categoryEditing: CategoryEditable): void {
+    categoryEditing.canEdit = false;
     for(let category of this.categories){
-      if(category.slug === categoryCancelEditing.slug){
-        categoryCancelEditing.name = category.name
+      if(category.slug === categoryEditing.slug){
+        categoryEditing.name = category.name
       }
     }
   }

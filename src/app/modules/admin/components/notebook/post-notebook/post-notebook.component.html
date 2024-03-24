@@ -44,16 +44,139 @@
       (keyup)="changeImageValue($event)"
       placeholder="URL de l'image..."
     />
+
+    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+
     <img
       class="pointer"
       (click)="fileUpload.click()"
       src="{{ imageToDisplay }}"
       alt="Photo à choisir pour le matériel"
     />
-    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
 
     <div *ngIf="isFormSubmit && newNotebookForm.controls['mainPicture'].invalid">
       <small *ngIf="fileSize > fileSizeMax">Votre fichier dépasse les {{ fileSizeMax / 1048576 }} Méga-octects.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="category">Catégorie ?</label>
+    <div class="dropdown-container">
+      <div class="input-and-arrow flex">
+        <input type="text"
+              id="category"
+              placeholder="Choississez la catégorie du carnet..."
+              autocomplete="off"
+              class="pointer"
+              (click)="toggleDropdown('categoryDropdown')"
+              [value]="categoryDtoForNewNotebook ? categoryDtoForNewNotebook.name : ''"
+              readonly/>
+        <div class="arrow-icone flex center">
+          <i class="fa-solid fa-circle-chevron-down pointer"
+              *ngIf="isDropdownCategoryOpen"
+              (click)="toggleDropdown('categoryDropdown')"></i>
+          <i class="fa-solid fa-circle-chevron-up pointer"
+              *ngIf="!isDropdownCategoryOpen"
+            (click)="toggleDropdown('categoryDropdown')"></i>
+        </div>
+      </div>
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownCategoryOpen}">
+        <li *ngFor="let category of categories" (click)="categoryClicked(category); toggleDropdown('categoryDropdown') ">
+            {{ category.name | titlecase }}
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="isFormSubmit">
+      <small *ngIf="categoryDtoForNewNotebook === null">La catégorie du carnet est obligatoire.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="materials">Matériaux ?</label>
+    <div class="dropdown-container">
+      <div class="input-and-arrow flex">
+        <input type="text"
+              id="materials"
+              placeholder="Choississez le(s) matériel(aux) du carnet..."
+              autocomplete="off"
+              class="pointer"
+              (click)="toggleDropdown('materialsDropdown')"
+              readonly/>
+        <div class="arrow-icone flex center">
+          <i class="fa-solid fa-circle-chevron-down pointer"
+              *ngIf="isDropdownMaterialsOpen"
+              (click)="toggleDropdown('materialsDropdown')"></i>
+          <i class="fa-solid fa-circle-chevron-up pointer"
+              *ngIf="!isDropdownMaterialsOpen"
+            (click)="toggleDropdown('materialsDropdown')"></i>
+        </div>
+      </div>
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownMaterialsOpen}">
+        <li *ngFor="let material of materials" (click)="materialClicked(material); toggleDropdown('materialsDropdown') ">
+            {{ material.name | titlecase }} ( {{ material.materialType | titlecase }} )
+        </li>
+      </ul>
+      <table>
+        <thead>
+          <tr>
+            <td>
+              <p>Nom</p>
+            </td>
+            <td>
+              <p>Prix</p>
+            </td>
+            <td>
+              <p>Type</p>
+            </td>
+            <td>
+              <p>Supp.</p>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="materialsDtoForNewNotebook.length < 1">
+            <td>
+              <p>Aucun matériel sélectionné</p>
+            </td>
+          </tr>
+          <ng-container *ngIf="materialsDtoForNewNotebook.length > 0">
+            <tr *ngFor="let material of materialsDtoForNewNotebook">
+              <td>
+                <p class="flex text-left"> {{ material.name | titlecase }} </p>
+              </td>
+              <td>
+                <p> {{ material.price | number :'0.2' }} €</p>
+              </td>
+              <td>
+                <p> {{ material.materialType | titlecase }} </p>
+              </td>
+              <td>
+                <i (click)="deleteMaterialFromList(material)" class="fa-solid fa-trash-can pointer flex center"></i>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <p>Total : {{ totalPriceMaterials() }}€</p>
+    </div>
+
+    <div *ngIf="isFormSubmit">
+      <small *ngIf="categoryDtoForNewNotebook === null">Au moins un matériel du carnet est obligatoire.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="price">Quel prix ?</label>
+    <input
+      type="number"
+      id="price"
+      formControlName="price"
+      placeholder="0"
+    />
+    <div *ngIf="isFormSubmit && newNotebookForm.controls['price'].invalid">
+      <small *ngIf="newNotebookForm.controls.price.errors?.['invalidPriceFormat']">Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
+      <small *ngIf="newNotebookForm.controls.price.errors?.['invalidPrice']">Le prix ne peut pas être inférieur à 0€.</small>
     </div>
   </fieldset>
 
@@ -75,20 +198,6 @@
   </fieldset>
 
   <fieldset class="flex column">
-    <label for="price">Quel prix ?</label>
-    <input
-      type="number"
-      id="price"
-      formControlName="price"
-      placeholder="0"
-    />
-    <div *ngIf="isFormSubmit && newNotebookForm.controls['price'].invalid">
-      <small *ngIf="newNotebookForm.controls.price.errors?.['invalidPriceFormat']">Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
-      <small *ngIf="newNotebookForm.controls.price.errors?.['invalidPrice']">Le prix ne peut pas être inférieur à 0€.</small>
-    </div>
-  </fieldset>
-
-  <fieldset class="flex column">
     <label for="description">Description du le carnet : </label>
     <editor
       [init]="toolBarConfig"
@@ -105,36 +214,9 @@
     </div>
   </fieldset>
 
-  <!-- <fieldset class="flex column">
-    <label for="materialType">Catégorie ?</label>
-    <div class="dropdown-container">
-      <input 
-        type="text"
-        id="materialType"
-        formControlName="materialType"
-        placeholder="Choississez le type de matériel..."
-        autocomplete="off"
-        class="pointer"
-        (click)="toogleDropdown()"
-        readonly
-      />
-
-      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownOpen}">
-        <li *ngFor="let type of materialTypes" (click)="materialTypeClicked(type); toogleDropdown() ">
-            {{ type | titlecase }}
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="isFormSubmit && newMaterialForm.controls['materialType'].invalid">
-      <small *ngIf="newMaterialForm.controls.materialType.errors?.['required']">Le type de matériel est obligatoire.</small>
-    </div>
-  </fieldset> -->
-
-  <button
-  class="btn-submit-admin"
-  type="submit"
-  (click)="submitNewNotebookForm()"
-  >
-  Créer
+  <button class="btn-submit-admin"
+          type="submit"
+          (click)="submitNewNotebookForm()">
+    Créer
   </button>
 </form>

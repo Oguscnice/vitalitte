@@ -7,6 +7,7 @@ import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
 import { CreateNotebook } from '../../interfaces/Notebook';
+import { loadScript } from '@paypal/paypal-js';
 
 @Component({
   selector: 'app-manage-notebooks',
@@ -19,6 +20,7 @@ import { CreateNotebook } from '../../interfaces/Notebook';
                 (newNotebook)="postNotebook($event)">
               </app-post-notebook>
               <app-edit-delete-notebook></app-edit-delete-notebook>
+              <anguille [message]="messageResponseFromBackend"/>
             `,
   styleUrls: ['./manage-notebooks.component.scss']
 })
