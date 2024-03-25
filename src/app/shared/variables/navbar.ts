@@ -6,16 +6,36 @@ export const NAVBAR_USER: Menu[] = [
     routerLink: '/',
     submenu : null
   },
+  // {
+  //   name: "L'univers",
+  //   routerLink: '/atelier',
+  //   submenu : {
+  //     isOpen : false,
+  //       items : [    
+  //           { name : "Carnets artisanaux", anchor : "handcraftedNotebooks" },
+  //           { name : "Animations", anchor : "animations" }
+  //               ]
+  //             }
+  // },
   {
-    name: "L'univers",
+    name: 'Carnets artisanaux',
     routerLink: '/atelier',
-    submenu : {
-      isOpen : false,
-        items : [    
-            { name : "Carnets artisanaux", anchor : "handcraftedNotebooks" },
-            { name : "Animations", anchor : "animations" }
-                ]
-              }
+    submenu : null
+  },
+  {
+    name: 'Ateliers',
+    routerLink: '/ateliers',
+    submenu : null
+  },
+  {
+    name: 'Actualités',
+    routerLink: '/actualites',
+    submenu : null
+  },
+  {
+    name: 'Booktique',
+    routerLink: '/booktique',
+    submenu : null
   },
   {
     name: 'A Propos',
@@ -27,11 +47,6 @@ export const NAVBAR_USER: Menu[] = [
             { name : "Qui suis-je ?", anchor : "whoAmI" }
              ]
               },
-  },
-  {
-    name: 'Booktique',
-    routerLink: '/booktique',
-    submenu : null
   },
   {
     name: 'Contact',

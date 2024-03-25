@@ -4,6 +4,7 @@
 @import "../src/app/scss/buttons.scss";
 @import "../src/app/scss/table.scss";
 @import "../src/app/scss/variables.scss";
+@import "/src/app/scss/dropdown.scss";
 
 html,
 body,
@@ -107,23 +108,32 @@ nav,
 section {
   display: block;
 }
+
 html {
   // width: 100%;
   scrollbar-color: transparent;
 }
+
 body {
   overflow-x: hidden;
   line-height: 1.2;
-  margin-top: var(--height-header);
 }
+
+editor {
+  z-index: $z-index;
+}
+
 ol,
 ul {
+  z-index: $z-index + 1;
   list-style: none;
 }
+
 blockquote,
 q {
   quotes: none;
 }
+
 blockquote:before,
 blockquote:after,
 q:before,
@@ -131,6 +141,7 @@ q:after {
   content: "";
   content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -165,6 +176,9 @@ table {
   }
   &.wrap {
     flex-wrap: wrap;
+  }
+  &.text-left {
+    text-align: left;
   }
 }
 
@@ -213,6 +227,10 @@ h3 {
   margin: $double-padding 0;
 }
 
+h4{
+  font-size: $double-font-size;
+}
+
 p {
   font-family: $font-family-text;
   font-size: $double-font-size;
@@ -232,13 +250,85 @@ h1 {
   background-color: rgba($brown, 0.2);
 }
 
+.visible-linear {
+  animation: appearLinear 2s linear forwards;
+}
+
+.invisible-linear {
+  animation: disappearLinear 1s linear forwards;
+}
+
+//pour la rotation des "+" aux formulaire de création
+i {
+  transition: all 0.4s linear;
+  color: $lilac;
+  font-size: $double-font-size;
+}
+
+.rotated45 {
+  transform: rotate(45deg);
+}
+
+.rotated180 {
+  transform: rotate(180deg);
+}
+
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@keyframes appearLinear {
+  0% {
+    z-index: $z-index + 10;
+    opacity: 0;
+  }
+  100% {
+    z-index: $z-index + 10;
+    opacity: 1;
+  }
+}
+
+@keyframes disappearLinear {
+  0% {
+    z-index: $z-index + 10;
+    opacity: 1;
+  }
+  99%{
+    z-index: $z-index + 10;
+    opacity: 0;
+  }
+  100% {
+    z-index: $z-index - 1;
+  }
+}
+
+// cible l'élément juste après le router-outlet
+// (donc la page appelée)
+router-outlet + * {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  //hauteur minimum de toute la page, moins celle du header et footer, auquelle on ajoute leurs bordures de 1px
+  min-height: calc(100vh - (var(--height-header) + (var(--height-footer) + $normal-margin)));
+  margin : var(--height-header) auto 0 auto;
+}
 
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
+  router-outlet + * {
+    max-width: 650px;
+  }
 }
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
+  router-outlet + * {
+    max-width: 800px;
+  }
   p {
     font-size: $normal-font-size;
     text-align: left;
@@ -249,12 +339,40 @@ h1 {
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
+  router-outlet + * {
+    max-width: 1000px;
+  }
 }
 
-html, body { 
-  height: 100%;
-}
 body {
-  // margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* --------- Width % --------- */
+.width10 {
+  width: 10%;
+}
+.width20 {
+  width: 20%;
+}
+.width30 {
+  width: 30%;
+}
+.width40 {
+  width: 40%;
+}
+.width50 {
+  width: 50%;
+}
+.width60 {
+  width: 60%;
+}
+.width70 {
+  width: 70%;
+}
+.width80 {
+  width: 80%;
+}
+.width90 {
+  width: 90%;
 }

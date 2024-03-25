@@ -3,20 +3,7 @@
   [titleChild]="titleParentCreations"
   [backgroundImageChild]="backgroundImageParentCreations"
   ></app-h1>
-  <div class="cards-choice flex space-around">
-      <div class="card" (click)="userChoiceSelected('notebook')">
-        <p class="heading">Carnets</p>
-        <p class="sub-heading">Artisanaux</p>
-        <p>&nbsp;</p>
-        <p>Découvrir</p>
-      </div>
-      <div class="card" (click)="userChoiceSelected('workshop')">
-        <p class="heading">Ateliers</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p>Découvrir</p>
-      </div>
-    </div>
+
     <section class="user-choice flex column center"
             *ngIf="userChoice === 'notebook'">
       <h2>Carnets</h2>
@@ -33,7 +20,7 @@
         notre précieuse planète.</p>
       <h4>Modèles :</h4>
       <app-notebooks-list
-      [notebooksListChild]="notebooksListPage"></app-notebooks-list>
+      [notebooksListChild]="notebooks"></app-notebooks-list>
       <h4>Encore plus de modèle içi...</h4>
       <button class="btn-normal pointer"
               routerLink="/carnets">

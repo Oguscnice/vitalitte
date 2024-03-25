@@ -1,0 +1,26 @@
+@import "../scss/admin-button.scss";
+@import "../scss/admin-form.scss";
+@import "../scss/admin-table.scss";
+
+.title-functionality{
+  margin-top: $half-margin;
+  h4{
+    padding: 0;
+    margin-right: $normal-margin;
+  }
+  i{
+    color: $lilac;
+    font-size: $triple-font-size;
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1235px) {
+}

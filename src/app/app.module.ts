@@ -36,6 +36,12 @@ import { CreateNotebookComponent } from './pages/create-notebook/create-notebook
 import { ImagesPreviewComponent } from './components/images-preview/images-preview.component';
 import { NewsHeadbandComponent } from './components/news-headband/news-headband.component';
 import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
+import { PaypalComponent } from './components/paypal/paypal.component';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { ShoppingCartService } from './shared/services/shopping-cart.service';
+import { ShoppingNotebooksListComponent } from './components/shopping-notebooks-list/shopping-notebooks-list.component';
+import { ChoicesPersonalizedCreationComponent } from './components/choices-personalized-creation/choices-personalized-creation.component';
+import { AnguilleComponent } from './shared/components/anguille/anguille.component';
 
 
 @NgModule({
@@ -43,7 +49,6 @@ import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    ModalComponent,
     HomeComponent,
     LoginComponent,
     Page404Component,
@@ -63,6 +68,9 @@ import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
     ImagesPreviewComponent,
     NewsHeadbandComponent,
     UpArrowComponent,
+    PaypalComponent,
+    ShoppingNotebooksListComponent,
+    ChoicesPersonalizedCreationComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,9 +82,15 @@ import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
     NgIf,
     MatButtonModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    NgxPayPalModule,
+    AnguilleComponent,
+    ModalComponent
   ],
-  providers: [AuthGuard, httpInterceptorProviders],
+  providers: [
+    AuthGuard,
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

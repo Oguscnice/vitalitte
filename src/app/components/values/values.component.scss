@@ -5,7 +5,7 @@
   justify-content: space-around;
 
   .value-icone-and-name {
-    // width: 24vw;
+
 
     i,
     span {
@@ -33,12 +33,10 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .values-container {
+    justify-content: space-between;
     width: 100vw;
     max-width: 650px;
-    justify-content: space-between;
     .value-icone-and-name {
-      // width: 0vw;
-      // width: 100%;
       i,
       span {
         height: 96px;
@@ -67,7 +65,6 @@
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   .values-container {
-    @include screen-more-1400px;
     .value-icone-and-name {
       i,
       span {

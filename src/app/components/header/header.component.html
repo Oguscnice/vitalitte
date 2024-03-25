@@ -3,7 +3,13 @@
     src="../../../assets/images/figma/icone.png"
     alt="Logo du site VitaLitté"
   />
-  <h3 class="flex">VitaLitté</h3>
+  <h3 class="flex"
+      [routerLink]="'/'">VitaLitté</h3>
+  <div class="shopping-cart-counter"
+      [ngClass]="shoppingCartService.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <p class="flex center">{{shoppingCartService.counterTotalShoppingCart()}}</p>
+  </div>
   <ul
     class="flex center space-around"
     [ngClass]="
@@ -11,9 +17,7 @@
         ? 'menu-burger-visible'
         : !isMenuBurgerChecked && !initialLoad
         ? 'menu-burger-hidden'
-        : ''
-    "
-  >
+        : '' ">
     <li
       *ngFor="let item of navbarUser; let index = index"
       [routerLink]="item.submenu ? null : item.routerLink"
@@ -23,8 +27,7 @@
         'separator': index !== navbarUser.length - 1 }"
       (click)="item.submenu ?
                 openSubmenu(item) :
-                closeMenuBurger(menuCheckbox, item.routerLink, $event) "
-    >
+                closeMenuBurger(menuCheckbox, item.routerLink, $event) ">
       <p class="flex center"
          [ngClass]="{
           'active': item.routerLink === activePageService.activePage,

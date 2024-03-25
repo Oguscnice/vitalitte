@@ -1,0 +1,116 @@
+@import "../../../scss/variables.scss";
+
+input{
+  @include inputStyleBorder;
+  border-radius: 4px;
+  padding: .15rem .5rem;
+  min-height: 40px;
+}
+
+input:focus {
+  // Styles spécifiques pour les inputs de type texte lorsqu'ils sont focus
+  border-bottom: 2px solid $lilac-light;
+  border-radius: 4px 4px 2px 2px;
+}
+
+input:hover {
+  // Styles spécifiques pour les inputs de type texte lorsqu'ils sont hover
+  outline: 1px solid $lilac-dark;
+}
+
+// retire les flèches de l'input NUMBER
+input[type="number"]{
+  max-width: 160px;
+	/* Firefox */
+	-moz-appearance: textfield;
+	/* Chrome */
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin:0;
+	}
+	/* Opéra*/
+	&::-o-inner-spin-button {
+		-o-appearance: none;
+		margin: 0; 
+	}
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 88%;
+  margin: $normal-margin auto 0 auto;
+
+  fieldset{
+    border: none;
+    padding-top: 16px;
+    width: 100%;
+    label{
+      font-size: $triple-font-size;
+    }
+    select,
+    input {
+      margin-top : $normal-margin;
+      width: 100%;
+    }
+  
+    img{
+      max-width: 180px;
+      max-height: 180px;
+      margin : 0 auto;
+      margin-top : $normal-margin;
+      border-radius: 8px;
+      border : 1px solid $lilac;
+    }
+
+    .bubble {
+      position: absolute;
+      top: -120px;
+      background-color: $white;
+      border: 2px solid $lilac;
+      padding: 16px;
+      border-radius: 5px;
+      box-shadow: 4px 4px 8px $lilac-dark;
+      z-index: 5;
+      font-size: $triple-font-size;
+    }
+
+    editor{
+      margin-top : $normal-margin;
+      border-radius: 8px;
+      border : 1px solid $lilac-light;
+    }
+
+    div{
+      small{
+        color: $red;
+      }
+    }
+  }
+
+  .tags-available{
+    margin-top : $normal-margin;
+    width: 100%;
+    gap: 8px;
+  }
+
+  button[type="submit"]{
+    margin : $double-margin 0;
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  form{
+    width: 100%;
+  }
+}
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+}
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1235px) {
+}

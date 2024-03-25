@@ -2,6 +2,7 @@
 :root {
   --height-footer: 0px;
   --height-header: 0px;
+  --height-booktique-page: 0px;
   --height-booktique-section-monitored: 0px;
   --height-img-monitored: 0px;
   --width-img-monitored: 0px;
@@ -13,7 +14,11 @@ $black: #000000;
 $lilac: rgba(182, 100, 210);
 $lilac-light: rgb(217, 117, 250);
 $lilac-dark: rgb(140, 76, 161);
+$lilac-light-opacity-low: #f67cfa42;
+$orange : orange;
 $brown : brown;
+$yellow : yellow;
+$red : red;
 
 // ----- padding -----
 $normal-padding: 8px;
@@ -42,6 +47,7 @@ $double-font-size: 1.5 * $normal-font-size;
 $triple-font-size: 2 * $normal-font-size;
 $fourth-font-size: 3 * $normal-font-size;
 $max-font-size: 4 * $normal-font-size;
+$half-font-size: calc($normal-font-size / 2);
 
 // ----- height-h1-component;
 $mobile-h1-component: 240px;
@@ -67,12 +73,6 @@ $z-index: 1;
   height: calc((100vw - (2 * $fourth-padding)) / 3);
 }
 
-@mixin screen-more-1400px {
-  padding: 0;
-  padding: 0vw;
-  width: 100vw;
-  max-width: 800px;
-}
 
 @mixin text-shadow ($height, $color) {
   text-shadow : 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
@@ -82,3 +82,12 @@ $z-index: 1;
         0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
         0 0 $height, $color;
 } 
+
+@mixin inputStyleBorder {
+  background-color: #f5f5f5;
+  color: #242424;
+  outline: none;
+  border: none;
+  line-height: 1.15;
+  box-shadow: 0px 10px 20px -18px $lilac-dark;
+}

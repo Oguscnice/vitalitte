@@ -1,22 +1,45 @@
 @import "../../scss/variables.scss";
 @import "../../../styles.scss";
 
+:root {
+  --height-footer: 0px;
+}
+
 footer {
   margin-top: $normal-margin;
   height: 60px;
   background-color: $lilac;
-  i {
-    color: $white;
-    font-size: $triple-font-size;
+  width: 100vw;
+  .footer-container{
+    width: 100%;
+    i {
+      color: $white;
+      font-size: $triple-font-size;
+    }
   }
 }
 
 @media screen and (min-width: 768px) {
+  footer {
+    .footer-container{
+      max-width: 650px;
+    }
+  }
 }
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
+  footer {
+    .footer-container{
+      max-width: 800px;
+    }
+  }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
+  footer {
+    .footer-container{
+      max-width: 1000px;
+    }
+  }
 }

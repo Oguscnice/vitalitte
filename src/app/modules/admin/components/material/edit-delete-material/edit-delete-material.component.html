@@ -1,0 +1,82 @@
+<div class="title-functionality flex center">
+  <h4 class="flex center">Gérer les Matériaux</h4>
+  <i class="fa-solid fa-arrow-down" (click)="isTableVisible = !isTableVisible" [ngClass]="{'rotated180': isTableVisible}"></i>
+</div>
+
+<div *ngIf="!materials || materials.length <= 0">Aucun Article</div>
+
+<table *ngIf="materials && isTableVisible">
+  <thead>
+    <tr>
+      <td>
+        <p>Libellé</p>
+      </td>
+      <td>
+        <p>Type</p>
+      </td>
+      <td>
+        <p>Prix</p>
+      </td>
+      <td>
+        <p>Des.</p>
+      </td>
+      <td>
+        <p>Image</p>
+      </td>
+      <td>
+        <p>Modif.</p>
+      </td>      
+      <td>
+        <p>Supp.</p>
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let material of materials; let index = index"
+        [ngClass]="index % 2 ? 'bg-dark' : ''">
+      <td>
+        <p class="flex text-left">{{ material.name | titlecase }}</p>
+      </td>
+      <td>
+        <p class="title">
+          {{ material.materialType | titlecase }}
+        </p>
+      </td>
+      <td>
+        <p>
+          {{ material.price | addEuroCurrency }}
+        </p>
+      </td>
+      <td>
+        <i
+          class="fa-solid fa-file-lines pointer flex center"
+          (click)="openModalWithDescription(material.description)"
+          >
+        </i>
+      </td>
+      <td class="flex center">
+        <img
+          src="{{material.picture}}"
+          alt="Photo de {{material.name}}"
+          
+        >
+      </td>
+      <td>
+        <i [routerLink]="'/admin/editer-materiel/' + material.slug" class="fa-solid fa-pencil pointer flex center"></i>
+      </td>
+      <td>
+        <i (click)="delete(material.slug)" class="fa-solid fa-trash-can pointer flex center"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<app-modal
+  [modalVisible]="modalVisible"
+  [modalText]="modalText"
+  [multipleChoice]="true"
+  
+  (responseForModal)="responseForModal($event)"
+>
+</app-modal>

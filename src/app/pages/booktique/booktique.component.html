@@ -1,1 +1,42 @@
-<p>booktique works!</p>
+<div class="booktique-page flex column center">
+  
+  <app-h1
+    [titleChild]="titleParentBooktique"
+    [backgroundImageChild]="backgroundImageParentHome"
+  ></app-h1>
+
+  <section class="cards-choice flex space-around">
+    <div class="card" (click)="userChoiceSelected('classic')">
+      <p class="heading">Carnets</p>
+      <p class="sub-heading">Thématique</p>
+      <p>&nbsp;</p>
+      <p>Sélectionner</p>
+    </div>
+    <div class="card" (click)="userChoiceSelected('personnalised')">
+      <p class="heading">Personnalisé</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>Sélectionner</p>
+    </div>
+  </section>
+
+  <section class="flex two-choices"
+           [ngClass]="userChoice === 'classic' ?
+                      'models-visible':'handmades-visible'">
+    <div class="models">
+      <h3>Liste des modèles</h3>
+      <app-shopping-notebooks-list [notebooksListChild]="notebooks"></app-shopping-notebooks-list>
+    </div>
+
+    <div class="handmades">
+      <h3>Créer mon Carnet</h3>
+      <app-choices-personalized-creation></app-choices-personalized-creation>
+    </div>
+  </section>
+
+  <section>
+    <p>Montant total : {{ shoppingCartService.totalPrice() | number: '0.2'}} €</p>
+    <app-paypal></app-paypal>
+  </section>
+
+</div>

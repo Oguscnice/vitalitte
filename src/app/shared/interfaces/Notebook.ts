@@ -1,10 +1,6 @@
-export interface Notebook {
-  title : string,
+import { CreateNotebook } from "src/app/modules/admin/interfaces/Notebook";
+
+export interface NotebookDto extends CreateNotebook {
   slug : string,
-  mainPicture : string,
-  introduction : string,
-  price : number,
-  pictures : string[],
-  descriptions : string[],
-  components : string[],
+  isAvailable : boolean,
 }

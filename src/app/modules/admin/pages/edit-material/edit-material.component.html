@@ -1,0 +1,133 @@
+<anguille [message]="messageResponseFromBackend" />
+<app-return-admin-home/>
+<form
+  (ngSubmit)="(editMaterialForm.valid)"
+  [formGroup]="editMaterialForm"
+  #myForm="ngForm"
+>
+  <fieldset class="flex column">
+    <label for="name">Libellé :</label>
+    <input
+      type="text"
+      id="name"
+      placeholder="Nom..."
+      formControlName="name"
+      autocomplete="off"
+    />
+
+    <div *ngIf="isFormSubmit && myForm.submitted && editMaterialForm.controls['name'].invalid">
+      <small *ngIf="editMaterialForm.controls.name.errors?.['required']">Le libellé du matériel est obligatoire.</small>
+      <small *ngIf="editMaterialForm.controls.name.errors?.['maxlength']">Le libellé du matériel ne doit pas dépasser 255 charactères.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="materialType">Quel Type de Matériel ?</label>
+    <div class="dropdown-container">
+      <div class="input-and-arrow flex">
+        <input type="text"
+               id="materialType"
+               formControlName="materialType"
+               placeholder="Choississez le type de matériel..."
+               autocomplete="off"
+               class="pointer"
+               (click)="toggleDropdown()"
+               (focus)="toggleDropdown()"
+               (blur)="toggleDropdown()"
+               readonly/>
+        <div class="arrow-icone flex center">
+          <i class="fa-solid fa-circle-chevron-down pointer"
+              *ngIf="isDropdownCategoryOpen"
+              (click)="toggleDropdown()"></i>
+          <i class="fa-solid fa-circle-chevron-up pointer"
+              *ngIf="!isDropdownCategoryOpen"
+            (click)="toggleDropdown()"></i>
+        </div>
+      </div>
+
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownCategoryOpen}">
+        <li *ngFor="let type of materialTypes" (click)="materialTypeClicked(type); toggleDropdown() ">
+            {{ type | titlecase }}
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="isFormSubmit && editMaterialForm.controls['materialType'].invalid">
+      <small *ngIf="editMaterialForm.controls.materialType.errors?.['required']">Le type de matériel est obligatoire.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="price">Quel prix ?</label>
+    <input
+      type="number"
+      id="price"
+      formControlName="price"
+      placeholder="0"
+    />
+    <div *ngIf="isFormSubmit && editMaterialForm.controls['price'].invalid">
+      <small *ngIf="editMaterialForm.controls.price.errors?.['invalidPriceFormat']">Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
+      <small *ngIf="editMaterialForm.controls.price.errors?.['invalidPrice']">Le prix ne peut pas être inférieur à 0€.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="description">Description du matériel : </label>
+    <editor
+      [init]="toolBarConfig"
+
+      placeholder="Description du matériel.."
+      formControlName="description"
+      autocomplete="off">
+    </editor>
+    
+    <div *ngIf="isFormSubmit && editMaterialForm.controls['description'].invalid">
+      <small *ngIf="editMaterialForm.controls.description.errors?.['required']">La descritpion du matériel est requise.</small>
+      <small *ngIf="editMaterialForm.controls.description.errors?.['maxlength']">La descritpion du matériel ne doit pas dépasser 1.000 charactères.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="picture">Photo : </label>
+    <small>Privilégier un format PNG</small>
+    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+    <input
+      class="display-none"
+      type="file"
+      accept="image/png, image/jpeg, image/bmp, image/gif"
+      (change)="onFileSelected($event)"
+      #fileUpload
+    />
+    <input
+      type="text"
+      id="picture"
+      formControlName="picture"
+      value="{{ imageToDisplay }}"
+      (keyup)="changeImageValue($event)"
+      placeholder="URL de l'image..."
+    />
+    <div *ngIf="isFormSubmit && editMaterialForm.controls['picture'].invalid">
+      <small *ngIf="fileSize > fileSizeMax">Votre fichier dépasse les {{ fileSizeMax / 1048576 }} Méga-octects.</small>
+    </div>
+
+    <img
+      class="pointer"
+      (click)="fileUpload.click()"
+      src="{{ imageToDisplay }}"
+      alt="Photo à choisir pour le matériel"
+    />
+  </fieldset>
+
+  <button
+    class="btn-direction pointer"
+    type="submit"
+    (click)="submitEditMaterialForm()"
+  >
+    Créer
+  </button>
+</form>
+<app-modal
+  [modalVisible]="modalVisible"
+  [modalText]="modalText"
+  (responseForModal)="responseForModal($event)"
+>
+</app-modal>

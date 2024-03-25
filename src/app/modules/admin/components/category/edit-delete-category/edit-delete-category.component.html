@@ -1,0 +1,58 @@
+<div class="title-functionality flex center">
+  <h4 class="flex center">Gérer les Catégories</h4>
+  <i class="fa-solid fa-arrow-down" (click)="isTableVisible = !isTableVisible" [ngClass]="{'rotated180': isTableVisible}"></i>
+</div>
+
+<div *ngIf="!categoriesEditable || categoriesEditable.length <= 0">Aucun Article</div>
+
+<table *ngIf="categoriesEditable && isTableVisible">
+  <thead>
+    <tr>
+      <td>
+        <p>Nom</p>
+      </td>
+      <td>
+        <p>Modif.</p>
+      </td>
+      <td>
+        <p>Supp.</p>
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let category of categoriesEditable ; let index = index"
+    [ngClass]="index % 2 ? 'bg-dark' : ''">
+  <td>
+    <p *ngIf="!category.canEdit">{{ category.name }}</p>
+    <input *ngIf="category.canEdit"
+           type="text"
+           value="{{ category.name }}"
+           (keyup)="changeInputValue($event, category)"/>
+    </td>
+    <td>
+      <i *ngIf="!category.canEdit"
+         (click)="canEdit(category)"
+         class="fa-solid fa-pencil flex center"></i>
+      <div class="flex center space-around" >
+      <i *ngIf="category.canEdit"
+        (click)="edit(category)"
+        class="fa-solid fa-check-circle"></i>
+      <i *ngIf="category.canEdit"
+        (click)="cancelEditing(category)"
+        class="fa-solid fa-circle-xmark"></i>
+      </div>
+    </td>
+    <td>
+      <i (click)="delete(category.slug)" class="fa-solid fa-trash-can flex center"></i>
+    </td>
+  </tbody>
+</table>
+<app-modal
+  [modalVisible]="modalVisible"
+  [modalText]="modalText"
+  [multipleChoice]="true"
+  
+  (responseForModal)="responseForModal($event)"
+>
+</app-modal>

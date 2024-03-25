@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { Notebook } from 'src/app/shared/interfaces/Notebook';
+import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 
 @Component({
   selector: 'app-notebooks-list',
   template: `<div class="notebooks-list flex column center"
                   *ngFor="let notebook of notebooksListChild">
-                <h5>{{notebook.title | titlecase}}</h5>
+                <h5>{{notebook.name | titlecase}}</h5>
                 <div class="image-and-filter-color flex column pointer"
                     [routerLink]="'/carnets/' + notebook.slug">
                   <img
@@ -20,6 +20,6 @@ import { Notebook } from 'src/app/shared/interfaces/Notebook';
 })
 export class NotebooksListComponent {
 
-  @Input() notebooksListChild! : Notebook[]
+  @Input() notebooksListChild! : NotebookDto[]
 
 }
