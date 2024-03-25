@@ -33,7 +33,7 @@
       class="display-none"
       type="file"
       accept="image/png, image/jpeg, image/bmp, image/gif"
-      (change)="onFileSelected($event)"
+      (change)="onFileSelected($event, 'mainPicture')"
       #fileUpload
     />
     <input
@@ -41,7 +41,7 @@
       id="mainPicture"
       formControlName="mainPicture"
       value="{{ imageToDisplay }}"
-      (keyup)="changeImageValue($event)"
+      (keyup)="changeImageValue($event, 'mainPicture')"
       placeholder="URL de l'image..."
     />
 
@@ -162,7 +162,7 @@
     </div>
 
     <div *ngIf="isFormSubmit">
-      <small *ngIf="categoryDtoForNewNotebook === null">Au moins un matériel du carnet est obligatoire.</small>
+      <small *ngIf="materialsDtoForNewNotebook.length < 1">Au moins un matériel du carnet est obligatoire.</small>
     </div>
   </fieldset>
 
@@ -212,6 +212,68 @@
       <small *ngIf="newNotebookForm.controls.description.errors?.['description']">La description du carnet est requise.</small>
       <small *ngIf="newNotebookForm.controls.description.errors?.['description']">La description du carnet ne doit pas dépasser 1.000 charactères.</small>
     </div>
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="secondaryPictures">Images secondaires ?</label>
+    <input
+      class="display-none"
+      type="file"
+      accept="image/png, image/jpeg, image/bmp, image/gif"
+      (change)="onFileSelected($event, 'secondaryPicture')"
+      #fileUploadSecondaryPicture
+    />
+    <input
+      type="text"
+      id="secondaryPictures"
+      formControlName="secondaryPictures"
+      (keyup)="changeImageValue($event, 'secondaryPicture')"
+      placeholder="URL de l'image..."
+    />
+
+    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+
+    <img
+      class="pointer"
+      (click)="fileUploadSecondaryPicture.click()"
+      src="{{ secondaryPictureDefault }}"
+      alt="Photo à choisir pour le matériel"
+    />
+    <table>
+      <thead>
+        <tr>
+          <td>
+            <p>URL</p>
+          </td>
+          <td>
+            <p>Image</p>
+          </td>
+          <td>
+            <p>Supp.</p>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="secondaryPicturesForNewNotebook.length < 1">
+          <td>
+            <p>Aucune image secondaire ajoutée</p>
+          </td>
+        </tr>
+        <ng-container *ngIf="secondaryPicturesForNewNotebook.length > 0">
+          <tr *ngFor="let pictureUrl of secondaryPicturesForNewNotebook">
+            <td>
+              <p class="flex text-left"> {{ pictureUrl }} </p>
+            </td>
+            <td>
+              <img src="{{ pictureUrl }}" alt="image secondaire en cours de selection">
+            </td>
+            <td>
+              <i (click)="deleteSecondaryPictureFromList(pictureUrl)" class="fa-solid fa-trash-can pointer flex center"></i>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
   </fieldset>
 
   <button class="btn-submit-admin"

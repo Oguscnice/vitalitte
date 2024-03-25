@@ -32,6 +32,7 @@ export class PostNotebookComponent {
 
   isFormVisible : boolean = false;
   imageToDisplay : string = this.fileUploadService.imageNotebookDefault
+  secondaryPictureDefault : string = this.fileUploadService.imageNotebookDefault
   isDropdownCategoryOpen : boolean = false;
   isDropdownMaterialsOpen : boolean = false;
   isFormSubmit : boolean = false;
@@ -86,11 +87,21 @@ export class PostNotebookComponent {
     )
   }
 
-  changeImageValue(event: KeyboardEvent): void {
+  deleteSecondaryPictureFromList(pictureUrl : string): void {
+    this.secondaryPicturesForNewNotebook = this.secondaryPicturesForNewNotebook.filter(
+      picture => picture !== pictureUrl
+    )
+  }
+
+  changeImageValue(event: KeyboardEvent, pictureChanged : 'mainPicture' | 'secondaryPicture'): void {
     const inputElement = event.target as HTMLInputElement;
     if(inputElement){
-      this.imageToDisplay = inputElement.value;
-      this.newNotebookForm.get('mainPicture')!.setValue(inputElement.value);
+      if (pictureChanged === 'mainPicture'){
+        this.imageToDisplay = inputElement.value;
+        this.newNotebookForm.get('mainPicture')!.setValue(inputElement.value);
+      } else if (pictureChanged === 'secondaryPicture'){
+        this.secondaryPicturesForNewNotebook.push(inputElement.value)
+      }
     }
   }
 
@@ -105,7 +116,7 @@ export class PostNotebookComponent {
     return 0;
   }
 
-  async onFileSelected(event: Event): Promise<void> {
+  async onFileSelected(event: Event, pictureChanged : 'mainPicture' | 'secondaryPicture'): Promise<void> {
 
     const inputElement = event.target as HTMLInputElement;
     const selectedFile = inputElement.files?.[0];
@@ -116,8 +127,12 @@ export class PostNotebookComponent {
 
       if (this.fileSize < this.fileSizeMax) {
         fileInfo = await this.fileUploadService.fileUpload(event);
-        this.imageToDisplay = fileInfo.data.thumb.url;
-        this.newNotebookForm.get('mainPicture')!.setValue(this.imageToDisplay);
+        if (pictureChanged === 'mainPicture'){
+          this.imageToDisplay = fileInfo.data.thumb.url;
+          this.newNotebookForm.get('mainPicture')!.setValue(this.imageToDisplay);
+        } else if (pictureChanged === 'secondaryPicture'){
+          this.secondaryPicturesForNewNotebook.push(fileInfo.data.image.url)
+        }
       };
     } else {
       this.imageToDisplay = this.fileUploadService.imageMaterialDefault;
@@ -140,6 +155,7 @@ export class PostNotebookComponent {
       this.isFormSubmit = false;
       this.categoryDtoForNewNotebook = null;
       this.materialsDtoForNewNotebook = [];
+      this.secondaryPicturesForNewNotebook = [];
       this.newNotebookForm.reset();
       this.imageToDisplay = this.fileUploadService.imageNotebookDefault;
     }
