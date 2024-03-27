@@ -1,4 +1,3 @@
-import { BaseComponent } from 'src/app/base.component';
 import { Component, Input } from '@angular/core';
 
 @Component({

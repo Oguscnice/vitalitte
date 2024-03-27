@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,13 +20,8 @@ import { H1Component } from './components/h1/h1.component';
 import { ValuesComponent } from './components/values/values.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './components/loader/loader.component';
 import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
 import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-prepared/notebooks-prepared.component';
@@ -72,22 +67,20 @@ import { WorkshopComponent } from './pages/workshop/workshop.component';
     PaypalComponent,
     ShoppingNotebooksListComponent,
     ChoicesPersonalizedCreationComponent,
-    WorkshopComponent,
+    WorkshopComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatFormFieldModule,
-    MatInputModule,
     NgIf,
-    MatButtonModule,
-    MatIconModule,
-    MatSelectModule,
     NgxPayPalModule,
     AnguilleComponent,
     ModalComponent
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
     AuthGuard,
