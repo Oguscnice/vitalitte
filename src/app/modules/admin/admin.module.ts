@@ -22,6 +22,8 @@ import { PostCategoryComponent } from './components/category/post-category/post-
 import { EditDeleteCategoryComponent } from './components/category/edit-delete-category/edit-delete-category.component';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { AddEuroCurrency } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
+import { ManageContactsComponent } from './pages/manage-contacts/manage-contacts.component';
+import { ManageGiftCardsComponent } from './pages/manage-gift-cards/manage-gift-cards.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { AddEuroCurrency } from 'src/app/shared/services/pipes/add-euro-currency
     PostCategoryComponent,
     EditDeleteCategoryComponent,
     CounterZeroIfEmpty,
-    AddEuroCurrency
+    AddEuroCurrency,
+    ManageContactsComponent,
+    ManageGiftCardsComponent
   ],
   imports: [
     CommonModule,

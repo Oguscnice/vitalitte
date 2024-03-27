@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
 import { ResponseEntity } from 'src/app/shared/interfaces/ResponseEntity';
-import { URLAPI } from 'src/app/shared/variables/others';
+import { URLAPI } from 'src/app/shared/variables/Others';
 
 @Injectable({
   providedIn: 'root'

@@ -27,8 +27,13 @@ export const NAVBAR_ADMIN: Menu[] = [
     submenu : null
   },
   {
+    name: 'Cartes Cadeaux',
+    routerLink: '/admin/gestion-des-cartes-cadeaux',
+    submenu : null
+  },
+  {
     name: 'Contact',
-    routerLink: '/contact',
+    routerLink: '/admin/gestion-des-contacts',
     submenu : null
   },
 ];

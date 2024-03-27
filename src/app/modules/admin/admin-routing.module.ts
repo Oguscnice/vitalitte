@@ -8,6 +8,8 @@ import { ManageActivitiesComponent } from './pages/manage-activities/manage-acti
 import { ManagePublicationsComponent } from './pages/manage-publications/manage-publications.component';
 import { EditMaterialComponent } from './pages/edit-material/edit-material.component';
 import { ManageCategoriesComponent } from './pages/manage-categories/manage-categories.component';
+import { ManageGiftCardsComponent } from './pages/manage-gift-cards/manage-gift-cards.component';
+import { ManageContactsComponent } from './pages/manage-contacts/manage-contacts.component';
 
 const routes: Routes = [
   // { path: '', component: AdminHomeComponent, canActivate: [AdminGuard] },
@@ -15,9 +17,11 @@ const routes: Routes = [
   { path: 'gestion-des-materiaux', component: ManageMaterialsComponent },
   { path: 'gestion-des-categories', component: ManageCategoriesComponent },
   { path: 'gestion-des-carnets', component: ManageNotebooksComponent },
-  { path: 'gestion-des-activites', component: ManageActivitiesComponent },
-  { path: 'gestion-des-publications', component: ManagePublicationsComponent },
   { path: 'editer-materiel/:materielSlug', component : EditMaterialComponent},
+  { path: 'gestion-des-activites', component: ManageActivitiesComponent },
+  { path: 'gestion-des-cartes-cadeaux', component: ManageGiftCardsComponent },
+  { path: 'gestion-des-publications', component: ManagePublicationsComponent },
+  { path: 'gestion-des-contacts', component: ManageContactsComponent },
   { path: '', component: AdminHomeComponent },
 ];
 

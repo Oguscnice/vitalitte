@@ -16,7 +16,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
                   <button
                     (click)="closeModalAndSendResponseIfExist()"
-                    [class]="!multipleChoice ? 'btn-direction pointer' : 'display-none'">
+                    [class]="!multipleChoice ? 'btn-medium-admin pointer' : 'display-none'">
                     OK !
                   </button>
 

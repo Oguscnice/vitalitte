@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MaterialDto } from '../interfaces/Material';
-import { URLAPI } from '../variables/others';
+import { URLAPI } from '../variables/Others';
 import { NotebookDto } from '../interfaces/Notebook';
 import { CategoryDto } from '../interfaces/Category';
 

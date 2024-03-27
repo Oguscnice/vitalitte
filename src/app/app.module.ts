@@ -12,7 +12,7 @@ import { Page404Component } from './pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { httpInterceptorProviders } from './shared/interceptors';
 import { HttpClientModule } from '@angular/common/http';
-import { CreationsComponent } from './pages/creations/creations.component';
+import { NotebooksComponent } from './pages/notebooks-pages/notebooks/notebooks.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
@@ -29,10 +29,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoaderComponent } from './components/loader/loader.component';
 import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
-import { NotebooksComponent } from './pages/notebooks/notebooks.component';
-import { NotebookSelectedComponent } from './pages/notebook-selected/notebook-selected.component';
+import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-prepared/notebooks-prepared.component';
+import { NotebookSelectedComponent } from './pages/notebooks-pages/notebook-selected/notebook-selected.component';
 import { NotebooksListComponent } from './components/notebooks-list/notebooks-list.component';
-import { CreateNotebookComponent } from './pages/create-notebook/create-notebook.component';
+import { CreateNotebookComponent } from './pages/notebooks-pages/create-notebook/create-notebook.component';
 import { ImagesPreviewComponent } from './components/images-preview/images-preview.component';
 import { NewsHeadbandComponent } from './components/news-headband/news-headband.component';
 import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
@@ -42,6 +42,7 @@ import { ShoppingCartService } from './shared/services/shopping-cart.service';
 import { ShoppingNotebooksListComponent } from './components/shopping-notebooks-list/shopping-notebooks-list.component';
 import { ChoicesPersonalizedCreationComponent } from './components/choices-personalized-creation/choices-personalized-creation.component';
 import { AnguilleComponent } from './shared/components/anguille/anguille.component';
+import { WorkshopComponent } from './pages/workshop/workshop.component';
 
 
 @NgModule({
@@ -52,7 +53,7 @@ import { AnguilleComponent } from './shared/components/anguille/anguille.compone
     HomeComponent,
     LoginComponent,
     Page404Component,
-    CreationsComponent,
+    NotebooksComponent,
     BiographyComponent,
     BooktiqueComponent,
     ContactComponent,
@@ -61,7 +62,7 @@ import { AnguilleComponent } from './shared/components/anguille/anguille.compone
     ContactFormComponent,
     LoaderComponent,
     FormulaireEnvoyeComponent,
-    NotebooksComponent,
+    NotebooksPreparedComponent,
     NotebookSelectedComponent,
     NotebooksListComponent,
     CreateNotebookComponent,
@@ -71,6 +72,7 @@ import { AnguilleComponent } from './shared/components/anguille/anguille.compone
     PaypalComponent,
     ShoppingNotebooksListComponent,
     ChoicesPersonalizedCreationComponent,
+    WorkshopComponent,
   ],
   imports: [
     BrowserModule,

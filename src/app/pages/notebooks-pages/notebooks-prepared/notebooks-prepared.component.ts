@@ -4,11 +4,11 @@ import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 
 @Component({
-  selector: 'app-notebooks',
-  templateUrl: './notebooks.component.html',
-  styleUrls: ['./notebooks.component.scss']
+  selector: 'app-notebooks-prepared',
+  templateUrl: './notebooks-prepared.component.html',
+  styleUrls: ['./notebooks-prepared.component.scss']
 })
-export class NotebooksComponent extends BaseComponent{
+export class NotebooksPreparedComponent extends BaseComponent{
 
   constructor(
     private apiRequestsService : ApiRequestsService

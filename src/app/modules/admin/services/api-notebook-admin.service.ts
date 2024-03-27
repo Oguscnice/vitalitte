@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
-import { URLAPI } from 'src/app/shared/variables/others';
+import { URLAPI } from 'src/app/shared/variables/Others';
 import { CreateNotebook } from '../interfaces/Notebook';
 import { ResponseEntity } from 'src/app/shared/interfaces/ResponseEntity';
 

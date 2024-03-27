@@ -4,11 +4,11 @@ import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 
 @Component({
-  selector: 'app-creations',
-  templateUrl: './creations.component.html',
-  styleUrls: ['./creations.component.scss']
+  selector: 'app-notebooks',
+  templateUrl: './notebooks.component.html',
+  styleUrls: ['./notebooks.component.scss']
 })
-export class CreationsComponent extends BaseComponent{
+export class NotebooksComponent extends BaseComponent{
 
   constructor(
     private apiRequestsService : ApiRequestsService
@@ -16,10 +16,8 @@ export class CreationsComponent extends BaseComponent{
     super()
   }
 
-  titleParentCreations = 'Ateliers';
+  titleParentCreations = 'Carnets...';
   backgroundImageParentCreations = '../../../assets/images/figma/carnet02.jpg';
-
-  userChoice : 'notebook' | 'workshop' = 'notebook';
 
   notebooks! : NotebookDto[]
 
@@ -43,9 +41,5 @@ export class CreationsComponent extends BaseComponent{
     this.notebooks = 
         this.notebooks.sort(() =>
             Math.random() - 0.5).slice(0, 3);
-  }
-
-  userChoiceSelected(choice : 'notebook' | 'workshop') : void{
-    this.userChoice = choice
   }
 }

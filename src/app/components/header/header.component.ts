@@ -3,7 +3,7 @@ import { ActivePageService } from './../../shared/services/active-page.service';
 import { Component, ElementRef, ViewChild, Renderer2  } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
-import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
+import { NAVBAR_USER } from 'src/app/shared/variables/Navbar';
 import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 

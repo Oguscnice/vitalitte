@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { ResponseEntity } from 'src/app/shared/interfaces/ResponseEntity';
-import { URLAPI } from 'src/app/shared/variables/others';
+import { URLAPI } from 'src/app/shared/variables/Others';
 import { CreateMaterial } from '../interfaces/Material';
 
 @Injectable({

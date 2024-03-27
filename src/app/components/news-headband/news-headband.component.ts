@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { New } from 'src/app/shared/interfaces/New';
-import { NEWS } from 'src/app/shared/variables/news';
+import { NEWS } from 'src/app/shared/variables/News';
 
 @Component({
   selector: 'app-news-headband',
