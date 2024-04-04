@@ -1,5 +1,5 @@
 import { ApiMaterialAdminService } from './../../services/api-material-admin.service';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
@@ -14,19 +14,18 @@ import { TransformApiPutService } from '../../services/transform-api-put.service
 @Component({
   selector: 'app-edit-material',
   templateUrl: './edit-material.component.html',
-  styleUrls: ['./edit-material.component.scss']
+  styles: [`@import "../../scss/admin-general.scss";`]
 })
 export class EditMaterialComponent extends BaseComponent{
 
-  constructor(
-    public route: ActivatedRoute,
-    private apiMaterialAdminService : ApiMaterialAdminService,
-    private apiRequestsService : ApiRequestsService,
-    private fileUploadService: FileUploadService,
-    private formBuilder: FormBuilder,
-    private transformApiPutService : TransformApiPutService,
-    private router: Router
-  ){
+  private apiRequestsService = inject(ApiRequestsService);
+  private  apiMaterialAdminService = inject(ApiMaterialAdminService);
+  public route = inject(ActivatedRoute);
+  private fileUploadService = inject(FileUploadService);
+  private formBuilder = inject(FormBuilder);
+  private transformApiPutService = inject(TransformApiPutService);
+  private router  = inject(Router);
+  constructor(){
     super()
   }
 
@@ -81,7 +80,7 @@ export class EditMaterialComponent extends BaseComponent{
 
   getAllMaterialsTypes(): void {
     this.subscriptions.push(
-      this.apiRequestsService.getAllMaterialsTypes().subscribe({
+      this.apiMaterialAdminService.getAllMaterialsTypes().subscribe({
         next: (materialsTypes) => this.materialTypes = materialsTypes,
         error: (err) => (this.changeMessage(err.error.message))
       })

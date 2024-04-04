@@ -93,6 +93,39 @@
   </fieldset>
 
   <fieldset class="flex column">
+    <label for="collection">Collection ?</label>
+    <div class="dropdown-container">
+      <div class="input-and-arrow flex">
+        <input type="text"
+              id="collection"
+              placeholder="Choississez la collection du carnet..."
+              autocomplete="off"
+              class="pointer"
+              (click)="toggleDropdown('collectionDropdown')"
+              [value]="collectionDtoForNewNotebook ? collectionDtoForNewNotebook.name : ''"
+              readonly/>
+        <div class="arrow-icone flex center">
+          <i class="fa-solid fa-circle-chevron-down pointer"
+              *ngIf="isDropdownCollectionOpen"
+              (click)="toggleDropdown('collectionDropdown')"></i>
+          <i class="fa-solid fa-circle-chevron-up pointer"
+              *ngIf="!isDropdownCollectionOpen"
+            (click)="toggleDropdown('collectionDropdown')"></i>
+        </div>
+      </div>
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownCollectionOpen}">
+        <li *ngFor="let collection of collections" (click)="collectionClicked(collection); toggleDropdown('collectionDropdown') ">
+            {{ collection.name | titlecase }}
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="isFormSubmit">
+      <small *ngIf="categoryDtoForNewNotebook === null">La catégorie du carnet est obligatoire.</small>
+    </div>
+  </fieldset>
+
+  <fieldset class="flex column">
     <label for="materials">Matériaux ?</label>
     <div class="dropdown-container">
       <div class="input-and-arrow flex">
@@ -226,7 +259,6 @@
     <input
       type="text"
       id="secondaryPictures"
-      formControlName="secondaryPictures"
       (keyup)="changeImageValue($event, 'secondaryPicture')"
       placeholder="URL de l'image..."
     />

@@ -1,6 +1,6 @@
 import { ApiRequestsService } from './../../../../shared/services/api-requests.service';
 import { ApiMaterialAdminService } from './../../services/api-material-admin.service';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { CreateMaterial } from '../../interfaces/Material';
@@ -18,6 +18,7 @@ import { CreateMaterial } from '../../interfaces/Material';
                 [materialTypes]="materialTypes"
                 
                 (materialToEdit)="putMaterial($event)"
+                (changeAvailabilityMaterial)="changeAvailabilityMaterial($event)"
                 (materialSlugToDelete)="deleteMaterial($event)"
               >
               </app-edit-delete-material>
@@ -28,10 +29,10 @@ import { CreateMaterial } from '../../interfaces/Material';
 })
 export class ManageMaterialsComponent extends BaseComponent{
 
-  constructor(
-    private apiMaterialAdminService : ApiMaterialAdminService,
-    private apiRequestsService : ApiRequestsService
-  ){
+  private apiRequestsService = inject(ApiRequestsService);
+  private  apiMaterialAdminService = inject(ApiMaterialAdminService);
+
+  constructor(){
     super()
   }
 
@@ -58,7 +59,7 @@ export class ManageMaterialsComponent extends BaseComponent{
 
   getAllMaterialsTypes(): void{
     this.subscriptions.push(
-      this.apiRequestsService.getAllMaterialsTypes().subscribe({
+      this.apiMaterialAdminService.getAllMaterialsTypes().subscribe({
         next: (materialsTypes) => this.materialTypes = materialsTypes,
         error: (err) => (this.changeMessage(err.error.message))
       })
@@ -83,6 +84,22 @@ export class ManageMaterialsComponent extends BaseComponent{
         next: (res) => {
           this.changeMessage(res.message);
           this.getAllMaterials();
+        },
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  changeAvailabilityMaterial(materialToChangeAvaibility : MaterialDto): void{
+    this.subscriptions.push(
+      this.apiMaterialAdminService.changeAvailability(materialToChangeAvaibility).subscribe({
+        next: (res) => {
+          for(let material of this.materials){
+            if(material.slug === materialToChangeAvaibility.slug){
+              material.available = !material.available
+            }
+          }
+
         },
         error: (err) => (this.changeMessage(err.error.message))
       })

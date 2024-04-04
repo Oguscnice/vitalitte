@@ -9,6 +9,9 @@
   <thead>
     <tr>
       <td>
+        <p>Dispo</p>
+      </td>
+      <td>
         <p>Libellé</p>
       </td>
       <td>
@@ -35,6 +38,14 @@
   <tbody>
     <tr *ngFor="let material of materials; let index = index"
         [ngClass]="index % 2 ? 'bg-dark' : ''">
+        <td>
+          <div class="toggle-switch" (click)="changeAvailability(material)">
+            <input class="toggle-input"
+                   type="checkbox"
+                   [checked]="material.available">
+            <label class="toggle-label" for="toggle"></label>
+          </div>
+        </td>
       <td>
         <p class="flex text-left">{{ material.name | titlecase }}</p>
       </td>
@@ -66,17 +77,15 @@
         <i [routerLink]="'/admin/editer-materiel/' + material.slug" class="fa-solid fa-pencil pointer flex center"></i>
       </td>
       <td>
-        <i (click)="delete(material.slug)" class="fa-solid fa-trash-can pointer flex center"></i>
+        <i (click)="delete(material)" class="fa-solid fa-trash-can pointer flex center"></i>
       </td>
     </tr>
   </tbody>
 </table>
 
-<app-modal
-  [modalVisible]="modalVisible"
-  [modalText]="modalText"
-  [multipleChoice]="true"
-  
-  (responseForModal)="responseForModal($event)"
->
+<app-modal [modalVisible]="modalVisible"
+           [modalText]="modalText"
+           [multipleChoice]="true"
+          
+           (responseForModal)="responseForModal($event)">
 </app-modal>

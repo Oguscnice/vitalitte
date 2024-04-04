@@ -1,5 +1,5 @@
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
 import { TransformApiPostService } from '../../../services/transform-api-post.service';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { CreateNotebook } from '../../../interfaces/Notebook';
 import { priceValidator } from '../../../validators/priceValidators';
 import { urlValidator } from '../../../validators/urlValidators';
 import { FileInfo } from '../../../interfaces/FileInfo';
+import { CollectionDto } from 'src/app/shared/interfaces/Collection';
 
 @Component({
   selector: 'app-post-notebook',
@@ -18,15 +19,14 @@ import { FileInfo } from '../../../interfaces/FileInfo';
 })
 export class PostNotebookComponent {
 
-  constructor(
-    private fileUploadService: FileUploadService,
-    private formBuilder: FormBuilder,
-    private transformApiPostService : TransformApiPostService
-  ){}
+  private fileUploadService = inject(FileUploadService);
+  private formBuilder = inject(FormBuilder);
+  private transformApiPostService = inject(TransformApiPostService);
 
   @Input() materialTypes! : string[];
   @Input() materials! : MaterialDto[];
   @Input() categories! : CategoryDto[];
+  @Input() collections! : CollectionDto[];
 
   @Output() newNotebook: EventEmitter<CreateNotebook> = new EventEmitter();
 
@@ -34,10 +34,12 @@ export class PostNotebookComponent {
   imageToDisplay : string = this.fileUploadService.imageNotebookDefault
   secondaryPictureDefault : string = this.fileUploadService.imageNotebookDefault
   isDropdownCategoryOpen : boolean = false;
+  isDropdownCollectionOpen : boolean = false;
   isDropdownMaterialsOpen : boolean = false;
   isFormSubmit : boolean = false;
 
   categoryDtoForNewNotebook : CategoryDto | null = null; 
+  collectionDtoForNewNotebook : CollectionDto | null = null; 
   materialsDtoForNewNotebook : MaterialDto[] = [];
   secondaryPicturesForNewNotebook : CreateNotebook['secondaryPictures'] = [];
 
@@ -61,18 +63,28 @@ export class PostNotebookComponent {
     description: ['', [Validators.required, Validators.maxLength(1000)]],
   });
 
-  toggleDropdown(dropdownClicked : 'categoryDropdown' | 'materialsDropdown'): void{
+  toggleDropdown(dropdownClicked : 'collectionDropdown' | 'categoryDropdown' | 'materialsDropdown'): void{
     if(dropdownClicked === 'categoryDropdown'){
       this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen;
       this.isDropdownMaterialsOpen = false;
+      this.isDropdownCollectionOpen = false;
     }else if(dropdownClicked === 'materialsDropdown'){
       this.isDropdownMaterialsOpen = !this.isDropdownMaterialsOpen;
       this.isDropdownCategoryOpen = false;
+      this.isDropdownCollectionOpen = false;
+    }else if(dropdownClicked === 'collectionDropdown'){
+      this.isDropdownCollectionOpen = !this.isDropdownCollectionOpen;
+      this.isDropdownCategoryOpen = false;
+      this.isDropdownMaterialsOpen = false;
     }
   }
 
   categoryClicked(categoryClicked : CategoryDto){
     this.categoryDtoForNewNotebook = categoryClicked;
+  }
+
+  collectionClicked(ccollectionClicked : CollectionDto){
+    this.collectionDtoForNewNotebook = ccollectionClicked;
   }
 
   materialClicked(materialClicked : MaterialDto): void {
@@ -145,10 +157,11 @@ export class PostNotebookComponent {
     this.isFormSubmit = true
     
     if(this.newNotebookForm.valid
-      && this.categoryDtoForNewNotebook !== null
+      && this.categoryDtoForNewNotebook
+      && this.collectionDtoForNewNotebook
       && this.materialsDtoForNewNotebook.length > 0){
 
-      let createdNotebook : CreateNotebook = this.transformApiPostService.postNotebookComponent(this.newNotebookForm, this.materialsDtoForNewNotebook, this.categoryDtoForNewNotebook, this.secondaryPicturesForNewNotebook)
+      let createdNotebook : CreateNotebook = this.transformApiPostService.postNotebookComponent(this.newNotebookForm, this.materialsDtoForNewNotebook, this.categoryDtoForNewNotebook, this.collectionDtoForNewNotebook, this.secondaryPicturesForNewNotebook)
       this.newNotebook.emit(createdNotebook);
 
       // Après avoir envoyé, on remet les variables à zéro

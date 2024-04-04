@@ -1,5 +1,5 @@
 import { AddDataSqlService } from './../../shared/services/add-data-sql.service';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
 
@@ -10,14 +10,14 @@ import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
 })
 export class HomeComponent extends BaseComponent{
 
-  constructor(
-    private addData : AddDataSqlService
-  ){
+  private addData = inject(AddDataSqlService);
+
+  constructor(){
     super()
   }
 
   ngOnInit(): void{
-    // this.addData.createAll()
+    // this.addData.createAll();
   }
 
   titleParentHome: string = 'Bienvenue';

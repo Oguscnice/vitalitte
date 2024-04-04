@@ -4,7 +4,7 @@ import { NAVBAR_ADMIN } from '../../variables/Navbar';
 
 @Component({
   selector: 'app-admin-home',
-  template: ` <h1>Acceuil Admin</h1>
+  template: ` <h1>Accueil Admin</h1>
               <h2>Votre tableau de bord pour la gestion</h2>
               <div class="btns-admin-home flex wrap center">
                 <div class="btn-medium-admin flex center pointer"

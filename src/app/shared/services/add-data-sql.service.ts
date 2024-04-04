@@ -2,31 +2,33 @@ import { ApiNotebookAdminService } from './../../modules/admin/services/api-note
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { ApiCategoryAdminService } from './../../modules/admin/services/api-category-admin.service';
 import { ApiMaterialAdminService } from './../../modules/admin/services/api-material-admin.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CreateMaterial } from 'src/app/modules/admin/interfaces/Material';
 import { CategoryDto } from '../interfaces/Category';
 import { MaterialDto } from '../interfaces/Material';
 import { CreateNotebook } from 'src/app/modules/admin/interfaces/Notebook';
+import { CollectionDto } from '../interfaces/Collection';
+import { ApiCollectionAdminService } from 'src/app/modules/admin/services/api-collection-admin.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AddDataSqlService {
 
-  constructor(
-    private apiRequestsService : ApiRequestsService,
-    private apiMaterialAdminService : ApiMaterialAdminService,
-    private apiCategoryAdminService : ApiCategoryAdminService,
-    private apiNotebookAdminService : ApiNotebookAdminService
-  ) { }
+  private apiNotebookAdminService = inject(ApiNotebookAdminService);
+  private apiRequestsService = inject(ApiRequestsService);
+  private  apiMaterialAdminService = inject(ApiMaterialAdminService);
+  private  apiCategoryAdminService = inject(ApiCategoryAdminService);
+  private  apiCollectionAdminService = inject(ApiCollectionAdminService);
 
   createAll(){
     //ils s'enchainent avec les autres
     this.createCategories();
   }
 
-  categories! : CategoryDto[]
-  materials! : MaterialDto[]
+  categories! : CategoryDto[];
+  materials! : MaterialDto[];
+  collections! : CollectionDto[];
   
   createCategories(): void{
     for (let category of this.categoriesToCreate){
@@ -43,11 +45,33 @@ export class AddDataSqlService {
         next: (categories) => {
             this.categories = categories
             console.log(this.categories);
-            this.createMaterials()
+            this.createCollections()
         },
         error: (err) => console.log(err),}
     )
   }
+
+  createCollections(): void{
+    for (let collection of this.collectionsToCreate){
+      this.apiCollectionAdminService.post(collection).subscribe({
+        next: (response) => console.log(response),
+        error: (err) => console.log(err),
+      })
+    }
+    this.getAllCollections();
+  }
+
+  getAllCollections(){
+    this.apiRequestsService.getAllCategories().subscribe({
+        next: (collections) => {
+            this.collections = collections
+            console.log(this.collections);
+            this.createMaterials();
+        },
+        error: (err) => console.log(err),}
+    )
+  }
+
 
   createMaterials(): void{
     for (let material of this.materialsToCreate){
@@ -76,6 +100,12 @@ export class AddDataSqlService {
     let randomIndex = Math.floor(Math.random() * this.categories.length);
     return this.categories[randomIndex];
   }
+
+  selectRandomCollection(): CategoryDto{
+    let randomIndex = Math.floor(Math.random() * this.collections.length);
+    return this.collections[randomIndex];
+  }
+
 
   selectRandomMaterials(): MaterialDto[]{
 
@@ -125,6 +155,7 @@ export class AddDataSqlService {
             description : notebook.description,
             materialsDto : this.selectRandomMaterials(),
             categoryDto : this.selectRandomCategory(),
+            collectionDto : this.selectRandomCollection(),
             secondaryPictures : this.selectRandomSecondaryPictures()
         }
         console.log(newNotebook);
@@ -138,14 +169,16 @@ export class AddDataSqlService {
   }
 
   categoriesToCreate: string[] = [
+    "Les illustrés",
+    "Les amoureux du papier",
+    "Les créations uniques",
+    "Les sur-mesures"
+  ];
+  collectionsToCreate: string[] = [
     "été",
-    "hiver",
     "printemps",
-    "noel",
-    "automne",
-    "speciale",
-    "occasionnel",
-    "unique"
+    "hiver",
+    "automone"
   ];
 
   materialsToCreate : CreateMaterial[] = [

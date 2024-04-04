@@ -5,6 +5,7 @@ import { MaterialDto } from '../interfaces/Material';
 import { URLAPI } from '../variables/Others';
 import { NotebookDto } from '../interfaces/Notebook';
 import { CategoryDto } from '../interfaces/Category';
+import { CollectionDto } from '../interfaces/Collection';
 
 @Injectable({
   providedIn: 'root',
@@ -16,14 +17,9 @@ export class ApiRequestsService {
     return this.http.get<MaterialDto[]>(URLAPI + "/materials")
   }
 
-  getAllMaterialsTypes(): Observable<string[]>{
-    return this.http.get<string[]>(URLAPI + "/materials/types")
-  }
-
   getAllNotebooks(): Observable<NotebookDto[]>{
     return this.http.get<NotebookDto[]>(URLAPI + "/notebooks")
   }
-
 
   getNotebookBySlug(notebookSlug : NotebookDto['slug']): Observable<NotebookDto>{
     return this.http.get<NotebookDto>(URLAPI + "/notebooks/" + notebookSlug)
@@ -31,6 +27,10 @@ export class ApiRequestsService {
 
   getAllCategories(): Observable<CategoryDto[]>{
     return this.http.get<CategoryDto[]>(URLAPI + "/categories")
+  }
+
+  getAllCollections(): Observable<CollectionDto[]>{
+    return this.http.get<CollectionDto[]>(URLAPI + "/collections")
   }
   
 }

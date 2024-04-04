@@ -1,10 +1,8 @@
-import { TransformToEditableService } from './../../services/transform-to-editable.service';
 import { Component } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { ApiCategoryAdminService } from '../../services/api-category-admin.service';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
-import { CategoryEditable } from '../../interfaces/EditableObject';
 
 @Component({
   selector: 'app-manage-categories',
@@ -12,9 +10,8 @@ import { CategoryEditable } from '../../interfaces/EditableObject';
               <app-post-category (newCategoryName)="postCategory($event)"></app-post-category>
               <app-edit-delete-category
                 [categories]="categories"
-                [categoriesEditable]="categoriesEditable"
 
-                (categoryToEdit)="putCategory($event)"
+                (categoryEdited)="putCategory($event)"
                 (categorySlugToDelete)="deleteCategory($event)"
                 >
               </app-edit-delete-category>
@@ -29,13 +26,11 @@ export class ManageCategoriesComponent extends BaseComponent {
   constructor(
     private apiCategoryAdminService : ApiCategoryAdminService,
     private apiRequestsService : ApiRequestsService,
-    private transformToEditableService : TransformToEditableService
   ){
     super()
   }
 
   categories! : CategoryDto[];
-  categoriesEditable! : CategoryEditable[];
 
   ngOnInit(): void {
     this.getAllCategories();
@@ -48,10 +43,7 @@ export class ManageCategoriesComponent extends BaseComponent {
   getAllCategories(): void{
     this.subscriptions.push(
       this.apiRequestsService.getAllCategories().subscribe({
-        next: (categories) => {
-          this.categories = categories;
-          this.categoriesEditable = this.transformToEditableService.categoriesDtoToEditable(categories);
-        },
+        next: (categories) => this.categories = categories,
         error: (err) => (this.changeMessage(err.error.message))
       })
     )
@@ -87,7 +79,6 @@ export class ManageCategoriesComponent extends BaseComponent {
         next: (res) => {
           this.changeMessage(res.message);
           this.categories = this.categories.filter(category => category.slug !== categorySlug);
-          this.categoriesEditable = this.categories;
         },
         error: (err) => (this.changeMessage(err.error.message))
       })

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { MaterialEditable } from '../../../interfaces/EditableObject';
 import { FileUploadService } from '../../../services/file-upload.service';
@@ -6,19 +6,16 @@ import { FileUploadService } from '../../../services/file-upload.service';
 @Component({
   selector: 'app-edit-delete-material',
   templateUrl: './edit-delete-material.component.html',
-  styles: [`
-            @import "../../../scss/admin-general.scss";
-          `]
+  styles: [`@import "../../../scss/admin-general.scss";`]
 })
 export class EditDeleteMaterialComponent {
 
-  constructor(
-    private fileUploadService: FileUploadService
-  ){}
+  private fileUploadService = inject(FileUploadService);
 
   @Input() materials! : MaterialDto[];
   @Input() materialTypes! : string[];
   @Output() materialToEdit: EventEmitter<MaterialDto> = new EventEmitter();
+  @Output() changeAvailabilityMaterial: EventEmitter<MaterialDto> = new EventEmitter();
   @Output() materialSlugToDelete: EventEmitter<MaterialDto['slug']> = new EventEmitter();
 
   fileSizeMax: number = this.fileUploadService.SIZE_MAX;
@@ -44,16 +41,12 @@ export class EditDeleteMaterialComponent {
     this.modalText = materialDescription;
   }
 
-  edit(materialToEdit : MaterialDto): void{
-    let materialEdited : MaterialDto = {
-      ...materialToEdit
-    }
-    this.materialToEdit.emit(materialEdited);
-  }
+  changeAvailability = (material : MaterialDto) => this.changeAvailabilityMaterial.emit(material);
+  edit = (materialEdited : MaterialDto) =>  this.materialToEdit.emit(materialEdited);
 
-  delete(materialSlug : MaterialDto['slug']): void {
-    this.materialSlugToDeleteSelected = materialSlug;
-    this.modalText = `Confirmer vouloir supprimer le matériel : "${materialSlug}"`
+  delete(materialSelected : MaterialDto): void {
+    this.materialSlugToDeleteSelected = materialSelected.slug;
+    this.modalText = `Confirmer vouloir supprimer le matériel : "${materialSelected.name}"`
     this.modalVisible = true;
   }
 

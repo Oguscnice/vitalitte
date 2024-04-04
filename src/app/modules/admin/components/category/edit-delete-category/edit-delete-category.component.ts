@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
-import { CategoryEditable } from '../../../interfaces/EditableObject';
-import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-edit-delete-category',
@@ -13,41 +11,25 @@ import { TitleCasePipe } from '@angular/common';
 export class EditDeleteCategoryComponent {
 
   @Input() categories! : CategoryDto[];
-  @Input() categoriesEditable! : CategoryEditable[];
-  @Output() categoryToEdit: EventEmitter<CategoryDto> = new EventEmitter();
+  @Output() categoryEdited: EventEmitter<CategoryDto> = new EventEmitter();
   @Output() categorySlugToDelete: EventEmitter<CategoryDto['slug']> = new EventEmitter();
 
   isTableVisible: boolean = false;
 
   categorySlugSelected! : CategoryDto['slug']
+  categoryToEdit : CategoryDto | null = null;
 
   modalVisible : boolean = false;
   modalText! : string;
 
-  canEdit(category: CategoryEditable): void {
-    category.canEdit = true;
-  }
+  canEdit = (categorySelected: CategoryDto) => this.categoryToEdit = {...categorySelected}
 
-  cancelEditing(categoryEditing: CategoryEditable): void {
-    categoryEditing.canEdit = false;
-    for(let category of this.categories){
-      if(category.slug === categoryEditing.slug){
-        categoryEditing.name = category.name
-      }
-    }
-  }
-
-  changeInputValue(event: KeyboardEvent, category: CategoryEditable): void {
+  changeNameValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
-    category.name = inputElement.value;
+    this.categoryToEdit!.name = inputElement.value;
   }
 
-  edit(categoryToEdit : CategoryEditable): void{
-    let categoryEdited: CategoryDto = {
-      ...categoryToEdit
-    }
-    this.categoryToEdit.emit(categoryEdited);
-  }
+  edit = () => this.categoryEdited.emit(this.categoryToEdit!);
 
   delete(categorySlug : CategoryDto['slug']): void {
     this.categorySlugSelected = categorySlug;
