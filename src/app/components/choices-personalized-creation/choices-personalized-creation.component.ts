@@ -4,6 +4,7 @@ import { BaseComponent } from 'src/app/base.component';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 
 @Component({
+  standalone: true,
   selector: 'app-choices-personalized-creation',
   templateUrl: './choices-personalized-creation.component.html',
   styleUrls: ['./choices-personalized-creation.component.scss']

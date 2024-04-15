@@ -1,26 +1,27 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FileUploadService } from '../../../services/file-upload.service';
 import { urlValidator } from '../../../validators/urlValidators';
 import { priceValidator } from '../../../validators/priceValidators';
 import { FileInfo } from '../../../interfaces/FileInfo';
-import { TransformApiPostService } from '../../../services/transform-api-post.service';
 import { CreateMaterial } from '../../../interfaces/Material';
+import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
+import { TransformApiService } from '../../../services/transform-api.service';
 
 @Component({
+  standalone: true,
+  imports: [NgClass, NgIf, ReactiveFormsModule, TitleCasePipe, NgFor, EditorModule, CounterZeroIfEmpty],
   selector: 'app-post-material',
   templateUrl: './post-material.component.html',
-  styles: [`
-            @import "../../../scss/admin-general.scss";
-          `]
+  styles: [` @import "../../../scss/admin-general.scss"; `]
 })
 export class PostMaterialComponent {
 
-  constructor(
-    private fileUploadService: FileUploadService,
-    private formBuilder: FormBuilder,
-    private transformApiPostService : TransformApiPostService
-  ){}
+  private fileUploadService = inject(FileUploadService)
+  private formBuilder = inject(FormBuilder)
+  private transformApiService = inject(TransformApiService);
 
   @Input() materialTypes! : string[];
   @Output() newMaterial: EventEmitter<CreateMaterial> = new EventEmitter();
@@ -99,7 +100,7 @@ export class PostMaterialComponent {
     this.isFormSubmit = true
     
     if(this.newMaterialForm.valid){
-      let createMaterial : CreateMaterial = this.transformApiPostService.postMaterielType(this.newMaterialForm)
+      let createMaterial : CreateMaterial = this.transformApiService.postMaterielType(this.newMaterialForm)
       this.newMaterial.emit(createMaterial);
       // Après avoir envoyé, on remet les variables à zéro
       this.isFormSubmit = false;

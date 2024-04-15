@@ -5,9 +5,12 @@ import { Menu } from 'src/app/shared/interfaces/Menu';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
 import { NAVBAR_USER } from 'src/app/shared/variables/Navbar';
 import { BaseComponent } from 'src/app/base.component';
-import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
+import { RouterLink } from '@angular/router';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 
 @Component({
+  standalone: true,
+  imports: [ RouterLink, NgClass, NgFor, NgIf],
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

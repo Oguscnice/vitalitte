@@ -38,13 +38,12 @@ import { ShoppingNotebooksListComponent } from './components/shopping-notebooks-
 import { ChoicesPersonalizedCreationComponent } from './components/choices-personalized-creation/choices-personalized-creation.component';
 import { AnguilleComponent } from './shared/components/anguille/anguille.component';
 import { WorkshopComponent } from './pages/workshop/workshop.component';
+import { RouterLink } from '@angular/router';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    FooterComponent,
     HomeComponent,
     LoginComponent,
     Page404Component,
@@ -52,21 +51,10 @@ import { WorkshopComponent } from './pages/workshop/workshop.component';
     BiographyComponent,
     BooktiqueComponent,
     ContactComponent,
-    H1Component,
-    ValuesComponent,
-    ContactFormComponent,
-    LoaderComponent,
     FormulaireEnvoyeComponent,
     NotebooksPreparedComponent,
     NotebookSelectedComponent,
-    NotebooksListComponent,
     CreateNotebookComponent,
-    ImagesPreviewComponent,
-    NewsHeadbandComponent,
-    UpArrowComponent,
-    PaypalComponent,
-    ShoppingNotebooksListComponent,
-    ChoicesPersonalizedCreationComponent,
     WorkshopComponent
   ],
   imports: [
@@ -74,10 +62,20 @@ import { WorkshopComponent } from './pages/workshop/workshop.component';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NgIf,
-    NgxPayPalModule,
-    AnguilleComponent,
-    ModalComponent
+    RouterLink,
+
+    HeaderComponent,
+    NewsHeadbandComponent,
+    H1Component,
+    FooterComponent,
+    UpArrowComponent,
+    ImagesPreviewComponent,
+    ValuesComponent,
+    ShoppingNotebooksListComponent,
+    ChoicesPersonalizedCreationComponent,
+    PaypalComponent,
+    ContactFormComponent,
+    NotebooksListComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -1,10 +1,9 @@
 <anguille [message]="messageResponseFromBackend" />
 <app-return-admin-home/>
-<form
-  (ngSubmit)="(editMaterialForm.valid)"
-  [formGroup]="editMaterialForm"
-  #myForm="ngForm"
->
+<form (ngSubmit)="(editMaterialForm.valid)"
+      [formGroup]="editMaterialForm"
+      #myForm="ngForm">
+
   <fieldset class="flex column">
     <label for="name">Libellé :</label>
     <input
@@ -125,9 +124,7 @@
     Créer
   </button>
 </form>
-<app-modal
-  [modalVisible]="modalVisible"
-  [modalText]="modalText"
-  (responseForModal)="responseForModal($event)"
->
+<app-modal [modalVisible]="modalVisible"
+           [modalText]="modalText"
+           (responseForModal)="responseForModal($event)">
 </app-modal>

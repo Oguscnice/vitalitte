@@ -1,27 +1,47 @@
+import { DecimalPipe, NgFor, TitleCasePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { ShoppingCart } from 'src/app/shared/interfaces/ShoppingCart';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
 
 @Component({
+  standalone: true,
+  imports: [ NgFor, TitleCasePipe, DecimalPipe ],
   selector: 'app-shopping-notebooks-list',
-  template: `<div class="shopping-notebooks-list">
-              <div *ngFor="let notebook of notebooksListChild"
-                  class="shopping-notebooks-container flex">
-                <img src="{{notebook.mainPicture}}"
-                    alt="Image du Carnet {{notebook.name}}">
-                <div class="title-and-price flex column center">
-                  <h4>{{notebook.name | titlecase }}</h4>
-                  <p>{{notebook.price | number: '0.2'}} €</p>
-                  <div class="shopping-cart-gestion flex">
-                    <button (click)="subtractNotebookToShoppingCart(notebook.slug)">-</button>
-                    <p>{{ shoppingCartService.counterQuantityBySlug(notebook.slug) }}</p>
-                    <button (click)="addNotebookToShoppingCart(notebook.slug)">+</button>
+  template: ` <div class="shopping-notebooks-list">
+                <div *ngFor="let notebook of notebooksListChild"
+                    class="shopping-notebooks-container flex">
+                  <img src="{{notebook.mainPicture}}"
+                      alt="Image du Carnet {{notebook.name}}">
+                  <div class="title-and-price flex column center">
+                    <h4>{{notebook.name | titlecase }}</h4>
+                    <p>{{notebook.price | number: '0.2'}} €</p>
+                    <div class="shopping-cart-gestion flex">
+                      <button (click)="subtractNotebookToShoppingCart(notebook.slug)">-</button>
+                      <p>{{ shoppingCartService.counterQuantityBySlug(notebook.slug) }}</p>
+                      <button (click)="addNotebookToShoppingCart(notebook.slug)">+</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>`,
-  styleUrls: ['./shopping-notebooks-list.component.scss']
+              </div>`,
+  styles: [`
+            @import "../../scss/variables.scss";
+            @import "../../scss/buttons.scss";
+            @import "../../../styles.scss";
+
+            .shopping-notebooks-list{
+              .shopping-notebooks-container{
+                width: calc(100vw - ($fourth-padding * 2));
+                min-height: calc((100vw - ($fourth-padding * 2)) / 4);
+                img{
+                  width: calc((100vw - ($fourth-padding * 2)) / 2);
+                }
+                .title-and-price{
+                  width: calc((100vw - ($fourth-padding * 2)) / 2);
+                }
+              }
+            }
+          `]
 })
 export class ShoppingNotebooksListComponent {
 

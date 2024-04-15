@@ -1,8 +1,7 @@
 <div class="creations-page flex column center">
-  <app-h1
-  [titleChild]="titleParentCreations"
-  [backgroundImageChild]="backgroundImageParentCreations"
-  ></app-h1>
+  <app-h1 [titleChild]="titleParentCreations"
+          [backgroundImageChild]="backgroundImageParentCreations">
+  </app-h1>
 
   <section class="user-choice flex column center">
     <h2>Carnets</h2>
@@ -18,7 +17,7 @@
       confectionnée pour stimuler votre créativité tout en respectant
       notre précieuse planète.</p>
     <h4>Modèles :</h4>
-    <app-notebooks-list [notebooksListChild]="notebooks"></app-notebooks-list>
+    <app-notebooks-list [notebooksListChild]="notebooks" />
     <h4>Encore plus de modèle içi...</h4>
     <button class="btn-normal pointer"
             routerLink="/carnets">

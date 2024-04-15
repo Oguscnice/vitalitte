@@ -1,10 +1,12 @@
 <div class="title-functionality flex center">
   <h4 class="flex center">Gérer les Matériaux</h4>
-  <i class="fa-solid fa-arrow-down" (click)="isTableVisible = !isTableVisible" [ngClass]="{'rotated180': isTableVisible}"></i>
+  <i class="fa-solid fa-arrow-down"
+     (click)="isTableVisible = !isTableVisible"
+     [ngClass]="{'rotated180': isTableVisible}">
+  </i>
 </div>
 
 <div *ngIf="!materials || materials.length <= 0">Aucun Article</div>
-
 <table *ngIf="materials && isTableVisible">
   <thead>
     <tr>
@@ -36,7 +38,7 @@
   </thead>
 
   <tbody>
-    <tr *ngFor="let material of materials; let index = index"
+    <tr *ngFor="let material of materials ; let index = index"
         [ngClass]="index % 2 ? 'bg-dark' : ''">
         <td>
           <div class="toggle-switch" (click)="changeAvailability(material)">
@@ -55,23 +57,16 @@
         </p>
       </td>
       <td>
-        <p>
-          {{ material.price | addEuroCurrency }}
-        </p>
+        <p> {{ material.price | addEuroCurrency }} </p>
       </td>
       <td>
-        <i
-          class="fa-solid fa-file-lines pointer flex center"
-          (click)="openModalWithDescription(material.description)"
-          >
+        <i class="fa-solid fa-file-lines pointer flex center"
+           (click)="openModalWithDescription(material.description)">
         </i>
       </td>
       <td class="flex center">
-        <img
-          src="{{material.picture}}"
-          alt="Photo de {{material.name}}"
-          
-        >
+        <img src="{{material.picture}}"
+             alt="Photo de {{material.name}}">
       </td>
       <td>
         <i [routerLink]="'/admin/editer-materiel/' + material.slug" class="fa-solid fa-pencil pointer flex center"></i>
@@ -85,7 +80,6 @@
 
 <app-modal [modalVisible]="modalVisible"
            [modalText]="modalText"
-           [multipleChoice]="true"
-          
+        
            (responseForModal)="responseForModal($event)">
 </app-modal>

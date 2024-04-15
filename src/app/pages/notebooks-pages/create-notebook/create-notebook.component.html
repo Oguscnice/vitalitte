@@ -1,17 +1,14 @@
 <div class="create-notebook-page flex column center">
 
-  <app-h1
-    [titleChild]="titleParentHome"
-    [backgroundImageChild]="backgroundImageParentHome"
-  ></app-h1>
+  <app-h1 [titleChild]="titleParentHome"
+          [backgroundImageChild]="backgroundImageParentHome">
+  </app-h1>
 
-  <form
-    action="https://formsubmit.io/send/guillaume.cometto@gmail.com"
-    method="POST"
-    class="flex column"
-    id="contactform"
-  >
-    <!-- <fieldset>
+  <form action="https://formsubmit.io/send/guillaume.cometto@gmail.com"
+        method="POST"
+        class="flex column"
+        id="contactform">
+    <fieldset>
       <mat-form-field>
         <mat-label>Type de couverture...</mat-label>
         <mat-select name="cover" id="cover">
@@ -114,7 +111,7 @@
           <strong>obligatoire</strong>.
         </small>
       </div>
-    </fieldset> -->
+    </fieldset>
   </form>
 
   <div class="preview-picture flex">

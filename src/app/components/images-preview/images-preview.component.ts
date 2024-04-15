@@ -1,7 +1,10 @@
+import { NgFor } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
 
 @Component({
+  standalone: true,
+  imports: [ NgFor ],
   selector: 'app-images-preview',
   template: `<div class="images-preview flex space-around">
                 <div *ngFor="let item of picturesArray" class="image-and-filter-color">

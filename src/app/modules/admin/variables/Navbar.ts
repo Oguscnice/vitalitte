@@ -7,8 +7,8 @@ export const NAVBAR_ADMIN: Menu[] = [
     submenu : null
   },
   {
-    name: 'Catégories',
-    routerLink: '/admin/gestion-des-categories',
+    name: 'Catégories et Collections',
+    routerLink: '/admin/gestion-des-categories-et-collections',
     submenu : null
   },
   {
@@ -17,8 +17,8 @@ export const NAVBAR_ADMIN: Menu[] = [
     submenu : null
   },
   {
-    name: 'Activités',
-    routerLink: '/admin/gestion-des-activites',
+    name: 'Ateliers',
+    routerLink: '/admin/gestion-des-ateliers',
     submenu : null
   },
   {

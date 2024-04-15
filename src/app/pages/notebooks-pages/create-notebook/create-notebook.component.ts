@@ -30,9 +30,6 @@ export class CreateNotebookComponent extends BaseComponent{
 
   changePaperValue(paperClicked: string) {
     this.paperValue = paperClicked;
-    let date = new Date("23/23/23")
-
-
   }
 
   changeTitleValue(event: KeyboardEvent) {

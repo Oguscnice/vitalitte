@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-publications',
   templateUrl: './manage-publications.component.html',
   styleUrls: ['./manage-publications.component.scss']

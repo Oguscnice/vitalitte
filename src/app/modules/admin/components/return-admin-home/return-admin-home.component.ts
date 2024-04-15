@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: true,
   selector: 'app-return-admin-home',
   template: `<button routerLink="/admin" class="btn-medium-admin">Accueil Admin</button>`,
   styles: [`

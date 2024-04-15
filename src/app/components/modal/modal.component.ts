@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   standalone : true,
+  imports: [],
   selector: 'app-modal',
   template: ` <div 
                 class="modal-confirmation-page flex column center"

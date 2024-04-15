@@ -1,6 +1,9 @@
+import { NgClass } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
+  standalone: true,
+  imports: [ NgClass ],
   selector: 'app-up-arrow',
   template: `<i class="fa-regular fa-circle-up up-arrow"
                 (click)="scrollToTop()"

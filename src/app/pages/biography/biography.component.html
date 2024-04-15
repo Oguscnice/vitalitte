@@ -1,9 +1,10 @@
 <div class="biography-page flex column center">
-  <app-h1
-    [titleChild]="titleParentHome"
-    [backgroundImageChild]="backgroundImageParentHome"
-  ></app-h1>
+  <app-h1 [titleChild]="titleParentHome"
+          [backgroundImageChild]="backgroundImageParentHome">
+  </app-h1>
+
   <h2>Histoire de vie</h2>
+
   <section class="bio-titles-and-image">
     <img
       src="../../../assets/images/loryane.jpg"
@@ -63,11 +64,9 @@
     </div> -->
 
     <div class="image-and-filter-color flex column">
-      <img
-        src="../../../assets/images/figma/atelier.jpg"
-        alt="Photo d'un livre ouvert"
-        #imgMonitored
-      />
+      <img src="../../../assets/images/figma/atelier.jpg"
+           alt="Photo d'un livre ouvert"
+           #imgMonitored/>
       <div class="filter-color"></div>
     </div>
     <h3 id="whoAmI">Qui suis-je ?</h3>

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { URLAPI } from 'src/app/shared/variables/Others';
@@ -11,7 +11,7 @@ import { ResponseEntity } from 'src/app/shared/interfaces/ResponseEntity';
 })
 export class ApiNotebookAdminService {
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   getAll(): Observable<NotebookDto[]>{
     return this.http.get<NotebookDto[]>(URLAPI + "/notebooks")
@@ -23,6 +23,10 @@ export class ApiNotebookAdminService {
 
   put(notebook : NotebookDto): Observable<ResponseEntity>{
     return this.http.put<ResponseEntity>(URLAPI + "/notebooks/" + notebook.slug, notebook)
+  }
+
+  changeAvailability(notebook : NotebookDto): Observable<ResponseEntity>{
+    return this.http.put<ResponseEntity>(URLAPI + "/notebooks/availability", notebook)
   }
   
   delete(notebookSlug : NotebookDto['slug']): Observable<ResponseEntity>{

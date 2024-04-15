@@ -9,7 +9,7 @@ import { urlValidator } from '../../validators/urlValidators';
 import { priceValidator } from '../../validators/priceValidators';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { FileInfo } from '../../interfaces/FileInfo';
-import { TransformApiPutService } from '../../services/transform-api-put.service';
+import { TransformApiService } from '../../services/transform-api.service';
 
 @Component({
   selector: 'app-edit-material',
@@ -23,8 +23,9 @@ export class EditMaterialComponent extends BaseComponent{
   public route = inject(ActivatedRoute);
   private fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
-  private transformApiPutService = inject(TransformApiPutService);
   private router  = inject(Router);
+  private transformApiService = inject(TransformApiService);
+
   constructor(){
     super()
   }
@@ -137,7 +138,7 @@ export class EditMaterialComponent extends BaseComponent{
     this.isFormSubmit = true
     
     if(this.editMaterialForm.valid){
-      let materialToEdit : MaterialDto = this.transformApiPutService.putMateriel(this.editMaterialForm, this.materialSlug)
+      let materialToEdit : MaterialDto = this.transformApiService.putMateriel(this.editMaterialForm, this.materialSlug)
       this.putMaterial(materialToEdit);
     }
   }

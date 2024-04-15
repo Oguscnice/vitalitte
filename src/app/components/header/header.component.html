@@ -1,8 +1,6 @@
 <nav class="flex space-between center" #navBar>
-  <img
-    src="../../../assets/images/figma/icone.png"
-    alt="Logo du site VitaLitté"
-  />
+  <img src="../../../assets/images/figma/icone.png"
+       alt="Logo du site VitaLitté"/>
   <h3 class="flex"
       [routerLink]="'/'">VitaLitté</h3>
   <div class="shopping-cart-counter"
@@ -39,7 +37,7 @@
         *ngIf="item.submenu"
         [ngClass]="item.submenu.isOpen ? '' : 'close' ">
         <a class="flex center"
-          *ngFor="let subItem of item.submenu.items"
+          *ngFor="let subItem of item.submenu?.items"
           [href]="item.routerLink + '#' + subItem.anchor"
           (click)="closeMenuBurger(menuCheckbox, item.routerLink, $event)">
           {{subItem.name}}

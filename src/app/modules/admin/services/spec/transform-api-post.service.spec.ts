@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TransformApiPostService } from '../transform-api-post.service';
+import { TransformApiPostService } from '../transform-api.service';
 
 describe('TransformApiPostService', () => {
   let service: TransformApiPostService;

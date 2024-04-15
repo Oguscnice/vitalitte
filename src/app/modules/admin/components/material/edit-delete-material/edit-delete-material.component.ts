@@ -1,29 +1,28 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { MaterialEditable } from '../../../interfaces/EditableObject';
-import { FileUploadService } from '../../../services/file-upload.service';
+import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
 
 @Component({
   selector: 'app-edit-delete-material',
+  standalone: true,
+  imports: [NgClass, NgIf, NgFor, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent ],
   templateUrl: './edit-delete-material.component.html',
   styles: [`@import "../../../scss/admin-general.scss";`]
 })
 export class EditDeleteMaterialComponent {
 
-  private fileUploadService = inject(FileUploadService);
-
   @Input() materials! : MaterialDto[];
   @Input() materialTypes! : string[];
   @Output() materialToEdit: EventEmitter<MaterialDto> = new EventEmitter();
   @Output() changeAvailabilityMaterial: EventEmitter<MaterialDto> = new EventEmitter();
-  @Output() materialSlugToDelete: EventEmitter<MaterialDto['slug']> = new EventEmitter();
+  @Output() materialToDelete: EventEmitter<MaterialDto> = new EventEmitter();
 
-  fileSizeMax: number = this.fileUploadService.SIZE_MAX;
-  fileSize!: number;
   isTableVisible: boolean = false;
   isDropdownOpen : boolean = false;
-
-  materialSlugToDeleteSelected! : MaterialDto['slug'];
 
   modalVisible : boolean = false;
   modalText! : string;
@@ -41,19 +40,11 @@ export class EditDeleteMaterialComponent {
     this.modalText = materialDescription;
   }
 
+  responseForModal(response: boolean): void {
+    this.modalVisible = false;
+  }
+
   changeAvailability = (material : MaterialDto) => this.changeAvailabilityMaterial.emit(material);
   edit = (materialEdited : MaterialDto) =>  this.materialToEdit.emit(materialEdited);
-
-  delete(materialSelected : MaterialDto): void {
-    this.materialSlugToDeleteSelected = materialSelected.slug;
-    this.modalText = `Confirmer vouloir supprimer le matériel : "${materialSelected.name}"`
-    this.modalVisible = true;
-  }
-
-  responseForModal(response : boolean): void{
-    this.modalVisible = false;
-    if(response){
-      this.materialSlugToDelete.emit(this.materialSlugToDeleteSelected);
-    }
-  }
+  delete = (materialSelected : MaterialDto) => this.materialToDelete.emit(materialSelected);
 }
