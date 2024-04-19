@@ -69,7 +69,7 @@ export class SlugNameDtoEditDeleteComponent {
   @Output() itemEdited: EventEmitter<SlugNameDto> = new EventEmitter();
   @Output() itemToDelete: EventEmitter<SlugNameDto> = new EventEmitter();
 
-  isTableVisible: boolean = false;
+  isTableVisible: boolean = true;
 
   itemToEdit : SlugNameDto | null = null;
 

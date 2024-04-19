@@ -21,11 +21,11 @@ export const NAVBAR_USER: Menu[] = [
     routerLink: '/galerie-photos',
     submenu : null
   },
-  // {
-  //   name: 'Actualités',
-  //   routerLink: '/actualites',
-  //   submenu : null
-  // },
+  {
+    name: 'Actualités',
+    routerLink: '/actualites',
+    submenu : null
+  },
   {
     name: 'A Propos',
     routerLink: '/qui-suis-je',

@@ -7,6 +7,9 @@ import { CreateNotebook } from '../interfaces/Notebook';
 import { CollectionDto } from 'src/app/shared/interfaces/Collection';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { CreateWorkshop } from '../interfaces/Workshop';
+import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
+import { CreatePublication } from '../interfaces/Publication';
+import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +21,10 @@ export class TransformApiService {
   }
 
   postWorkshop(form : FormGroup): CreateWorkshop{
+    return { ...form.value }
+  }
+
+  putWorkshop(form : FormGroup): WorkshopDto{
     return { ...form.value }
   }
 
@@ -59,6 +66,18 @@ export class TransformApiService {
     return {
       ...form.value,
       slug: slug
+    }
+  }
+
+  postPublication(form : FormGroup): CreatePublication{
+    return { ...form.value }
+  }
+
+  putPublication(form : FormGroup, oldPublication : PublicationDto): PublicationDto{
+    return {
+      ...form.value,
+      createdAt: oldPublication.createdAt,
+      spotlighted : oldPublication.spotlighted
     }
   }
 }

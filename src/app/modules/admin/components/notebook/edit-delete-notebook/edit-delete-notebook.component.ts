@@ -12,7 +12,7 @@ export class EditDeleteNotebookComponent {
   @Output() notebookToDelete: EventEmitter<NotebookDto> = new EventEmitter();
   @Output() changeAvailabilityNotebook: EventEmitter<NotebookDto> = new EventEmitter();
 
-  isTableVisible = false;
+  isTableVisible = true;
 
   changeAvailability = (notebook : NotebookDto) => this.changeAvailabilityNotebook.emit(notebook);
   delete = (notebook: NotebookDto) => this.notebookToDelete.emit(notebook);

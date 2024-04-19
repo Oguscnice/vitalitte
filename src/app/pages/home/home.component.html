@@ -1,6 +1,6 @@
-<app-news-headband />
+<app-news-headband [publicationsSpotlighted]="publicationsSpotlighted"/>
 
-<app-h1 [titleChild]="titleParentHome"
+<app-h1 [titleChild]="'Bienvenue'"
         [backgroundImageChild]="backgroundImageParentHome">
 </app-h1>
 
@@ -14,8 +14,10 @@
   </p>
   <app-images-preview [picturesArray]="handmadeNotebooksPictures" />
 </section>
+
 <app-values></app-values>
 <section>
+
   <h2 class="pointer" routerLink="/ateliers">Ateliers</h2>
   <p>
     Bienvenue dans notre atelier artisanal où la créativité rencontre

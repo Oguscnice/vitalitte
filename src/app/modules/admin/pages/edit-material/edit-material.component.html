@@ -1,5 +1,6 @@
 <anguille [message]="messageResponseFromBackend" />
 <app-return-admin-home/>
+
 <form (ngSubmit)="(editMaterialForm.valid)"
       [formGroup]="editMaterialForm"
       #myForm="ngForm">
@@ -89,21 +90,17 @@
     <label for="picture">Photo : </label>
     <p>Privilégier un format PNG</p>
     <p>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</p>
-    <input
-      class="display-none"
-      type="file"
-      accept="image/png, image/jpeg, image/bmp, image/gif"
-      (change)="onFileSelected($event)"
-      #fileUpload
-    />
-    <input
-      type="text"
-      id="picture"
-      formControlName="picture"
-      value="{{ imageToDisplay }}"
-      (keyup)="changeImageValue($event)"
-      placeholder="URL de l'image..."
-    />
+    <input class="display-none"
+           type="file"
+           accept="image/png, image/jpeg, image/bmp, image/gif"
+           (change)="onFileSelected($event)"
+           #fileUpload/>
+    <input type="text"
+           id="picture"
+           formControlName="picture"
+           value="{{ this.editMaterialForm.get('picture')!.value }}"
+           (keyup)="changeImageValue($event)"
+           placeholder="URL de l'image..."/>
     <div *ngIf="isFormSubmit && editMaterialForm.controls['picture'].invalid">
       <small *ngIf="fileSize > fileSizeMax">Votre fichier dépasse les {{ fileSizeMax / 1048576 }} Méga-octects.</small>
     </div>
@@ -111,7 +108,7 @@
     <img
       class="pointer"
       (click)="fileUpload.click()"
-      src="{{ imageToDisplay }}"
+      src="{{ this.editMaterialForm.get('picture')!.value }}"
       alt="Photo à choisir pour le matériel"
     />
   </fieldset>
@@ -124,7 +121,9 @@
     Créer
   </button>
 </form>
+
 <app-modal [modalVisible]="modalVisible"
            [modalText]="modalText"
+           
            (responseForModal)="responseForModal($event)">
 </app-modal>

@@ -1,12 +1,13 @@
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { ActivePageService } from './../../shared/services/active-page.service';
-import { Component, ElementRef, ViewChild, Renderer2  } from '@angular/core';
+import { Component, ElementRef, ViewChild, Renderer2, HostListener, inject  } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
 import { NAVBAR_USER } from 'src/app/shared/variables/Navbar';
 import { BaseComponent } from 'src/app/base.component';
 import { RouterLink } from '@angular/router';
 import { NgClass, NgFor, NgIf } from '@angular/common';
+import { Subject } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -17,14 +18,18 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
 })
 export class HeaderComponent extends BaseComponent {
 
-  constructor(
-    public activePageService: ActivePageService,
-    private renderer: Renderer2,
-    public shoppingCartService : ShoppingCartService,
-    private apiRequestsService : ApiRequestsService
-    ) {
-      super()
-    }
+  public activePageService = inject(ActivePageService);
+  private renderer = inject(Renderer2);
+  public shoppingCartService = inject(ShoppingCartService);
+  private apiRequestsService = inject(ApiRequestsService);
+
+  windowSize$ = new Subject<[number, number]>();
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event : Event) {
+    this.windowSize$.next([window.innerWidth, window.innerHeight]);
+    this.checkValueResize();
+  }
 
   @ViewChild('navBar') navBar!: ElementRef;
 
@@ -38,6 +43,10 @@ export class HeaderComponent extends BaseComponent {
   }
 
   ngAfterViewInit(): void {
+    this.checkValueResize();
+  }
+
+  checkValueResize(): void {
     document.documentElement.style.setProperty(
       '--height-header',
       this.navBar.nativeElement.offsetHeight + 'px'

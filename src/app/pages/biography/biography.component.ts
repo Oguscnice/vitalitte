@@ -20,7 +20,6 @@ export class BiographyComponent extends BaseComponent{
         '--height-img-monitored',
         imgElement.offsetHeight + 'px'
       );
-      console.log(imgElement.offsetHeight + 'px');
 
       document.documentElement.style.setProperty(
         '--width-img-monitored',

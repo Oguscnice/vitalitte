@@ -3,42 +3,63 @@ import { Component, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
 import { CreateWorkshop } from '../../interfaces/Workshop';
+import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 
 @Component({
   selector: 'app-manage-workshops',
   standalone: false,
-  templateUrl: './manage-workshops.component.html',
-  styleUrl: './manage-workshops.component.scss'
+  template: ` <app-return-admin-home/>
+              <h2>Gestion des Ateliers</h2>
+
+              <app-post-workshop (newWorkshop)="post($event)">
+              </app-post-workshop>
+              <app-edit-delete-workshop [workshops]="workshops"
+              
+                                        (changeAvailabilityWorkshop)="changeAvailability($event)"
+                                        (workshopToDelete)="showModal($event)">
+              </app-edit-delete-workshop>
+              
+              <anguille [message]="messageResponseFromBackend"/>
+              <app-modal [modalVisible]="modalVisible"
+                        [modalText]="modalText"
+                        [multipleChoice]="true"
+                        
+                        (responseForModal)="responseForModal($event)">
+              </app-modal>`,
+  styles: [` @import "../../scss/admin-general.scss"; `]
 })
 export class ManageWorkshopsComponent extends BaseComponent {
 
   private apiWorkshopAdminService = inject(ApiWorkshopAdminService);
+  private apiRequestsService = inject(ApiRequestsService);
 
   modalVisible : boolean = false;
+  multipleChoice! : boolean;
   modalText! : string;
-
+  
+  workshops! : WorkshopDto[];
   workshopToDelete! : WorkshopDto;
 
   ngOnInit(): void {
     this.getAllWorkshops();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.unsubscribeAll();
   }
 
   getAllWorkshops(): void{
     this.subscriptions.push(
-      // this.apiRequestsService.getAllMaterials().subscribe({
-      //   next: (materials) => this.materials = materials,
-      //   error: (err) => (this.changeMessage(err.error.message))
-      // })
+      this.apiRequestsService.getAllWorkshops().subscribe({
+        next: (workshops) => this.workshops = workshops,
+        error: (err) => (this.changeMessage(err.error.message))
+      })
     )
   }
 
   showModal(workshopToDelete : WorkshopDto): void {
     this.workshopToDelete = workshopToDelete;
-    this.modalText = `Confirmer vouloir supprimer l'atelier : "${workshopToDelete.title}"`
+    this.modalText = `Confirmer vouloir supprimer l'atelier : ${workshopToDelete.title}`
     this.modalVisible = true;
   }
 
@@ -52,9 +73,22 @@ export class ManageWorkshopsComponent extends BaseComponent {
   post(newWorkshop : CreateWorkshop): void {
     this.subscriptions.push(
       this.apiWorkshopAdminService.post(newWorkshop).subscribe({
+        next: (res) => this.changeMessage(res.message),
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  changeAvailability(workshopToChangeAvaibility : WorkshopDto): void {
+    this.subscriptions.push(
+      this.apiWorkshopAdminService.changeAvailability(workshopToChangeAvaibility).subscribe({
         next: (res) => {
           this.changeMessage(res.message);
-console.log(res);
+          for(let workshop of this.workshops){
+            if(workshop.slug === workshopToChangeAvaibility.slug){
+              workshop.available = !workshop.available
+            }
+          }
         },
         error: (err) => (this.changeMessage(err.error.message))
       })
@@ -63,13 +97,13 @@ console.log(res);
 
   deleteWorkshop(workshopSlug : WorkshopDto['slug']): void {
     this.subscriptions.push(
-      // this.apiMaterialAdminService.delete(materialSlug).subscribe({
-      //   next: (res) => {
-      //     this.changeMessage(res.message);
-      //     this.materials = this.materials.filter(material => material.slug !== materialSlug)
-      //   },
-      //   error: (err) => (this.changeMessage(err.error.message))
-      // })
+      this.apiWorkshopAdminService.delete(workshopSlug).subscribe({
+        next: (res) => {
+          this.changeMessage(res.message);
+          this.workshops = this.workshops.filter(workshop => workshop.slug !== workshopSlug)
+        },
+        error: (err) => (this.changeMessage(err.error.message))
+      })
     )
   }
 }

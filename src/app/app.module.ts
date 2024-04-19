@@ -11,7 +11,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { Page404Component } from './pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { httpInterceptorProviders } from './shared/interceptors';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
 import { NotebooksComponent } from './pages/notebooks-pages/notebooks/notebooks.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
@@ -39,6 +39,12 @@ import { ChoicesPersonalizedCreationComponent } from './components/choices-perso
 import { AnguilleComponent } from './shared/components/anguille/anguille.component';
 import { WorkshopComponent } from './pages/workshop/workshop.component';
 import { RouterLink } from '@angular/router';
+import { PublicationsComponent } from './pages/publications-pages/publications/publications.component';
+import { PublicationThumbnailComponent } from './components/publication-thumbnail/publication-thumbnail.component';
+import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
+import { PAGE_RESPONSE_PARSER_TOKEN } from './shared/services/pagination-api.service';
+import { jsonServerLinkParser } from './shared/services/json-server-link-parser';
+import { NgModel } from '@angular/forms';
 
 
 @NgModule({
@@ -55,7 +61,9 @@ import { RouterLink } from '@angular/router';
     NotebooksPreparedComponent,
     NotebookSelectedComponent,
     CreateNotebookComponent,
-    WorkshopComponent
+    WorkshopComponent,
+    PublicationsComponent,
+    PublicationSelectedComponent
   ],
   imports: [
     BrowserModule,
@@ -75,14 +83,17 @@ import { RouterLink } from '@angular/router';
     ChoicesPersonalizedCreationComponent,
     PaypalComponent,
     ContactFormComponent,
-    NotebooksListComponent
+    NotebooksListComponent,
+    PublicationThumbnailComponent
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
     AuthGuard,
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    { provide : PAGE_RESPONSE_PARSER_TOKEN, useValue: jsonServerLinkParser},
+    provideHttpClient()
   ],
   bootstrap: [AppComponent],
 })

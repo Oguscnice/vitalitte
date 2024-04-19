@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminHomeComponent } from './pages/admin-home/admin-home.component';
@@ -28,6 +28,9 @@ import { EditDeleteActivityComponent } from './components/activity/edit-delete-a
 import { ManageWorkshopsComponent } from './pages/manage-workshops/manage-workshops.component';
 import { PostWorkshopComponent } from './components/workshop/post-workshop/post-workshop.component';
 import { EditDeleteWorkshopComponent } from './components/workshop/edit-delete-workshop/edit-delete-workshop.component';
+import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
+import { PostPublicationComponent } from './components/publication/post-publication/post-publication.component';
+import { EditDeletePublicationComponent } from './components/publication/edit-delete-publication/edit-delete-publication.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import { EditDeleteWorkshopComponent } from './components/workshop/edit-delete-w
     ManageNotebooksComponent,
     ManagePublicationsComponent,
     EditMaterialComponent,
+    EditWorkshopComponent,
     EditDeleteNotebookComponent,
     ManageContactsComponent,
     ManageGiftCardsComponent,
@@ -58,7 +62,9 @@ import { EditDeleteWorkshopComponent } from './components/workshop/edit-delete-w
     CounterZeroIfEmpty,
     PostNotebookComponent,
     PostWorkshopComponent,
-    EditDeleteWorkshopComponent
+    EditDeleteWorkshopComponent,
+    PostPublicationComponent,
+    EditDeletePublicationComponent
   ],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

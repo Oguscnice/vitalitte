@@ -14,7 +14,6 @@
   .content-text-and-buttons {
     background-color: $white;
     width: 80vw;
-    max-width: 300px;
     border-radius: 10px;
     border: 2px solid $lilac-dark;
     padding: 20px;
@@ -31,7 +30,7 @@
     }
   }
   .two-buttons{
-    
+    gap: $normal-margin;
   }
 }
 
@@ -47,9 +46,19 @@
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
+  .modal-confirmation-page {
+    .content-text-and-buttons {
+      max-width: 650px;
+    }
+  }
 }
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
+  .modal-confirmation-page {
+    .content-text-and-buttons {
+      max-width: 800px;
+    }
+  }
 }
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1235px) {

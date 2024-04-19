@@ -14,7 +14,7 @@ import { TransformApiService } from '../../services/transform-api.service';
 @Component({
   selector: 'app-edit-material',
   templateUrl: './edit-material.component.html',
-  styles: [`@import "../../scss/admin-general.scss";`]
+  styles: [` @import "../../scss/admin-general.scss"; `]
 })
 export class EditMaterialComponent extends BaseComponent{
 
@@ -34,7 +34,6 @@ export class EditMaterialComponent extends BaseComponent{
   materialSelected! : MaterialDto;
   materialTypes : string[] = [];
 
-  imageToDisplay! : string;
   isDropdownCategoryOpen : boolean = false;
   isFormSubmit : boolean = false;
   modalVisible : boolean = false;
@@ -72,7 +71,7 @@ export class EditMaterialComponent extends BaseComponent{
       this.apiMaterialAdminService.getBySlug(this.materialSlug).subscribe({
         next: (material) =>{
           this.materialSelected = material;
-          this.updateEditFormValueValue();
+          this.updateEditFormValue();
         },
         error: (err) => (this.changeMessage(err.error.message))
       })
@@ -88,13 +87,12 @@ export class EditMaterialComponent extends BaseComponent{
     )
   }
 
-  updateEditFormValueValue(): void {
+  updateEditFormValue(): void {
     this.editMaterialForm.get('name')!.setValue(this.materialSelected.name);
     this.editMaterialForm.get('price')!.setValue(this.materialSelected.price.toString());
     this.editMaterialForm.get('materialType')!.setValue(this.materialSelected.materialType);
     this.editMaterialForm.get('description')!.setValue(this.materialSelected.description);
     this.editMaterialForm.get('picture')!.setValue(this.materialSelected.picture);
-    this.imageToDisplay = this.materialSelected.picture;
   }
 
   toggleDropdown(): void{
@@ -116,25 +114,22 @@ export class EditMaterialComponent extends BaseComponent{
 
       if (this.fileSize < this.fileSizeMax) {
         fileInfo = await this.fileUploadService.fileUpload(event);
-        this.imageToDisplay = fileInfo.data.thumb.url;
-        this.editMaterialForm.get('picture')!.setValue(this.imageToDisplay);
+        this.editMaterialForm.get('picture')!.setValue(fileInfo.data.thumb.url);
       };
     } else {
-      this.imageToDisplay = this.fileUploadService.imageMaterialDefault;
+      this.editMaterialForm.get('picture')!.setValue(this.fileUploadService.imageMaterialDefault);
     }
   }
 
   changeImageValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     if(inputElement){
-      this.imageToDisplay = inputElement.value;
       this.editMaterialForm.get('picture')!.setValue(inputElement.value);
     }
   }
 
   submitEditMaterialForm(): void {
 
-    this.editMaterialForm.get('picture')!.setValue(this.imageToDisplay);
     this.isFormSubmit = true
     
     if(this.editMaterialForm.valid){

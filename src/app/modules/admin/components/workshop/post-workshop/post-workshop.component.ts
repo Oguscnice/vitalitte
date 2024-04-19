@@ -24,14 +24,12 @@ export class PostWorkshopComponent {
   public fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private transformApiService = inject(TransformApiService);
-  private apiBan = inject(ApiBanService)
+  public apiBanService = inject(ApiBanService)
 
   @Output() newWorkshop: EventEmitter<CreateWorkshop> = new EventEmitter();
 
   isFormVisible : boolean = false;
   isFormSubmit : boolean = false;
-  isDropdownBanOpen : boolean = false;
-  adressList!: any;
 
   fileSize!: number;
 
@@ -43,35 +41,31 @@ export class PostWorkshopComponent {
     toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
   };
 
-  ngOnInit(): void {
-    this.newWorkshopForm.get('picture')!.setValue(this.fileUploadService.imageActivityDefault);
-  }
-
   newWorkshopForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.maxLength(255)]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
     date: ['', [Validators.required]],
-    adress: ['', [Validators.required]],
+    address: ['', [Validators.required]],
     price: ['', [Validators.required, priceValidator]],
     picture: ['', [Validators.required, urlValidator]],
     registrations: ['', [Validators.required]],
   });
 
-  toggleDropdown(boolean : boolean): void {
-    this.isDropdownBanOpen = boolean
+  ngOnInit(): void {
+    this.newWorkshopForm.get('picture')!.setValue(this.fileUploadService.imageActivityDefault);
   }
 
   searchAdress(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     if(inputElement.value.length > 3){
-      this.apiBan.getAdress(inputElement.value).subscribe((adress) => {
-        this.adressList = adress.features;
+      this.apiBanService.getAdress(inputElement.value).subscribe((adress) => {
+        this.apiBanService.adressList = adress.features;
       });
     }
   }
 
-  adressSelected(adressClicked: string): void {
-    this.newWorkshopForm.get('adress')!.setValue(adressClicked);
+  adressSelected(addressClicked: string): void {
+    this.newWorkshopForm.get('address')!.setValue(addressClicked);
   }
 
   async onFileSelected(event: Event): Promise<void> {
@@ -95,12 +89,12 @@ export class PostWorkshopComponent {
     }
   }
 
-  submitNewWorkshopForm(): void{
+  submitNewWorkshopForm(): void {
 
     this.isFormSubmit = true
+
     if(this.newWorkshopForm.valid){
       let createdWorkshop : CreateWorkshop = this.transformApiService.postWorkshop(this.newWorkshopForm)
-      console.log(createdWorkshop);
       this.newWorkshop.emit(createdWorkshop);
     }
   }

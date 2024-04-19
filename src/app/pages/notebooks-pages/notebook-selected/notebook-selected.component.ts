@@ -1,5 +1,5 @@
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
@@ -11,15 +11,11 @@ import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 })
 export class NotebookSelectedComponent extends BaseComponent{
 
+  public route = inject(ActivatedRoute);
+  public apiRequestsService = inject(ApiRequestsService);
+
   notebookSlug! : string
   notebookSelected! : NotebookDto
-
-  constructor(
-    public route: ActivatedRoute,
-    private apiRequestsService : ApiRequestsService
-    ){
-    super()
-  }
 
   ngOnInit(){
     this.route.params.subscribe((params) => {
@@ -28,7 +24,7 @@ export class NotebookSelectedComponent extends BaseComponent{
     });
   }
 
-  findNotebook():void{
+  findNotebook(): void {
     this.subscriptions.push(
       this.apiRequestsService.getNotebookBySlug(this.notebookSlug).subscribe({
         next: (notebook) => this.notebookSelected = notebook,

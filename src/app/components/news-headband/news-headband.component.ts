@@ -1,46 +1,54 @@
-import { NgClass, NgFor, UpperCasePipe } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { NgClass, NgFor, UpperCasePipe, NgIf } from '@angular/common';
+import { Component, ElementRef, HostListener, Input, ViewChild, inject, input } from '@angular/core';
+import { Subject } from 'rxjs';
 import { New } from 'src/app/shared/interfaces/New';
+import { PublicationDto } from 'src/app/shared/interfaces/Publication';
+import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { NEWS } from 'src/app/shared/variables/News';
 
 @Component({
   standalone: true,
-  imports: [ NgFor, NgClass, UpperCasePipe ],
+  imports: [ NgFor, NgIf, NgClass, UpperCasePipe ],
   selector: 'app-news-headband',
-  template: ` <div class="news-headband flex">
+  template: ` <div class="news-headband flex" *ngIf="publicationsSpotlighted.length > 0">
                 <p class="fixed-text">Actus :</p>
-                <div class="rolling-news flex center space-between">
-
-                  <i class="fa-solid fa-circle-left" (click)="changeNews('previous')"></i>
-
-                  <p>
-                    {{newsList[index].title | uppercase}} : {{newsList[index].description}}
-                  </p>
-
-                  <i class="fa-solid fa-circle-right" (click)="changeNews('next')"></i>
-
+                <div class="rolling-news flex" #newsContainer>
+                  <div class="section-rolling-news flex space-around" *ngFor="let section of [0,1,2,3,4,5]">
+                    <div *ngFor="let news of publicationsSpotlighted">
+                     <p>{{ news.title }} <ng-template [innerHTML]="news.description"></ng-template> </p> 
+                    </div>
+                  </div>
                 </div>
               </div>`,
   styleUrls: ['./news-headband.component.scss']
 })
 export class NewsHeadbandComponent {
 
-  newsList : New[] = NEWS
-  index = 0;
+  @Input() publicationsSpotlighted! : PublicationDto[];
 
-  changeNews(changement : 'previous' | 'next'): void{
-    if(changement === 'previous'){
-      if(this.index === 0){
-        this.index = this.newsList.length -1
-      } else {
-        this.index -= 1
-      }
-    }else if(changement === 'next'){
-      if(this.index === this.newsList.length -1){
-        this.index = 0
-      } else {
-        this.index += 1
-      }
-    }
+  windowSize$ = new Subject<[number, number]>();
+  newsList : New[] = NEWS
+
+  @ViewChild('newsContainer') newsContainer! : ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event : Event) {
+    this.windowSize$.next([window.innerWidth, window.innerHeight]);
+    this.checkWidthNews();
   }
+
+
+  ngAfterViewInit(){
+    this.checkWidthNews();
+  }
+
+  ngOnDestroy() {
+    // this.unsubscribeAll()
+  }
+
+  private checkWidthNews(){
+    document.documentElement.style.setProperty('--news-container-width',
+    this.newsContainer.nativeElement.offsetWidth + 'px')
+  }
+
 }

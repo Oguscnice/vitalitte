@@ -4,24 +4,20 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone : true,
   imports: [],
   selector: 'app-modal',
-  template: ` <div 
-                class="modal-confirmation-page flex column center"
-                [class]="modalVisible ? 'modal-visible' : ''"
-              >
+  template: ` <div class="modal-confirmation-page flex column center"
+                   [class]="modalVisible ? 'modal-visible' : ''">
 
-                <div
-                  class="content-text-and-buttons flex column space-between"
-                  [class]="!multipleChoice ? 'no-margin' : ''"
-                >
+                <div class="content-text-and-buttons flex column center space-between"
+                     [class]="!multipleChoice ? 'no-margin' : ''">
+
                   <p [innerHTML]="modalText"></p>
 
-                  <button
-                    (click)="closeModalAndSendResponseIfExist()"
-                    [class]="!multipleChoice ? 'btn-medium-admin pointer' : 'display-none'">
+                  <button (click)="closeModalAndSendResponseIfExist()"
+                          [class]="!multipleChoice ? 'btn-medium-admin flex center pointer' : 'display-none'">
                     OK !
                   </button>
 
-                  <div [class]="multipleChoice ? 'two-buttons flex center space-between' : 'display-none'">
+                  <div [class]="multipleChoice ? 'two-buttons flex' : 'display-none'">
                     <button
                       (click)="closeModalAndSendResponseIfExist('false')"
                       class="btn-admin-cancel"

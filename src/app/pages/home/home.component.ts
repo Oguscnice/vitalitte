@@ -2,6 +2,8 @@ import { AddDataSqlService } from './../../shared/services/add-data-sql.service'
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
+import { PublicationDto } from 'src/app/shared/interfaces/Publication';
+import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 
 @Component({
   selector: 'app-home',
@@ -10,17 +12,10 @@ import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
 })
 export class HomeComponent extends BaseComponent{
 
+  private apiRequestsService = inject(ApiRequestsService);
   private addData = inject(AddDataSqlService);
 
-  constructor(){
-    super()
-  }
-
-  ngOnInit(): void{
-    // this.addData.createAll();
-  }
-
-  titleParentHome: string = 'Bienvenue';
+  publicationsSpotlighted! : PublicationDto[];
   backgroundImageParentHome: string =
     '../../../assets/images/figma/school-work.jpg';
 
@@ -57,6 +52,11 @@ export class HomeComponent extends BaseComponent{
   
   booktiqueSectionMonitored!: ElementRef;
 
+  ngOnInit(): void{
+    this.getPublicationsSpotlighted();
+    // this.addData.createAll();
+  }
+
   ngAfterViewInit() {
     const imgElement: HTMLImageElement = this.imgMonitored.nativeElement;
 
@@ -71,5 +71,24 @@ export class HomeComponent extends BaseComponent{
         imgElement.width + 'px'
       );
     };
+  }
+
+  getPublicationsSpotlighted(): void {
+    this.subscriptions.push(
+      this.apiRequestsService.getPublicationsSpotlighted('true').subscribe({
+        next: (publicationsSpotlighted) => {
+          this.publicationsSpotlighted = publicationsSpotlighted;
+          for(let publication of this.publicationsSpotlighted){
+            if(publication.title.length > 50){
+              publication.title = publication.title.slice(0, 50) + "..."
+            } 
+            if(publication.description.length > 50){
+              publication.description = publication.description.slice(0, 50) + "..."
+            } 
+          } 
+        },
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
   }
 }

@@ -11,6 +11,7 @@ import { ManageContactsComponent } from './pages/manage-contacts/manage-contacts
 import { ManageCategoriesCollectionsComponent } from './pages/manage-categories-collections/manage-categories-collections.component';
 import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.component';
 import { ManageWorkshopsComponent } from './pages/manage-workshops/manage-workshops.component';
+import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
 
 const routes: Routes = [
   // { path: '', component: AdminHomeComponent, canActivate: [AdminGuard] },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'editer-materiel/:materielSlug', component : EditMaterialComponent},
   { path: 'editer-carnet/:notebookSlug', component : EditNotebookComponent},
   { path: 'gestion-des-ateliers', component: ManageWorkshopsComponent },
+  { path: 'editer-atelier/:workshopSlug', component : EditWorkshopComponent},
   { path: 'gestion-des-cartes-cadeaux', component: ManageGiftCardsComponent },
   { path: 'gestion-des-publications', component: ManagePublicationsComponent },
   { path: 'gestion-des-contacts', component: ManageContactsComponent },

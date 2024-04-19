@@ -2,7 +2,7 @@ export interface CreateWorkshop {
   title : string,
   description : string,
   date : Date,
-  adress : string,
+  address : string,
   price : number,
   picture : string,
   registrations : number

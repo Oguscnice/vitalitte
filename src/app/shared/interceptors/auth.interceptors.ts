@@ -30,7 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
         'Authorization',
         `Bearer ${this.authService.getToken()}`
       );
-
+      
       let modifiedReq = request.clone({ headers });
 
       return next.handle(modifiedReq);

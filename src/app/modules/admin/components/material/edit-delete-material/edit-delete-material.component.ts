@@ -9,9 +9,9 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 @Component({
   selector: 'app-edit-delete-material',
   standalone: true,
-  imports: [NgClass, NgIf, NgFor, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent ],
+  imports: [ NgClass, NgIf, NgFor, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent ],
   templateUrl: './edit-delete-material.component.html',
-  styles: [`@import "../../../scss/admin-general.scss";`]
+  styles: [ `@import "../../../scss/admin-general.scss"; `]
 })
 export class EditDeleteMaterialComponent {
 
@@ -21,19 +21,10 @@ export class EditDeleteMaterialComponent {
   @Output() changeAvailabilityMaterial: EventEmitter<MaterialDto> = new EventEmitter();
   @Output() materialToDelete: EventEmitter<MaterialDto> = new EventEmitter();
 
-  isTableVisible: boolean = false;
-  isDropdownOpen : boolean = false;
+  isTableVisible: boolean = true;
 
   modalVisible : boolean = false;
   modalText! : string;
-
-  public toolBarConfig = {
-    base_url: '/tinymce',
-    suffix: '.min',
-    plugins : 'lists',
-    menubar: false,
-    toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
-  };
 
   openModalWithDescription(materialDescription : MaterialEditable['description']): void{
     this.modalVisible = true;

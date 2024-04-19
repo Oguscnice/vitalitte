@@ -12,6 +12,8 @@ import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-pr
 import { NotebookSelectedComponent } from './pages/notebooks-pages/notebook-selected/notebook-selected.component';
 import { CreateNotebookComponent } from './pages/notebooks-pages/create-notebook/create-notebook.component';
 import { WorkshopComponent } from './pages/workshop/workshop.component';
+import { PublicationsComponent } from './pages/publications-pages/publications/publications.component';
+import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
 
 const routes: Routes = [
   {
@@ -29,6 +31,8 @@ const routes: Routes = [
   { path: 'qui-suis-je', component: BiographyComponent },
   { path: 'booktique', component: BooktiqueComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'actualites', component: PublicationsComponent },
+  { path: 'actualites/:publicationSlug', component : PublicationSelectedComponent},
   { path: 'page-404', component: Page404Component },
   { path: 'imaginer-mon-carnet', component: CreateNotebookComponent },
   { path: 'ateliers', component : WorkshopComponent},

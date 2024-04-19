@@ -1,0 +1,15 @@
+@import "../../../scss/buttons.scss";
+@import "../../../scss/forms.scss";
+
+h4 {
+
+}
+
+.publications {
+  .publications-section {
+    flex-direction: column;
+    app-publication-thumbnail {
+      margin-top: $half-margin;
+    }
+  }
+}

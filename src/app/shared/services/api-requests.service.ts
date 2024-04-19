@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MaterialDto } from '../interfaces/Material';
 import { URLAPI } from '../variables/Others';
 import { NotebookDto } from '../interfaces/Notebook';
@@ -9,6 +9,8 @@ import { CollectionDto } from '../interfaces/Collection';
 import { WorkshopDto } from '../interfaces/Workshop';
 import { CreateInscription } from '../interfaces/Inscription';
 import { ResponseEntity } from '../interfaces/ResponseEntity';
+import { PublicationDto } from '../interfaces/Publication';
+import { PaginationApiService } from './pagination-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,7 @@ import { ResponseEntity } from '../interfaces/ResponseEntity';
 export class ApiRequestsService {
 
   private http = inject(HttpClient);
+  private pagineationApi = inject(PaginationApiService);
 
   getAllMaterials(): Observable<MaterialDto[]>{
     return this.http.get<MaterialDto[]>(URLAPI + "/materials")
@@ -60,5 +63,42 @@ export class ApiRequestsService {
   getInscriptionsCounterByWorkshop(workshopDtoSlug : WorkshopDto['slug']): Observable<number>{
     return this.http.get<number>(URLAPI + "/inscriptions/count-by-workshop/" + workshopDtoSlug)
   }
-  
+
+  getAllPublications(): Observable<PublicationDto[]>{
+    return this.http.get<PublicationDto[]>(URLAPI + "/publications")
+  }
+
+  getAllPublicationsCounter(): Observable<number>{
+    return this.http.get<number>(URLAPI + "/publications/count")
+  }
+
+  getPublicationsFilteredCounter(value : string): Observable<number>{
+    return this.http.get<number>(URLAPI + "/publications/count/" + value)
+  }
+
+  getPublicationsSpotlighted(value : string): Observable<PublicationDto[]>{
+    return this.http.get<PublicationDto[]>(URLAPI + "/publications/isSpotlighted/" + value)
+  }
+
+  getPublicationBySlug(publicationSlug : PublicationDto['slug']): Observable<PublicationDto>{
+    return this.http.get<PublicationDto>(URLAPI + "/publications/" + publicationSlug)
+  }
+
+  getPublicationPaginated(pageNumber : number){
+    return this.http.get<PublicationDto[]>(URLAPI + "/publications/page-" + pageNumber)
+  }
+
+  getPublicationPaginatedFiltered(pageNumber : number, value : string){
+    return this.http.get<PublicationDto[]>(URLAPI + "/publications/page-" + pageNumber + "/" + value)
+  }
+
+  // getPublicationPaginated(){
+  //   return this.http.get<PublicationDto[]>(URLAPI + "/publications",
+  //   {
+  //     observe: 'response',
+  //     params: new HttpParams().append('size', 5).append('offset', 1)
+  //   }).pipe(
+  //     map(response => this.pagineationApi.responseToPage(response))
+  //   )
+  // }
 }
