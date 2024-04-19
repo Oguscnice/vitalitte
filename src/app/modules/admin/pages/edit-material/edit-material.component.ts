@@ -1,5 +1,5 @@
 import { ApiMaterialAdminService } from './../../services/api-material-admin.service';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
@@ -9,24 +9,24 @@ import { urlValidator } from '../../validators/urlValidators';
 import { priceValidator } from '../../validators/priceValidators';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { FileInfo } from '../../interfaces/FileInfo';
-import { TransformApiPutService } from '../../services/transform-api-put.service';
+import { TransformApiService } from '../../services/transform-api.service';
 
 @Component({
   selector: 'app-edit-material',
   templateUrl: './edit-material.component.html',
-  styleUrls: ['./edit-material.component.scss']
+  styles: [` @import "../../scss/admin-general.scss"; `]
 })
 export class EditMaterialComponent extends BaseComponent{
 
-  constructor(
-    public route: ActivatedRoute,
-    private apiMaterialAdminService : ApiMaterialAdminService,
-    private apiRequestsService : ApiRequestsService,
-    private fileUploadService: FileUploadService,
-    private formBuilder: FormBuilder,
-    private transformApiPutService : TransformApiPutService,
-    private router: Router
-  ){
+  private apiRequestsService = inject(ApiRequestsService);
+  private  apiMaterialAdminService = inject(ApiMaterialAdminService);
+  public route = inject(ActivatedRoute);
+  private fileUploadService = inject(FileUploadService);
+  private formBuilder = inject(FormBuilder);
+  private router  = inject(Router);
+  private transformApiService = inject(TransformApiService);
+
+  constructor(){
     super()
   }
 
@@ -34,7 +34,6 @@ export class EditMaterialComponent extends BaseComponent{
   materialSelected! : MaterialDto;
   materialTypes : string[] = [];
 
-  imageToDisplay! : string;
   isDropdownCategoryOpen : boolean = false;
   isFormSubmit : boolean = false;
   modalVisible : boolean = false;
@@ -72,7 +71,7 @@ export class EditMaterialComponent extends BaseComponent{
       this.apiMaterialAdminService.getBySlug(this.materialSlug).subscribe({
         next: (material) =>{
           this.materialSelected = material;
-          this.updateEditFormValueValue();
+          this.updateEditFormValue();
         },
         error: (err) => (this.changeMessage(err.error.message))
       })
@@ -81,20 +80,19 @@ export class EditMaterialComponent extends BaseComponent{
 
   getAllMaterialsTypes(): void {
     this.subscriptions.push(
-      this.apiRequestsService.getAllMaterialsTypes().subscribe({
+      this.apiMaterialAdminService.getAllMaterialsTypes().subscribe({
         next: (materialsTypes) => this.materialTypes = materialsTypes,
         error: (err) => (this.changeMessage(err.error.message))
       })
     )
   }
 
-  updateEditFormValueValue(): void {
+  updateEditFormValue(): void {
     this.editMaterialForm.get('name')!.setValue(this.materialSelected.name);
     this.editMaterialForm.get('price')!.setValue(this.materialSelected.price.toString());
     this.editMaterialForm.get('materialType')!.setValue(this.materialSelected.materialType);
     this.editMaterialForm.get('description')!.setValue(this.materialSelected.description);
     this.editMaterialForm.get('picture')!.setValue(this.materialSelected.picture);
-    this.imageToDisplay = this.materialSelected.picture;
   }
 
   toggleDropdown(): void{
@@ -116,29 +114,26 @@ export class EditMaterialComponent extends BaseComponent{
 
       if (this.fileSize < this.fileSizeMax) {
         fileInfo = await this.fileUploadService.fileUpload(event);
-        this.imageToDisplay = fileInfo.data.thumb.url;
-        this.editMaterialForm.get('picture')!.setValue(this.imageToDisplay);
+        this.editMaterialForm.get('picture')!.setValue(fileInfo.data.thumb.url);
       };
     } else {
-      this.imageToDisplay = this.fileUploadService.imageMaterialDefault;
+      this.editMaterialForm.get('picture')!.setValue(this.fileUploadService.imageMaterialDefault);
     }
   }
 
   changeImageValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     if(inputElement){
-      this.imageToDisplay = inputElement.value;
       this.editMaterialForm.get('picture')!.setValue(inputElement.value);
     }
   }
 
   submitEditMaterialForm(): void {
 
-    this.editMaterialForm.get('picture')!.setValue(this.imageToDisplay);
     this.isFormSubmit = true
     
     if(this.editMaterialForm.valid){
-      let materialToEdit : MaterialDto = this.transformApiPutService.putMateriel(this.editMaterialForm, this.materialSlug)
+      let materialToEdit : MaterialDto = this.transformApiService.putMateriel(this.editMaterialForm, this.materialSlug)
       this.putMaterial(materialToEdit);
     }
   }

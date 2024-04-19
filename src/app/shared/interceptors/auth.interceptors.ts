@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -11,22 +11,26 @@ import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  
+  private authService = inject(AuthService);
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
 
-    if (request.url.startsWith('https://api.cloudinary.com/') 
-        || request.url.startsWith('https://api.imgbb.com/')) {
+    if (
+      request.url.startsWith('https://api-adresse.data.gouv.fr/search/') ||
+      request.url.startsWith('https://api.cloudinary.com/') ||
+      request.url.startsWith('https://api.imgbb.com/')
+    ) {
       return next.handle(request);
     } else {
       let headers = new HttpHeaders().append(
         'Authorization',
         `Bearer ${this.authService.getToken()}`
       );
-
+      
       let modifiedReq = request.clone({ headers });
 
       return next.handle(modifiedReq);

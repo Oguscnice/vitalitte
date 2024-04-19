@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,8 +11,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { Page404Component } from './pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { httpInterceptorProviders } from './shared/interceptors';
-import { HttpClientModule } from '@angular/common/http';
-import { CreationsComponent } from './pages/creations/creations.component';
+import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { NotebooksComponent } from './pages/notebooks-pages/notebooks/notebooks.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
@@ -20,19 +20,14 @@ import { H1Component } from './components/h1/h1.component';
 import { ValuesComponent } from './components/values/values.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { NgIf } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './components/loader/loader.component';
 import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
-import { NotebooksComponent } from './pages/notebooks/notebooks.component';
-import { NotebookSelectedComponent } from './pages/notebook-selected/notebook-selected.component';
+import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-prepared/notebooks-prepared.component';
+import { NotebookSelectedComponent } from './pages/notebooks-pages/notebook-selected/notebook-selected.component';
 import { NotebooksListComponent } from './components/notebooks-list/notebooks-list.component';
-import { CreateNotebookComponent } from './pages/create-notebook/create-notebook.component';
+import { CreateNotebookComponent } from './pages/notebooks-pages/create-notebook/create-notebook.component';
 import { ImagesPreviewComponent } from './components/images-preview/images-preview.component';
 import { NewsHeadbandComponent } from './components/news-headband/news-headband.component';
 import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
@@ -42,54 +37,63 @@ import { ShoppingCartService } from './shared/services/shopping-cart.service';
 import { ShoppingNotebooksListComponent } from './components/shopping-notebooks-list/shopping-notebooks-list.component';
 import { ChoicesPersonalizedCreationComponent } from './components/choices-personalized-creation/choices-personalized-creation.component';
 import { AnguilleComponent } from './shared/components/anguille/anguille.component';
+import { WorkshopComponent } from './pages/workshop/workshop.component';
+import { RouterLink } from '@angular/router';
+import { PublicationsComponent } from './pages/publications-pages/publications/publications.component';
+import { PublicationThumbnailComponent } from './components/publication-thumbnail/publication-thumbnail.component';
+import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
+import { PAGE_RESPONSE_PARSER_TOKEN } from './shared/services/pagination-api.service';
+import { jsonServerLinkParser } from './shared/services/json-server-link-parser';
+import { NgModel } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    FooterComponent,
     HomeComponent,
     LoginComponent,
     Page404Component,
-    CreationsComponent,
+    NotebooksComponent,
     BiographyComponent,
     BooktiqueComponent,
     ContactComponent,
-    H1Component,
-    ValuesComponent,
-    ContactFormComponent,
-    LoaderComponent,
     FormulaireEnvoyeComponent,
-    NotebooksComponent,
+    NotebooksPreparedComponent,
     NotebookSelectedComponent,
-    NotebooksListComponent,
     CreateNotebookComponent,
-    ImagesPreviewComponent,
-    NewsHeadbandComponent,
-    UpArrowComponent,
-    PaypalComponent,
-    ShoppingNotebooksListComponent,
-    ChoicesPersonalizedCreationComponent,
+    WorkshopComponent,
+    PublicationsComponent,
+    PublicationSelectedComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgIf,
-    MatButtonModule,
-    MatIconModule,
-    MatSelectModule,
-    NgxPayPalModule,
-    AnguilleComponent,
-    ModalComponent
+    RouterLink,
+
+    HeaderComponent,
+    NewsHeadbandComponent,
+    H1Component,
+    FooterComponent,
+    UpArrowComponent,
+    ImagesPreviewComponent,
+    ValuesComponent,
+    ShoppingNotebooksListComponent,
+    ChoicesPersonalizedCreationComponent,
+    PaypalComponent,
+    ContactFormComponent,
+    NotebooksListComponent,
+    PublicationThumbnailComponent
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
     AuthGuard,
-    httpInterceptorProviders
+    httpInterceptorProviders,
+    { provide : PAGE_RESPONSE_PARSER_TOKEN, useValue: jsonServerLinkParser},
+    provideHttpClient()
   ],
   bootstrap: [AppComponent],
 })

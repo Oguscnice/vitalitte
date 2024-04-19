@@ -1,18 +1,17 @@
-import { Component } from '@angular/core';
-import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
+import { Component, inject } from '@angular/core';
+import { IPayPalConfig, ICreateOrderRequest, NgxPayPalModule } from 'ngx-paypal';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
 
 @Component({
+  standalone: true,
+  imports: [ NgxPayPalModule ],
   selector: 'app-paypal',
   template: '<ngx-paypal [config]="payPalConfig"></ngx-paypal>',
   styleUrls: ['./paypal.component.scss']
 })
 export class PaypalComponent {
 
-  constructor(
-    private shoppingCartService : ShoppingCartService
-    ) { }
-
+  private shoppingCartService = inject(ShoppingCartService);
   public payPalConfig ? : IPayPalConfig;
 
   ngOnInit(): void {

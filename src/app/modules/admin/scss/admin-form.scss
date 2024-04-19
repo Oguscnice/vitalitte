@@ -1,6 +1,11 @@
 @import "../../../scss/variables.scss";
 
-input{
+small {
+  font-size: $normal-font-size;
+  color: $red;
+}
+
+input {
   @include inputStyleBorder;
   border-radius: 4px;
   padding: .15rem .5rem;
@@ -81,12 +86,6 @@ form{
       margin-top : $normal-margin;
       border-radius: 8px;
       border : 1px solid $lilac-light;
-    }
-
-    div{
-      small{
-        color: $red;
-      }
     }
   }
 

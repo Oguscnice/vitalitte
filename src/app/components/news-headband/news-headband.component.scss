@@ -2,54 +2,87 @@
 @import "../../scss/buttons.scss";
 @import "../../../styles.scss";
 
+:root {
+  --news-container-width: 0px;
+}
+
 .news-headband {
-  overflow: hidden;
-  width: 100vw;
+  overflow-x: hidden;
   flex-direction: column;
+
   .fixed-text {
     padding: 0 $normal-padding;
     background-color: $lilac;
     color: $white;
     font-size: $double-font-size;
-    width: 20%;
     text-align: center;
     z-index: $z-index + 1;
-    width: 100vw;
   }
+
   .rolling-news {
-    z-index: $z-index;
     white-space: nowrap;
-    animation: scrollNews 10s linear infinite;
-    .news-item {
-      padding: 0 20px;
-      border-left: 1px solid $lilac-dark;
+    position: relative;
+      
+    .section-rolling-news {
+      border-left: 4px solid $lilac;
+      min-width: 100vw;
+      animation: 20s slide infinite linear;
+      p{
+        border-left: 1px solid $lilac;
+        padding: 0 $normal-padding;
+      }
     }
-    .border-right{
-      border-right: 1px solid $lilac-dark;
-    }
+  }
+  .rolling-news:before,
+  .rolling-news:after {
+    position: absolute;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    content: "";
+    z-index: 2;
   }
 }
 
-@keyframes scrollNews {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+@keyframes slide {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(calc(0px - (var(--news-container-width)) / 1/6 ));
+  }
 }
-
-
 
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
+  .news-headband{
+    .rolling-news {
+      .section-rolling-news {
+        min-width: 650px;
+      }
+    }
+  }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
-
-  .news-headband {
-    flex-direction: row;
+  .news-headband{
+    .rolling-news {
+      .section-rolling-news {
+        min-width: 800px;
+      }
+    }
   }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
+  .news-headband{
+    .rolling-news {
+      .section-rolling-news {
+        min-width: 1000px;
+      }
+    }
+  }
 }

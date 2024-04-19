@@ -1,6 +1,9 @@
+import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
+  standalone: true,
+  imports: [ NgIf ],
   selector: 'app-loader',
   template: `<div *ngIf="booleanVisibilityInLoarder" class="modal-loader flex center">
               <div class="loader">

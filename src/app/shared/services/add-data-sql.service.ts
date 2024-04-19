@@ -2,31 +2,37 @@ import { ApiNotebookAdminService } from './../../modules/admin/services/api-note
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { ApiCategoryAdminService } from './../../modules/admin/services/api-category-admin.service';
 import { ApiMaterialAdminService } from './../../modules/admin/services/api-material-admin.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CreateMaterial } from 'src/app/modules/admin/interfaces/Material';
 import { CategoryDto } from '../interfaces/Category';
 import { MaterialDto } from '../interfaces/Material';
 import { CreateNotebook } from 'src/app/modules/admin/interfaces/Notebook';
+import { CollectionDto } from '../interfaces/Collection';
+import { ApiCollectionAdminService } from 'src/app/modules/admin/services/api-collection-admin.service';
+import { ApiWorkshopAdminService } from 'src/app/modules/admin/services/api-workshop-admin.service';
+import { CreateWorkshop } from 'src/app/modules/admin/interfaces/Workshop';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AddDataSqlService {
 
-  constructor(
-    private apiRequestsService : ApiRequestsService,
-    private apiMaterialAdminService : ApiMaterialAdminService,
-    private apiCategoryAdminService : ApiCategoryAdminService,
-    private apiNotebookAdminService : ApiNotebookAdminService
-  ) { }
+  private apiNotebookAdminService = inject(ApiNotebookAdminService);
+  private apiRequestsService = inject(ApiRequestsService);
+  private apiMaterialAdminService = inject(ApiMaterialAdminService);
+  private apiCategoryAdminService = inject(ApiCategoryAdminService);
+  private apiCollectionAdminService = inject(ApiCollectionAdminService);
+  private apiWorkshopAdminService = inject(ApiWorkshopAdminService);
 
   createAll(){
     //ils s'enchainent avec les autres
     this.createCategories();
+    // this.createNotebooks()
   }
 
-  categories! : CategoryDto[]
-  materials! : MaterialDto[]
+  categories! : CategoryDto[];
+  materials! : MaterialDto[];
+  collections! : CollectionDto[];
   
   createCategories(): void{
     for (let category of this.categoriesToCreate){
@@ -42,12 +48,33 @@ export class AddDataSqlService {
     this.apiRequestsService.getAllCategories().subscribe({
         next: (categories) => {
             this.categories = categories
-            console.log(this.categories);
-            this.createMaterials()
+            this.createCollections()
         },
         error: (err) => console.log(err),}
     )
   }
+
+  createCollections(): void{
+    for (let collection of this.collectionsToCreate){
+      this.apiCollectionAdminService.post(collection).subscribe({
+        next: (response) => console.log(response),
+        error: (err) => console.log(err),
+      })
+    }
+    this.getAllCollections();
+  }
+
+  getAllCollections(){
+    this.apiRequestsService.getAllCollections().subscribe({
+        next: (collections) => {
+            this.collections = collections
+            console.log(this.collections);
+            this.createMaterials();
+        },
+        error: (err) => console.log(err),}
+    )
+  }
+
 
   createMaterials(): void{
     for (let material of this.materialsToCreate){
@@ -58,8 +85,6 @@ export class AddDataSqlService {
       }
       this.getAllMaterials()
   }
-
-
 
   getAllMaterials(){
     this.apiRequestsService.getAllMaterials().subscribe({
@@ -76,6 +101,12 @@ export class AddDataSqlService {
     let randomIndex = Math.floor(Math.random() * this.categories.length);
     return this.categories[randomIndex];
   }
+
+  selectRandomCollection(): CategoryDto{
+    let randomIndex = Math.floor(Math.random() * this.collections.length);
+    return this.collections[randomIndex];
+  }
+
 
   selectRandomMaterials(): MaterialDto[]{
 
@@ -125,27 +156,108 @@ export class AddDataSqlService {
             description : notebook.description,
             materialsDto : this.selectRandomMaterials(),
             categoryDto : this.selectRandomCategory(),
+            collectionDto : this.selectRandomCollection(),
             secondaryPictures : this.selectRandomSecondaryPictures()
         }
+
         console.log(newNotebook);
-        
 
         this.apiNotebookAdminService.post(newNotebook).subscribe({
             next: (response) => console.log(response),
             error: (err) => console.log(err),
           })
     }
+
+    this.createWorkshop();
   }
 
+  createWorkshop(): void {
+    for(let workshop of this.workshopsToCreate){
+      this.apiWorkshopAdminService.post(workshop).subscribe({
+          next: (response) => console.log(response),
+          error: (err) => console.log(err),
+        })
+    } 
+  }
+
+  workshopsToCreate: CreateWorkshop[] = [
+    {
+      title : "Papier d'Artisanat Carnet",
+      description : "Dans l'atelier du Papier d'Artisanat Carnet, chaque carnet est façonné avec passion et dévotion, mêlant habilement tradition et innovation. Nos artisans expérimentés utilisent des techniques ancestrales de reliure et de façonnage du papier pour créer des carnets uniques en leur genre. Chaque étape du processus est effectuée à la main, de la sélection méticuleuse des matériaux à la découpe précise du papier, en passant par l'assemblage et la finition minutieuse. Notre engagement envers la qualité se reflète dans chaque détail, des couvertures exquises aux pages lisses et durables. Que ce soit pour capturer des pensées fugaces, noter des idées créatives ou simplement pour le plaisir d'écrire, nos carnets artisanaux offrent une expérience d'écriture incomparable, empreinte de caractère et d'authenticité.",
+      date : new Date("08/09/2024 18:36"),
+      address : "123 Rue des Nuages, Ville-sur-Mer, France",
+      price : (5.99),
+      picture : "https://pliereliure.com/569-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      registrations : 8
+    },
+    {
+      title : "Carnets Faits à la Main Co.",
+      description : "Chez Carnets Faits à la Main Co., nous croyons en l'importance de l'artisanat traditionnel et de la qualité intemporelle. Chaque carnet qui quitte notre atelier est le fruit d'un travail méticuleux réalisé par nos artisans qualifiés. Inspirés par la beauté de la simplicité, nous utilisons des matériaux de haute qualité et des techniques de reliure traditionnelles pour créer des carnets qui allient fonctionnalité et esthétique. Chaque carnet est conçu pour être un compagnon fidèle, offrant un espace où les idées prennent vie et les souvenirs sont préservés. Qu'il s'agisse d'un journal intime, d'un carnet de croquis ou d'un cahier de voyage, nos carnets faits à la main sont conçus pour inspirer la créativité et nourrir l'âme.",
+      date : new Date("10/09/2024 08:00"),
+      address : "456 Avenue de l'Arc-en-Ciel, Ville-en-Montagne, Canada",
+      price : (0),
+      picture : "https://pliereliure.com/1386-large_default/carnet-artisanal-carnettiste-artistique.jpg",
+      registrations : 3
+    },    
+    {
+      title : "Atelier Carnets Artisanaux",
+      description : "À l'Atelier Carnets Artisanaux, nous nous engageons à créer des produits authentiques qui capturent l'essence de l'artisanat traditionnel. Chaque carnet que nous produisons est le résultat d'un processus méticuleux réalisé à la main, depuis la sélection attentive des matériaux jusqu'à la finition minutieuse. Nos artisans passionnés mettent leur expertise et leur savoir-faire au service de la création de carnets uniques en leur genre, où la qualité et l'attention aux détails sont primordiales. Nos carnets artisanaux sont conçus pour inspirer la créativité et encourager l'expression personnelle, offrant un espace où les idées peuvent s'épanouir et les histoires peuvent prendre vie. Avec leur charme intemporel et leur qualité exceptionnelle, nos carnets sont bien plus que de simples objets ; ce sont des compagnons précieux qui enrichissent la vie quotidienne.",
+      date : new Date("10/04/2024 09:00"),
+      address : "789 Boulevard des Étoiles, Ville-aux-Étoiles, Australie",
+      price : (10),
+      picture : "https://pliereliure.com/568-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      registrations : 999
+    },    
+    {
+      title : "Studio de Reliure Créative",
+      description : "Bienvenue à la Papeterie Artisanale des Mots, où chaque carnet est une œuvre d'art en soi. Dans notre atelier, nous célébrons la beauté de l'écriture à la main et la puissance des mots, en créant des carnets qui inspirent la créativité et captivent l'imagination. Nos artisans passionnés utilisent des matériaux de qualité supérieure et des techniques de reliure traditionnelles pour concevoir des carnets uniques qui sont à la fois fonctionnels et esthétiquement plaisants. Chaque détail est soigneusement considéré, des motifs exquis sur les couvertures aux pages lisses et agréables au toucher. Que ce soit pour écrire, dessiner ou simplement pour laisser libre cours à votre imagination, nos carnets artisanaux sont conçus pour vous accompagner dans tous vos voyages créatifs.",
+      date : new Date("12/05/2024 14:30"),
+      address : "1010 Rue de la Licorne, Ville-enchantée, Royaume-Uni",
+      price : (5.99),
+      picture : "https://pliereliure.com/333-large_default/carnet-artisanal-de-notes-avec-petit-message.jpg",
+      registrations : 2
+    },    
+    {
+      title : "L'Atelier des Carnets d'Écriture",
+      description : "Au Studio de Reliure Créative, nous sommes dévoués à l'art intemporel de la reliure artisanale. Chaque carnet qui quitte notre atelier est le fruit d'un processus méticuleux et passionné, où chaque étape est effectuée à la main avec une attention méticuleuse aux détails. Nos artisans talentueux utilisent des matériaux de haute qualité, allant du papier de qualité supérieure aux tissus et cuirs exquis, pour créer des carnets qui allient fonctionnalité et esthétique. Chaque carnet est conçu pour être une œuvre d'art en soi, offrant un espace où les idées peuvent s'épanouir et les pensées peuvent être capturées. Qu'il s'agisse d'un carnet de voyage, d'un journal intime ou d'un carnet de croquis, nos créations sont conçues pour inspirer la créativité et enrichir la vie de nos clients.",
+      date : new Date("06/05/2024 17:00"),
+      address : "1313 Avenue de la Lune, Ville-lunaire, États-Unis",
+      price : (0),
+      picture : "https://latelierdestephanieaguado.com/wp-content/uploads/2020/05/mini-carnet-07.jpg",
+      registrations : 9
+    },    
+    {
+      title : "Carnet",
+      description : "L'Atelier des Carnets d'Écriture est un sanctuaire pour les amoureux de l'écriture et du papier de qualité. Dans notre atelier, nous mettons l'accent sur l'artisanat traditionnel et la qualité exceptionnelle, en utilisant des techniques de reliure ancestrales pour créer des carnets qui sont à la fois beaux et fonctionnels. Chaque carnet est conçu avec soin et attention aux détails, depuis la sélection des matériaux jusqu'à la finition finale. Nos artisans expérimentés mettent leur expertise au service de la création de carnets uniques en leur genre, offrant un espace où les pensées peuvent s'épanouir et les idées peuvent prendre forme. Qu'il s'agisse d'un carnet de voyage rempli d'aventures ou d'un journal intime rempli de souvenirs, nos créations sont conçues pour inspirer et enrichir la vie de nos clients, une page à la fois.",
+      date : new Date("05/06/2024 20:00"),
+      address : "1313 Avenue de la Lune, Ville-lunaire, États-Unis",
+      price : 7.89,
+      picture : "https://pliereliure.com/565-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      registrations : 10
+    },    
+    {
+      title : "Artisanat Carnet",
+      description : "L'Atelier des Carnets d'Écriture est un sanctuaire pour les amoureux de l'écriture et du papier de qualité. Dans notre atelier, nous mettons l'accent sur l'artisanat traditionnel et la qualité exceptionnelle, en utilisant des techniques de reliure ancestrales pour créer des carnets qui sont à la fois beaux et fonctionnels. Chaque carnet est conçu avec soin et attention aux détails, depuis la sélection des matériaux jusqu'à la finition finale. Nos artisans expérimentés mettent leur expertise au service de la création de carnets uniques en leur genre, offrant un espace où les pensées peuvent s'épanouir et les idées peuvent prendre forme. Qu'il s'agisse d'un carnet de voyage rempli d'aventures ou d'un journal intime rempli de souvenirs, nos créations sont conçues pour inspirer et enrichir la vie de nos clients, une page à la fois.",
+      date : new Date("01/08/2024 08:00"),
+      address : "1515 Chemin de la Magie, Ville-mystère, Espagne",
+      price : (5.99),
+      picture : "https://pliereliure.com/img/cms/30-03.jpg",
+      registrations : 80
+    }
+  ]
+
   categoriesToCreate: string[] = [
+    "Les illustrés",
+    "Les amoureux du papier",
+    "Les créations uniques",
+    "Les sur-mesures"
+  ];
+
+  collectionsToCreate: string[] = [
     "été",
-    "hiver",
     "printemps",
-    "noel",
-    "automne",
-    "speciale",
-    "occasionnel",
-    "unique"
+    "hiver",
+    "automone"
   ];
 
   materialsToCreate : CreateMaterial[] = [

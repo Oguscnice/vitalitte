@@ -4,20 +4,28 @@ import { AdminHomeComponent } from './pages/admin-home/admin-home.component';
 import { AdminGuard } from 'src/app/shared/guards/admin.guard';
 import { ManageMaterialsComponent } from './pages/manage-materials/manage-materials.component';
 import { ManageNotebooksComponent } from './pages/manage-notebooks/manage-notebooks.component';
-import { ManageActivitiesComponent } from './pages/manage-activities/manage-activities.component';
 import { ManagePublicationsComponent } from './pages/manage-publications/manage-publications.component';
 import { EditMaterialComponent } from './pages/edit-material/edit-material.component';
-import { ManageCategoriesComponent } from './pages/manage-categories/manage-categories.component';
+import { ManageGiftCardsComponent } from './pages/manage-gift-cards/manage-gift-cards.component';
+import { ManageContactsComponent } from './pages/manage-contacts/manage-contacts.component';
+import { ManageCategoriesCollectionsComponent } from './pages/manage-categories-collections/manage-categories-collections.component';
+import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.component';
+import { ManageWorkshopsComponent } from './pages/manage-workshops/manage-workshops.component';
+import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
 
 const routes: Routes = [
   // { path: '', component: AdminHomeComponent, canActivate: [AdminGuard] },
   { path: 'accueil', component: AdminHomeComponent },
   { path: 'gestion-des-materiaux', component: ManageMaterialsComponent },
-  { path: 'gestion-des-categories', component: ManageCategoriesComponent },
+  { path: 'gestion-des-categories-et-collections', component: ManageCategoriesCollectionsComponent },
   { path: 'gestion-des-carnets', component: ManageNotebooksComponent },
-  { path: 'gestion-des-activites', component: ManageActivitiesComponent },
-  { path: 'gestion-des-publications', component: ManagePublicationsComponent },
   { path: 'editer-materiel/:materielSlug', component : EditMaterialComponent},
+  { path: 'editer-carnet/:notebookSlug', component : EditNotebookComponent},
+  { path: 'gestion-des-ateliers', component: ManageWorkshopsComponent },
+  { path: 'editer-atelier/:workshopSlug', component : EditWorkshopComponent},
+  { path: 'gestion-des-cartes-cadeaux', component: ManageGiftCardsComponent },
+  { path: 'gestion-des-publications', component: ManagePublicationsComponent },
+  { path: 'gestion-des-contacts', component: ManageContactsComponent },
   { path: '', component: AdminHomeComponent },
 ];
 

@@ -13,6 +13,7 @@ export class BaseComponent {
   protected subscriptions: Subscription[] = [];
 
   changeMessage(newMessage: string): void {
+    this.messageResponseFromBackend = "";
     this.messageResponseFromBackend = newMessage;
     setTimeout(() => {
       this.messageResponseFromBackend = "";

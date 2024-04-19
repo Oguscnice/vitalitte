@@ -2,6 +2,8 @@ import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
+  standalone: true,
+  imports: [],
   selector: 'app-footer',
   template: `<footer class="flex center" #footer>
                 <div class="footer-container flex space-around center">
@@ -10,7 +12,53 @@ import { Subject } from 'rxjs';
                   <i class="fa-solid fa-envelope"></i>
                 </div>
             </footer>`,
-  styleUrls: ['./footer.component.scss']
+  styles: [`
+            @import "../../scss/variables.scss";
+            @import "../../../styles.scss";
+
+            :root {
+              --height-footer: 0px;
+            }
+
+            footer {
+              margin-top: $normal-margin;
+              height: 60px;
+              background-color: $lilac;
+              width: 100vw;
+              .footer-container{
+                width: 100%;
+                i {
+                  color: $white;
+                  font-size: $triple-font-size;
+                }
+              }
+            }
+
+            @media screen and (min-width: 768px) {
+              footer {
+                .footer-container{
+                  max-width: 650px;
+                }
+              }
+            }
+            // Tablettes vers ordinateurs portables :
+            @media screen and (min-width: 992px) {
+              footer {
+                .footer-container{
+                  max-width: 800px;
+                }
+              }
+            }
+
+            // Ordinateurs portables vers ordinateurs de bureau :
+            @media screen and (min-width: 1400px) {
+              footer {
+                .footer-container{
+                  max-width: 1000px;
+                }
+              }
+            }
+              `]
 })
 export class FooterComponent {
   

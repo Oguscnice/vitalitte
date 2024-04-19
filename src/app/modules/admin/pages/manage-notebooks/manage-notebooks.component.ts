@@ -1,54 +1,74 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { ApiNotebookAdminService } from '../../services/api-notebook-admin.service';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { TransformToEditableService } from '../../services/transform-to-editable.service';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
 import { CreateNotebook } from '../../interfaces/Notebook';
-import { loadScript } from '@paypal/paypal-js';
+import { ApiMaterialAdminService } from '../../services/api-material-admin.service';
+import { CollectionDto } from 'src/app/shared/interfaces/Collection';
 
 @Component({
   selector: 'app-manage-notebooks',
   template: ` <app-return-admin-home/>
+              <h2>Gestion des Carnets</h2>
               <app-post-notebook
                 [materialTypes]="materialTypes"
                 [materials]="materials"
                 [categories]="categories"
+                [collections]="collections"
                 
                 (newNotebook)="postNotebook($event)">
               </app-post-notebook>
-              <app-edit-delete-notebook></app-edit-delete-notebook>
+              <app-edit-delete-notebook
+                [notebooks]="notebooks"
+
+                (changeAvailabilityNotebook)="changeAvailabilityNotebook($event)"
+                (notebookToDelete)="modalConfirmation($event)">
+              </app-edit-delete-notebook>
               <anguille [message]="messageResponseFromBackend"/>
+              <app-modal [modalVisible]="modalVisible"
+                         [modalText]="modalText"
+                         [multipleChoice]="true"
+                        
+                         (responseForModal)="responseForModal($event)">
+              </app-modal>
             `,
   styleUrls: ['./manage-notebooks.component.scss']
 })
 export class ManageNotebooksComponent extends BaseComponent{
 
-  constructor(
-    private apiNotebookAdminService : ApiNotebookAdminService,
-    private apiRequestsService : ApiRequestsService,
-    private transformToEditableService : TransformToEditableService
-  ){
+  private apiNotebookAdminService = inject(ApiNotebookAdminService);
+  private apiRequestsService = inject(ApiRequestsService);
+  private  apiMaterialAdminService = inject(ApiMaterialAdminService);
+
+  constructor(){
     super()
   }
 
   materialTypes! : string[];
   materials! : MaterialDto[];
-  notebooks! : NotebookDto[];
   categories! : CategoryDto[];
+  collections! : CollectionDto[];
+
+  notebooks! : NotebookDto[];
+  notebookToDelete : NotebookDto | null = null;
+
+  modalVisible : boolean = false;
+  modalText! : string;
 
   ngOnInit(): void {
     this.getAllMaterials();
     this.getAllMaterialsTypes();
     this.getAllNotebooks();
     this.getAllCategories();
+    this.getAllCollections();
   }
 
   getAllMaterialsTypes(): void{
     this.subscriptions.push(
-      this.apiRequestsService.getAllMaterialsTypes().subscribe({
+      this.apiMaterialAdminService.getAllMaterialsTypes().subscribe({
         next: (materialsTypes) => this.materialTypes = materialsTypes,
         error: (err) => (this.changeMessage(err.error.message))
       })
@@ -73,6 +93,15 @@ export class ManageNotebooksComponent extends BaseComponent{
     )
   }
 
+  getAllCollections(): void{
+    this.subscriptions.push(
+      this.apiRequestsService.getAllCollections().subscribe({
+        next: (collections) => this.collections = collections,
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
   getAllCategories(): void{
     this.subscriptions.push(
       this.apiRequestsService.getAllCategories().subscribe({
@@ -80,6 +109,19 @@ export class ManageNotebooksComponent extends BaseComponent{
         error: (err) => (this.changeMessage(err.error.message))
       })
     )
+  }
+
+  modalConfirmation(notebookToDelete : NotebookDto): void{
+    this.notebookToDelete = notebookToDelete;
+    this.modalText = 'Confirmer vouloir supprimer le Carnet : ' + this.notebookToDelete.name
+    this.modalVisible = true;
+  }
+
+  responseForModal(response : boolean): void{
+    this.modalVisible = false;
+    if(response){
+      this.deleteNotebook(this.notebookToDelete!.slug);
+    }
   }
 
   postNotebook(newNotebook : CreateNotebook): void{
@@ -100,6 +142,23 @@ export class ManageNotebooksComponent extends BaseComponent{
         next: (res) => {
           this.changeMessage(res.message);
           this.getAllNotebooks();
+        },
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  changeAvailabilityNotebook(notebookToChangeAvailability : NotebookDto): void {
+    this.subscriptions.push(
+      this.apiNotebookAdminService.changeAvailability(notebookToChangeAvailability).subscribe({
+        next: (res) => {
+          this.changeMessage(res.message);
+          for(let notebook of this.notebooks){
+            if(notebook.slug === notebookToChangeAvailability.slug){
+              notebook.available = !notebook.available
+            }
+          }
+
         },
         error: (err) => (this.changeMessage(err.error.message))
       })

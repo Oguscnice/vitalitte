@@ -1,0 +1,77 @@
+<div class="title-functionality flex center">
+  <h4 class="flex center">Gérer les Ateliers</h4>
+  <i class="fa-solid fa-arrow-down"
+     (click)="isTableVisible = !isTableVisible"
+     [ngClass]="{'rotated180': isTableVisible}">
+  </i>
+</div>
+
+<div *ngIf="!workshops || workshops.length <= 0">Aucun Atelier</div>
+<table *ngIf="workshops && isTableVisible">
+  <thead>
+    <tr>
+      <td>
+        <p>Dispo</p>
+      </td>
+      <td>
+        <p>Libellé</p>
+      </td>
+      <td>
+        <p>Prix</p>
+      </td>
+      <td>
+        <p>Des.</p>
+      </td>
+      <td>
+        <p>Image</p>
+      </td>
+      <td>
+        <p>Modif.</p>
+      </td>      
+      <td>
+        <p>Supp.</p>
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let workshop of workshops ; let index = index"
+        [ngClass]="index % 2 ? 'bg-dark' : ''">
+        <td>
+          <div class="toggle-switch" (click)="changeAvailability(workshop)">
+            <input class="toggle-input"
+                   type="checkbox"
+                   [checked]="workshop.available">
+            <label class="toggle-label" for="toggle"></label>
+          </div>
+        </td>
+      <td>
+        <p class="flex text-left">{{ workshop.title | titlecase }}</p>
+      </td>
+      <td>
+        <p> {{ workshop.price | addEuroCurrency }} </p>
+      </td>
+      <td>
+        <i class="fa-solid fa-file-lines pointer flex center"
+           (click)="openModalWithDescription(workshop.description)">
+        </i>
+      </td>
+      <td class="flex center">
+        <img src="{{workshop.picture}}"
+             alt="Photo de l'atelier {{workshop.title}}">
+      </td>
+      <td>
+        <i [routerLink]="'/admin/editer-atelier/' + workshop.slug" class="fa-solid fa-pencil pointer flex center"></i>
+      </td>
+      <td>
+        <i (click)="delete(workshop)" class="fa-solid fa-trash-can pointer flex center"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<app-modal [modalVisible]="modalVisible"
+           [modalText]="modalText"
+
+           (responseForModal)="responseForModal($event)">
+</app-modal>

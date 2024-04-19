@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ActivePageService } from './shared/services/active-page.service';
@@ -11,8 +11,9 @@ import { ShoppingCartService } from './shared/services/shopping-cart.service';
 })
 export class AppComponent {
 
+  private router = inject(Router);
+
   constructor(
-    private router: Router,
     private activePageService: ActivePageService,
     public shoppingCartService : ShoppingCartService
   ) {}

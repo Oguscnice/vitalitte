@@ -1,15 +1,15 @@
-import { CommonModule } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
   standalone : true,
-  imports : [CommonModule],
+  imports : [ NgClass, NgIf ],
   selector: 'anguille',
-  template: ` <p class="anguille" [ngClass]="message ? 'hors-roche' : 'sous-roche' ">
+  template: ` <p class="anguille"
+                 [ngClass]="message ? 'hors-roche' : 'sous-roche' ">
                 {{ message }}
               </p> `,
-  styles: [`
-            @import "../../../scss/variables.scss";
+  styles: [`@import "../../../scss/variables.scss";
             @import "../../../scss/buttons.scss";
 
             .anguille {

@@ -1,48 +1,49 @@
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
-import { TransformApiPostService } from '../../../services/transform-api-post.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FileUploadService } from '../../../services/file-upload.service';
 import { CreateNotebook } from '../../../interfaces/Notebook';
 import { priceValidator } from '../../../validators/priceValidators';
 import { urlValidator } from '../../../validators/urlValidators';
 import { FileInfo } from '../../../interfaces/FileInfo';
+import { CollectionDto } from 'src/app/shared/interfaces/Collection';
+import { DecimalPipe, NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { EditorModule } from '@tinymce/tinymce-angular';
+import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
+import { TransformApiService } from '../../../services/transform-api.service';
 
 @Component({
+  standalone: true,
+  imports: [NgClass, NgIf, NgFor, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty ],
   selector: 'app-post-notebook',
   templateUrl: './post-notebook.component.html',
-  styles: [`
-            @import "../../../scss/admin-general.scss";
-          `]
+  styles: [` @import "../../../scss/admin-general.scss"; `]
 })
 export class PostNotebookComponent {
 
-  constructor(
-    private fileUploadService: FileUploadService,
-    private formBuilder: FormBuilder,
-    private transformApiPostService : TransformApiPostService
-  ){}
+  public fileUploadService = inject(FileUploadService);
+  private formBuilder = inject(FormBuilder);
+  private transformApiService = inject(TransformApiService);
 
   @Input() materialTypes! : string[];
   @Input() materials! : MaterialDto[];
   @Input() categories! : CategoryDto[];
+  @Input() collections! : CollectionDto[];
 
   @Output() newNotebook: EventEmitter<CreateNotebook> = new EventEmitter();
 
   isFormVisible : boolean = false;
-  imageToDisplay : string = this.fileUploadService.imageNotebookDefault
-  secondaryPictureDefault : string = this.fileUploadService.imageNotebookDefault
   isDropdownCategoryOpen : boolean = false;
+  isDropdownCollectionOpen : boolean = false;
   isDropdownMaterialsOpen : boolean = false;
   isFormSubmit : boolean = false;
 
   categoryDtoForNewNotebook : CategoryDto | null = null; 
+  collectionDtoForNewNotebook : CollectionDto | null = null; 
   materialsDtoForNewNotebook : MaterialDto[] = [];
   secondaryPicturesForNewNotebook : CreateNotebook['secondaryPictures'] = [];
 
-
-  fileSizeMax: number = this.fileUploadService.SIZE_MAX;
   fileSize!: number;
 
   public toolBarConfig = {
@@ -52,6 +53,10 @@ export class PostNotebookComponent {
     menubar: false,
     toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
   };
+
+  ngOnInit(): void {
+    this.newNotebookForm.get('mainPicture')!.setValue(this.fileUploadService.imageNotebookDefault);
+  }
   
   newNotebookForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
@@ -61,18 +66,28 @@ export class PostNotebookComponent {
     description: ['', [Validators.required, Validators.maxLength(1000)]],
   });
 
-  toggleDropdown(dropdownClicked : 'categoryDropdown' | 'materialsDropdown'): void{
+  toggleDropdown(dropdownClicked : 'collectionDropdown' | 'categoryDropdown' | 'materialsDropdown'): void{
     if(dropdownClicked === 'categoryDropdown'){
       this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen;
       this.isDropdownMaterialsOpen = false;
+      this.isDropdownCollectionOpen = false;
     }else if(dropdownClicked === 'materialsDropdown'){
       this.isDropdownMaterialsOpen = !this.isDropdownMaterialsOpen;
       this.isDropdownCategoryOpen = false;
+      this.isDropdownCollectionOpen = false;
+    }else if(dropdownClicked === 'collectionDropdown'){
+      this.isDropdownCollectionOpen = !this.isDropdownCollectionOpen;
+      this.isDropdownCategoryOpen = false;
+      this.isDropdownMaterialsOpen = false;
     }
   }
 
   categoryClicked(categoryClicked : CategoryDto){
     this.categoryDtoForNewNotebook = categoryClicked;
+  }
+
+  collectionClicked(collectionClicked : CollectionDto){
+    this.collectionDtoForNewNotebook = collectionClicked;
   }
 
   materialClicked(materialClicked : MaterialDto): void {
@@ -97,7 +112,6 @@ export class PostNotebookComponent {
     const inputElement = event.target as HTMLInputElement;
     if(inputElement){
       if (pictureChanged === 'mainPicture'){
-        this.imageToDisplay = inputElement.value;
         this.newNotebookForm.get('mainPicture')!.setValue(inputElement.value);
       } else if (pictureChanged === 'secondaryPicture'){
         this.secondaryPicturesForNewNotebook.push(inputElement.value)
@@ -123,41 +137,37 @@ export class PostNotebookComponent {
     let fileInfo: FileInfo | null = null;
 
     if (selectedFile) {
-      this.fileSize = selectedFile.size;
 
-      if (this.fileSize < this.fileSizeMax) {
+      if (selectedFile.size < this.fileUploadService.SIZE_MAX) {
         fileInfo = await this.fileUploadService.fileUpload(event);
         if (pictureChanged === 'mainPicture'){
-          this.imageToDisplay = fileInfo.data.thumb.url;
-          this.newNotebookForm.get('mainPicture')!.setValue(this.imageToDisplay);
+          this.newNotebookForm.get('mainPicture')!.setValue(fileInfo.data.thumb.url);
         } else if (pictureChanged === 'secondaryPicture'){
           this.secondaryPicturesForNewNotebook.push(fileInfo.data.image.url)
         }
       };
-    } else {
-      this.imageToDisplay = this.fileUploadService.imageMaterialDefault;
     }
   }
 
   submitNewNotebookForm(): void{
 
-    this.newNotebookForm.get('mainPicture')!.setValue(this.imageToDisplay);
     this.isFormSubmit = true
     
     if(this.newNotebookForm.valid
-      && this.categoryDtoForNewNotebook !== null
+      && this.categoryDtoForNewNotebook
+      && this.collectionDtoForNewNotebook
       && this.materialsDtoForNewNotebook.length > 0){
 
-      let createdNotebook : CreateNotebook = this.transformApiPostService.postNotebookComponent(this.newNotebookForm, this.materialsDtoForNewNotebook, this.categoryDtoForNewNotebook, this.secondaryPicturesForNewNotebook)
+      let createdNotebook : CreateNotebook = this.transformApiService.postNotebook(this.newNotebookForm, this.materialsDtoForNewNotebook, this.categoryDtoForNewNotebook, this.collectionDtoForNewNotebook, this.secondaryPicturesForNewNotebook)
       this.newNotebook.emit(createdNotebook);
-
+      
       // Après avoir envoyé, on remet les variables à zéro
       this.isFormSubmit = false;
       this.categoryDtoForNewNotebook = null;
       this.materialsDtoForNewNotebook = [];
       this.secondaryPicturesForNewNotebook = [];
       this.newNotebookForm.reset();
-      this.imageToDisplay = this.fileUploadService.imageNotebookDefault;
+      this.newNotebookForm.get('mainPicture')!.setValue(this.fileUploadService.imageNotebookDefault);
     }
   }
 }

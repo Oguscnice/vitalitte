@@ -1,0 +1,8 @@
+@import "../scss/variables.scss";
+
+input {
+  @include inputStyleBorder;
+  border-radius: 4px;
+  padding: .15rem .5rem;
+  min-height: 40px;
+}

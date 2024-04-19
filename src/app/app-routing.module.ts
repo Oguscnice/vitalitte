@@ -3,14 +3,17 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { Page404Component } from './pages/page404/page404.component';
-import { CreationsComponent } from './pages/creations/creations.component';
+import { NotebooksComponent } from './pages/notebooks-pages/notebooks/notebooks.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
-import { NotebooksComponent } from './pages/notebooks/notebooks.component';
-import { NotebookSelectedComponent } from './pages/notebook-selected/notebook-selected.component';
-import { CreateNotebookComponent } from './pages/create-notebook/create-notebook.component';
+import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-prepared/notebooks-prepared.component';
+import { NotebookSelectedComponent } from './pages/notebooks-pages/notebook-selected/notebook-selected.component';
+import { CreateNotebookComponent } from './pages/notebooks-pages/create-notebook/create-notebook.component';
+import { WorkshopComponent } from './pages/workshop/workshop.component';
+import { PublicationsComponent } from './pages/publications-pages/publications/publications.component';
+import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
 
 const routes: Routes = [
   {
@@ -25,15 +28,18 @@ const routes: Routes = [
   },
 
   // { path: 'connexion', component: LoginComponent },
-  { path: 'atelier', component: CreationsComponent },
   { path: 'qui-suis-je', component: BiographyComponent },
   { path: 'booktique', component: BooktiqueComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'actualites', component: PublicationsComponent },
+  { path: 'actualites/:publicationSlug', component : PublicationSelectedComponent},
   { path: 'page-404', component: Page404Component },
   { path: 'imaginer-mon-carnet', component: CreateNotebookComponent },
+  { path: 'ateliers', component : WorkshopComponent},
   { path: 'formulaire-envoye', component : FormulaireEnvoyeComponent},
+  { path: 'carnets-pret-a-emploi', component : NotebooksPreparedComponent},
   { path: 'carnets/:notebookSlug', component : NotebookSelectedComponent},
-  { path: 'carnets', component : NotebooksComponent},
+  { path: 'carnets', component: NotebooksComponent },
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: 'page-404' },
 ];

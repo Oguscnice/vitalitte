@@ -1,0 +1,39 @@
+<app-h1 [titleChild]="'Actualités'"
+        [backgroundImageChild]="backgroundImageParentHome"></app-h1>
+
+<div class="publications">
+  <h3 class="flex center">Actus du moment</h3>
+  <div class="flex publications-section">
+    <app-publication-thumbnail *ngFor="let publication of publicationsSpotlightedTrue"
+                                [publication]="publication">
+    </app-publication-thumbnail>
+  </div>
+</div>
+
+<div class="publications">
+  <h3 class="flex center">Toutes nos actualités</h3>
+  <div class="flex space-between">
+    <input class="width80"
+           type="text"
+           placeholder="Mot(s) recherché(s)"
+           (keyup)="filteredByValueSearch($event)">
+    <button class="btn-normal width20" (click)="selectMethod()">Chercher</button>
+  </div>
+  
+  <div class="flex publications-section">
+    <app-publication-thumbnail *ngFor="let publication of publications"
+                                [publication]="publication">
+    </app-publication-thumbnail>
+  </div>
+  <div class="flex center space-around">
+    <i [ngClass]="{'disabled': pageNumber === 0 }"
+       class="fa-solid fa-angles-left pointer" (click)="changePage('first')"></i>
+    <i [ngClass]="{'disabled': pageNumber === 0 }"
+       class="fa-solid fa-angle-left pointer" (click)="changePage('prev')"></i>
+      Page {{ pageNumber + 1 }} / {{ calcLastPage() }}
+    <i [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
+       class="fa-solid fa-angle-right pointer" (click)="changePage('next')"></i>
+    <i [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
+       class="fa-solid fa-angles-right pointer" (click)="changePage('last')"></i>
+  </div>
+</div>

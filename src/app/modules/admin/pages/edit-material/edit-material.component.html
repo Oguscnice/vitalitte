@@ -1,10 +1,10 @@
 <anguille [message]="messageResponseFromBackend" />
 <app-return-admin-home/>
-<form
-  (ngSubmit)="(editMaterialForm.valid)"
-  [formGroup]="editMaterialForm"
-  #myForm="ngForm"
->
+
+<form (ngSubmit)="(editMaterialForm.valid)"
+      [formGroup]="editMaterialForm"
+      #myForm="ngForm">
+
   <fieldset class="flex column">
     <label for="name">Libellé :</label>
     <input
@@ -88,23 +88,19 @@
 
   <fieldset class="flex column">
     <label for="picture">Photo : </label>
-    <small>Privilégier un format PNG</small>
-    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
-    <input
-      class="display-none"
-      type="file"
-      accept="image/png, image/jpeg, image/bmp, image/gif"
-      (change)="onFileSelected($event)"
-      #fileUpload
-    />
-    <input
-      type="text"
-      id="picture"
-      formControlName="picture"
-      value="{{ imageToDisplay }}"
-      (keyup)="changeImageValue($event)"
-      placeholder="URL de l'image..."
-    />
+    <p>Privilégier un format PNG</p>
+    <p>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</p>
+    <input class="display-none"
+           type="file"
+           accept="image/png, image/jpeg, image/bmp, image/gif"
+           (change)="onFileSelected($event)"
+           #fileUpload/>
+    <input type="text"
+           id="picture"
+           formControlName="picture"
+           value="{{ this.editMaterialForm.get('picture')!.value }}"
+           (keyup)="changeImageValue($event)"
+           placeholder="URL de l'image..."/>
     <div *ngIf="isFormSubmit && editMaterialForm.controls['picture'].invalid">
       <small *ngIf="fileSize > fileSizeMax">Votre fichier dépasse les {{ fileSizeMax / 1048576 }} Méga-octects.</small>
     </div>
@@ -112,22 +108,22 @@
     <img
       class="pointer"
       (click)="fileUpload.click()"
-      src="{{ imageToDisplay }}"
+      src="{{ this.editMaterialForm.get('picture')!.value }}"
       alt="Photo à choisir pour le matériel"
     />
   </fieldset>
 
   <button
-    class="btn-direction pointer"
+    class="btn-medium-admin pointer"
     type="submit"
     (click)="submitEditMaterialForm()"
   >
     Créer
   </button>
 </form>
-<app-modal
-  [modalVisible]="modalVisible"
-  [modalText]="modalText"
-  (responseForModal)="responseForModal($event)"
->
+
+<app-modal [modalVisible]="modalVisible"
+           [modalText]="modalText"
+           
+           (responseForModal)="responseForModal($event)">
 </app-modal>

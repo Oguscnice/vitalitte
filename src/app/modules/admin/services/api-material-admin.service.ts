@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { ResponseEntity } from 'src/app/shared/interfaces/ResponseEntity';
-import { URLAPI } from 'src/app/shared/variables/others';
+import { URLAPI } from 'src/app/shared/variables/Others';
 import { CreateMaterial } from '../interfaces/Material';
 
 @Injectable({
@@ -11,7 +11,11 @@ import { CreateMaterial } from '../interfaces/Material';
 })
 export class ApiMaterialAdminService {
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
+
+  getAllMaterialsTypes(): Observable<string[]>{
+    return this.http.get<string[]>(URLAPI + "/materials/types")
+  }
 
   getBySlug(materialSlug : MaterialDto['slug']): Observable<MaterialDto>{
     return this.http.get<MaterialDto>(URLAPI + "/materials/" + materialSlug)
@@ -23,6 +27,10 @@ export class ApiMaterialAdminService {
 
   put(material : MaterialDto): Observable<ResponseEntity>{
     return this.http.put<ResponseEntity>(URLAPI + "/materials/" + material.slug, material)
+  }
+
+  changeAvailability(material : MaterialDto): Observable<ResponseEntity>{
+    return this.http.put<ResponseEntity>(URLAPI + "/materials/availability", material)
   }
   
   delete(materialSlug : MaterialDto['slug']): Observable<ResponseEntity>{
