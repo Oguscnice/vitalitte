@@ -37,13 +37,8 @@ export class NewsHeadbandComponent {
     this.checkWidthNews();
   }
 
-
   ngAfterViewInit(){
     this.checkWidthNews();
-  }
-
-  ngOnDestroy() {
-    // this.unsubscribeAll()
   }
 
   private checkWidthNews(){

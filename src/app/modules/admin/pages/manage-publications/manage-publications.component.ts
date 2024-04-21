@@ -27,10 +27,6 @@ export class ManagePublicationsComponent extends BaseComponent {
     this.getAllPublications();
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribeAll();
-  }
-
   getAllPublications(): void {
     this.subscriptions.push(
       this.apiRequestsService.getAllPublications().subscribe({

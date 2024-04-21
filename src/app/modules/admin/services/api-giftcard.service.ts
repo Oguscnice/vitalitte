@@ -21,10 +21,6 @@ export class ApiGiftcardService {
     return this.http.get<GiftCardDto[]>(URLAPI + "/giftCards")
   }
 
-  put(giftCard : GiftCardDto): Observable<ResponseEntity>{
-    return this.http.put<ResponseEntity>(URLAPI + "/giftCards/" + giftCard.slug, giftCard)
-  }
-
   delete(giftCardSlug : GiftCardDto['slug']): Observable<ResponseEntity>{
     return this.http.delete<ResponseEntity>(URLAPI + "/giftCards/" + giftCardSlug)
   }

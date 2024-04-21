@@ -23,10 +23,6 @@ export class ChoicesPersonalizedCreationComponent extends BaseComponent {
     this.geAllMaterials()
   }
 
-  ngOnDestroy() {
-    this.unsubscribeAll();
-  }
-
   logSelectedValue(possibilityName: string, itemName : any) {
       console.log("Option sélectionnée pour", possibilityName + " // event : " + itemName);
   }

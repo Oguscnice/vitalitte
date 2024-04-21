@@ -23,4 +23,8 @@ export class BaseComponent {
   protected unsubscribeAll() {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
+
+  ngOnDestroy(): void {
+    this.unsubscribeAll();
+  }
 } 

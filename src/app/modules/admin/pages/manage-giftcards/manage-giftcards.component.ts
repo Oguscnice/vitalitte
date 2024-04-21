@@ -24,11 +24,6 @@ export class ManageGiftcardsComponent extends BaseComponent {
     this.getAllGiftCards();
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribeAll();
-  }
-
-
   getAllGiftCards(): void {
     this.subscriptions.push(
       this.apiGiftcardService.getAll().subscribe({
@@ -52,7 +47,7 @@ export class ManageGiftcardsComponent extends BaseComponent {
 
   showModal(giftCardToDelete : GiftCardDto): void {
     this.giftCardToDelete = giftCardToDelete;
-    this.modalText = `Confirmer vouloir supprimer la Carte Cadeau : "${giftCardToDelete.code}" d'une réduction ${giftCardToDelete.percentage ? 'de '+ giftCardToDelete.rising + ' %' : "d'un montant de " + giftCardToDelete.rising + " €"} ?`
+    this.modalText = `Confirmer vouloir supprimer la Carte Cadeau : "${giftCardToDelete.code}" d'une réduction ${giftCardToDelete.percentage ? 'de '+ giftCardToDelete.rising + ' %' : "d'un montant de " + giftCardToDelete.rising + " €. ATTENTION : toutes les données utilisateurs liées à cette carte cadeau seront perdues"} ?`
     this.modalVisible = true;
   }
 
@@ -64,7 +59,15 @@ export class ManageGiftcardsComponent extends BaseComponent {
   }
 
   deleteGiftCard(giftCardCodeToDelete : GiftCardDto['code']): void {
-
+    this.subscriptions.push(
+      this.apiGiftcardService.delete(giftCardCodeToDelete).subscribe({
+        next: (res) => {
+          this.changeMessage(res.message);
+          this.giftcards = this.giftcards.filter(giftcard => giftcard.code !== giftCardCodeToDelete)
+        },
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
   }
 
 }

@@ -47,10 +47,6 @@ export class ManageMaterialsComponent extends BaseComponent {
     
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribeAll();
-  }
-
   getAllMaterials(): void {
     this.subscriptions.push(
       this.apiRequestsService.getAllMaterials().subscribe({
