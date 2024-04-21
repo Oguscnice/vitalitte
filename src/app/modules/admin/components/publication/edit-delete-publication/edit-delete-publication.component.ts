@@ -11,6 +11,7 @@ import { FileInfo } from '../../../interfaces/FileInfo';
 import { TransformApiService } from '../../../services/transform-api.service';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 
 @Component({
   selector: 'app-edit-delete-publication',
@@ -21,7 +22,7 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 })
 export class EditDeletePublicationComponent {
 
-  public fileUploadService = inject(FileUploadService);
+  protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private transformApiService = inject(TransformApiService);
 
@@ -44,16 +45,10 @@ export class EditDeletePublicationComponent {
     slug: ['', [Validators.required]],
     title: ['', [Validators.required, Validators.maxLength(255)]],
     description: ['', [Validators.required, Validators.maxLength(2000)]],
-    picture: ['', [Validators.required, urlValidator]]
+    picture: ['', [Validators.required, urlValidator()]]
   });
 
-  public toolBarConfig = {
-    base_url: '/tinymce',
-    suffix: '.min',
-    plugins : 'lists',
-    menubar: false,
-    toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
-  };
+  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   openModalWithDescription(publicationDescription : PublicationDto['description']): void{
     this.modalVisible = true;

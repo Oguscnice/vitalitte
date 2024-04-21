@@ -6,12 +6,12 @@ import { ManageMaterialsComponent } from './pages/manage-materials/manage-materi
 import { ManageNotebooksComponent } from './pages/manage-notebooks/manage-notebooks.component';
 import { ManagePublicationsComponent } from './pages/manage-publications/manage-publications.component';
 import { EditMaterialComponent } from './pages/edit-material/edit-material.component';
-import { ManageGiftCardsComponent } from './pages/manage-gift-cards/manage-gift-cards.component';
 import { ManageContactsComponent } from './pages/manage-contacts/manage-contacts.component';
 import { ManageCategoriesCollectionsComponent } from './pages/manage-categories-collections/manage-categories-collections.component';
 import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.component';
 import { ManageWorkshopsComponent } from './pages/manage-workshops/manage-workshops.component';
 import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
+import { ManageGiftcardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
 
 const routes: Routes = [
   // { path: '', component: AdminHomeComponent, canActivate: [AdminGuard] },
@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'editer-carnet/:notebookSlug', component : EditNotebookComponent},
   { path: 'gestion-des-ateliers', component: ManageWorkshopsComponent },
   { path: 'editer-atelier/:workshopSlug', component : EditWorkshopComponent},
-  { path: 'gestion-des-cartes-cadeaux', component: ManageGiftCardsComponent },
+  { path: 'gestion-des-cartes-cadeaux', component: ManageGiftcardsComponent },
   { path: 'gestion-des-publications', component: ManagePublicationsComponent },
   { path: 'gestion-des-contacts', component: ManageContactsComponent },
   { path: '', component: AdminHomeComponent },

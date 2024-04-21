@@ -11,6 +11,7 @@ import { urlValidator } from '../../validators/urlValidators';
 import { ApiWorkshopAdminService } from '../../services/api-workshop-admin.service';
 import { ApiBanService } from '../../services/api-ban.service';
 import { FileInfo } from '../../interfaces/FileInfo';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
 
 @Component({
   selector: 'app-edit-workshop',
@@ -20,7 +21,7 @@ import { FileInfo } from '../../interfaces/FileInfo';
 export class EditWorkshopComponent extends BaseComponent {
 
   public route = inject(ActivatedRoute);
-  public fileUploadService = inject(FileUploadService);
+  protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private router  = inject(Router);
   private transformApiService = inject(TransformApiService);
@@ -38,13 +39,7 @@ export class EditWorkshopComponent extends BaseComponent {
   fileSize!: number;
 
 
-  public toolBarConfig = {
-    base_url: '/tinymce',
-    suffix: '.min',
-    plugins : 'lists',
-    menubar: false,
-    toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
-  };
+  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   editWorkshopForm  = this.formBuilder.group({
     slug: [this.workshopSlug, [Validators.required]],
@@ -52,8 +47,8 @@ export class EditWorkshopComponent extends BaseComponent {
     description: ['', [Validators.required, Validators.maxLength(1000)]],
     date: ['', [Validators.required]],
     address: ['', [Validators.required]],
-    price: ['', [Validators.required, priceValidator]],
-    picture: ['', [Validators.required, urlValidator]],
+    price: ['', [Validators.required, priceValidator()]],
+    picture: ['', [Validators.required, urlValidator()]],
     registrations: ['', [Validators.required]],
   });
 

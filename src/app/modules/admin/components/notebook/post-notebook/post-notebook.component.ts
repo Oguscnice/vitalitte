@@ -12,6 +12,7 @@ import { DecimalPipe, NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/commo
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { TransformApiService } from '../../../services/transform-api.service';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 
 @Component({
   standalone: true,
@@ -22,7 +23,7 @@ import { TransformApiService } from '../../../services/transform-api.service';
 })
 export class PostNotebookComponent {
 
-  public fileUploadService = inject(FileUploadService);
+  protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private transformApiService = inject(TransformApiService);
 
@@ -46,13 +47,7 @@ export class PostNotebookComponent {
 
   fileSize!: number;
 
-  public toolBarConfig = {
-    base_url: '/tinymce',
-    suffix: '.min',
-    plugins : 'lists',
-    menubar: false,
-    toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
-  };
+  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   ngOnInit(): void {
     this.newNotebookForm.get('mainPicture')!.setValue(this.fileUploadService.imageNotebookDefault);
@@ -60,9 +55,9 @@ export class PostNotebookComponent {
   
   newNotebookForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
-    mainPicture: ['', [Validators.required, urlValidator]],
+    mainPicture: ['', [Validators.required, urlValidator()]],
     introduction: ['', [Validators.required, Validators.maxLength(500)]],
-    price: ['', [priceValidator]],
+    price: ['', [priceValidator()]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
   });
 

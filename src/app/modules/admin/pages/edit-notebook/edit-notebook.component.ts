@@ -18,6 +18,7 @@ import { CategoryDto } from 'src/app/shared/interfaces/Category';
 import { CollectionDto } from 'src/app/shared/interfaces/Collection';
 import { TransformApiService } from '../../services/transform-api.service';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
 
 @Component({
   selector: 'app-edit-notebook',
@@ -32,7 +33,7 @@ export class EditNotebookComponent extends BaseComponent{
   private apiMaterialAdminService = inject(ApiMaterialAdminService);
   private apiNotebookAdminService = inject(ApiNotebookAdminService);
   public route = inject(ActivatedRoute);
-  public fileUploadService = inject(FileUploadService);
+  protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private router  = inject(Router);
   private transformApiService = inject(TransformApiService);
@@ -63,19 +64,13 @@ export class EditNotebookComponent extends BaseComponent{
   editNotebookForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     slug: ['', [Validators.required]],
-    mainPicture: ['', [Validators.required, urlValidator]],
+    mainPicture: ['', [Validators.required, urlValidator()]],
     introduction: ['', [Validators.required, Validators.maxLength(500)]],
-    price: ['', [priceValidator]],
+    price: ['', [priceValidator()]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
   });
 
-  public toolBarConfig = {
-    base_url: '/tinymce',
-    suffix: '.min',
-    plugins : 'lists',
-    menubar: false,
-    toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
-  };
+  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   ngOnInit(): void {
     this.findSlugInUrl();

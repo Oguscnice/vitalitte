@@ -9,17 +9,18 @@ import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { TransformApiService } from '../../../services/transform-api.service';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 
 @Component({
   standalone: true,
-  imports: [NgClass, NgIf, ReactiveFormsModule, TitleCasePipe, NgFor, EditorModule, CounterZeroIfEmpty],
+  imports: [ NgClass, NgIf, ReactiveFormsModule, TitleCasePipe, NgFor, EditorModule, CounterZeroIfEmpty ],
   selector: 'app-post-material',
   templateUrl: './post-material.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })
 export class PostMaterialComponent {
 
-  private fileUploadService = inject(FileUploadService)
+  protected fileUploadService = inject(FileUploadService)
   private formBuilder = inject(FormBuilder)
   private transformApiService = inject(TransformApiService);
 
@@ -27,27 +28,19 @@ export class PostMaterialComponent {
   @Output() newMaterial: EventEmitter<CreateMaterial> = new EventEmitter();
 
   isFormVisible : boolean = false;
-  imageToDisplay : string = this.fileUploadService.imageMaterialDefault
   isDropdownCategoryOpen : boolean = false;
   isFormSubmit : boolean = false;
 
-  fileSizeMax: number = this.fileUploadService.SIZE_MAX;
   fileSize!: number;
 
-  public toolBarConfig = {
-    base_url: '/tinymce',
-    suffix: '.min',
-    plugins : 'lists',
-    menubar: false,
-    toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
-  };
+  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
   
   newMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     materialType : ['', [Validators.required]],
-    price: ['', [priceValidator]],
+    price: ['', [priceValidator()]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
-    picture: ['', [Validators.required, urlValidator]]
+    picture: ['', [Validators.required, urlValidator()]]
   });
 
   toggleDropdown(): void{
@@ -70,7 +63,6 @@ export class PostMaterialComponent {
   changeImageValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     if(inputElement){
-      this.imageToDisplay = inputElement.value;
       this.newMaterialForm.get('picture')!.setValue(inputElement.value);
     }
   }
@@ -84,19 +76,17 @@ export class PostMaterialComponent {
     if (selectedFile) {
       this.fileSize = selectedFile.size;
 
-      if (this.fileSize < this.fileSizeMax) {
+      if (this.fileSize < this.fileUploadService.SIZE_MAX) {
         fileInfo = await this.fileUploadService.fileUpload(event);
-        this.imageToDisplay = fileInfo.data.thumb.url;
-        this.newMaterialForm.get('picture')!.setValue(this.imageToDisplay);
+        this.newMaterialForm.get('picture')!.setValue(fileInfo.data.thumb.url);
       };
     } else {
-      this.imageToDisplay = this.fileUploadService.imageMaterialDefault;
+      this.newMaterialForm.get('picture')!.setValue(this.fileUploadService.imageMaterialDefault);
     }
   }
 
-  submitNewMaterialForm(): void{
+  submitNewMaterialForm(): void {
 
-    this.newMaterialForm.get('picture')!.setValue(this.imageToDisplay);
     this.isFormSubmit = true
     
     if(this.newMaterialForm.valid){
@@ -105,7 +95,7 @@ export class PostMaterialComponent {
       // Après avoir envoyé, on remet les variables à zéro
       this.isFormSubmit = false;
       this.newMaterialForm.reset()
-      this.imageToDisplay = this.fileUploadService.imageMaterialDefault;
+      this.newMaterialForm.get('picture')!.setValue(this.fileUploadService.imageMaterialDefault);
     }
   }
 }
