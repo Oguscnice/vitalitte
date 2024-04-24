@@ -2,8 +2,8 @@ import { GiftCardDto } from './GiftCard';
 
 export interface CreateGiftCardUsed {
   firstname : string,
-  lastaname : number,
-  email : Date,
-  phone : boolean,
+  lastname : string,
+  email : string,
+  phone : string,
   giftCardDto: GiftCardDto
 }

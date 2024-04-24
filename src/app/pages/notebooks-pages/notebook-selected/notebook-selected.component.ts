@@ -27,7 +27,10 @@ export class NotebookSelectedComponent extends BaseComponent{
   findNotebook(): void {
     this.subscriptions.push(
       this.apiRequestsService.getNotebookBySlug(this.notebookSlug).subscribe({
-        next: (notebook) => this.notebookSelected = notebook,
+        next: (notebook) => {this.notebookSelected = notebook
+          console.log(notebook);
+          
+        },
         error: (err) => (this.changeMessage(err.error.message))
       })
     )

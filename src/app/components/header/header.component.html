@@ -1,7 +1,8 @@
 <nav class="flex space-between center" #navBar>
   <img src="../../../assets/images/figma/icone.png"
-       alt="Logo du site VitaLitté"/>
-  <h3 class="flex"
+       alt="Logo du site VitaLitté"
+       class="pointer"/>
+  <h3 class="flex pointer"
       [routerLink]="'/'">VitaLitté</h3>
   <div class="shopping-cart-counter"
       [ngClass]="shoppingCartService.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">

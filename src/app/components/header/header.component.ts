@@ -3,11 +3,11 @@ import { ActivePageService } from './../../shared/services/active-page.service';
 import { Component, ElementRef, ViewChild, Renderer2, HostListener, inject  } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
 import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
-import { NAVBAR_USER } from 'src/app/shared/variables/Navbar';
 import { BaseComponent } from 'src/app/base.component';
 import { RouterLink } from '@angular/router';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Subject } from 'rxjs';
+import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
 
 @Component({
   standalone: true,

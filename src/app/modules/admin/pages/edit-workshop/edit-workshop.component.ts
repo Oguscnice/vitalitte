@@ -18,6 +18,7 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
   standalone: false,
   templateUrl: './edit-workshop.component.html',
   styles: [` @import "../../scss/admin-general.scss"; `]})
+
 export class EditWorkshopComponent extends BaseComponent {
 
   public route = inject(ActivatedRoute);
@@ -37,7 +38,6 @@ export class EditWorkshopComponent extends BaseComponent {
   modalText! : string;
 
   fileSize!: number;
-
 
   public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 

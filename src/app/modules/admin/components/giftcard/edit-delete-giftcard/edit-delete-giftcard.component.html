@@ -29,15 +29,22 @@
     <tr *ngFor="let giftcard of giftcards ; let index = index"
         [ngClass]="index % 2 ? 'bg-dark' : ''">
       <td>
-        <p class="flex text-left">{{ giftcard.expiryDate | date : 'dd/MM/yyyy' }}</p>
+        <p class="flex text-left pointer"
+           [routerLink]="'/admin/utilisateurs-carte-cadeaux/' + giftcard.code">
+          {{ giftcard.expiryDate | date : 'dd/MM/yyyy' }}
+        </p>
       </td>
       <td>
-        <p class="title">
+        <p class="title pointer"
+           [routerLink]="'/admin/utilisateurs-carte-cadeaux/' + giftcard.code">
           {{ giftcard.code }}
         </p>
       </td>
       <td>
-        <p> {{ giftcard.rising | number: '0.2' }}  {{ giftcard.percentage ? ' €' : ' %' }}</p>
+        <p class="pointer"
+           [routerLink]="'/admin/utilisateurs-carte-cadeaux/' + giftcard.code">
+          {{ giftcard.rising | number: '0.2' }}  {{ giftcard.percentage ? ' %' : ' €' }}
+        </p>
       </td>
       <td>
         <i (click)="delete(giftcard)" class="fa-solid fa-trash-can pointer flex center"></i>

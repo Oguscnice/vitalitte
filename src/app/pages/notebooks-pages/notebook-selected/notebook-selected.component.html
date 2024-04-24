@@ -6,7 +6,7 @@
 
   <div>
     <h2 class="flex center">Carnet : {{ notebookSelected.name | titlecase }}</h2>
-    <p>{{notebookSelected.introduction}}</p>
+    <p [innerHTML]="notebookSelected.introduction"></p>
 
     <div class="flex column descriptions-list">
       <p [style.display]="notebookSelected.description ? 'flex' : 'none'"

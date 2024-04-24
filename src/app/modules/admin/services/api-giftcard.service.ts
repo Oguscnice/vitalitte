@@ -11,7 +11,7 @@ import { GiftCardDto } from 'src/app/shared/interfaces/GiftCard';
 })
 export class ApiGiftcardService {
 
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
 
   post(giftCard : CreateGiftCard): Observable<ResponseEntity>{
     return this.http.post<ResponseEntity>(URLAPI + "/giftCards", giftCard)
@@ -19,6 +19,10 @@ export class ApiGiftcardService {
 
   getAll(): Observable<GiftCardDto[]>{
     return this.http.get<GiftCardDto[]>(URLAPI + "/giftCards")
+  }
+
+  getByCode(code : string): Observable<GiftCardDto>{
+    return this.http.get<GiftCardDto>(URLAPI + "/giftCards/" + code)
   }
 
   delete(giftCardSlug : GiftCardDto['slug']): Observable<ResponseEntity>{

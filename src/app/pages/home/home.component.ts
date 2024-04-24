@@ -80,15 +80,19 @@ export class HomeComponent extends BaseComponent{
           this.publicationsSpotlighted = publicationsSpotlighted;
           for(let publication of this.publicationsSpotlighted){
             if(publication.title.length > 50){
-              publication.title = publication.title.slice(0, 50) + "..."
+              publication.title = this.troncateString(publication.title, 50);
             } 
             if(publication.description.length > 50){
-              publication.description = publication.description.slice(0, 50) + "..."
+              publication.description = this.troncateString(publication.description, 50);
             } 
           } 
         },
         error: (err) => (this.changeMessage(err.error.message))
       })
     )
+  }
+
+  troncateString(value : string, length : number): string {
+      return value.length > length ? value.slice(0, length) + "..." : value
   }
 }

@@ -62,8 +62,7 @@
                class="pointer"
                (keyup)="searchAdress($event)"
                (focus)="apiBanService.toggleDropdown(true)"
-               [value]="this.newWorkshopForm.get('adress')?.value ? this.newWorkshopForm.get('adress')!.value : ''"
-              />
+               [value]="this.newWorkshopForm.get('adress')?.value ? this.newWorkshopForm.get('adress')!.value : ''"/>
         <div class="arrow-icone flex center">
           <i class="fa-solid fa-circle-chevron-down pointer"
               *ngIf="apiBanService.isDropdownBanOpen"

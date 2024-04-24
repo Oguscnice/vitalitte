@@ -1,0 +1,54 @@
+<h4 class="flex center">Carte Cadeaux : {{ giftcard.code }}</h4>
+<p>valide jusqu'au {{ giftcard.expiryDate | date : 'dd/MM/yyyy' }}</p>
+
+<p>Recherche :</p>
+<input type="text"
+       id="valueSearch"
+       placeholder="Tapez la valeur recherchée..."
+       autocomplete="off"
+       class="pointer"
+       (keyup)="searchValue($event)">
+
+<div *ngIf="!usersToDisplay || usersToDisplay.length <= 0">Aucune Utilisation de cette Carte Cadeaux</div>
+<table *ngIf="usersToDisplay">
+  <thead>
+    <tr>
+      <td>
+        <p> Date d'utilisation </p>
+      </td>
+      <td>
+        <p> Nom </p>
+      </td>
+      <td>
+        <p> Prénom </p>
+      </td>
+      <td>
+        <p> Email </p>
+      </td>
+      <td>
+        <p> Téléphone </p>
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let user of usersToDisplay ; let index = index"
+        [ngClass]="index % 2 ? 'bg-dark' : ''">
+      <td>
+        <p> {{ user.createdAt | date : 'dd/MM/yyyy' }} </p>
+      </td>
+      <td>
+        <p> {{ user.lastname }} </p>
+      </td>
+      <td>
+        <p> {{ user.firstname }} </p>
+      </td>
+      <td>
+        <p> {{ user.email }} </p>
+      </td>
+      <td>
+        <p> {{ user.phone }} </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
