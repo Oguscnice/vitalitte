@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ApiBanService } from './api-ban.service';
+import { ApiBanService } from '../api-ban.service';
 
 describe('ApiBanService', () => {
   let service: ApiBanService;

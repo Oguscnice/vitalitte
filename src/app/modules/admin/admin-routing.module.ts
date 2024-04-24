@@ -12,6 +12,7 @@ import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.compo
 import { ManageWorkshopsComponent } from './pages/manage-workshops/manage-workshops.component';
 import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
 import { ManageGiftcardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
+import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used/user-list-giftcards-used.component';
 
 const routes: Routes = [
   // { path: '', component: AdminHomeComponent, canActivate: [AdminGuard] },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'gestion-des-ateliers', component: ManageWorkshopsComponent },
   { path: 'editer-atelier/:workshopSlug', component : EditWorkshopComponent},
   { path: 'gestion-des-cartes-cadeaux', component: ManageGiftcardsComponent },
+  { path: 'utilisateurs-carte-cadeaux/:giftcardCode', component: UserListGiftcardsUsedComponent },
   { path: 'gestion-des-publications', component: ManagePublicationsComponent },
   { path: 'gestion-des-contacts', component: ManageContactsComponent },
   { path: '', component: AdminHomeComponent },

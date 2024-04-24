@@ -1,11 +1,11 @@
 import { Menu } from '../interfaces/Menu';
 
 export const NAVBAR_USER: Menu[] = [
-  {
-    name: 'Accueil',
-    routerLink: '/',
-    submenu : null
-  },
+  // {
+  //   name: 'Accueil',
+  //   routerLink: '/',
+  //   submenu : null
+  // },
   {
     name: 'Carnets artisanaux',
     routerLink: '/carnets',

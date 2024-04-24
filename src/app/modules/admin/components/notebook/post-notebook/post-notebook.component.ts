@@ -34,7 +34,7 @@ export class PostNotebookComponent {
 
   @Output() newNotebook: EventEmitter<CreateNotebook> = new EventEmitter();
 
-  isFormVisible : boolean = false;
+  isFormVisible : boolean = true;
   isDropdownCategoryOpen : boolean = false;
   isDropdownCollectionOpen : boolean = false;
   isDropdownMaterialsOpen : boolean = false;

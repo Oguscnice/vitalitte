@@ -33,6 +33,7 @@ import { EditDeletePublicationComponent } from './components/publication/edit-de
 import { PostGiftcardComponent } from './components/giftcard/post-giftcard/post-giftcard.component';
 import { EditDeleteGiftcardComponent } from './components/giftcard/edit-delete-giftcard/edit-delete-giftcard.component';
 import { ManageGiftcardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
+import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used/user-list-giftcards-used.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { ManageGiftcardsComponent } from './pages/manage-giftcards/manage-giftca
     PostPublicationComponent,
     EditDeletePublicationComponent,
     PostGiftcardComponent,
-    EditDeleteGiftcardComponent
+    EditDeleteGiftcardComponent,
+    UserListGiftcardsUsedComponent
   ],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

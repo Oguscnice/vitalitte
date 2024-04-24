@@ -87,7 +87,7 @@ export class TransformApiService {
     return {
       ...form.value,
       expiryDate : new Date(form.value.expiryDate),
-      percentage: percentage
+      isPercentage: percentage
     }
   }
 }

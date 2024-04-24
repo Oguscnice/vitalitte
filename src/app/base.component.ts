@@ -12,7 +12,7 @@ export class BaseComponent {
   protected messageResponseFromBackend!: string;
   protected subscriptions: Subscription[] = [];
 
-  changeMessage(newMessage: string): void {
+  protected changeMessage(newMessage: string): void {
     this.messageResponseFromBackend = "";
     this.messageResponseFromBackend = newMessage;
     setTimeout(() => {
@@ -21,10 +21,10 @@ export class BaseComponent {
   }
 
   protected unsubscribeAll() {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  ngOnDestroy(): void {
+  protected ngOnDestroy(): void {
     this.unsubscribeAll();
   }
 } 

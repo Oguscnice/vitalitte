@@ -11,6 +11,8 @@ import { CollectionDto } from '../interfaces/Collection';
 import { ApiCollectionAdminService } from 'src/app/modules/admin/services/api-collection-admin.service';
 import { ApiWorkshopAdminService } from 'src/app/modules/admin/services/api-workshop-admin.service';
 import { CreateWorkshop } from 'src/app/modules/admin/interfaces/Workshop';
+import { CreatePublication } from 'src/app/modules/admin/interfaces/Publication';
+import { ApiPublicationAdminService } from 'src/app/modules/admin/services/api-publication-admin.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +25,11 @@ export class AddDataSqlService {
   private apiCategoryAdminService = inject(ApiCategoryAdminService);
   private apiCollectionAdminService = inject(ApiCollectionAdminService);
   private apiWorkshopAdminService = inject(ApiWorkshopAdminService);
+  private apiPublicationAdminService = inject(ApiPublicationAdminService);
 
   createAll(){
-    //ils s'enchainent avec les autres
+    // ils s'enchainent avec les autres
     this.createCategories();
-    // this.createNotebooks()
   }
 
   categories! : CategoryDto[];
@@ -174,11 +176,83 @@ export class AddDataSqlService {
   createWorkshop(): void {
     for(let workshop of this.workshopsToCreate){
       this.apiWorkshopAdminService.post(workshop).subscribe({
-          next: (response) => console.log(response),
+          next: (response) => {
+            console.log(response);
+            this.createPublications();
+          },
           error: (err) => console.log(err),
         })
     } 
   }
+
+  createPublications(): void {
+    for(let publication of this.publicationsToCreate){
+      this.apiPublicationAdminService.post(publication).subscribe({
+          next: (response) => {
+            console.log(response);
+          },
+          error: (err) => console.log(err),
+        })
+    } 
+  }
+
+  publicationsToCreate: CreatePublication[] = [
+      {
+        title: "Atelier d'inspiration : Créez votre propre carnet artistique !",
+        description: "<p>Rejoignez-nous lors de notre prochain atelier o&ugrave; vous pourrez laisser libre cours &agrave; votre cr&eacute;ativit&eacute; en fabriquant votre propre carnet, guid&eacute; par nos artisans exp&eacute;riment&eacute;s.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Rencontre avec l'artisan : Découvrez l'histoire derrière nos créations !",
+        description: "<p>Plongez dans l'univers de la fabrication artisanale en rencontrant notre artisan principal, qui partagera ses inspirations et son savoir-faire lors d'une s&eacute;ance exclusive.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Concours de design : Montrez votre talent et gagnez des carnets exclusifs !",
+        description: "<p>Participez &agrave; notre concours de design et montrez-nous votre cr&eacute;ativit&eacute; en proposant votre propre motif de carnet. Les gagnants recevront une collection de nos carnets exclusifs en r&eacute;compense.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Carnets sur mesure : Personnalisez votre compagnon d'écriture !",
+        description: "<p>Exprimez votre individualit&eacute; en commandant un carnet enti&egrave;rement personnalis&eacute;, adapt&eacute; &agrave; vos besoins et &agrave; votre style.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Cadeau artisanal : Offrez un carnet unique pour célébrer les moments spéciaux !",
+        description: "<p>Faites de chaque occasion un souvenir inoubliable en offrant un cadeau artisanal unique, tel qu'un carnet fait &agrave; la main, parfait pour capturer les moments pr&eacute;cieux de la vie.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Édition limitée : Nos nouveaux carnets inspirés de la nature sont disponibles !",
+        description: "<p>Explorez la beaut&eacute; de la nature &agrave; travers notre derni&egrave;re &eacute;dition limit&eacute;e de carnets, orn&eacute;s de motifs floraux et de textures organiques uniques.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Carnets éco-responsables : Engagez-vous pour un avenir plus vert avec nos produits durables !",
+        description: "<p>Faites un pas vers un mode de vie plus respectueux de l'environnement en optant pour nos carnets &eacute;co-responsables, fabriqu&eacute;s &agrave; partir de mat&eacute;riaux durables et recycl&eacute;s.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Nouvelle collection artisanale : Découvrez nos carnets exclusifs !",
+        description: "<p>Plongez dans l'artisanat authentique avec notre derni&egrave;re collection de carnets, alliant qualit&eacute;, design et durabilit&eacute;.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Artisanat local : Soutenez nos créateurs locaux en achetant des carnets faits à la main !",
+        description: "<p>Valorisez l'artisanat local et soutenez nos talentueux artisans en choisissant nos carnets faits &agrave; la main, fabriqu&eacute;s avec amour et d&eacute;vouement dans notre atelier.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: "Nouvelle technique de reliure : Découvrez notre dernière innovation artisanale !",
+        description: "<p>Explorez notre toute nouvelle technique de reliure, fusionnant tradition et innovation pour cr&eacute;er des carnets &agrave; la fois &eacute;l&eacute;gants et r&eacute;sistants, parfaits pour accompagner vos aventures quotidiennes.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      },
+      {
+        title: " Offrez un carnet ",
+        description: "<p>Valorisez l'artisanat local et soutenez nos talentueux artisans en choisissant nos carnets faits &agrave; la main, fabriqu&eacute;s avec amour et d&eacute;vouement dans notre atelier.</p> <p>Participez &agrave; notre concours de design et montrez-nous votre cr&eacute;ativit&eacute; en proposant votre propre motif de carnet. Les gagnants recevront une collection de nos carnets exclusifs en r&eacute;compense.</p> <p>Explorez notre toute nouvelle technique de reliure, fusionnant tradition et innovation pour cr&eacute;er des carnets &agrave; la fois &eacute;l&eacute;gants et r&eacute;sistants, parfaits pour accompagner vos aventures quotidiennes.</p>",
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+      }
+    ]
 
   workshopsToCreate: CreateWorkshop[] = [
     {
