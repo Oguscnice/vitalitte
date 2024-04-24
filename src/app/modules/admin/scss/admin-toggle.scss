@@ -5,39 +5,37 @@
   width: 40px;
   height: 24px;
   margin: 10px;
+
+  .toggle-input {
+    display: none;
+  }
+
+  .toggle-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 24px;
+    background-color: $lilac-light-opacity-low;
+    border-radius: 34px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .toggle-label::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    background-color: #fff;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+  }
 }
 
-/* Giriş stil */
-.toggle-switch .toggle-input {
-  display: none;
-}
-
-/* Anahtarın stilinin etrafındaki etiketin stil */
-.toggle-switch .toggle-label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 24px;
-  background-color: $lilac-light-opacity-low;
-  border-radius: 34px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-/* Anahtarın yuvarlak kısmının stil */
-.toggle-switch .toggle-label::before {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  top: 2px;
-  left: 2px;
-  background-color: #fff;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s;
-}
 
 /* Anahtarın etkin hale gelmesindeki stil değişiklikleri */
 .toggle-switch .toggle-input:checked + .toggle-label {

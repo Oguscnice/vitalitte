@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   styles: [`
             @import "../../scss/admin-general.scss";
 
-            button{
+            button {
               margin-top: $half-margin;
             }
 

@@ -32,11 +32,7 @@ import { CreateMaterial } from '../../interfaces/Material';
 export class ManageMaterialsComponent extends BaseComponent {
 
   private apiRequestsService = inject(ApiRequestsService);
-  private  apiMaterialAdminService = inject(ApiMaterialAdminService);
-
-  constructor(){
-    super()
-  }
+  private apiMaterialAdminService = inject(ApiMaterialAdminService);
 
   materials! : MaterialDto[];
   materialTypes : string[] = [];
@@ -51,11 +47,7 @@ export class ManageMaterialsComponent extends BaseComponent {
     
   }
 
-  ngOnDestroy() {
-    this.unsubscribeAll();
-  }
-
-  getAllMaterials(): void{
+  getAllMaterials(): void {
     this.subscriptions.push(
       this.apiRequestsService.getAllMaterials().subscribe({
         next: (materials) => this.materials = materials,
@@ -64,7 +56,7 @@ export class ManageMaterialsComponent extends BaseComponent {
     )
   }
 
-  getAllMaterialsTypes(): void{
+  getAllMaterialsTypes(): void {
     this.subscriptions.push(
       this.apiMaterialAdminService.getAllMaterialsTypes().subscribe({
         next: (materialsTypes) => this.materialTypes = materialsTypes,
@@ -86,7 +78,7 @@ export class ManageMaterialsComponent extends BaseComponent {
     }
   }
 
-  postMaterial(newMaterial : CreateMaterial): void{
+  postMaterial(newMaterial : CreateMaterial): void {
     this.subscriptions.push(
       this.apiMaterialAdminService.post(newMaterial).subscribe({
         next: (res) => {
@@ -98,7 +90,7 @@ export class ManageMaterialsComponent extends BaseComponent {
     )
   }
 
-  putMaterial(materialToEdit : MaterialDto): void{
+  putMaterial(materialToEdit : MaterialDto): void {
     this.subscriptions.push(
       this.apiMaterialAdminService.put(materialToEdit).subscribe({
         next: (res) => {
@@ -110,7 +102,7 @@ export class ManageMaterialsComponent extends BaseComponent {
     )
   }
 
-  changeAvailabilityMaterial(materialToChangeAvaibility : MaterialDto): void{
+  changeAvailabilityMaterial(materialToChangeAvaibility : MaterialDto): void {
     this.subscriptions.push(
       this.apiMaterialAdminService.changeAvailability(materialToChangeAvaibility).subscribe({
         next: (res) => {
@@ -127,7 +119,7 @@ export class ManageMaterialsComponent extends BaseComponent {
     )
   }
 
-  deleteMaterial(materialSlug : MaterialDto['slug']): void{
+  deleteMaterial(materialSlug : MaterialDto['slug']): void {
     this.subscriptions.push(
       this.apiMaterialAdminService.delete(materialSlug).subscribe({
         next: (res) => {

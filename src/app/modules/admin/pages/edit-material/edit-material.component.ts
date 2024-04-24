@@ -10,6 +10,7 @@ import { priceValidator } from '../../validators/priceValidators';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { FileInfo } from '../../interfaces/FileInfo';
 import { TransformApiService } from '../../services/transform-api.service';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
 
 @Component({
   selector: 'app-edit-material',
@@ -42,20 +43,14 @@ export class EditMaterialComponent extends BaseComponent{
   fileSizeMax: number = this.fileUploadService.SIZE_MAX;
   fileSize!: number;
 
-  public toolBarConfig = {
-    base_url: '/tinymce',
-    suffix: '.min',
-    plugins : 'lists',
-    menubar: false,
-    toolbar: 'undo redo cut copy paste bold italic strikethrough numlist bullist styles alignleft aligncenter alignright alignjustify ',
-  };
+  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   editMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     materialType : ['', [Validators.required]],
-    price: ['', [priceValidator]],
+    price: ['', [priceValidator()]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
-    picture: ['', [Validators.required, urlValidator]]
+    picture: ['', [Validators.required, urlValidator()]]
   });
 
   ngOnInit(): void {

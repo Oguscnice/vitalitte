@@ -10,6 +10,8 @@ import { CreateWorkshop } from '../interfaces/Workshop';
 import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
 import { CreatePublication } from '../interfaces/Publication';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
+import { GiftCardDto } from 'src/app/shared/interfaces/GiftCard';
+import { CreateGiftCard } from '../interfaces/GiftCard';
 
 @Injectable({
   providedIn: 'root'
@@ -78,6 +80,14 @@ export class TransformApiService {
       ...form.value,
       createdAt: oldPublication.createdAt,
       spotlighted : oldPublication.spotlighted
+    }
+  }
+
+  postGiftCard(form : FormGroup, percentage : boolean): CreateGiftCard{
+    return {
+      ...form.value,
+      expiryDate : new Date(form.value.expiryDate),
+      percentage: percentage
     }
   }
 }

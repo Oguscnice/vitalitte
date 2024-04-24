@@ -20,85 +20,79 @@ export class ApiRequestsService {
   private http = inject(HttpClient);
   private pagineationApi = inject(PaginationApiService);
 
-  getAllMaterials(): Observable<MaterialDto[]>{
+  getAllMaterials(): Observable<MaterialDto[]> {
     return this.http.get<MaterialDto[]>(URLAPI + "/materials")
   }
 
-  getAllNotebooks(): Observable<NotebookDto[]>{
+  getAllNotebooks(): Observable<NotebookDto[]> {
     return this.http.get<NotebookDto[]>(URLAPI + "/notebooks")
   }
 
-  getNotebookBySlug(notebookSlug : NotebookDto['slug']): Observable<NotebookDto>{
+  getNotebookBySlug(notebookSlug : NotebookDto['slug']): Observable<NotebookDto> {
     return this.http.get<NotebookDto>(URLAPI + "/notebooks/" + notebookSlug)
   }
 
-  getNotebooksByCategorySlug(categorySlug : CategoryDto['slug']): Observable<NotebookDto[]>{
+  getNotebooksByCategorySlug(categorySlug : CategoryDto['slug']): Observable<NotebookDto[]> {
     return this.http.get<NotebookDto[]>(URLAPI + "/notebooks/category/" + categorySlug)
   }
 
-  getNotebooksByCollectionSlug(collectionSlug : CollectionDto['slug']): Observable<NotebookDto[]>{
+  getNotebooksByCollectionSlug(collectionSlug : CollectionDto['slug']): Observable<NotebookDto[]> {
     return this.http.get<NotebookDto[]>(URLAPI + "/notebooks/collection/" + collectionSlug)
   }
 
-  getAllCategories(): Observable<CategoryDto[]>{
+  getAllCategories(): Observable<CategoryDto[]> {
     return this.http.get<CategoryDto[]>(URLAPI + "/categories")
   }
 
-  getAllCollections(): Observable<CollectionDto[]>{
+  getAllCollections(): Observable<CollectionDto[]> {
     return this.http.get<CollectionDto[]>(URLAPI + "/collections")
   }
 
-  getAllWorkshops(): Observable<WorkshopDto[]>{
+  getAllWorkshops(): Observable<WorkshopDto[]> {
     return this.http.get<WorkshopDto[]>(URLAPI + "/workshops")
   }
 
-  getWorkshopBySlug(workshopSlug : WorkshopDto['slug']): Observable<WorkshopDto>{
+  getWorkshopBySlug(workshopSlug : WorkshopDto['slug']): Observable<WorkshopDto> {
     return this.http.get<WorkshopDto>(URLAPI + "/workshops/" + workshopSlug)
   }
 
-  postInscription(inscription : CreateInscription): Observable<ResponseEntity>{
+  postInscription(inscription : CreateInscription): Observable<ResponseEntity> {
     return this.http.post<ResponseEntity>(URLAPI + "/inscriptions", inscription)
   }
 
-  getInscriptionsCounterByWorkshop(workshopDtoSlug : WorkshopDto['slug']): Observable<number>{
+  getInscriptionsCounterByWorkshop(workshopDtoSlug : WorkshopDto['slug']): Observable<number> {
     return this.http.get<number>(URLAPI + "/inscriptions/count-by-workshop/" + workshopDtoSlug)
   }
 
-  getAllPublications(): Observable<PublicationDto[]>{
+  getAllPublications(): Observable<PublicationDto[]> {
     return this.http.get<PublicationDto[]>(URLAPI + "/publications")
   }
 
-  getAllPublicationsCounter(): Observable<number>{
+  getAllPublicationsCounter(): Observable<number> {
     return this.http.get<number>(URLAPI + "/publications/count")
   }
 
-  getPublicationsFilteredCounter(value : string): Observable<number>{
+  getPublicationsFilteredCounter(value : string): Observable<number> {
     return this.http.get<number>(URLAPI + "/publications/count/" + value)
   }
 
-  getPublicationsSpotlighted(value : string): Observable<PublicationDto[]>{
+  getPublicationsSpotlighted(value : string): Observable<PublicationDto[]> {
     return this.http.get<PublicationDto[]>(URLAPI + "/publications/isSpotlighted/" + value)
   }
 
-  getPublicationBySlug(publicationSlug : PublicationDto['slug']): Observable<PublicationDto>{
+  getPublicationBySlug(publicationSlug : PublicationDto['slug']): Observable<PublicationDto> {
     return this.http.get<PublicationDto>(URLAPI + "/publications/" + publicationSlug)
   }
 
-  getPublicationPaginated(pageNumber : number){
+  getPublicationPaginated(pageNumber : number): Observable<PublicationDto[]> {
     return this.http.get<PublicationDto[]>(URLAPI + "/publications/page-" + pageNumber)
   }
 
-  getPublicationPaginatedFiltered(pageNumber : number, value : string){
+  getPublicationPaginatedFiltered(pageNumber : number, value : string): Observable<PublicationDto[]> {
     return this.http.get<PublicationDto[]>(URLAPI + "/publications/page-" + pageNumber + "/" + value)
   }
 
-  // getPublicationPaginated(){
-  //   return this.http.get<PublicationDto[]>(URLAPI + "/publications",
-  //   {
-  //     observe: 'response',
-  //     params: new HttpParams().append('size', 5).append('offset', 1)
-  //   }).pipe(
-  //     map(response => this.pagineationApi.responseToPage(response))
-  //   )
-  // }
+  getIsExpiredGiftCard(code : string): Observable<boolean> {
+    return this.http.get<boolean>(URLAPI + "/giftCards/is-expired/" + code)
+  }
 }

@@ -20,7 +20,6 @@ import { ManageCategoriesComponent } from './components/category/manage-categori
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
 import { ManageContactsComponent } from './pages/manage-contacts/manage-contacts.component';
-import { ManageGiftCardsComponent } from './pages/manage-gift-cards/manage-gift-cards.component';
 import { ManageCategoriesCollectionsComponent } from './pages/manage-categories-collections/manage-categories-collections.component';
 import { ManageCollectionsComponent } from './components/collection/manage-collections/manage-collections.component';
 import { PostActivityComponent } from './components/activity/post-activity/post-activity.component';
@@ -31,6 +30,9 @@ import { EditDeleteWorkshopComponent } from './components/workshop/edit-delete-w
 import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
 import { PostPublicationComponent } from './components/publication/post-publication/post-publication.component';
 import { EditDeletePublicationComponent } from './components/publication/edit-delete-publication/edit-delete-publication.component';
+import { PostGiftcardComponent } from './components/giftcard/post-giftcard/post-giftcard.component';
+import { EditDeleteGiftcardComponent } from './components/giftcard/edit-delete-giftcard/edit-delete-giftcard.component';
+import { ManageGiftcardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,7 @@ import { EditDeletePublicationComponent } from './components/publication/edit-de
     EditWorkshopComponent,
     EditDeleteNotebookComponent,
     ManageContactsComponent,
-    ManageGiftCardsComponent,
+    ManageGiftcardsComponent,
     ManageCategoriesCollectionsComponent,
     ManageWorkshopsComponent
   ],
@@ -64,7 +66,9 @@ import { EditDeletePublicationComponent } from './components/publication/edit-de
     PostWorkshopComponent,
     EditDeleteWorkshopComponent,
     PostPublicationComponent,
-    EditDeletePublicationComponent
+    EditDeletePublicationComponent,
+    PostGiftcardComponent,
+    EditDeleteGiftcardComponent
   ],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

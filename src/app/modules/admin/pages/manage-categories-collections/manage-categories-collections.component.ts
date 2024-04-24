@@ -68,10 +68,6 @@ export class ManageCategoriesCollectionsComponent extends BaseComponent {
     this.getAllCollections();
   }
 
-  ngOnDestroy() {
-    this.unsubscribeAll();
-  }
-
   getAllCategories(): void{
     this.subscriptions.push(
       this.apiRequestsService.getAllCategories().subscribe({

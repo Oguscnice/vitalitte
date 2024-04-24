@@ -44,10 +44,6 @@ export class ManageWorkshopsComponent extends BaseComponent {
     this.getAllWorkshops();
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribeAll();
-  }
-
   getAllWorkshops(): void{
     this.subscriptions.push(
       this.apiRequestsService.getAllWorkshops().subscribe({

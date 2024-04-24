@@ -1,0 +1,24 @@
+import { DatePipe, DecimalPipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { GiftCardDto } from 'src/app/shared/interfaces/GiftCard';
+import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
+
+@Component({
+  selector: 'app-edit-delete-giftcard',
+  standalone: true,
+  imports: [ NgClass, NgIf, NgFor, CounterZeroIfEmpty, DatePipe, DecimalPipe ],
+  templateUrl: './edit-delete-giftcard.component.html',
+  styles: [` @import "../../../scss/admin-general.scss"; `]
+})
+export class EditDeleteGiftcardComponent {
+
+  @Input() giftcards! : GiftCardDto[];
+  @Output() giftCardToDelete: EventEmitter<GiftCardDto> = new EventEmitter();
+
+  isTableVisible: boolean = true;
+
+  modalVisible : boolean = false;
+  modalText! : string;
+
+  delete = (giftcard : GiftCardDto) => this.giftCardToDelete.emit(giftcard);
+}
