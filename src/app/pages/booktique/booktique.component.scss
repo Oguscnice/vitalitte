@@ -2,6 +2,7 @@
 @import "../../../styles.scss";
 
 .booktique-page{
+
   .cards-choice{
     width: 100%;
     max-width: 600px;
@@ -10,16 +11,6 @@
     position: relative;
     width: calc(100vw * 2);
     transition : left 1s;
-    .models,
-    .handmades{
-      width: 50%;
-    }
-  }
-  .models-visible{
-    left : 50vw;
-  }
-  .handmades-visible{
-    left : -50vw;
   }
 }
 

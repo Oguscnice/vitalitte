@@ -2,7 +2,7 @@ import { DecimalPipe, NgFor, TitleCasePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { ShoppingCart } from 'src/app/shared/interfaces/ShoppingCart';
-import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
+import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
 
 @Component({
   standalone: true,
@@ -48,17 +48,17 @@ export class ShoppingNotebooksListComponent {
   @Input() notebooksListChild! : NotebookDto[];
 
   constructor(
-    public shoppingCartService : ShoppingCartService
+    public shoppingCartService : ShoppingCartNotebookService
     ){}
 
 
   addNotebookToShoppingCart(itemSlug : string) : void{  
-    this.shoppingCartService.addNotebook(itemSlug)
+    this.shoppingCartService.addItem(itemSlug)
     this.shoppingCartService.counterQuantityBySlug(itemSlug);
   }
 
   subtractNotebookToShoppingCart(itemSlug : string) : void{
-    this.shoppingCartService.subtractNotebookToShoppingCart(itemSlug)
+    this.shoppingCartService.subtractItemToShoppingCart(itemSlug)
     this.shoppingCartService.counterQuantityBySlug(itemSlug);
   }
 

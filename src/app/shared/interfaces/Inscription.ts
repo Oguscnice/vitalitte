@@ -6,4 +6,10 @@ export interface CreateInscription {
   phone : Date,
   email : string,
   workshopDto : WorkshopDto,
+  quantity : number
+}
+
+export interface InscriptionDto extends CreateInscription {
+  slug : string,
+  isConfirmed : boolean
 }

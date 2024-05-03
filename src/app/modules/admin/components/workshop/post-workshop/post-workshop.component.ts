@@ -43,7 +43,7 @@ export class PostWorkshopComponent {
     address: ['', [Validators.required]],
     price: ['', [Validators.required, priceValidator()]],
     picture: ['', [Validators.required, urlValidator()]],
-    registrations: ['', [Validators.required]],
+    registrations: [0, [Validators.required]],
   });
 
   ngOnInit(): void {

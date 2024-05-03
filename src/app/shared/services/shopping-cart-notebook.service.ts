@@ -10,7 +10,7 @@ export class ShoppingCartNotebookService {
 
   userShoppingCart : ShoppingCart[] = [];
   counertQuantityUserShoppingCart : number = 0;
-  items! : NotebookDto[];
+  items! : NotebookDto[] | WorkshopDto[];
 
   haveCartInLocalStorage(): ShoppingCart[] {
     return localStorage.getItem('userCartVitalitteNotebook') ? 

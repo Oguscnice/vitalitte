@@ -3,13 +3,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CreateGiftCard } from '../../../interfaces/GiftCard';
 import { futureDateValidator } from '../../../validators/pastDate';
 import { TransformApiService } from '../../../services/transform-api.service';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { priceValidator } from '../../../validators/priceValidators';
 
 @Component({
   selector: 'app-post-giftcard',
   standalone: true,
-  imports: [ ReactiveFormsModule, NgClass, NgIf ],
+  imports: [ ReactiveFormsModule, NgClass ],
   templateUrl: './post-giftcard.component.html',
   styles: [` @import "../../../scss/admin-general.scss";
             .toggle-switch {

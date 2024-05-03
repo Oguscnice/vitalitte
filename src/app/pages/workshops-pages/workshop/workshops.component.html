@@ -1,0 +1,57 @@
+<app-h1 titleChild="Nos Ateliers"
+        [backgroundImageChild]="backgroundImageParent"></app-h1>
+
+@if(workshopsWithDateToCome && workshopsWithDateToCome.length > 0) {
+  <h3>A venir</h3>
+  <div class="workshops flex column">
+    @for(workshop of workshopsWithDateToCome; track workshop) {
+        <app-workshop-thumbnail [workshop]="workshop"
+                                [disponibility]="inscriptionsReservedByWorkshopSlug(workshop.slug)"/>
+    }
+  </div>
+}
+
+@if(workshopsWithPastDate && workshopsWithPastDate.length > 0) {
+  <h3>Passés</h3>
+  <div class="workshops flex column">
+    @for(workshop of workshopsWithPastDate; track workshop) {
+      <app-workshop-thumbnail [workshop]="workshop"
+                             [disponibility]="inscriptionsReservedByWorkshopSlug(workshop.slug)"/>
+    }
+
+    @if(workshopsWithPastDate && workshopsWithPastDate.length > 0 && calcLastPage() > 0) {
+      <div class="btns-articles-page flex center space-around">
+        <i 
+          [ngClass]="{'disabled': pageNumber === 0 }"
+          class="btn pointer fa-solid fa-backward-fast"
+          (click)="changePage('first')"
+        ></i>
+        <i
+          [ngClass]="{'disabled': pageNumber === 0 }"
+          class="btn pointer fa-solid fa-chevron-left"
+          (click)="changePage('prev')"
+        ></i>
+          
+        <p>Page {{ pageNumber + 1 }} / {{ calcLastPage() }}</p>
+      
+        <i
+          [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
+          class="btn pointer fa-solid fa-chevron-right"
+          (click)="changePage('next')"
+        ></i> 
+        <i
+          [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
+          class="btn pointer fa-solid fa-forward-fast"
+          (click)="changePage('last')"
+        ></i>
+      </div>
+    }
+
+  </div>
+}
+
+<app-modal [modalVisible]="modalVisible"
+           [modalText]="modalText"
+        
+           (responseForModal)="responseForModal($event)">
+</app-modal>

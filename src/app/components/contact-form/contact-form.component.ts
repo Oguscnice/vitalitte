@@ -37,7 +37,7 @@ export class ContactFormComponent {
     this.validateEmail();
   }
   
-  changePhoneValue(event: KeyboardEvent) {
+  changePhoneValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.phoneValue = inputElement.value;
   }

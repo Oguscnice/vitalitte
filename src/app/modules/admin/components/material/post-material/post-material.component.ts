@@ -20,8 +20,8 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 })
 export class PostMaterialComponent {
 
-  protected fileUploadService = inject(FileUploadService)
-  private formBuilder = inject(FormBuilder)
+  protected fileUploadService = inject(FileUploadService);
+  private formBuilder = inject(FormBuilder);
   private transformApiService = inject(TransformApiService);
 
   @Input() materialTypes! : string[];

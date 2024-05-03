@@ -5,9 +5,9 @@
   <h3 class="flex pointer"
       [routerLink]="'/'">VitaLitté</h3>
   <div class="shopping-cart-counter"
-      [ngClass]="shoppingCartService.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
+      [ngClass]="shoppingCartNotebookService.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
     <i class="fa-solid fa-cart-shopping"></i>
-    <p class="flex center">{{shoppingCartService.counterTotalShoppingCart()}}</p>
+    <p class="flex center">{{shoppingCartNotebookService.counterTotalShoppingCart()}}</p>
   </div>
   <ul
     class="flex center space-around"

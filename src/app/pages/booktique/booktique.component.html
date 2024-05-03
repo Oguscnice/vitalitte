@@ -34,8 +34,8 @@
   </section>
 
   <section>
-    <p>Montant total : {{ shoppingCartService.totalPrice() | number: '0.2'}} €</p>
-    <app-paypal></app-paypal>
+    <p>Montant total : {{ shoppingCartNotebookService.totalPrice() | number: '0.2'}} €</p>
+    <app-paypal [shoppingCart]="shoppingCartNotebookService"></app-paypal>
   </section>
 
 </div>

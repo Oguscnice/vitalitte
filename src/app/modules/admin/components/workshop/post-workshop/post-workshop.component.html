@@ -128,6 +128,7 @@
            id="registrations"
            formControlName="registrations"
            placeholder="0"/>
+    <small>Laisser ' 0 ' pour un nombre de places illimtés</small>
     <div *ngIf="isFormSubmit && newWorkshopForm.controls['registrations'].invalid">
       <small *ngIf="newWorkshopForm.controls.registrations.errors?.['required']">Le nombre de place doit être indiqué (mettre un grand nombre si illimité, exemple : 99999).</small>
     </div>

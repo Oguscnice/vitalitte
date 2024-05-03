@@ -11,9 +11,10 @@ import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-
 import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-prepared/notebooks-prepared.component';
 import { NotebookSelectedComponent } from './pages/notebooks-pages/notebook-selected/notebook-selected.component';
 import { CreateNotebookComponent } from './pages/notebooks-pages/create-notebook/create-notebook.component';
-import { WorkshopComponent } from './pages/workshop/workshop.component';
+import { WorkshopsComponent } from './pages/workshops-pages/workshop/workshops.component';
 import { PublicationsComponent } from './pages/publications-pages/publications/publications.component';
 import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
+import { WorkshopSelectedComponent } from './pages/workshops-pages/workshop-selected/workshop-selected.component';
 
 const routes: Routes = [
   {
@@ -35,7 +36,8 @@ const routes: Routes = [
   { path: 'actualites/:publicationSlug', component : PublicationSelectedComponent},
   { path: 'page-404', component: Page404Component },
   { path: 'imaginer-mon-carnet', component: CreateNotebookComponent },
-  { path: 'ateliers', component : WorkshopComponent},
+  { path: 'ateliers', component : WorkshopsComponent},
+  { path: 'ateliers/:workshopSlug', component : WorkshopSelectedComponent},
   { path: 'formulaire-envoye', component : FormulaireEnvoyeComponent},
   { path: 'carnets-pret-a-emploi', component : NotebooksPreparedComponent},
   { path: 'carnets/:notebookSlug', component : NotebookSelectedComponent},

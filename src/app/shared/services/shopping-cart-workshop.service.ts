@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ShoppingCart } from '../interfaces/ShoppingCart';
-import { NotebookDto } from '../interfaces/Notebook';
 import { WorkshopDto } from '../interfaces/Workshop';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShoppingCartNotebookService {
+export class ShoppingCartWorkshopService {
 
   userShoppingCart : ShoppingCart[] = [];
   counertQuantityUserShoppingCart : number = 0;
-  items! : NotebookDto[];
+  items! : WorkshopDto[];
 
   haveCartInLocalStorage(): ShoppingCart[] {
-    return localStorage.getItem('userCartVitalitteNotebook') ? 
-        JSON.parse(localStorage.getItem('userCartVitalitteNotebook')!) :
+    return localStorage.getItem('userCartVitalitteWorkshop') ? 
+        JSON.parse(localStorage.getItem('userCartVitalitteWorkshop')!) :
         []
   }
 
@@ -83,7 +82,7 @@ export class ShoppingCartNotebookService {
   }
 
   editCartInLocalStorage(shoppingCart : ShoppingCart[]): void{
-    localStorage.setItem('userCartVitalitteNotebook', JSON.stringify(shoppingCart));
+    localStorage.setItem('userCartVitalitteWorkshop', JSON.stringify(shoppingCart));
   }
 
   counterQuantityBySlug(itemSlugParams : string) : number{
@@ -140,6 +139,6 @@ export class ShoppingCartNotebookService {
   }
 
   cleanLocalStorage(): void{
-    localStorage.removeItem('userCartVitalitteNotebook');
+    localStorage.removeItem('userCartVitalitteWorkshop');
   }
 }

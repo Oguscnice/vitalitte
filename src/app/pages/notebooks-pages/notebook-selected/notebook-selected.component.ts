@@ -14,7 +14,7 @@ export class NotebookSelectedComponent extends BaseComponent{
   public route = inject(ActivatedRoute);
   public apiRequestsService = inject(ApiRequestsService);
 
-  notebookSlug! : string
+  notebookSlug! : NotebookDto['slug']
   notebookSelected! : NotebookDto
 
   ngOnInit(){
@@ -27,10 +27,7 @@ export class NotebookSelectedComponent extends BaseComponent{
   findNotebook(): void {
     this.subscriptions.push(
       this.apiRequestsService.getNotebookBySlug(this.notebookSlug).subscribe({
-        next: (notebook) => {this.notebookSelected = notebook
-          console.log(notebook);
-          
-        },
+        next: (notebook) => this.notebookSelected = notebook,
         error: (err) => (this.changeMessage(err.error.message))
       })
     )

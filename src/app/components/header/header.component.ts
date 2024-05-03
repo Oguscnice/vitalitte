@@ -2,7 +2,7 @@ import { ApiRequestsService } from 'src/app/shared/services/api-requests.service
 import { ActivePageService } from './../../shared/services/active-page.service';
 import { Component, ElementRef, ViewChild, Renderer2, HostListener, inject  } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
-import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
+import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
 import { BaseComponent } from 'src/app/base.component';
 import { RouterLink } from '@angular/router';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -20,7 +20,7 @@ export class HeaderComponent extends BaseComponent {
 
   public activePageService = inject(ActivePageService);
   private renderer = inject(Renderer2);
-  public shoppingCartService = inject(ShoppingCartService);
+  protected shoppingCartNotebookService = inject(ShoppingCartNotebookService);
   private apiRequestsService = inject(ApiRequestsService);
 
   windowSize$ = new Subject<[number, number]>();
@@ -56,7 +56,7 @@ export class HeaderComponent extends BaseComponent {
   getAllNotebooks(): void{
     this.subscriptions.push(
       this.apiRequestsService.getAllNotebooks().subscribe({
-        next: (notebooks) => this.shoppingCartService.notebooks = notebooks,
+        next: (notebooks) => this.shoppingCartNotebookService.items = notebooks,
         error: (err) => (this.changeMessage(err.error.message))
       })
     )

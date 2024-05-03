@@ -1,0 +1,27 @@
+@import "../../scss/variables.scss";
+@import "../../scss/buttons.scss";
+
+.workshop {
+  @include outline-picture;
+  img {
+    max-width: 160px;
+    max-height: 160px;
+  }
+  .workshop-description {
+    padding: $normal-padding;
+    width: 100%;
+    .workshop-address {
+      font-size: $normal-font-size;
+    }
+  }
+}
+.not-available {
+  border: 2px solid grey;
+  box-shadow: 4px 4px 4px rgba($black, 0.8);
+  .workshop-description {
+    p {
+      color: grey;
+    }
+  }
+}
+

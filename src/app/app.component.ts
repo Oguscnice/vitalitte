@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ActivePageService } from './shared/services/active-page.service';
-import { ShoppingCartService } from './shared/services/shopping-cart.service';
+import { ShoppingCartNotebookService } from './shared/services/shopping-cart-notebook.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ export class AppComponent {
 
   constructor(
     private activePageService: ActivePageService,
-    public shoppingCartService : ShoppingCartService
+    public shoppingCartService : ShoppingCartNotebookService
   ) {}
 
   title = 'Vitalitté';

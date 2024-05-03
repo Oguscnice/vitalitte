@@ -1,0 +1,30 @@
+@if(workshop) {
+  <div class="workshop flex"
+      [ngClass]="!workshop.available ? 'not-available' : 'pointer'"
+      (click)="workshop.available ? navigate(workshop) : null">
+  <img [src]="workshop.picture" alt="Photo de l'atelier + {{workshop.title}}">
+  <div class="workshop-description flex column center">
+    @if(!workshop.available) {
+      <p> INDISPONIBLE </p>
+    }
+    <p class="flex center"> {{ workshop.title }} </p>
+    <p> {{ workshop.date| date : 'dd/MM/yyyy à hh:MM' }} </p>
+    <p class="workshop-address"> {{ workshop.address }} </p>
+
+    @if(workshop.available && isFutureDate(workshop.date)) {
+      <div class="flex center">
+        @if(workshop.registrations === 0) {
+          <p> Places illimitées </p>
+        } @else {
+          <p> Places disponibles : {{ workshop.registrations - disponibility }} </p>
+        }
+        <button class="btn-normal pointer">
+              {{ workshop.registrations === 0 || workshop.registrations - disponibility > 0 ? 'S’inscrire' : 'COMPLET' }}
+        </button>
+      </div> 
+    }
+  </div>
+</div>
+} @else {
+  <p>Pas d'Atelier trouvé.</p>
+}

@@ -18,8 +18,5 @@ export class EditDeleteGiftcardComponent {
 
   isTableVisible: boolean = true;
 
-  modalVisible : boolean = false;
-  modalText! : string;
-
   delete = (giftcard : GiftCardDto) => this.giftCardToDelete.emit(giftcard);
 }

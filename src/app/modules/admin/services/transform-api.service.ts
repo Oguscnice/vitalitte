@@ -12,6 +12,7 @@ import { CreatePublication } from '../interfaces/Publication';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { GiftCardDto } from 'src/app/shared/interfaces/GiftCard';
 import { CreateGiftCard } from '../interfaces/GiftCard';
+import { CreateInscription } from 'src/app/shared/interfaces/Inscription';
 
 @Injectable({
   providedIn: 'root'
@@ -88,6 +89,13 @@ export class TransformApiService {
       ...form.value,
       expiryDate : new Date(form.value.expiryDate),
       isPercentage: percentage
+    }
+  }
+
+  postInscription(form : FormGroup, workshopDto : WorkshopDto): CreateInscription{
+    return {
+      ...form.value,
+      workshopDto : workshopDto
     }
   }
 }

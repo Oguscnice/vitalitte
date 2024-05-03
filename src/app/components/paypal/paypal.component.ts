@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
-import { IPayPalConfig, ICreateOrderRequest, NgxPayPalModule } from 'ngx-paypal';
-import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { IPayPalConfig, ICreateOrderRequest, NgxPayPalModule, IClientAuthorizeCallbackData } from 'ngx-paypal';
+import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
+import { ShoppingCartWorkshopService } from 'src/app/shared/services/shopping-cart-workshop.service';
 
 @Component({
   standalone: true,
@@ -11,8 +12,9 @@ import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.servi
 })
 export class PaypalComponent {
 
-  private shoppingCartService = inject(ShoppingCartService);
-  public payPalConfig ? : IPayPalConfig;
+  @Input() shoppingCart! : ShoppingCartNotebookService | ShoppingCartWorkshopService
+  @Output() responsePaypal: EventEmitter<'success' | 'cancel' | 'error'> = new EventEmitter();
+  public payPalConfig? : IPayPalConfig;
 
   ngOnInit(): void {
       this.initConfig();
@@ -28,15 +30,15 @@ export class PaypalComponent {
               purchase_units: [{
                   amount: {
                       currency_code: 'EUR',
-                      value: this.shoppingCartService.totalPrice().toString(),
+                      value: this.shoppingCart.totalPrice().toString(),
                       breakdown: {
                           item_total: {
                               currency_code: 'EUR',
-                              value: this.shoppingCartService.totalPrice().toString()
+                              value: this.shoppingCart.totalPrice().toString()
                           }
                       }
                   },
-                  items: this.shoppingCartService.itemsForPaypal()
+                  items: this.shoppingCart.itemsForPaypal()
               }]
           },
           advanced: {
@@ -55,17 +57,16 @@ export class PaypalComponent {
           },
           onClientAuthorization: (data) => {
               console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-              // this.showSuccess = true;
-              this.shoppingCartService.cleanLocalStorage()
+              this.responsePaypal.emit('success')
+              this.shoppingCart.cleanLocalStorage()
           },
           onCancel: (data, actions) => {
               console.log('OnCancel', data, actions);
-              // this.showCancel = true;
-
+              this.responsePaypal.emit('cancel')
           },
           onError: err => {
               console.log('OnError', err);
-              // this.showError = true;
+              this.responsePaypal.emit('error')
           },
           onClick: (data, actions) => {
               console.log('onClick', data, actions);
@@ -76,7 +77,7 @@ export class PaypalComponent {
 }
 
 let onClientAuthorizationData : any = {
-    "id": "19P17852AY6751113",
+    "id": "2MS34461WD214490V",
     "intent": "CAPTURE",
     "status": "COMPLETED",
     "purchase_units": [
@@ -84,11 +85,11 @@ let onClientAuthorizationData : any = {
             "reference_id": "default",
             "amount": {
                 "currency_code": "EUR",
-                "value": "3.50",
+                "value": "0.50",
                 "breakdown": {
                     "item_total": {
                         "currency_code": "EUR",
-                        "value": "3.50"
+                        "value": "0.50"
                     },
                     "shipping": {
                         "currency_code": "EUR",
@@ -112,26 +113,14 @@ let onClientAuthorizationData : any = {
                 "email_address": "sb-kdkmc27077755@business.example.com",
                 "merchant_id": "ZM8U2CDM48YLE"
             },
-            "description": "le-meditteranee",
+            "description": "la-foret-enchantee",
             "soft_descriptor": "PAYPAL *TEST STORE",
             "items": [
                 {
-                    "name": "le-meditteranee",
+                    "name": "la-foret-enchantee",
                     "unit_amount": {
                         "currency_code": "EUR",
-                        "value": "1.00"
-                    },
-                    "tax": {
-                        "currency_code": "EUR",
-                        "value": "0.00"
-                    },
-                    "quantity": "2"
-                },
-                {
-                    "name": "le-vegetal",
-                    "unit_amount": {
-                        "currency_code": "EUR",
-                        "value": "1.50"
+                        "value": "0.50"
                     },
                     "tax": {
                         "currency_code": "EUR",
@@ -154,18 +143,18 @@ let onClientAuthorizationData : any = {
             "payments": {
                 "captures": [
                     {
-                        "id": "1YV73692SJ948424R",
+                        "id": "2J210318G49192317",
                         "status": "COMPLETED",
                         "amount": {
                             "currency_code": "EUR",
-                            "value": "3.50"
+                            "value": "0.50"
                         },
                         "final_capture": true,
                         "seller_protection": {
                             "status": "NOT_ELIGIBLE"
                         },
-                        "create_time": "2024-02-13T15:25:20Z",
-                        "update_time": "2024-02-13T15:25:20Z"
+                        "create_time": "2024-05-02T12:39:05Z",
+                        "update_time": "2024-05-02T12:39:05Z"
                     }
                 ]
             }
@@ -176,19 +165,20 @@ let onClientAuthorizationData : any = {
             "given_name": "Gus",
             "surname": "Cometto"
         },
-        "email_address": "guillaume_cometto@hotmail.fr",
+        "email_address": "guillaume.cometto@gmail.com",
         "payer_id": "APZQ7PPDQQN3J",
         "address": {
             "country_code": "FR"
         }
     },
-    "create_time": "2024-02-13T15:06:16Z",
-    "update_time": "2024-02-13T15:25:20Z",
+    "create_time": "2024-05-02T12:38:05Z",
+    "update_time": "2024-05-02T12:39:05Z",
     "links": [
         {
-            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/19P17852AY6751113",
+            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/2MS34461WD214490V",
             "rel": "self",
             "method": "GET"
         }
     ]
+
 }

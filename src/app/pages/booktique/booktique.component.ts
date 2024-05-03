@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
+import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
 
 @Component({
   selector: 'app-booktique',
@@ -11,12 +11,8 @@ import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.servi
 })
 export class BooktiqueComponent extends BaseComponent{
 
-  constructor(
-    private apiRequestsService : ApiRequestsService,
-    public shoppingCartService: ShoppingCartService
-  ){
-    super()
-  }
+  private apiRequestsService = inject(ApiRequestsService);
+  protected shoppingCartNotebookService = inject(ShoppingCartNotebookService);
 
   notebooks! : NotebookDto[];
 
@@ -33,7 +29,7 @@ export class BooktiqueComponent extends BaseComponent{
       this.apiRequestsService.getAllNotebooks().subscribe({
         next: (notebooks) => {
           this.notebooks = notebooks;
-          this.shoppingCartService.notebooks = notebooks
+          this.shoppingCartNotebookService.items = notebooks
         },
         error: (err) => (this.changeMessage(err.error.message))
       })
