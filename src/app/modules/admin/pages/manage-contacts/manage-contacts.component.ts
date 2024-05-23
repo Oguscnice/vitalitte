@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-contacts',
   templateUrl: './manage-contacts.component.html',
   styleUrls: ['./manage-contacts.component.scss']

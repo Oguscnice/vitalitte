@@ -8,7 +8,29 @@ import { CreatePublication } from '../../interfaces/Publication';
 @Component({
   standalone: false,
   selector: 'app-manage-publications',
-  templateUrl: './manage-publications.component.html',
+  template: `
+              <app-return-admin-home/>
+
+              <h2>Gestion des Publications</h2>
+
+              <app-post-publication (newPublication)="post($event)"/>
+
+              <app-edit-delete-publication [publications]="publications"
+                                                          
+                                          (changePublicationSpotlight)="changeSpotlight($event)"
+                                          (publicationEdited)="put($event)"
+                                          (publicationToDelete)="showModal($event)">
+              </app-edit-delete-publication>
+
+              <anguille [message]="messageResponseFromBackend"/>
+              
+              <app-modal [modalVisible]="modalVisible"
+                        [modalText]="modalText"
+                        [multipleChoice]="true"
+                        
+                        (responseForModal)="responseForModal($event)">
+              </app-modal>
+  `,
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
 export class ManagePublicationsComponent extends BaseComponent {

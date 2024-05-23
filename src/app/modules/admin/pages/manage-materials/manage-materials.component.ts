@@ -6,12 +6,17 @@ import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { CreateMaterial } from '../../interfaces/Material';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-materials',
-  template: ` <app-return-admin-home/>
+  template: `
+              <app-return-admin-home/>
+
               <h2>Gestion des Matériaux</h2>
+
               <app-post-material [materialTypes]="materialTypes"
                                  (newMaterial)="postMaterial($event)">
               </app-post-material>
+
               <app-edit-delete-material
                 [materials]="materials"
                 [materialTypes]="materialTypes"
@@ -20,7 +25,9 @@ import { CreateMaterial } from '../../interfaces/Material';
                 (changeAvailabilityMaterial)="changeAvailabilityMaterial($event)"
                 (materialToDelete)="showModal($event)">
               </app-edit-delete-material>
+
               <anguille [message]="messageResponseFromBackend"/>
+
               <app-modal [modalVisible]="modalVisible"
                         [modalText]="modalText"
                         [multipleChoice]="true"

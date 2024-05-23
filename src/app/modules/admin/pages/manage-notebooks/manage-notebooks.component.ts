@@ -10,9 +10,13 @@ import { ApiMaterialAdminService } from '../../services/api-material-admin.servi
 import { CollectionDto } from 'src/app/shared/interfaces/Collection';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-notebooks',
-  template: ` <app-return-admin-home/>
+  template: `
+              <app-return-admin-home/>
+
               <h2>Gestion des Carnets</h2>
+
               <app-post-notebook
                 [materialTypes]="materialTypes"
                 [materials]="materials"
@@ -21,13 +25,16 @@ import { CollectionDto } from 'src/app/shared/interfaces/Collection';
                 
                 (newNotebook)="postNotebook($event)">
               </app-post-notebook>
+
               <app-edit-delete-notebook
                 [notebooks]="notebooks"
 
                 (changeAvailabilityNotebook)="changeAvailabilityNotebook($event)"
                 (notebookToDelete)="modalConfirmation($event)">
               </app-edit-delete-notebook>
+
               <anguille [message]="messageResponseFromBackend"/>
+
               <app-modal [modalVisible]="modalVisible"
                          [modalText]="modalText"
                          [multipleChoice]="true"
@@ -35,17 +42,13 @@ import { CollectionDto } from 'src/app/shared/interfaces/Collection';
                          (responseForModal)="responseForModal($event)">
               </app-modal>
             `,
-  styleUrls: ['./manage-notebooks.component.scss']
+  styles: [``]
 })
 export class ManageNotebooksComponent extends BaseComponent{
 
   private apiNotebookAdminService = inject(ApiNotebookAdminService);
   private apiRequestsService = inject(ApiRequestsService);
   private  apiMaterialAdminService = inject(ApiMaterialAdminService);
-
-  constructor(){
-    super()
-  }
 
   materialTypes! : string[];
   materials! : MaterialDto[];

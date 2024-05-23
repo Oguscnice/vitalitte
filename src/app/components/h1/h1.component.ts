@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
   template: `<div class="h1-image-container"
                   [ngClass]="titleChild === 'A propos...' ? 'thumbnail-h1-home' : ''">
                 <img src="{{ backgroundImageChild }}"
-                  alt="Image de fond pour la page {{ titleChild }}"/>
+                     alt="Image de fond pour la page {{ titleChild }}"/>
                 <div class="filter-color"></div>
                 <h1 class="flex center"> {{ titleChild }} </h1>
               </div>`,

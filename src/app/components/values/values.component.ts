@@ -1,23 +1,26 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { Value } from 'src/app/shared/interfaces/Value';
 
 @Component({
   standalone: true,
-  imports: [ NgFor, NgIf],
+  imports: [ ],
   selector: 'app-values',
   template: `<div class="values-container flex">
-              <div class="value-icone-and-name flex column center"
-                  *ngFor="let value of valuesList">
-                <span *ngIf="value.source === 'fonts.google'"
-                      class="material-symbols-outlined flex center">
-                      {{ value.icone }}
+              @for (value of valuesList; track value) {
+                <div class="value-icone-and-name flex column center">
+                  @if (value.source === 'fonts.google') {
+                    <span class="material-symbols-outlined flex center">
+                        {{ value.icone }}
                     </span>
-                <i *ngIf="value.source === 'fontawesome'"
-                   class="{{ value.icone }} flex center"></i>
-                <p>{{ value.name }}</p>
-              </div>
-            </div>`,
+                  }
+                  @if (value.source === 'fontawesome') {
+                    <i class="{{ value.icone }} flex center"></i>
+                  }
+                  <p>{{ value.name }}</p>
+                </div>
+              }
+            </div>
+            `,
   styleUrls: ['./values.component.scss'],
 })
 export class ValuesComponent {

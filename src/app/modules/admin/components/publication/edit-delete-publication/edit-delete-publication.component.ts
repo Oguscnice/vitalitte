@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -14,9 +14,9 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 
 @Component({
-  selector: 'app-edit-delete-publication',
   standalone: true,
-  imports: [ NgClass, NgIf, NgFor, TitleCasePipe, AddEuroCurrencyPipe, RouterLink, ReactiveFormsModule, EditorModule, CounterZeroIfEmpty, ModalComponent ],
+  imports: [ NgClass, TitleCasePipe, AddEuroCurrencyPipe, RouterLink, ReactiveFormsModule, EditorModule, CounterZeroIfEmpty, ModalComponent ],
+  selector: 'app-edit-delete-publication',
   templateUrl: './edit-delete-publication.component.html',
   styles: [ `@import "../../../scss/admin-general.scss"; `]
 })
@@ -48,7 +48,7 @@ export class EditDeletePublicationComponent {
     picture: ['', [Validators.required, urlValidator()]]
   });
 
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   openModalWithDescription(publicationDescription : PublicationDto['description']): void{
     this.modalVisible = true;

@@ -9,7 +9,7 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 @Component({
   selector: 'app-edit-delete-material',
   standalone: true,
-  imports: [ NgClass, NgIf, NgFor, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent ],
+  imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent ],
   templateUrl: './edit-delete-material.component.html',
   styles: [ `@import "../../../scss/admin-general.scss"; `]
 })

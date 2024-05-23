@@ -13,10 +13,15 @@
            formControlName="title"
            autocomplete="off"/>
 
-    <div *ngIf="isFormSubmit && myForm.submitted && editWorkshopForm.controls['title'].invalid">
-      <small *ngIf="editWorkshopForm.controls.title.errors?.['required']">Le titre de l'atelier est obligatoire.</small>
-      <small *ngIf="editWorkshopForm.controls.title.errors?.['maxlength']">Le titre de l'atelier ne doit pas dépasser 255 charactères.</small>
-    </div>
+    @if (isFormSubmit && myForm.submitted && editWorkshopForm.controls['title'].invalid) {
+      <div>
+        @if (editWorkshopForm.controls.title.errors?.['required']) {
+          <small>Le titre de l'atelier est obligatoire.</small>
+        } @else if (editWorkshopForm.controls.title.errors?.['maxlength']) {
+          <small>Le titre de l'atelier ne doit pas dépasser 255 charactères.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -29,10 +34,15 @@
     </editor>
     <p [style.color]=" this.editWorkshopForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 1000 </p>
     
-    <div *ngIf="isFormSubmit && editWorkshopForm.controls['description'].invalid">
-      <small *ngIf="editWorkshopForm.controls.description.errors?.['required']">La description de l'atelier est requise.</small>
-      <small *ngIf="editWorkshopForm.controls.description.errors?.['maxlength']">La description de l'atelier ne doit pas dépasser 1000 charactères.</small>
-    </div>
+    @if (isFormSubmit && editWorkshopForm.controls['description'].invalid) {
+      <div>
+        @if (editWorkshopForm.controls.description.errors?.['required']) {
+          <small>La description de l'atelier est requise.</small>
+        } @else if (editWorkshopForm.controls.description.errors?.['maxlength']) {
+          <small>La description de l'atelier ne doit pas dépasser 1000 charactères.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -40,9 +50,16 @@
     <input type="datetime-local"
            id="date"
            formControlName="date">
-    <div *ngIf="isFormSubmit && myForm.submitted && editWorkshopForm.controls['date'].invalid">
-      <small *ngIf="editWorkshopForm.controls.date.errors?.['required']">La date et heure sont obligatoires.</small>
-    </div>
+
+    @if (isFormSubmit && myForm.submitted && editWorkshopForm.controls['date'].invalid) {
+      <div>
+        @if (editWorkshopForm.controls.date.errors?.['required']) {
+          <small>La date et heure sont obligatoires.</small>
+        } @else if (editWorkshopForm.controls.date.errors?.['pastDate']) {
+          <small>La date ne peut pas être passée.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -60,23 +77,29 @@
                [value]="this.editWorkshopForm.get('adress')?.value ? this.editWorkshopForm.get('adress')!.value : ''"
               />
         <div class="arrow-icone flex center">
-          <i class="fa-solid fa-circle-chevron-down pointer"
-              *ngIf="apiBanService.isDropdownBanOpen"
-              (click)="apiBanService.toggleDropdown(true)"></i>
-          <i class="fa-solid fa-circle-chevron-up pointer"
-              *ngIf="!apiBanService.isDropdownBanOpen"
-            (click)="apiBanService.toggleDropdown(false)"></i>
+          @if (apiBanService.isDropdownBanOpen) {
+            <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
+          } @else {
+            <i class="fa-solid fa-circle-chevron-up pointer" (click)="apiBanService.toggleDropdown(false)"></i>
+          }
         </div>
       </div>
       <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.adressList && apiBanService.adressList.length > 0}">
-        <li *ngFor="let adress of apiBanService.adressList" (click)="adressSelected(adress.properties.label); apiBanService.toggleDropdown(false) ">
+        @for (adress of apiBanService.adressList; track adress) {
+          <li (click)="adressSelected(adress.properties.label); apiBanService.toggleDropdown(false) ">
             {{ adress.properties.label | titlecase }}
-        </li>
+          </li>
+        }
       </ul>
     </div>
-    <div *ngIf="isFormSubmit && myForm.submitted && editWorkshopForm.controls['address'].invalid">
-      <small *ngIf="editWorkshopForm.controls.address.errors?.['required']">L'adresse est obligatoire.</small>
-    </div>
+
+    @if (isFormSubmit && myForm.submitted && editWorkshopForm.controls['address'].invalid) {
+      <div>
+        @if (editWorkshopForm.controls.address.errors?.['required']) {
+          <small>L'adresse est obligatoire.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -85,11 +108,18 @@
            id="price"
            formControlName="price"
            placeholder="0"/>
-    <div *ngIf="isFormSubmit && editWorkshopForm.controls['price'].invalid">
-      <small *ngIf="editWorkshopForm.controls.price.errors?.['required']">Le prix doit être indiqué (même 0€).</small>
-      <small *ngIf="editWorkshopForm.controls.price.errors?.['invalidPriceFormat']">Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
-      <small *ngIf="editWorkshopForm.controls.price.errors?.['invalidPrice']">Le prix ne peut pas être inférieur à 0€.</small>
-    </div>
+
+    @if (isFormSubmit && editWorkshopForm.controls['price'].invalid) {
+      <div>
+        @if (editWorkshopForm.controls.price.errors?.['required']) {
+          <small>Le prix doit être indiqué (même 0€).</small>
+        } @else if (editWorkshopForm.controls.price.errors?.['invalidPriceFormat']) {
+          <small>Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
+        } @else if (editWorkshopForm.controls.price.errors?.['invalidPrice']) {
+          <small>Le prix ne peut pas être inférieur à 0€.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -113,9 +143,15 @@
          [src]="editWorkshopForm.get('picture')!.value"
          alt="Photo à choisir pour le carnet"/>
 
-    <div *ngIf="isFormSubmit && editWorkshopForm.controls['picture'].invalid">
-      <small *ngIf="fileSize > fileUploadService.SIZE_MAX">Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
-    </div>
+    @if (isFormSubmit && editWorkshopForm.controls['picture'].invalid) {
+      <div>
+        @if (fileSize > fileUploadService.SIZE_MAX) {
+          <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
+        } @else if (editWorkshopForm.controls.picture.errors?.['invalidUrl']) {
+          <small>L'image doit être une URL (commencer par http:// ou https:// ou www.).</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -124,9 +160,13 @@
            id="registrations"
            formControlName="registrations"
            placeholder="0"/>
-    <div *ngIf="isFormSubmit && editWorkshopForm.controls['registrations'].invalid">
-      <small *ngIf="editWorkshopForm.controls.registrations.errors?.['required']">Le nombre de place doit être indiqué (mettre un grand nombre si illimité, exemple : 99999).</small>
-    </div>
+    @if (isFormSubmit && editWorkshopForm.controls['registrations'].invalid) {
+      <div>
+        @if (editWorkshopForm.controls.registrations.errors?.['required']) {
+          <small>Le nombre de place doit être indiqué (mettre un grand nombre si illimité, exemple : 99999).</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <button class="btn-submit-admin"

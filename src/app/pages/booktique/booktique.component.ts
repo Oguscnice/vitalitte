@@ -5,6 +5,7 @@ import { ApiRequestsService } from 'src/app/shared/services/api-requests.service
 import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
 
 @Component({
+  standalone: false,
   selector: 'app-booktique',
   templateUrl: './booktique.component.html',
   styleUrls: ['./booktique.component.scss']

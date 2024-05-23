@@ -7,7 +7,7 @@ import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-i
 @Component({
   selector: 'app-edit-delete-giftcard',
   standalone: true,
-  imports: [ NgClass, NgIf, NgFor, CounterZeroIfEmpty, DatePipe, DecimalPipe, RouterLink ],
+  imports: [ NgClass, CounterZeroIfEmpty, DatePipe, DecimalPipe, RouterLink ],
   templateUrl: './edit-delete-giftcard.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })

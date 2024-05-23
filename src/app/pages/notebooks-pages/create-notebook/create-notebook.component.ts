@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 
 @Component({
+  standalone: false,
   selector: 'app-create-notebook',
   templateUrl: './create-notebook.component.html',
   styleUrls: ['./create-notebook.component.scss']
 })
 export class CreateNotebookComponent extends BaseComponent{
 
-  titleParentHome = 'Imaginer mon carnet';
-  backgroundImageParentHome = '../../../assets/images/figma/couverture.jpg';
+  protected backgroundImageParentHome = '../../../assets/images/figma/couverture.jpg';
 
   isFormClicked: boolean = false;
   hasErrors: boolean = false;

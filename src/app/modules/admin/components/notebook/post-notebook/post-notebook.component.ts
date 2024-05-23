@@ -8,7 +8,7 @@ import { priceValidator } from '../../../validators/priceValidators';
 import { urlValidator } from '../../../validators/urlValidators';
 import { FileInfo } from '../../../interfaces/FileInfo';
 import { CollectionDto } from 'src/app/shared/interfaces/Collection';
-import { DecimalPipe, NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { TransformApiService } from '../../../services/transform-api.service';
@@ -16,7 +16,7 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 
 @Component({
   standalone: true,
-  imports: [NgClass, NgIf, NgFor, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty ],
+  imports: [ NgClass, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty ],
   selector: 'app-post-notebook',
   templateUrl: './post-notebook.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
@@ -47,7 +47,7 @@ export class PostNotebookComponent {
 
   fileSize!: number;
 
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   ngOnInit(): void {
     this.newNotebookForm.get('mainPicture')!.setValue(this.fileUploadService.imageNotebookDefault);

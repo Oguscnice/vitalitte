@@ -4,78 +4,68 @@ import { WorkshopDto } from '../../../shared/interfaces/Workshop';
 import { ApiRequestsService } from '../../../shared/services/api-requests.service';
 
 @Component({
+  standalone: false,
   selector: 'app-workshops',
   templateUrl: './workshops.component.html',
-  styleUrls: ['./workshops.component.scss']
+  styles: [`
+            @import "../../../scss/variables.scss";
+
+            .workshops {
+              flex-direction: column;
+            }
+
+            .dropdown-container {
+              margin-bottom: $half-margin;
+              .input-and-arrow {
+                .arrow-icone {
+                  margin-top : 0px;
+                }
+              }
+            }
+
+            .choice-page {
+              margin-top: $normal-margin;
+              width: 320px;
+            }
+
+            // Tablettes vers ordinateurs portables :
+            @media screen and (min-width: 992px) {
+              .workshops {
+                flex-direction: row;
+              }
+            }
+  `]
 })
 export class WorkshopsComponent extends BaseComponent {
 
   private apiRequestsService = inject(ApiRequestsService);
 
-  backgroundImageParent = "../../../assets/images/figma/atelier.jpg";
-  workshopsWithDateToCome! : WorkshopDto[];
-  workshopsWithPastDate! : WorkshopDto[];
-  disponibilities : {workshopSlug : WorkshopDto['slug'], inscriptions : number}[] = []
-  pageNumber: number = 0;
+  protected backgroundImageParent = "../../../assets/images/figma/atelier.jpg";
+  protected workshopsWithDateToCome! : WorkshopDto[];
+  protected workshopsWithPastDate! : WorkshopDto[];
+  protected disponibilities : {workshopSlug : WorkshopDto['slug'], inscriptions : number}[] = []
+
+  protected pageNumber: number = 0;
+  protected size: number = 10;
+  protected isDropdownOpen: boolean = false;
   
   private counterWorkshops: number = 0;
-  modalVisible : boolean = false;
-  modalText! : string;
+  protected modalVisible : boolean = false;
+  protected modalText! : string;
 
   ngOnInit(): void {
     this.getWorkshopsByDateToCome();
-    this.getWorkshopsByPastDate();
-    this.getCounterWorkshopsByPastDate();
+    this.getWorkshopsByPastDateAndCounter();
   }
 
-  getWorkshopsByDateToCome(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getWorkshopsByDateToCome().subscribe({
-        next: (workshops) => {
-
-          this.workshopsWithDateToCome = workshops;
-          for(let workshop of workshops){
-            this.getCounterDisponibilities(workshop.slug);
-          }
-
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
+  toggleDropdown(value: boolean): void {
+    this.isDropdownOpen = value;
   }
 
-  getWorkshopsByPastDate(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getWorkshopsByPastDate(this.pageNumber).subscribe({
-        next: (workshops) => {
-          this.workshopsWithPastDate = workshops;
-          for(let workshop of workshops){
-            this.getCounterDisponibilities(workshop.slug);
-          }
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getCounterWorkshopsByPastDate(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getCounterWorkshopsByPastDate().subscribe({
-        next: (counter) => this.counterWorkshops = counter,
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getCounterDisponibilities(workshopSlugToFind: WorkshopDto['slug']): void {
-    if(!this.disponibilities.some(item => item.workshopSlug === workshopSlugToFind)){
-      this.subscriptions.push(
-        this.apiRequestsService.getCounterWorkshopInscriptions(workshopSlugToFind).subscribe({
-          next: (counter) => this.disponibilities.push({workshopSlug : workshopSlugToFind, inscriptions : counter}),
-          error: (err) => (this.changeMessage(err.error.message))
-        })
-      )
-    }
+  updateSizeValue(value: number): void {
+    this.size = value;
+    this.getWorkshopsByPastDateAndCounter();
+    this.toggleDropdown(false);
   }
 
   changePage(choice : 'first' | 'prev' | 'next' | 'last'): void {
@@ -92,7 +82,7 @@ export class WorkshopsComponent extends BaseComponent {
   }
 
   calcLastPage(): number {
-    return Math.floor(this.counterWorkshops / 6) + (this.counterWorkshops % 6 === 0 ? 0 : 1)
+    return Math.floor(this.counterWorkshops / this.size) + (this.counterWorkshops % this.size === 0 ? 0 : 1)
   }
 
   inscriptionsReservedByWorkshopSlug(workshopSlug: WorkshopDto['slug']): number {
@@ -108,4 +98,58 @@ export class WorkshopsComponent extends BaseComponent {
     this.modalVisible = false;
   }
 
+  private getWorkshopsByPastDateAndCounter(): void {
+    this.getWorkshopsByPastDate();
+    this.getCounterWorkshopsByPastDate();
+  }
+
+  private getWorkshopsByDateToCome(): void {
+    this.subscriptions.push(
+      this.apiRequestsService.getWorkshopsByDateToCome().subscribe({
+        next: (workshops) => {
+          this.workshopsWithDateToCome = workshops;
+
+          for(let workshop of workshops){
+            this.getCounterDisponibilities(workshop.slug);
+          }
+        },
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  private getWorkshopsByPastDate(): void {    
+    this.subscriptions.push(
+      this.apiRequestsService.getWorkshopsByPastDate({page: this.pageNumber, size: this.size}).subscribe({
+        next: (workshops) => {
+          this.workshopsWithPastDate = workshops;
+
+          for(let workshop of workshops){
+            this.getCounterDisponibilities(workshop.slug);
+          }
+        },
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  private getCounterWorkshopsByPastDate(): void {
+    this.subscriptions.push(
+      this.apiRequestsService.getCounterWorkshopsByPastDate().subscribe({
+        next: (counter) => this.counterWorkshops = counter,
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  private getCounterDisponibilities(workshopSlugToFind: WorkshopDto['slug']): void {
+    if(!this.disponibilities.some(item => item.workshopSlug === workshopSlugToFind)){
+      this.subscriptions.push(
+        this.apiRequestsService.getCounterWorkshopInscriptions(workshopSlugToFind).subscribe({
+          next: (counter) => this.disponibilities.push({workshopSlug : workshopSlugToFind, inscriptions : counter}),
+          error: (err) => (this.changeMessage(err.error.message))
+        })
+      )
+    }
+  }
 }

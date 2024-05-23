@@ -1,25 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 
 @Component({
+  standalone: false,
   selector: 'app-notebooks',
   templateUrl: './notebooks.component.html',
   styleUrls: ['./notebooks.component.scss']
 })
 export class NotebooksComponent extends BaseComponent{
 
-  constructor(
-    private apiRequestsService : ApiRequestsService
-  ){
-    super()
-  }
-
-  titleParentCreations = 'Carnets...';
-  backgroundImageParentCreations = '../../../assets/images/figma/carnet02.jpg';
-
-  notebooks! : NotebookDto[]
+  private apiRequestsService = inject(ApiRequestsService);
+  protected backgroundImageParentCreations = '../../../assets/images/figma/carnet02.jpg';
+  protected notebooks! : NotebookDto[]
 
   ngOnInit(): void {
     this.getAllNotebooks();

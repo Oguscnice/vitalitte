@@ -3,7 +3,7 @@ import { FileUploadService } from '../../../services/file-upload.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TransformApiService } from '../../../services/transform-api.service';
 import { CreateWorkshop } from '../../../interfaces/Workshop';
-import { DecimalPipe, NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { urlValidator } from '../../../validators/urlValidators';
 import { priceValidator } from '../../../validators/priceValidators';
 import { EditorModule } from '@tinymce/tinymce-angular';
@@ -15,7 +15,7 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 @Component({
   selector: 'app-post-workshop',
   standalone: true,
-  imports: [ NgClass, NgIf, NgFor, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty ],
+  imports: [ NgClass, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty ],
   templateUrl: './post-workshop.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })
@@ -25,16 +25,16 @@ export class PostWorkshopComponent {
   protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private transformApiService = inject(TransformApiService);
-  public apiBanService = inject(ApiBanService)
+  protected apiBanService = inject(ApiBanService)
 
   @Output() newWorkshop: EventEmitter<CreateWorkshop> = new EventEmitter();
 
-  isFormVisible : boolean = false;
-  isFormSubmit : boolean = false;
+  protected isFormVisible : boolean = false;
+  protected isFormSubmit : boolean = false;
 
-  fileSize!: number;
+  protected fileSize!: number;
 
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   newWorkshopForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.maxLength(255)]],

@@ -1,11 +1,12 @@
-<!-- <form action="https://formsubmit.io/send/guillaume.cometto@gmail.com"
+<h2>Formulaire de contact</h2>
+
+<form action="https://formsubmit.io/send/guillaume.cometto@gmail.com"
       method="POST"
       class="flex center"
       id="contactform">
-<h2>Formulaire de contact</h2>
+
 <fieldset>
-  <mat-form-field >
-    <mat-label>Nom...</mat-label>
+    <label>Nom...</label>
     <input
       matInput
       type="text"
@@ -13,25 +14,22 @@
       id="lastname"
       (keyup)="changeLastnameValue($event)"
     />
-  </mat-form-field>
-  <div class="errors" *ngIf="isFormClicked && hasErrors">
-    <small *ngIf="lastnameValue && lastnameValue.length > 255">
-      Le nom ne doit pas comporter plus de
-      <strong>255 caractères</strong>.
-    </small>
-    <small *ngIf="lastnameValue && lastnameValue.length <= 2">
-      Le nom doit comporter plus de
-      <strong>2 caractères</strong>.
-    </small>
-    <small *ngIf="!lastnameValue">
-      Le nom est
-      <strong>obligatoire</strong>.
-    </small>
-  </div>
+  
+    @if (isFormClicked && hasErrors) {
+      <div class="errors">
+        @if (lastnameValue && lastnameValue.length > 255) {
+          <small>Le nom ne doit pas comporter plus de<strong>255 caractères</strong>.</small>
+        } @else if (lastnameValue && lastnameValue.length <= 2) {
+          <small>Le nom doit comporter plus de<strong>2 caractères</strong>.</small>
+        } @else if (!lastnameValue) {
+          <small>Le nom est<strong>obligatoire</strong>.</small>
+        }
+      </div>
+    }
 </fieldset>
+
 <fieldset>
-  <mat-form-field>
-    <mat-label>Prénom...</mat-label>
+    <label>Prénom...</label>
     <input
       matInput
       type="text"
@@ -39,25 +37,22 @@
       id="firstname"
       (keyup)="changeFirstnameValue($event)"
     />
-  </mat-form-field>
-  <div class="errors" *ngIf="isFormClicked && hasErrors">
-    <small *ngIf="firstnameValue && lastnameValue.length > 255">
-      Le prénom ne doit pas comporter plus de
-      <strong>255 caractères</strong>.
-    </small>
-    <small *ngIf="firstnameValue.length <= 2">
-      Le prénom doit comporter plus de
-      <strong>2 caractères</strong>.
-    </small>
-    <small *ngIf="!firstnameValue">
-      Le prénom est
-      <strong>obligatoire</strong>.
-    </small>
-  </div>
+  
+    @if (isFormClicked && hasErrors) {
+      <div class="errors">
+        @if (firstnameValue && lastnameValue.length > 255) {
+          <small>Le prénom ne doit pas comporter plus de<strong>255 caractères</strong>.</small>
+        } @else if (firstnameValue.length <= 2) {
+          <small>Le prénom doit comporter plus de<strong>2 caractères</strong>.</small>
+        } @else if (!firstnameValue) {
+          <small>Le prénom est<strong>obligatoire</strong>.</small>
+        }
+      </div>
+    }
 </fieldset>
+
 <fieldset>
-  <mat-form-field>
-    <mat-label>Email</mat-label>
+    <label>Email</label>
     <input
       type="email"
       name="email"
@@ -66,21 +61,19 @@
       placeholder="Ex: email@example.com"
       (keyup)="changeEmailValue($event)"
     />
-  </mat-form-field>
-  <div class="errors" *ngIf="isFormClicked && hasErrors">
-    <small *ngIf="!validateEmail()">
-      Renseigner un email au bon format
-      <strong>bon format</strong>.
-    </small>
-    <small *ngIf="!emailValue">
-      L'email est
-      <strong>obligatoire</strong>.
-    </small>
-  </div>
+    @if (isFormClicked && hasErrors) {
+      <div class="errors">
+        @if (!validateEmail()) {
+          <small>Renseigner un email au bon format<strong>bon format</strong>.</small>
+        } @else if (!emailValue) {
+          <small>L'email est<strong>obligatoire</strong>.</small>
+        }
+      </div>
+    }
 </fieldset>
+
 <fieldset>
-  <mat-form-field>
-    <mat-label>Telephone</mat-label>
+    <label>Telephone</label>
     <input
       type="tel"
       matInput
@@ -89,83 +82,92 @@
       id="phone"
       (keyup)="changePhoneValue($event)"
     />
-  </mat-form-field>
-  <div class="errors" *ngIf="isFormClicked && hasErrors">
-    <small *ngIf="validatePhone()">
-      Merci d'entrer un numéro de téléphone à
-      <strong>10 chiffres</strong>.</small
-    >
-    <small *ngIf="!phoneValue">
-      Le numéro de téléphone est <strong>obligatoire</strong>.</small
-    >
-  </div>
-</fieldset>
-<fieldset>
-  <mat-form-field>
-    <mat-label>Choisir un thème...</mat-label>
-    <mat-select name="theme" id="theme">
-      <mat-option
-        (click)="changeThemeValue('Carnets')"
-        value="Carnets"
-        >Carnets</mat-option
-      >
-      <mat-option
-        (click)="changeThemeValue('Ateliers')"
-        value="Ateliers"
-        >Ateliers</mat-option
-      >
-      <mat-option (click)="changeThemeValue('Autre sujet...')"
-        >Autre sujet...</mat-option
-      >
-    </mat-select>
-  </mat-form-field>
-  <div class="errors" *ngIf="isFormClicked && hasErrors">
-    <small *ngIf="!themeValue">
-      Le thème est <strong>obligatoire</strong>.</small
-    >
-  </div>
+    @if (isFormClicked && hasErrors) {
+      <div class="errors">
+        @if (validatePhone()) {
+          <small>Merci d'entrer un numéro de téléphone à<strong>10 chiffres</strong>.</small>
+        } @else if (!phoneValue) {
+          <small>Le numéro de téléphone est <strong>obligatoire</strong>.</small>
+        }
+      </div>
+    }
 </fieldset>
 
-<fieldset class="field-text-area">
-  <mat-form-field class="mat-form-field-text-area">
-    <mat-label>Message</mat-label>
-    <textarea
-      matInput
-      placeholder="Ex. Bonjour, je voudrais des informations sur..."
-      name="message"
-      id="message"
-      (keyup)="changeMessageValue($event)"
-    ></textarea>
-  </mat-form-field>
-  <div class="errors" *ngIf="hasErrors && isFormClicked">
-    <small *ngIf="messageValue && messageValue.length > 1000">
-      Le message ne doit pas comporter plus de
-      <strong>1000 caractères</strong>.
-    </small>
-    <small *ngIf="messageValue && messageValue.length <= 10">
-      Le message doit comporter plus de
-      <strong>10 caractères</strong>.
-    </small>
-    <small *ngIf="!messageValue">
-      Le message est
-      <strong>obligatoire</strong>.
-    </small>
-  </div>
+<fieldset>
+    <label>Choisir un thème...</label>
+    <div class="dropdown-container">
+      <div class="input-and-arrow flex">
+        <input type="text"
+               id="theme"
+               [value]="themeValue"
+               placeholder="Choississez le thème de votre demande..."
+               autocomplete="off"
+               class="pointer"
+               (focus)="toggleDropdown(true)"
+               readonly/>
+        <div class="arrow-icone flex center">
+          @if (isDropdownOpen) {
+            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false)"></i>
+          } @else {
+            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true)"></i>
+          }
+        </div>
+      </div>
+
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownOpen}">
+        @for (theme of themeList; track theme) {
+          <li (click)="changeThemeValue(theme); toggleDropdown(false) ">
+            {{ theme }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    @if (isFormClicked && hasErrors) {
+      <div class="errors">
+        @if (!themeValue) {
+          <small>Le thème est <strong>obligatoire</strong>.</small>
+        }
+      </div>
+    }
 </fieldset>
-<input name="_formsubmit_id" type="text" style="display: none" />
-<input
-  name="_redirect"
-  type="hidden"
-  id="name"
-  value="http://localhost:4200//formulaire-envoye"
-/>
+
+<fieldset class="field-text-area flex column">
+  <label>Message</label>
+  <textarea matInput
+            placeholder="Ex. Bonjour, je voudrais des informations sur..."
+            name="message"
+            id="message"
+            (keyup)="changeMessageValue($event)">
+  </textarea>
+  <small [ngStyle]="{'color' : messageValue.length > 999 ? 'red' : ''}">Charactère(s) {{ messageValue.length }} / 1000 maximum</small>
+
+  @if (hasErrors && isFormClicked) {
+    <div class="errors">
+      @if (messageValue && messageValue.length > 1000) {
+        <small>Le message ne doit pas comporter plus de<strong>1000 caractères</strong>.</small>
+      } @else if (messageValue && messageValue.length <= 10) {
+        <small>Le message doit comporter plus de<strong>10 caractères</strong>.</small>
+      } @else if (!messageValue) {
+        <small>Le message est<strong>obligatoire</strong>.</small>
+      }
+    </div>
+  }
+</fieldset>
+
+  <input name="_formsubmit_id" type="text" style="display: none" />
+  <input
+    name="_redirect"
+    type="hidden"
+    id="name"
+    value="http://localhost:4200//formulaire-envoye"
+  />
   <button
     [type]="checkErrors() ? 'submit' : 'button'"
     (click)="changeSubmitted()"
-    class="btn-normal pointer submit" 
-  >
+    class="btn-normal submit">
     ENVOYER
   </button>
 </form>
 
-<app-loader [booleanVisibilityInLoarder]="isLoaderVisible"></app-loader> -->
+<app-loader [booleanVisibilityInLoarder]="isLoaderVisible"></app-loader>

@@ -12,40 +12,42 @@ import { ApiWorkshopAdminService } from '../../services/api-workshop-admin.servi
 import { ApiBanService } from '../../services/api-ban.service';
 import { FileInfo } from '../../interfaces/FileInfo';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
+import { futureDateValidator } from '../../validators/pastDate';
 
 @Component({
-  selector: 'app-edit-workshop',
   standalone: false,
+  selector: 'app-edit-workshop',
   templateUrl: './edit-workshop.component.html',
-  styles: [` @import "../../scss/admin-general.scss"; `]})
+  styles: [` @import "../../scss/admin-general.scss"; `]
+})
 
 export class EditWorkshopComponent extends BaseComponent {
 
-  public route = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
   protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private router  = inject(Router);
   private transformApiService = inject(TransformApiService);
-  public apiBanService = inject(ApiBanService);
+  protected apiBanService = inject(ApiBanService);
   private apiRequestsService = inject(ApiRequestsService);
   private apiWorkshopAdminService = inject(ApiWorkshopAdminService);
 
-  workshopSlug! : WorkshopDto['slug'];
-  workshopSelected! : WorkshopDto;
+  protected workshopSlug! : WorkshopDto['slug'];
+  protected workshopSelected! : WorkshopDto;
 
-  isFormSubmit : boolean = false;
+  protected isFormSubmit : boolean = false;
   modalVisible : boolean = false;
   modalText! : string;
 
-  fileSize!: number;
+  protected fileSize!: number;
 
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   editWorkshopForm  = this.formBuilder.group({
     slug: [this.workshopSlug, [Validators.required]],
     title: ['', [Validators.required, Validators.maxLength(255)]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
-    date: ['', [Validators.required]],
+    date: ['', [Validators.required, futureDateValidator()]],
     address: ['', [Validators.required]],
     price: ['', [Validators.required, priceValidator()]],
     picture: ['', [Validators.required, urlValidator()]],

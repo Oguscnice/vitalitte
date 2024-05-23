@@ -1,8 +1,6 @@
 <div class="booktique-page flex column center">
   
-  <app-h1 [titleChild]="titleParentBooktique"
-          [backgroundImageChild]="backgroundImageParentHome">
-  </app-h1>
+  <app-h1 [titleChild]="titleParentBooktique" [backgroundImageChild]="backgroundImageParentHome"/>
 
   <section class="cards-choice flex space-around">
     <div class="card" (click)="userChoiceSelected('classic')">
@@ -19,17 +17,15 @@
     </div>
   </section>
 
-  <section class="flex two-choices"
-           [ngClass]="userChoice === 'classic' ?
-                      'models-visible':'handmades-visible'">
+  <section class="flex two-choices" [ngClass]="userChoice === 'classic' ? 'models-visible':'handmades-visible'">
     <div class="models">
       <h3>Liste des modèles</h3>
-      <app-shopping-notebooks-list [notebooksListChild]="notebooks"></app-shopping-notebooks-list>
+      <app-shopping-notebooks-list [notebooksListChild]="notebooks"/>
     </div>
 
     <div class="handmades">
       <h3>Créer mon Carnet</h3>
-      <app-choices-personalized-creation></app-choices-personalized-creation>
+      <app-choices-personalized-creation/>
     </div>
   </section>
 

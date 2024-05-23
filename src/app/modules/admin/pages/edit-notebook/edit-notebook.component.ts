@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileUploadService } from '../../services/file-upload.service';
 import { ApiMaterialAdminService } from '../../services/api-material-admin.service';
@@ -8,22 +8,17 @@ import { ApiNotebookAdminService } from '../../services/api-notebook-admin.servi
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { BaseComponent } from 'src/app/base.component';
-import { DecimalPipe, NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
-import { EditorModule } from '@tinymce/tinymce-angular';
-import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { urlValidator } from '../../validators/urlValidators';
 import { priceValidator } from '../../validators/priceValidators';
 import { FileInfo } from '../../interfaces/FileInfo';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
 import { CollectionDto } from 'src/app/shared/interfaces/Collection';
 import { TransformApiService } from '../../services/transform-api.service';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
 
 @Component({
+  standalone: false,
   selector: 'app-edit-notebook',
-  standalone: true,
-  imports: [NgClass, NgIf, NgFor, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty, ModalComponent],
   templateUrl: './edit-notebook.component.html',
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
@@ -32,7 +27,7 @@ export class EditNotebookComponent extends BaseComponent{
   private apiRequestsService = inject(ApiRequestsService);
   private apiMaterialAdminService = inject(ApiMaterialAdminService);
   private apiNotebookAdminService = inject(ApiNotebookAdminService);
-  public route = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
   protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private router  = inject(Router);
@@ -70,7 +65,7 @@ export class EditNotebookComponent extends BaseComponent{
     description: ['', [Validators.required, Validators.maxLength(1000)]],
   });
 
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   ngOnInit(): void {
     this.findSlugInUrl();
@@ -181,17 +176,17 @@ export class EditNotebookComponent extends BaseComponent{
     }
   }
 
-  toggleDropdown(dropdownClicked : 'collectionDropdown' | 'categoryDropdown' | 'materialsDropdown'): void{
+  toggleDropdown(value: boolean, dropdownClicked : 'collectionDropdown' | 'categoryDropdown' | 'materialsDropdown'): void{
     if(dropdownClicked === 'categoryDropdown'){
-      this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen;
+      this.isDropdownCategoryOpen = value;
       this.isDropdownMaterialsOpen = false;
       this.isDropdownCollectionOpen = false;
     }else if(dropdownClicked === 'materialsDropdown'){
-      this.isDropdownMaterialsOpen = !this.isDropdownMaterialsOpen;
+      this.isDropdownMaterialsOpen = value;
       this.isDropdownCategoryOpen = false;
       this.isDropdownCollectionOpen = false;
     }else if(dropdownClicked === 'collectionDropdown'){
-      this.isDropdownCollectionOpen = !this.isDropdownCollectionOpen;
+      this.isDropdownCollectionOpen = value;
       this.isDropdownCategoryOpen = false;
       this.isDropdownMaterialsOpen = false;
     }

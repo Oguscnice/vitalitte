@@ -5,15 +5,15 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { TransformApiService } from '../../../services/transform-api.service';
 import { urlValidator } from '../../../validators/urlValidators';
 import { FileInfo } from '../../../interfaces/FileInfo';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 
 @Component({
-  selector: 'app-post-publication',
   standalone: true,
-  imports: [ NgClass, NgIf, ReactiveFormsModule, CounterZeroIfEmpty, EditorModule ],
+  imports: [ NgClass, ReactiveFormsModule, CounterZeroIfEmpty, EditorModule ],
+  selector: 'app-post-publication',
   templateUrl: './post-publication.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })
@@ -25,12 +25,12 @@ export class PostPublicationComponent {
 
   @Output() newPublication: EventEmitter<CreatePublication> = new EventEmitter();
 
-  isFormVisible : boolean = false;
-  isFormSubmit : boolean = false;
+  protected isFormVisible : boolean = false;
+  protected isFormSubmit : boolean = false;
 
-  fileSize!: number;
+  protected fileSize!: number;
 
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   newPublicationForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.maxLength(255)]],
@@ -39,7 +39,7 @@ export class PostPublicationComponent {
   });
 
   ngOnInit(): void {
-    this.newPublicationForm.get('picture')!.setValue(this.fileUploadService.imagePublicationDefault);
+    this.updateImageValue(this.fileUploadService.imagePublicationDefault);
   }
 
   async onFileSelected(event: Event): Promise<void> {
@@ -59,8 +59,12 @@ export class PostPublicationComponent {
   changeImageValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     if(inputElement){
-      this.newPublicationForm.get('picture')!.setValue(inputElement.value);
+      this.updateImageValue(inputElement.value)
     }
+  }
+
+  updateImageValue(value: string): void {
+    this.newPublicationForm.get('picture')!.setValue(value);
   }
 
   submitNewPublicationForm(): void {

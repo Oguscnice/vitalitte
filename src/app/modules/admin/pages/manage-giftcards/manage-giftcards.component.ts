@@ -5,23 +5,29 @@ import { ApiGiftcardService } from './../../services/api-giftcard.service';
 import { Component, inject } from '@angular/core';
 
 @Component({
-  selector: 'app-manage-giftcards',
   standalone: false,
-  template:  `<app-return-admin-home/>
-              <h2>Gestion des Cartes Cadeaux</h2>
-              <app-post-giftcard (newGiftCard)="postGiftCard($event)"></app-post-giftcard>
-              <app-edit-delete-giftcard [giftcards]="giftcards"
-              
-                                        (giftCardToDelete)="showModal($event)">
-              </app-edit-delete-giftcard>
-              
-              <anguille [message]="messageResponseFromBackend"/>
-              <app-modal [modalVisible]="modalVisible"
-                         [modalText]="modalText"
-                         [multipleChoice]="true"
-                        
-                         (responseForModal)="responseForModal($event)">
-              </app-modal>`,
+  selector: 'app-manage-giftcards',
+  template:  `
+                <app-return-admin-home/>
+
+                <h2>Gestion des Cartes Cadeaux</h2>
+
+                <app-post-giftcard (newGiftCard)="postGiftCard($event)"/>
+
+                <app-edit-delete-giftcard [giftcards]="giftcards"
+                
+                                          (giftCardToDelete)="showModal($event)">
+                </app-edit-delete-giftcard>
+                
+                <anguille [message]="messageResponseFromBackend"/>
+
+                <app-modal [modalVisible]="modalVisible"
+                          [modalText]="modalText"
+                          [multipleChoice]="true"
+                          
+                          (responseForModal)="responseForModal($event)">
+                </app-modal>
+                `,
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
 export class ManageGiftcardsComponent extends BaseComponent {

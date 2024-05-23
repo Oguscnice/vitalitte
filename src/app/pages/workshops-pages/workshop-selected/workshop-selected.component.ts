@@ -17,29 +17,52 @@ import { phoneValidator } from 'src/app/shared/validators/PhoneValidator';
 import { quantityValidator } from 'src/app/shared/validators/QuantityValidator';
 
 @Component({
-  selector: 'app-workshop-selected',
   standalone: true,
   imports: [ H1Component, ReactiveFormsModule, AnguilleComponent, ModalComponent, PaypalComponent, DecimalPipe ],
+  selector: 'app-workshop-selected',
   templateUrl: './workshop-selected.component.html',
-  styleUrl: './workshop-selected.component.scss'
+  styles: [`
+
+            @import "../../../scss/variables.scss";
+            @import "../../../scss/forms.scss";
+
+            .workshop-content,
+            .workshop-resgistrations-free,
+            .btn-normal,
+            .total-price,
+            .price-per-person
+             {
+              margin-top: $normal-margin;
+            }
+
+            .workshop-resgistrations-free {
+              font-weight: bold;
+            }
+
+            .price-per-person {
+              margin-top : $normal-margin;
+              margin-right: $half-margin;
+            }
+
+          `]
 })
 export class WorkshopSelectedComponent extends BaseComponent{
 
-  public route = inject(ActivatedRoute);
+  protected route = inject(ActivatedRoute);
   private apiRequestsService = inject(ApiRequestsService);
   protected shoppingCartWorkshop = inject(ShoppingCartWorkshopService);
   private formBuilder = inject(FormBuilder);
   private transformApiService = inject(TransformApiService);
 
-  workshopSlug! : WorkshopDto['slug'];
-  workshopSelected! : WorkshopDto;
-  inscriptionsCount : number = 0;
-  inscriptionSlugNotConfirmed! : string;
+  protected workshopSlug! : WorkshopDto['slug'];
+  protected workshopSelected! : WorkshopDto;
+  protected inscriptionsCount : number = 0;
+  protected inscriptionSlugNotConfirmed! : string;
   private quantityChangeSubscription! : Subscription;
   private oldQuantityChange : number = 0;
 
-  isFormVisible: boolean = false;
-  isFormSubmit: boolean = false;
+  protected isFormVisible: boolean = false;
+  protected isFormSubmit: boolean = false;
 
   modalVisible : boolean = false;
   modalText! : string;
@@ -59,6 +82,8 @@ export class WorkshopSelectedComponent extends BaseComponent{
       this.findInscriptionsByWorkshopBySlug();
     });
 
+    this.shoppingCartWorkshop.cleanLocalStorage();
+
     // Surveiller les changements de quantity pour adapter le ShoppingCartWorkshop
     this.quantityChangeSubscription = this.newInscriptionForm.get('quantity')!.valueChanges.subscribe({
       next: (value) => {
@@ -71,6 +96,7 @@ export class WorkshopSelectedComponent extends BaseComponent{
         } else if(!value) {
           this.shoppingCartWorkshop.deleteItemToShoppingCart(this.workshopSlug);
         }
+        this.oldQuantityChange = value!;
       },
       error: (err) => console.error('Error observing quantity changes:', err),
       complete: () => console.log('Observation complete')

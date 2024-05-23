@@ -1,29 +1,30 @@
-import { DecimalPipe, NgFor, TitleCasePipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { DecimalPipe, TitleCasePipe } from '@angular/common';
+import { Component, Input, inject } from '@angular/core';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import { ShoppingCart } from 'src/app/shared/interfaces/ShoppingCart';
 import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
 
 @Component({
   standalone: true,
-  imports: [ NgFor, TitleCasePipe, DecimalPipe ],
+  imports: [ TitleCasePipe, DecimalPipe ],
   selector: 'app-shopping-notebooks-list',
   template: ` <div class="shopping-notebooks-list">
-                <div *ngFor="let notebook of notebooksListChild"
-                    class="shopping-notebooks-container flex">
-                  <img src="{{notebook.mainPicture}}"
-                      alt="Image du Carnet {{notebook.name}}">
-                  <div class="title-and-price flex column center">
-                    <h4>{{notebook.name | titlecase }}</h4>
-                    <p>{{notebook.price | number: '0.2'}} €</p>
-                    <div class="shopping-cart-gestion flex">
-                      <button (click)="subtractNotebookToShoppingCart(notebook.slug)">-</button>
-                      <p>{{ shoppingCartService.counterQuantityBySlug(notebook.slug) }}</p>
-                      <button (click)="addNotebookToShoppingCart(notebook.slug)">+</button>
+                @for (notebook of notebooksListChild; track notebook) {
+                  <div class="shopping-notebooks-container flex">
+                    <img src="{{notebook.mainPicture}}" alt="Image du Carnet {{notebook.name}}">
+                    <div class="title-and-price flex column center">
+                      <h4>{{notebook.name | titlecase }}</h4>
+                      <p>{{notebook.price | number: '0.2'}} €</p>
+                      <div class="shopping-cart-gestion flex">
+                        <button (click)="subtractNotebookToShoppingCart(notebook.slug)">-</button>
+                        <p>{{ shoppingCartService.counterQuantityBySlug(notebook.slug) }}</p>
+                        <button (click)="addNotebookToShoppingCart(notebook.slug)">+</button>
+                      </div>
                     </div>
                   </div>
+                }
                 </div>
-              </div>`,
+                `,
   styles: [`
             @import "../../scss/variables.scss";
             @import "../../scss/buttons.scss";
@@ -47,10 +48,7 @@ export class ShoppingNotebooksListComponent {
 
   @Input() notebooksListChild! : NotebookDto[];
 
-  constructor(
-    public shoppingCartService : ShoppingCartNotebookService
-    ){}
-
+  protected shoppingCartService = inject(ShoppingCartNotebookService)
 
   addNotebookToShoppingCart(itemSlug : string) : void{  
     this.shoppingCartService.addItem(itemSlug)

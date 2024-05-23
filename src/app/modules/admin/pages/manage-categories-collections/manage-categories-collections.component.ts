@@ -8,9 +8,13 @@ import { ApiCollectionAdminService } from '../../services/api-collection-admin.s
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-categories-collections',
-  template: ` <app-return-admin-home/>
+  template: `
+              <app-return-admin-home/>
+
               <h2>Gestion des Catégories et des Collections</h2>
+
               <div class="flex space-between">
                 <app-manage-categories [categories]="categories"
                 
@@ -18,6 +22,7 @@ import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
                                       (categoryPut)="putCategory($event)"
                                       (categoryDelete)="modalConfirmation($event, 'catégorie')">
                 </app-manage-categories>
+
                 <app-manage-collections [collections]="collections"
                 
                                         (collectionNamePost)="postCollection($event)"
@@ -25,7 +30,9 @@ import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
                                         (collectionDelete)="modalConfirmation($event, 'collection')">
                 </app-manage-collections>
               </div>
+
               <anguille [message]="messageResponseFromBackend"/>
+              
               <app-modal [modalVisible]="modalVisible"
                          [modalText]="modalText"
                          [multipleChoice]="true"

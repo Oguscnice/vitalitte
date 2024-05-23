@@ -8,18 +8,17 @@ import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { ApiGiftcardService } from '../../services/api-giftcard.service';
 
 @Component({
-  selector: 'app-user-list-giftcards-used',
   standalone: true,
-  imports: [ NgIf, NgFor, NgClass, DatePipe ],
+  imports: [ NgClass, DatePipe ],
+  selector: 'app-user-list-giftcards-used',
   templateUrl: './user-list-giftcards-used.component.html',
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
 export class UserListGiftcardsUsedComponent extends BaseComponent {
 
-  public route = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
   private apiGiftcardUsedService = inject(ApiGiftcardUsedService);
   private apiGiftcardService = inject(ApiGiftcardService);
-
 
   giftcardCode! : GiftCardDto['code'];
   giftcard! : GiftCardDto;

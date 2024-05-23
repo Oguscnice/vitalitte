@@ -12,17 +12,10 @@ import { ShoppingCartNotebookService } from './shared/services/shopping-cart-not
 export class AppComponent {
 
   private router = inject(Router);
-
-  constructor(
-    private activePageService: ActivePageService,
-    public shoppingCartService : ShoppingCartNotebookService
-  ) {}
-
-  title = 'Vitalitté';
+  private activePageService = inject(ActivePageService);
 
   ngOnInit() : void {
     this.checkCurrentUrl();
-    this.shoppingCartService.haveCartInLocalStorage();
   }
 
   checkCurrentUrl() {

@@ -1,6 +1,9 @@
-<app-h1 [titleChild]="''"
-        [backgroundImageChild]="publicationSelected ? publicationSelected.picture : ''"></app-h1>
 
-<h2 *ngIf="publicationSelected">{{ publicationSelected.title }}</h2>
-<p *ngIf="publicationSelected">Actualité créée le {{ publicationSelected.createdAt | date:'dd/MM/yyyy à hh:mm'}}</p>
-<div *ngIf="publicationSelected" [innerHTML]="publicationSelected.description"></div>
+@if (publicationSelected) {
+  <app-h1 [titleChild]="''" [backgroundImageChild]="publicationSelected.picture"/>
+  <h2>{{ publicationSelected.title }}</h2>
+  <p class="actuality-date">Actualité créée le {{ publicationSelected.createdAt | date:'dd/MM/yyyy à hh:mm'}}</p>
+  <div [innerHTML]="publicationSelected.description"></div>
+} @else {
+  <h2>Erreur lors du chargement de l'article.</h2>
+}

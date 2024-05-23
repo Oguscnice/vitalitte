@@ -7,43 +7,37 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { urlValidator } from '../../validators/urlValidators';
 import { priceValidator } from '../../validators/priceValidators';
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { FileInfo } from '../../interfaces/FileInfo';
 import { TransformApiService } from '../../services/transform-api.service';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
 
 @Component({
+  standalone: false,
   selector: 'app-edit-material',
   templateUrl: './edit-material.component.html',
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
 export class EditMaterialComponent extends BaseComponent{
 
-  private apiRequestsService = inject(ApiRequestsService);
   private  apiMaterialAdminService = inject(ApiMaterialAdminService);
-  public route = inject(ActivatedRoute);
-  private fileUploadService = inject(FileUploadService);
+  private route = inject(ActivatedRoute);
+  protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
   private router  = inject(Router);
   private transformApiService = inject(TransformApiService);
 
-  constructor(){
-    super()
-  }
+  protected materialSlug! : MaterialDto['slug'];
+  protected materialSelected! : MaterialDto;
+  protected materialTypes : string[] = [];
 
-  materialSlug! : MaterialDto['slug'];
-  materialSelected! : MaterialDto;
-  materialTypes : string[] = [];
-
-  isDropdownCategoryOpen : boolean = false;
-  isFormSubmit : boolean = false;
+  protected isDropdownCategoryOpen : boolean = false;
+  protected isFormSubmit : boolean = false;
   modalVisible : boolean = false;
   modalText! : string;
 
-  fileSizeMax: number = this.fileUploadService.SIZE_MAX;
-  fileSize!: number;
+  protected fileSize!: number;
 
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   editMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
@@ -107,7 +101,7 @@ export class EditMaterialComponent extends BaseComponent{
     if (selectedFile) {
       this.fileSize = selectedFile.size;
 
-      if (this.fileSize < this.fileSizeMax) {
+      if (this.fileSize < this.fileUploadService.SIZE_MAX) {
         fileInfo = await this.fileUploadService.fileUpload(event);
         this.editMaterialForm.get('picture')!.setValue(fileInfo.data.thumb.url);
       };
@@ -142,9 +136,7 @@ export class EditMaterialComponent extends BaseComponent{
       this.apiMaterialAdminService.put(materialToEdit).subscribe({
         next: (res) => {
           this.modalText = res.message;
-          // Après avoir envoyé, on vérouille le formulaire pour empêcher une nouvelle modif sur un slug non existant
           this.modalVisible = true;
-          // Après avoir envoyé, on remet les variables à zéro
           this.isFormSubmit = false;
         },
         error: (err) => (this.changeMessage(err.error.message))

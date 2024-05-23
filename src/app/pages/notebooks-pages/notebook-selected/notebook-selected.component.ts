@@ -5,14 +5,15 @@ import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 
 @Component({
+  standalone: false,
   selector: 'app-notebook-selected',
   templateUrl: './notebook-selected.component.html',
   styleUrls: ['./notebook-selected.component.scss']
 })
 export class NotebookSelectedComponent extends BaseComponent{
 
-  public route = inject(ActivatedRoute);
-  public apiRequestsService = inject(ApiRequestsService);
+  protected route = inject(ActivatedRoute);
+  protected apiRequestsService = inject(ApiRequestsService);
 
   notebookSlug! : NotebookDto['slug']
   notebookSelected! : NotebookDto

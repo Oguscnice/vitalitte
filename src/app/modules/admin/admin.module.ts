@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule, DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminHomeComponent } from './pages/admin-home/admin-home.component';
@@ -8,7 +8,7 @@ import { ManageNotebooksComponent } from './pages/manage-notebooks/manage-notebo
 import { ManagePublicationsComponent } from './pages/manage-publications/manage-publications.component';
 import { PostMaterialComponent } from './components/material/post-material/post-material.component';
 import { EditDeleteMaterialComponent } from './components/material/edit-delete-material/edit-delete-material.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { EditorModule, TINYMCE_SCRIPT_SRC  } from '@tinymce/tinymce-angular';
 import { AnguilleComponent } from 'src/app/shared/components/anguille/anguille.component';
 import { EditMaterialComponent } from './pages/edit-material/edit-material.component';
@@ -22,8 +22,6 @@ import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-curr
 import { ManageContactsComponent } from './pages/manage-contacts/manage-contacts.component';
 import { ManageCategoriesCollectionsComponent } from './pages/manage-categories-collections/manage-categories-collections.component';
 import { ManageCollectionsComponent } from './components/collection/manage-collections/manage-collections.component';
-import { PostActivityComponent } from './components/activity/post-activity/post-activity.component';
-import { EditDeleteActivityComponent } from './components/activity/edit-delete-activity/edit-delete-activity.component';
 import { ManageWorkshopsComponent } from './pages/manage-workshops/manage-workshops.component';
 import { PostWorkshopComponent } from './components/workshop/post-workshop/post-workshop.component';
 import { EditDeleteWorkshopComponent } from './components/workshop/edit-delete-workshop/edit-delete-workshop.component';
@@ -34,6 +32,7 @@ import { PostGiftcardComponent } from './components/giftcard/post-giftcard/post-
 import { EditDeleteGiftcardComponent } from './components/giftcard/edit-delete-giftcard/edit-delete-giftcard.component';
 import { ManageGiftcardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
 import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used/user-list-giftcards-used.component';
+import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +42,7 @@ import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used
     ManagePublicationsComponent,
     EditMaterialComponent,
     EditWorkshopComponent,
-    EditDeleteNotebookComponent,
+    EditNotebookComponent,
     ManageContactsComponent,
     ManageGiftcardsComponent,
     ManageCategoriesCollectionsComponent,
@@ -52,6 +51,12 @@ import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used
   imports: [
     CommonModule,
     AdminRoutingModule,
+    NgClass,
+    TitleCasePipe,
+    DecimalPipe,
+    EditorModule,
+    CounterZeroIfEmpty,
+    ModalComponent,
     ReactiveFormsModule,
     EditorModule,
     AnguilleComponent,
@@ -64,13 +69,14 @@ import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used
     PostMaterialComponent,
     CounterZeroIfEmpty,
     PostNotebookComponent,
+    EditDeleteNotebookComponent,
     PostWorkshopComponent,
     EditDeleteWorkshopComponent,
     PostPublicationComponent,
     EditDeletePublicationComponent,
     PostGiftcardComponent,
     EditDeleteGiftcardComponent,
-    UserListGiftcardsUsedComponent
+    UserListGiftcardsUsedComponent,
   ],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }

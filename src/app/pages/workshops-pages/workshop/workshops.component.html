@@ -3,51 +3,82 @@
 
 @if(workshopsWithDateToCome && workshopsWithDateToCome.length > 0) {
   <h3>A venir</h3>
-  <div class="workshops flex column">
+  <div class="workshops flex wrap space-around">
     @for(workshop of workshopsWithDateToCome; track workshop) {
         <app-workshop-thumbnail [workshop]="workshop"
                                 [disponibility]="inscriptionsReservedByWorkshopSlug(workshop.slug)"/>
     }
   </div>
+} @else {
+  <h3>Aucun Atelier à venir</h3>
 }
 
 @if(workshopsWithPastDate && workshopsWithPastDate.length > 0) {
   <h3>Passés</h3>
-  <div class="workshops flex column">
+
+  <div class="dropdown-container">
+    <div class="input-and-arrow flex">
+      <input id="inputSearchPublication"
+            type="text"
+            class="pointer"
+            [value]="size"
+            (focus)="toggleDropdown(true)"
+            readonly/>
+      <div class="arrow-icone flex center">
+        @if (isDropdownOpen) {
+          <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false)"></i>
+        } @else {
+          <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true)"></i>
+        }
+      </div>
+    </div>
+
+    <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownOpen}">
+      @for (number of [10, 20, 50]; track number) {
+        <li (click)="updateSizeValue(number)">
+          {{ number }}
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="workshops flex wrap space-around">
     @for(workshop of workshopsWithPastDate; track workshop) {
       <app-workshop-thumbnail [workshop]="workshop"
                              [disponibility]="inscriptionsReservedByWorkshopSlug(workshop.slug)"/>
     }
-
-    @if(workshopsWithPastDate && workshopsWithPastDate.length > 0 && calcLastPage() > 0) {
-      <div class="btns-articles-page flex center space-around">
-        <i 
-          [ngClass]="{'disabled': pageNumber === 0 }"
-          class="btn pointer fa-solid fa-backward-fast"
-          (click)="changePage('first')"
-        ></i>
-        <i
-          [ngClass]="{'disabled': pageNumber === 0 }"
-          class="btn pointer fa-solid fa-chevron-left"
-          (click)="changePage('prev')"
-        ></i>
-          
-        <p>Page {{ pageNumber + 1 }} / {{ calcLastPage() }}</p>
-      
-        <i
-          [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
-          class="btn pointer fa-solid fa-chevron-right"
-          (click)="changePage('next')"
-        ></i> 
-        <i
-          [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
-          class="btn pointer fa-solid fa-forward-fast"
-          (click)="changePage('last')"
-        ></i>
-      </div>
-    }
-
   </div>
+
+  @if(workshopsWithPastDate && workshopsWithPastDate.length > 0 && calcLastPage() > 0) {
+    <div class="choice-page flex center space-around">
+      <i 
+        [ngClass]="{'disabled': pageNumber === 0 }"
+        class="btn pointer fa-solid fa-backward-fast"
+        (click)="changePage('first')"
+      ></i>
+      <i
+        [ngClass]="{'disabled': pageNumber === 0 }"
+        class="btn pointer fa-solid fa-chevron-left"
+        (click)="changePage('prev')"
+      ></i>
+        
+      <p>Page {{ pageNumber + 1 }} / {{ calcLastPage() }}</p>
+    
+      <i
+        [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
+        class="btn pointer fa-solid fa-chevron-right"
+        (click)="changePage('next')"
+      ></i> 
+      <i
+        [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
+        class="btn pointer fa-solid fa-forward-fast"
+        (click)="changePage('last')"
+      ></i>
+    </div>
+  }
+
+} @else {
+  <h3>Pas d'Atelier passé</h3>
 }
 
 <app-modal [modalVisible]="modalVisible"

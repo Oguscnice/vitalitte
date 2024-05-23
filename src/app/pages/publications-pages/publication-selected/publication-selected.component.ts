@@ -5,14 +5,24 @@ import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 
 @Component({
+  standalone: false,
   selector: 'app-publication-selected',
   templateUrl: './publication-selected.component.html',
-  styleUrl: './publication-selected.component.scss'
+  styles: [`
+
+    @import "src/app/scss/variables.scss";
+
+    .actuality-date {
+      font-size: $normal-font-size;
+      margin-bottom: $normal-margin;
+    }
+    
+  `]
 })
 export class PublicationSelectedComponent extends BaseComponent {
 
-  public route = inject(ActivatedRoute);
-  public apiRequestsService = inject(ApiRequestsService);
+  private route = inject(ActivatedRoute);
+  private apiRequestsService = inject(ApiRequestsService);
 
   publicationSlug! : string;
   publicationSelected! : PublicationDto;

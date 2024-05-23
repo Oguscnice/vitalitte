@@ -5,7 +5,7 @@ import { urlValidator } from '../../../validators/urlValidators';
 import { priceValidator } from '../../../validators/priceValidators';
 import { FileInfo } from '../../../interfaces/FileInfo';
 import { CreateMaterial } from '../../../interfaces/Material';
-import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { TransformApiService } from '../../../services/transform-api.service';
@@ -13,7 +13,7 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
 
 @Component({
   standalone: true,
-  imports: [ NgClass, NgIf, ReactiveFormsModule, TitleCasePipe, NgFor, EditorModule, CounterZeroIfEmpty ],
+  imports: [ NgClass, ReactiveFormsModule, TitleCasePipe, EditorModule, CounterZeroIfEmpty ],
   selector: 'app-post-material',
   templateUrl: './post-material.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
@@ -33,7 +33,7 @@ export class PostMaterialComponent {
 
   fileSize!: number;
 
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
   
   newMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
@@ -43,8 +43,8 @@ export class PostMaterialComponent {
     picture: ['', [Validators.required, urlValidator()]]
   });
 
-  toggleDropdown(): void{
-    this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen
+  toggleDropdown(value : boolean): void{
+    this.isDropdownCategoryOpen = value
   }
 
   addEuroSign(event: any) {

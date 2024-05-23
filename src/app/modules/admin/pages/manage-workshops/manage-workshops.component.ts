@@ -8,11 +8,13 @@ import { ApiRequestsService } from 'src/app/shared/services/api-requests.service
 @Component({
   selector: 'app-manage-workshops',
   standalone: false,
-  template: ` <app-return-admin-home/>
+  template: `
+              <app-return-admin-home/>
+
               <h2>Gestion des Ateliers</h2>
 
-              <app-post-workshop (newWorkshop)="post($event)">
-              </app-post-workshop>
+              <app-post-workshop (newWorkshop)="post($event)"/>
+
               <app-edit-delete-workshop [workshops]="workshops"
               
                                         (changeAvailabilityWorkshop)="changeAvailability($event)"
@@ -20,6 +22,7 @@ import { ApiRequestsService } from 'src/app/shared/services/api-requests.service
               </app-edit-delete-workshop>
               
               <anguille [message]="messageResponseFromBackend"/>
+              
               <app-modal [modalVisible]="modalVisible"
                         [modalText]="modalText"
                         [multipleChoice]="true"

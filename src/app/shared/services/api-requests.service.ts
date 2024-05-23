@@ -1,3 +1,5 @@
+import { PublciationPaginated } from './../interfaces/Publication';
+import { GoogleReviews, Review } from './../interfaces/GoogleReviews';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -10,6 +12,7 @@ import { WorkshopDto } from '../interfaces/Workshop';
 import { CreateInscription, InscriptionDto } from '../interfaces/Inscription';
 import { ResponseEntity } from '../interfaces/ResponseEntity';
 import { PublicationDto } from '../interfaces/Publication';
+import { Pagination } from '../interfaces/Pagination';
 
 @Injectable({
   providedIn: 'root',
@@ -78,8 +81,8 @@ export class ApiRequestsService {
     return this.http.get<WorkshopDto[]>(URLAPI + "/workshops/date-to-come")
   }
 
-  getWorkshopsByPastDate(pageNumber : number): Observable<WorkshopDto[]> {
-    return this.http.get<WorkshopDto[]>(URLAPI + "/workshops/past-date/page-" + pageNumber)
+  getWorkshopsByPastDate(pagination : Pagination): Observable<WorkshopDto[]> {
+    return this.http.post<WorkshopDto[]>(URLAPI + "/workshops/past-date/paginated", pagination)
   }
 
   getCounterWorkshopsByPastDate(): Observable<number> {
@@ -118,12 +121,8 @@ export class ApiRequestsService {
     return this.http.get<PublicationDto[]>(URLAPI + "/publications")
   }
 
-  getAllPublicationsCounter(): Observable<number> {
-    return this.http.get<number>(URLAPI + "/publications/count")
-  }
-
-  getPublicationsFilteredCounter(value : string): Observable<number> {
-    return this.http.get<number>(URLAPI + "/publications/count/" + value)
+  getAllPublicationsCounter(publciationPaginated: PublciationPaginated): Observable<number> {
+    return this.http.post<number>(URLAPI + "/publications/count", publciationPaginated)
   }
 
   getPublicationsSpotlighted(value : string): Observable<PublicationDto[]> {
@@ -134,14 +133,9 @@ export class ApiRequestsService {
     return this.http.get<PublicationDto>(URLAPI + "/publications/" + publicationSlug)
   }
 
-  getPublicationPaginated(pageNumber : number): Observable<PublicationDto[]> {
-    return this.http.get<PublicationDto[]>(URLAPI + "/publications/page-" + pageNumber)
+  getPublicationPaginated(publciationPaginated: PublciationPaginated): Observable<PublicationDto[]> {
+    return this.http.post<PublicationDto[]>(URLAPI + "/publications/paginated" , publciationPaginated)
   }
-
-  getPublicationPaginatedFiltered(pageNumber : number, value : string): Observable<PublicationDto[]> {
-    return this.http.get<PublicationDto[]>(URLAPI + "/publications/page-" + pageNumber + "/" + value)
-  }
-
 
   //-------------------
   //-----GiftCards-----
@@ -149,5 +143,22 @@ export class ApiRequestsService {
 
   getIsExpiredGiftCard(code : string): Observable<boolean> {
     return this.http.get<boolean>(URLAPI + "/giftCards/is-expired/" + code)
+  }
+
+  //-------------------
+  //--Google-Reviews---
+  //-------------------
+
+  private googleAccountId : string = "";
+  private googleLocationId : string = "";
+
+  getGoogleReviews(): Observable<any> {
+  // getGoogleReviews(): Observable<GoogleReviews[]> {
+    return this.http.get<GoogleReviews[]>(`https://mybusiness.googleapis.com/v4/accounts/${this.googleAccountId}/locations/${this.googleLocationId}/reviews`)
+  }
+
+  getOneReview(reviewId : number): Observable<any> {
+  // getOneReview(reviewId : number): Observable<Review> {
+    return this.http.get<Review>(`https://mybusiness.googleapis.com/v4/accounts/${this.googleAccountId}/locations/${this.googleLocationId}/reviews/` + reviewId)
   }
 }

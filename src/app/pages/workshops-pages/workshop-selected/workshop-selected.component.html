@@ -1,29 +1,27 @@
 @if(workshopSelected) {
-  <app-h1 [titleChild]="'Atelier : ' + workshopSelected.title"
-          [backgroundImageChild]="workshopSelected.picture">
-  </app-h1>
-  <div [innerHTML]="workshopSelected.description"></div>
+  <app-h1 [titleChild]="'Atelier : ' + workshopSelected.title" [backgroundImageChild]="workshopSelected.picture"/>
 
-  @if(workshopSelected.registrations === 0
-      || resgistrationsFree() > 0) {
+  <div class="workshop-content" [innerHTML]="workshopSelected.description"></div>
 
-    @if(workshopSelected.registrations === 0) {
-      <p>Places illimitées </p>
-    } @else if(resgistrationsFree() > 1){
-      <p>Places disponibles : {{ resgistrationsFree() }} </p> 
+  @if(resgistrationsFree() > 0) {
+    @if (workshopSelected.available) {
+      @if(resgistrationsFree() === 1) {
+        <p class="workshop-resgistrations-free">Place disponible : {{ resgistrationsFree() }} </p>
+      } @else {
+        <p class="workshop-resgistrations-free">Places disponibles : {{ resgistrationsFree() }} </p> 
+      }
+      <button class="btn-normal" (click)="isFormVisible = !isFormVisible"> Formulaire d'inscription </button>
     } @else {
-      <p>Place disponible : {{ resgistrationsFree() }} </p>
+      <p class="workshop-resgistrations-free">Inscription Indisponible.</p>
     }
-    <button class="btn-normal pointer" (click)="isFormVisible = !isFormVisible"> Formulaire d'inscription </button>
   } @else {
-    <p>Inscription impossible</p>
+    <div class="flex center">
+      <button class="btn-normal btn-grey">COMPLET</button>
+      <p class="workshop-resgistrations-free">Plus de place disponible.</p>
+    </div>
   }
 
-  @if(isFormVisible) {
-    <div class="title-functionality flex center">
-      <h4>Formulaire d'inscription</h4>
-    </div>
-    
+  @if(isFormVisible && resgistrationsFree() > 0) {
     <form (ngSubmit)="(newInscriptionForm.valid)"
           [formGroup]="newInscriptionForm"
           #myForm="ngForm">
@@ -31,10 +29,10 @@
       <fieldset class="flex column">
         <label for="lastname">Nom :</label>
         <input type="text"
-              id="lastname"
-              placeholder="Nom..."
-              formControlName="lastname"
-              autocomplete="off"/>
+               id="lastname"
+               placeholder="Nom..."
+               formControlName="lastname"
+               autocomplete="off"/>
     
         @if(isFormSubmit && myForm.submitted && newInscriptionForm.controls['lastname'].invalid) {
           <div>
@@ -45,16 +43,15 @@
             }
           </div>
         }
-    
       </fieldset>
     
       <fieldset class="flex column">
         <label for="firstname">Prénom :</label>
         <input type="text"
-              id="firstname"
-              placeholder="Prénom..."
-              formControlName="firstname"
-              autocomplete="off"/>
+               id="firstname"
+               placeholder="Prénom..."
+               formControlName="firstname"
+               autocomplete="off"/>
     
         @if(isFormSubmit && myForm.submitted && newInscriptionForm.controls['firstname'].invalid) {
           <div>
@@ -110,12 +107,14 @@
     
       <fieldset class="flex column">
         <label for="quantity">Combien de places ?</label>
-        <p> {{ workshopSelected.price | number:'0.2' }}€ /personne </p>
-        <input type="number"
-              id="quantity"
-              formControlName="quantity"
-              min="0"
-              [max]="workshopSelected.registrations === 0 || resgistrationsFree() > 5 ? 5 : resgistrationsFree()"/>
+        <div class="flex">
+          <p class="price-per-person"> {{ workshopSelected.price | number:'0.2' }}€ /personne </p>
+          <input type="number"
+                id="quantity"
+                formControlName="quantity"
+                min="0"
+                [max]="workshopSelected.registrations === 0 || resgistrationsFree() > 5 ? 5 : resgistrationsFree()"/>
+        </div>
         @if(isFormSubmit && newInscriptionForm.controls['quantity'].invalid) {
         <div>
           @if(newInscriptionForm.controls.quantity.errors?.['required']) {
@@ -128,7 +127,7 @@
     
       </fieldset>
     
-      <p>Montant total : {{ shoppingCartWorkshop.totalPrice()| number: '0.2'}} €</p>
+      <p class="total-price">Montant total : {{ shoppingCartWorkshop.totalPrice()| number: '0.2'}} €</p>
 
       @if(!inscriptionSlugNotConfirmed) {
         <button class="btn-normal" (click)="postNewInscription()">S'inscrire</button>

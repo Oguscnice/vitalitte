@@ -1,20 +1,33 @@
 @import "../scss/variables.scss";
 
-.btn-normal{
+.btn-normal {
   @include outline-picture;
   background-color: $lilac-light;
   margin: $half-margin;
   padding: $double-padding;
   font-family: $font-family-text;
-  font-size: $normal-font-size;
+  font-size: $double-font-size;
   font-weight: bold;
   text-align: center;
   box-shadow: 8px 8px 4px rgba($lilac-light, 0.8);
   color: $white;
-  text-shadow: 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
-  0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
-  0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
-  0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
-  0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black, 0 0 0.7px $black,
-  0 0 0.7px $black;
+  @include text-shadow (0.4px, $black);
+  cursor: pointer;
+}
+
+.btn-grey {
+  background-color: $grey;
+  box-shadow: 8px 8px 4px rgba($grey, 0.8);
+  border: 2px solid $grey;
+  cursor: not-allowed;
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  .btn-normal {
+    font-size: $normal-font-size;
+    padding: 0px;
+    height: 40px;
+  }
 }

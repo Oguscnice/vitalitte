@@ -6,6 +6,7 @@ import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 
 @Component({
+  standalone: false,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -79,9 +80,6 @@ export class HomeComponent extends BaseComponent{
         next: (publicationsSpotlighted) => {
           this.publicationsSpotlighted = publicationsSpotlighted;
           for(let publication of this.publicationsSpotlighted){
-            if(publication.title.length > 50){
-              publication.title = this.troncateString(publication.title, 50);
-            } 
             if(publication.description.length > 50){
               publication.description = this.troncateString(publication.description, 50);
             } 

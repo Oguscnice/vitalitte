@@ -1,62 +1,134 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
-import { PublicationDto } from 'src/app/shared/interfaces/Publication';
+import { PublciationPaginated, PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 
 @Component({
+  standalone: false,
   selector: 'app-publications',
   templateUrl: './publications.component.html',
-  styleUrl: './publications.component.scss'
+  styles: [`
+            @import "../../../scss/variables.scss";
+
+            .publications {
+
+              .publications-section {
+                flex-direction: column;
+
+                app-publication-thumbnail {
+                  width: 100%;
+                  margin-top: $half-margin;
+                }
+              }
+
+              .input-search {
+                flex-direction: column;
+                width: 100%;
+
+                input {
+                  width: 100%;
+                }
+                .btn-normal {
+                  width: 40%;
+                  font-size: $double-font-size;
+                }
+              }
+
+              .dropdown-container {
+                .input-and-arrow {
+                  .arrow-icone {
+                    margin-top : 0px;
+                  }
+                }
+              }
+            }
+
+            .choice-page {
+              margin-top: $normal-margin;
+              width: 400px;
+            }
+
+            // Tablettes vers ordinateurs portables :
+            @media screen and (min-width: 992px) {
+              .publications {
+                .input-search {
+                  flex-direction: row;
+                  input {
+                    width: 72%
+                  }
+                  button {
+                    width: 24%;
+                  }
+                }
+                
+                .publications-section {
+                  flex-direction: row;
+
+                  app-publication-thumbnail {
+                    width: 50%;
+                  }
+                }
+              }
+            }
+          `]
 })
 export class PublicationsComponent extends BaseComponent {
 
   private apiRequestsService = inject(ApiRequestsService);
-  publications! : PublicationDto[];
-  publicationsSpotlightedTrue! : PublicationDto[];
+  protected publications! : PublicationDto[];
+  protected publicationsSpotlightedTrue! : PublicationDto[];
 
-  pageNumber: number = 0;
-  counterPublications: number = 0;
-  valueSearch : string = "";
+  protected pageNumber: number = 0;
+  protected size: number = 10;
+  private counterPublications: number = 0;
+  private valueSearch : string = "";
+  isDropdownOpen: boolean = false;
 
   backgroundImageParentHome: string =
     '../../../assets/images/figma/school-work.jpg';
 
   ngOnInit(): void {
-    this.getPublicationPaginated();
+    this.getPublicationsAndCounter();
     this.getPublicationsSpotlighted();
-    this.getCounterAllPublications();
+  }
+
+  getPublicationsAndCounter(): void {
+    this.getPublicationPaginated();
+    this.getCounterPublications();
+  }
+
+  toggleDropdown(value: boolean): void {
+    this.isDropdownOpen = value;
+  }
+
+  updateSizeValue(value: number): void {
+    this.size = value;
+    this.getPublicationsAndCounter();
+    this.toggleDropdown(false);
+  }
+
+  formatObjectPublicationPaginated(): PublciationPaginated {
+    return {
+      valueSearch: this.valueSearch,
+      pagination: {
+        page: this.pageNumber,
+        size: this.size,
+      }
+    }
   }
 
   getPublicationPaginated(): void {
     this.subscriptions.push(
-      this.apiRequestsService.getPublicationPaginated(this.pageNumber).subscribe({
+      this.apiRequestsService.getPublicationPaginated(this.formatObjectPublicationPaginated()).subscribe({
         next: (publications) => this.publications = publications,
         error: (err) => (this.changeMessage(err.error.message))
       })
     )
   }
 
-  getPublicationsFiltered(): void {
+  getCounterPublications(): void {
     this.subscriptions.push(
-      this.apiRequestsService.getPublicationPaginatedFiltered(this.pageNumber, this.valueSearch).subscribe({
-        next: (publications) => this.publications = publications,
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getCounterAllPublications(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getAllPublicationsCounter().subscribe({
-        next: (counter) => this.counterPublications = counter,
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getCounterPublicationsFiltered(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getPublicationsFilteredCounter(this.valueSearch).subscribe({
+      this.apiRequestsService.getAllPublicationsCounter(this.formatObjectPublicationPaginated()).subscribe({
         next: (counter) => this.counterPublications = counter,
         error: (err) => (this.changeMessage(err.error.message))
       })
@@ -73,7 +145,7 @@ export class PublicationsComponent extends BaseComponent {
   }
 
   calcLastPage(): number {
-    return Math.floor(this.counterPublications / 6) + (this.counterPublications % 6 === 0 ? 0 : 1)
+    return Math.floor(this.counterPublications / this.size) + (this.counterPublications % this.size === 0 ? 0 : 1)
   }
 
   filteredByValueSearch(event: KeyboardEvent): void {
@@ -92,16 +164,6 @@ export class PublicationsComponent extends BaseComponent {
       this.pageNumber += this.pageNumber < this.calcLastPage() ? 1 : 0
     }
 
-    this.selectMethod();
-  }
-
-  selectMethod(): void {
-    if(this.valueSearch){
-      this.getCounterPublicationsFiltered();
-      this.getPublicationsFiltered();
-    } else {
-      this.getCounterAllPublications();
-      this.getPublicationPaginated();
-    }
+    this.getPublicationPaginated();
   }
 }

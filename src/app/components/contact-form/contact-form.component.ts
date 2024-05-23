@@ -1,18 +1,21 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoaderComponent } from '../loader/loader.component';
+import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   standalone: true,
-  imports: [ ReactiveFormsModule, NgIf, NgFor ],
+  imports: [ ReactiveFormsModule, LoaderComponent, NgClass, NgStyle ],
   selector: 'app-contact-form',
   templateUrl: './contact-form.component.html',
   styleUrls: ['./contact-form.component.scss']
 })
 export class ContactFormComponent {
+
   isFormClicked: boolean = false;
   hasErrors: boolean = false;
   isLoaderVisible: boolean = false;
+  isDropdownOpen: boolean = false;
 
   lastnameValue: string = '';
   firstnameValue: string = '';
@@ -20,18 +23,28 @@ export class ContactFormComponent {
   phoneValue: string = '';
   themeValue: string = '';
   messageValue: string = '';
+
+  themeList: string[] = [
+    "Carnets",
+    "Ateliers",
+    "Autre sujet"
+  ]
+
+  toggleDropdown(value: boolean): void {
+    this.isDropdownOpen = value;
+  }
   
-  changeLastnameValue(event: KeyboardEvent) {
+  changeLastnameValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.lastnameValue = inputElement.value;
   }
   
-  changeFirstnameValue(event: KeyboardEvent) {
+  changeFirstnameValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.firstnameValue = inputElement.value;
   }
   
-  changeEmailValue(event: KeyboardEvent) {
+  changeEmailValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.emailValue = inputElement.value;
     this.validateEmail();
@@ -42,11 +55,11 @@ export class ContactFormComponent {
     this.phoneValue = inputElement.value;
   }
   
-  changeThemeValue(themeClicked: string) {
+  changeThemeValue(themeClicked: string): void {
     this.themeValue = themeClicked;
   }
   
-  changeMessageValue(event: KeyboardEvent) {
+  changeMessageValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.messageValue = inputElement.value;
   }
@@ -68,7 +81,7 @@ export class ContactFormComponent {
     return false;
   }
   
-  changeSubmitted() {
+  changeSubmitted(): void {
     this.isFormClicked = true;
     if (this.checkErrors()) {
       this.isLoaderVisible = true;

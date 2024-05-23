@@ -1,74 +1,91 @@
 <div class="title-functionality flex center">
   <h4>Créer une nouvelle Publication</h4>
   <i class="fa-solid fa-circle-plus"
-    (click)="isFormVisible = !isFormVisible"
-    [ngClass]="{'rotated45': isFormVisible}"></i>
+     (click)="isFormVisible = !isFormVisible"
+     [ngClass]="{'rotated45': isFormVisible}"></i>
 </div>
 
-<form *ngIf="isFormVisible"
-      (ngSubmit)="(newPublicationForm.valid)"
-      [formGroup]="newPublicationForm"
-      #myForm="ngForm">
+@if (isFormVisible) {
+  <form (ngSubmit)="(newPublicationForm.valid)"
+        [formGroup]="newPublicationForm"
+        #myForm="ngForm">
 
-  <fieldset class="flex column">
-    <label for="title">Titre de la publication :</label>
-    <input type="text"
-            id="title"
-            placeholder="Titre..."
-            formControlName="title"
-            autocomplete="off"/>
+    <fieldset class="flex column">
+      <label for="title">Titre de la publication :</label>
+      <input type="text"
+             id="title"
+             placeholder="Titre..."
+             formControlName="title"
+             autocomplete="off"/>
 
-    <div *ngIf="isFormSubmit && myForm.submitted && newPublicationForm.controls['title'].invalid">
-      <small *ngIf="newPublicationForm.controls.title.errors?.['required']">Le titre de la publication est obligatoire.</small>
-      <small *ngIf="newPublicationForm.controls.title.errors?.['maxlength']">Le titre de la publication ne doit pas dépasser 255 charactères.</small>
-    </div>
-  </fieldset>
+       @if (isFormSubmit && myForm.submitted && newPublicationForm.controls['title'].invalid) {
+        <div>
+          @if (newPublicationForm.controls.title.errors?.['required']) {
+            <small>Le titre de la publication est obligatoire.</small>
+          } @else if (newPublicationForm.controls.title.errors?.['maxlength']) {
+            <small>Le titre de la publication ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+       }
+    </fieldset>
 
-  <fieldset class="flex column">
-    <label for="description">Description : </label>
-    <editor [init]="toolBarConfig"
+    <fieldset class="flex column">
+      <label for="description">Description : </label>
+      <editor [init]="toolBarConfig"
 
-            placeholder="Description.."
-            formControlName="description"
-            autocomplete="off">
-    </editor>
-    <p [style.color]=" this.newPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.newPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
-    
-    <div *ngIf="isFormSubmit && newPublicationForm.controls['description'].invalid">
-      <small *ngIf="newPublicationForm.controls.description.errors?.['required']">La description de l'atelier est requise.</small>
-      <small *ngIf="newPublicationForm.controls.description.errors?.['maxlength']">La description de l'atelier ne doit pas dépasser 2000 charactères.</small>
-    </div>
-  </fieldset>
+              placeholder="Description.."
+              formControlName="description"
+              autocomplete="off">
+      </editor>
+      <p [style.color]=" this.newPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.newPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
+      
+      @if (isFormSubmit && newPublicationForm.controls['description'].invalid) {
+        <div>
+          @if (newPublicationForm.controls.description.errors?.['required']) {
+            <small>La description de l'atelier est requise.</small>
+          } @else if (newPublicationForm.controls.description.errors?.['maxlength']) {
+            <small>La description de l'atelier ne doit pas dépasser 2000 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
 
-  <fieldset class="flex column">
-    <label for="picture">Image : </label>
-    <input class="display-none"
-           type="file"
-           accept="image/png, image/jpeg, image/bmp, image/gif"
-           (change)="onFileSelected($event)"
-           #fileUpload/>
-    <input type="text"
-           id="picture"
-           formControlName="picture"
-           value="{{ newPublicationForm.get('picture') }}"
-           (keyup)="changeImageValue($event)"
-           placeholder="URL de l'image..."/>
+    <fieldset class="flex column">
+      <label for="picture">Image : </label>
+      <input class="display-none"
+             type="file"
+             accept="image/png, image/jpeg, image/bmp, image/gif"
+             (change)="onFileSelected($event)"
+             #fileUpload/>
+      <input type="text"
+             id="picture"
+             formControlName="picture"
+             value="{{ newPublicationForm.get('picture') }}"
+             (keyup)="changeImageValue($event)"
+             placeholder="URL de l'image..."/>
 
-    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+      <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
 
-    <img class="pointer"
-         (click)="fileUpload.click()"
-         [src]="newPublicationForm.get('picture')!.value"
-         alt="Photo à choisir pour le carnet"/>
+      <img class="pointer"
+           (click)="fileUpload.click()"
+           [src]="newPublicationForm.get('picture')!.value"
+           alt="Photo à choisir pour le carnet"/>
 
-    <div *ngIf="isFormSubmit && newPublicationForm.controls['picture'].invalid">
-      <small *ngIf="fileSize > fileUploadService.SIZE_MAX">Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
-    </div>
-  </fieldset>
+      @if (isFormSubmit && newPublicationForm.controls['picture'].invalid) {
+        <div>
+          @if (fileSize > fileUploadService.SIZE_MAX) {
+            <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
+          } @else if (newPublicationForm.controls.description.errors?.['invalidUrl']) {
+            <small>L'image doit respecter le format d'une URL (http://, https:// ou www.).</small>
+          }
+        </div>
+      }
+    </fieldset>
 
-  <button class="btn-submit-admin"
-          type="submit"
-          (click)="submitNewPublicationForm()">
-  Créer
-  </button>
-</form>
+    <button class="btn-submit-admin"
+            type="submit"
+            (click)="submitNewPublicationForm()">
+      Créer
+    </button>
+  </form>
+}

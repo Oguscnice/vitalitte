@@ -1,5 +1,5 @@
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 
@@ -10,11 +10,7 @@ import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 })
 export class NotebooksPreparedComponent extends BaseComponent{
 
-  constructor(
-    private apiRequestsService : ApiRequestsService
-  ){
-    super()
-  }
+  private apiRequestsService = inject(ApiRequestsService);
 
   notebooksListParent! : NotebookDto[];
   titleParentNotebooks = "Carnets Artisanaux"

@@ -3,62 +3,66 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SlugNameDto } from '../../../interfaces/SlugNameDto';
 
 @Component({
-  selector: 'app-slug-name-dto-edit-delete',
   standalone: true,
-  imports: [ NgIf, NgClass, NgFor ],
+  imports: [ NgClass ],
+  selector: 'app-slug-name-dto-edit-delete',
   template: ` <div class="title-functionality flex center">
                 <h4 class="flex center">Gérer les {{ type }}</h4>
                 <i class="fa-solid fa-arrow-down" (click)="isTableVisible = !isTableVisible" [ngClass]="{'rotated180': isTableVisible}"></i>
               </div>
+              @if (items && isTableVisible) {
+                <table>
+                  <thead>
+                    <tr>
+                      <td>
+                        <p>Nom</p>
+                      </td>
+                      <td>
+                        <p>Modif.</p>
+                      </td>
+                      <td>
+                        <p>Supp.</p>
+                      </td>
+                    </tr>
+                  </thead>
 
-              <div *ngIf="!items || items.length <= 0">Aucun Article</div>
-
-              <table *ngIf="items && isTableVisible">
-                <thead>
-                  <tr>
-                    <td>
-                      <p>Nom</p>
-                    </td>
-                    <td>
-                      <p>Modif.</p>
-                    </td>
-                    <td>
-                      <p>Supp.</p>
-                    </td>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <tr *ngFor="let item of items ; let index = index"
-                      [ngClass]="index % 2 ? 'bg-dark' : ''">
-                <td class="flex column">
-                  <p *ngIf="item.slug !== itemToEdit?.slug">{{ item.name }}</p>
-                  <input *ngIf="item.slug === itemToEdit?.slug"
-                        type="text"
-                        value="{{ item.name }}"
-                        (keyup)="changeNameValue($event)"/>
-                  <small *ngIf="!itemToEdit?.name && itemToEdit?.slug === item.slug">Le nom de categorie ne peut être vide</small>
-                  </td>
-                  <td>
-                    <i *ngIf="item.slug !== itemToEdit?.slug"
-                      (click)="canEdit(item)"
-                      class="fa-solid fa-pencil flex center"></i>
-                    <div class="flex center space-around" >
-                    <i *ngIf="item.slug === itemToEdit?.slug"
-                      (click)="edit()"
-                      class="fa-solid fa-check-circle"></i>
-                    <i *ngIf="item.slug === itemToEdit?.slug"
-                      (click)="itemToEdit = null"
-                      class="fa-solid fa-circle-xmark"></i>
-                    </div>
-                  </td>
-                  <td>
-                    <i (click)="itemToEdit?.slug !== item.slug ? delete(item) : ''"
-                      class="fa-solid fa-trash-can flex center"
-                      [ngClass]="itemToEdit?.slug === item.slug ? 'disabled' : '' "></i>
-                  </td>
-                </tbody>
-              </table>
+                  <tbody>
+                    @for (item of items; track item; let index = $index) {
+                      <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+                        <td class="flex column">
+                          @if (item.slug !== itemToEdit?.slug) {
+                            <p>{{ item.name }}</p>
+                          } @else {
+                            <input type="text"
+                                  value="{{ item.name }}"
+                                  (keyup)="changeNameValue($event)"/>
+                          }
+                          @if (!itemToEdit?.name && itemToEdit?.slug === item.slug) {
+                            <small>Le nom de categorie ne peut être vide</small>
+                          }
+                        </td>
+                        <td>
+                          @if (item.slug !== itemToEdit?.slug) {
+                            <i (click)="canEdit(item)" class="fa-solid fa-pencil flex center"></i>
+                          } @else {
+                            <div class="flex center space-around" >
+                              <i (click)="edit()" class="fa-solid fa-check-circle"></i>
+                              <i (click)="itemToEdit = null" class="fa-solid fa-circle-xmark"></i>
+                            </div>
+                          }
+                        </td>
+                        <td>
+                          <i (click)="itemToEdit?.slug !== item.slug ? delete(item) : ''"
+                              class="fa-solid fa-trash-can flex center"
+                              [ngClass]="itemToEdit?.slug === item.slug ? 'disabled' : '' "></i>
+                        </td>
+                      </tr>
+                    }
+                    </tbody>
+                </table>
+              } @else if (!items || items.length <= 0) {
+                <h5>Aucun Article</h5>
+              }
               `,
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })

@@ -11,13 +11,13 @@
     p{
       font-size: $triple-font-size;
     }
-    .descriptions-list{
-      margin: $normal-margin 0;
-      .description{
-        font-size: $double-font-size;
-        text-align: left;
-      }
-    }
+    // .descriptions-list{
+    //   margin: $normal-margin 0;
+    //   .description{
+    //     font-size: $double-font-size;
+    //     text-align: left;
+    //   }
+    // }
     .components-list{
       width: 100%;
       font-size: calc($normal-font-size * 1.2);

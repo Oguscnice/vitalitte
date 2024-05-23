@@ -38,6 +38,7 @@ import { PublicationThumbnailComponent } from './components/publication-thumbnai
 import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
 import { WorkshopThumbnailComponent } from './components/workshop-thumbnail/workshop-thumbnail.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { TitleCasePipe } from '@angular/common';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { ModalComponent } from './components/modal/modal.component';
     HttpClientModule,
     BrowserAnimationsModule,
     RouterLink,
+    TitleCasePipe,
 
     HeaderComponent,
     NewsHeadbandComponent,

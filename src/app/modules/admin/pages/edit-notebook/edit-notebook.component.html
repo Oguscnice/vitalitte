@@ -10,21 +10,24 @@
            formControlName="name"
            autocomplete="off"/>
 
-    <div *ngIf="isFormSubmit && myForm.submitted && editNotebookForm.controls['name'].invalid">
-      <small *ngIf="editNotebookForm.controls.name.errors?.['required']">Le nom du Carnet est obligatoire.</small>
-      <small *ngIf="editNotebookForm.controls.name.errors?.['maxlength']">Le nom du Carnet ne doit pas dépasser 255 charactères.</small>
-    </div>
+    @if (isFormSubmit && myForm.submitted && editNotebookForm.controls['name'].invalid) {
+      <div>
+        @if (editNotebookForm.controls.name.errors?.['required']) {
+          <small>Le nom du Carnet est obligatoire.</small>
+        } @else if (editNotebookForm.controls.name.errors?.['maxlength']) {
+          <small>Le nom du Carnet ne doit pas dépasser 255 charactères.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
     <label for="mainPicture">Image Principale : </label>
-    <input
-      class="display-none"
-      type="file"
-      accept="image/png, image/jpeg, image/bmp, image/gif"
-      (change)="onFileSelected($event, 'mainPicture')"
-      #fileUpload
-    />
+    <input class="display-none"
+           type="file"
+           accept="image/png, image/jpeg, image/bmp, image/gif"
+           (change)="onFileSelected($event, 'mainPicture')"
+           #fileUpload/>
     <input type="text"
            id="mainPicture"
            formControlName="mainPicture"
@@ -39,9 +42,15 @@
          src="{{ editNotebookForm.get('mainPicture')!.value }}"
          alt="Photo à choisir pour le matériel"/>
 
-    <div *ngIf="isFormSubmit && editNotebookForm.controls['mainPicture'].invalid">
-      <small *ngIf="fileSize > fileUploadService.SIZE_MAX">Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
-    </div>
+    @if (isFormSubmit && editNotebookForm.controls['mainPicture'].invalid) {
+      <div>
+        @if (fileSize > fileUploadService.SIZE_MAX) {
+          <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
+        } @else if (editNotebookForm.controls.mainPicture.errors?.['invalidUrl']) {
+          <small>L'image doit être une URL (commencer par => http:// ou https:// ou www.).</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -49,32 +58,38 @@
     <div class="dropdown-container">
       <div class="input-and-arrow flex">
         <input type="text"
-              id="category"
-              placeholder="Choississez la catégorie du carnet..."
-              autocomplete="off"
-              class="pointer"
-              (click)="toggleDropdown('categoryDropdown')"
-              [value]="categoryDtoForNotebook ? categoryDtoForNotebook.name : ''"
-              readonly/>
+               id="category"
+               placeholder="Choississez la catégorie du carnet..."
+               autocomplete="off"
+               class="pointer"
+               (focus)="toggleDropdown(true, 'categoryDropdown')"
+               (blur)="toggleDropdown(false, 'categoryDropdown')"
+               [value]="categoryDtoForNotebook ? categoryDtoForNotebook.name : ''"
+               readonly/>
         <div class="arrow-icone flex center">
-          <i class="fa-solid fa-circle-chevron-down pointer"
-              *ngIf="isDropdownCategoryOpen"
-              (click)="toggleDropdown('categoryDropdown')"></i>
-          <i class="fa-solid fa-circle-chevron-up pointer"
-              *ngIf="!isDropdownCategoryOpen"
-            (click)="toggleDropdown('categoryDropdown')"></i>
+          @if (isDropdownCategoryOpen) {
+            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false, 'categoryDropdown')"></i>
+          } @else {
+            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true, 'categoryDropdown')"></i>
+          }
         </div>
       </div>
       <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownCategoryOpen}">
-        <li *ngFor="let category of categories" (click)="categoryClicked(category); toggleDropdown('categoryDropdown') ">
+        @for (category of categories; track category) {
+          <li (click)="categoryClicked(category); toggleDropdown(false, 'categoryDropdown') ">
             {{ category.name | titlecase }}
-        </li>
+          </li>
+        }
       </ul>
     </div>
 
-    <div *ngIf="isFormSubmit">
-      <small *ngIf="categoryDtoForNotebook === null">La catégorie du carnet est obligatoire.</small>
-    </div>
+    @if (isFormSubmit && !categoryDtoForNotebook) {
+      <div>
+        @if (categoryDtoForNotebook === null) {
+          <small>La catégorie du carnet est obligatoire.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -82,32 +97,38 @@
     <div class="dropdown-container">
       <div class="input-and-arrow flex">
         <input type="text"
-              id="collection"
-              placeholder="Choississez la collection du carnet..."
-              autocomplete="off"
-              class="pointer"
-              (click)="toggleDropdown('collectionDropdown')"
-              [value]="collectionDtoForNotebook ? collectionDtoForNotebook.name : ''"
-              readonly/>
+               id="collection"
+               placeholder="Choississez la collection du carnet..."
+               autocomplete="off"
+               class="pointer"
+               (focus)="toggleDropdown(true, 'collectionDropdown')"
+               (blur)="toggleDropdown(false, 'collectionDropdown')"
+               [value]="collectionDtoForNotebook ? collectionDtoForNotebook.name : ''"
+               readonly/>
         <div class="arrow-icone flex center">
-          <i class="fa-solid fa-circle-chevron-down pointer"
-              *ngIf="isDropdownCollectionOpen"
-              (click)="toggleDropdown('collectionDropdown')"></i>
-          <i class="fa-solid fa-circle-chevron-up pointer"
-              *ngIf="!isDropdownCollectionOpen"
-            (click)="toggleDropdown('collectionDropdown')"></i>
+          @if (isDropdownCollectionOpen) {
+            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false, 'collectionDropdown')"></i>
+          } @else {
+            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(false, 'collectionDropdown')"></i>
+          }
         </div>
       </div>
       <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownCollectionOpen}">
-        <li *ngFor="let collection of collections" (click)="collectionClicked(collection); toggleDropdown('collectionDropdown') ">
+        @for (collection of collections; track collection) {
+          <li (click)="collectionClicked(collection); toggleDropdown(false, 'collectionDropdown') ">
             {{ collection.name | titlecase }}
-        </li>
+          </li>
+        }
       </ul>
     </div>
 
-    <div *ngIf="isFormSubmit">
-      <small *ngIf="categoryDtoForNotebook === null">La catégorie du carnet est obligatoire.</small>
-    </div>
+    @if (isFormSubmit && !categoryDtoForNotebook) {
+      <div>
+        @if (categoryDtoForNotebook === null) {
+          <small>La catégorie du carnet est obligatoire.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -115,25 +136,27 @@
     <div class="dropdown-container">
       <div class="input-and-arrow flex">
         <input type="text"
-              id="materials"
-              placeholder="Choississez le(s) matériel(aux) du carnet..."
-              autocomplete="off"
-              class="pointer"
-              (click)="toggleDropdown('materialsDropdown')"
-              readonly/>
+               id="materials"
+               placeholder="Choississez le(s) matériel(aux) du carnet..."
+               autocomplete="off"
+               class="pointer"
+               (focus)="toggleDropdown(true, 'materialsDropdown')"
+               (blur)="toggleDropdown(false, 'materialsDropdown')"
+               readonly/>
         <div class="arrow-icone flex center">
-          <i class="fa-solid fa-circle-chevron-down pointer"
-              *ngIf="isDropdownMaterialsOpen"
-              (click)="toggleDropdown('materialsDropdown')"></i>
-          <i class="fa-solid fa-circle-chevron-up pointer"
-              *ngIf="!isDropdownMaterialsOpen"
-            (click)="toggleDropdown('materialsDropdown')"></i>
+          @if (isDropdownMaterialsOpen) {
+            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false, 'materialsDropdown')"></i>
+          } @else {
+            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true, 'materialsDropdown')"></i>
+          }
         </div>
       </div>
       <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownMaterialsOpen}">
-        <li *ngFor="let material of materials" (click)="materialClicked(material); toggleDropdown('materialsDropdown') ">
+        @for (material of materials; track material) {
+          <li (click)="materialClicked(material); toggleDropdown(false, 'materialsDropdown') ">
             {{ material.name | titlecase }} ( {{ material.materialType | titlecase }} )
-        </li>
+          </li>
+        }
       </ul>
       <table>
         <thead>
@@ -153,66 +176,79 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngIf="materialsDtoForNotebook.length < 1">
-            <td>
-              <p>Aucun matériel sélectionné</p>
-            </td>
-          </tr>
-          <ng-container *ngIf="materialsDtoForNotebook.length > 0">
-            <tr *ngFor="let material of materialsDtoForNotebook">
+          @if (materialsDtoForNotebook.length < 1) {
+            <tr>
               <td>
-                <p class="flex text-left"> {{ material.name | titlecase }} </p>
-              </td>
-              <td>
-                <p> {{ material.price | number :'0.2' }} €</p>
-              </td>
-              <td>
-                <p> {{ material.materialType | titlecase }} </p>
-              </td>
-              <td>
-                <i (click)="deleteMaterialFromList(material)" class="fa-solid fa-trash-can pointer flex center"></i>
+                <p>Aucun matériel sélectionné</p>
               </td>
             </tr>
-          </ng-container>
+          } @else if (materialsDtoForNotebook.length > 0) {
+            @for (material of materialsDtoForNotebook; track material) {
+              <tr>
+                <td>
+                  <p class="flex text-left"> {{ material.name | titlecase }} </p>
+                </td>
+                <td>
+                  <p> {{ material.price | number :'0.2' }} €</p>
+                </td>
+                <td>
+                  <p> {{ material.materialType | titlecase }} </p>
+                </td>
+                <td>
+                  <i (click)="deleteMaterialFromList(material)" class="fa-solid fa-trash-can pointer flex center"></i>
+                </td>
+              </tr>
+            }
+          }
         </tbody>
       </table>
       <p>Total : {{ totalPriceMaterials() }}€</p>
     </div>
 
-    <div *ngIf="isFormSubmit">
-      <small *ngIf="materialsDtoForNotebook.length < 1">Au moins un matériel du carnet est obligatoire.</small>
-    </div>
+    @if (isFormSubmit && materialsDtoForNotebook.length < 1) {
+      <div>
+        <small>Au moins un matériel du carnet est obligatoire.</small>
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
     <label for="price">Quel prix ?</label>
-    <input
-      type="number"
-      id="price"
-      formControlName="price"
-      placeholder="0"
-    />
-    <div *ngIf="isFormSubmit && editNotebookForm.controls['price'].invalid">
-      <small *ngIf="editNotebookForm.controls.price.errors?.['invalidPriceFormat']">Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
-      <small *ngIf="editNotebookForm.controls.price.errors?.['invalidPrice']">Le prix ne peut pas être inférieur à 0€.</small>
-    </div>
+    <input type="number"
+          id="price"
+          formControlName="price"
+          placeholder="0"/>
+
+    @if (isFormSubmit && editNotebookForm.controls['price'].invalid) {
+      <div>
+        @if (editNotebookForm.controls.price.errors?.['invalidPriceFormat']) {
+          <small>Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
+        } @else if (editNotebookForm.controls.price.errors?.['invalidPrice']) {
+          <small>Le prix ne peut pas être inférieur à 0€.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
     <label for="introduction">Introduction pour le carnet : </label>
-    <editor
-      [init]="toolBarConfig"
+    <editor [init]="toolBarConfig"
 
-      placeholder="Introduction.."
-      formControlName="introduction"
-      autocomplete="off">
+            placeholder="Introduction.."
+            formControlName="introduction"
+            autocomplete="off">
     </editor>
     <p [style.color]=" this.editNotebookForm.get('introduction')!.value!.length > 500 ? 'red': ''">{{ this.editNotebookForm.get('introduction')!.value | counterZeroIfEmpty }} caractères / 500 </p>
     
-    <div *ngIf="isFormSubmit && editNotebookForm.controls['introduction'].invalid">
-      <small *ngIf="editNotebookForm.controls.description.errors?.['introduction']">L'introduction pour le carnet est requise.</small>
-      <small *ngIf="editNotebookForm.controls.description.errors?.['introduction']">L'introduction pour le carnet ne doit pas dépasser 500 charactères.</small>
-    </div>
+    @if (isFormSubmit && editNotebookForm.controls['introduction'].invalid) {
+      <div>
+        @if (editNotebookForm.controls.introduction.errors?.['required']) {
+          <small>L'introduction pour le carnet est requise.</small>
+        } @else if (editNotebookForm.controls.introduction.errors?.['maxlength']) {
+          <small>L'introduction pour le carnet ne doit pas dépasser 500 charactères.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -224,11 +260,16 @@
             autocomplete="off">
     </editor>
     <p [style.color]=" this.editNotebookForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editNotebookForm.get('description')!.value | counterZeroIfEmpty }} caractères / 1000 </p>
-    
-    <div *ngIf="isFormSubmit && editNotebookForm.controls['description'].invalid">
-      <small *ngIf="editNotebookForm.controls.description.errors?.['description']">La description du carnet est requise.</small>
-      <small *ngIf="editNotebookForm.controls.description.errors?.['description']">La description du carnet ne doit pas dépasser 1.000 charactères.</small>
-    </div>
+  
+    @if (isFormSubmit && editNotebookForm.controls['description'].invalid) {
+      <div>
+        @if (editNotebookForm.controls.description.errors?.['required']) {
+          <small>La description du carnet est requise.</small>
+        } @else if (editNotebookForm.controls.description.errors?.['maxlength']) {
+          <small>La description du carnet ne doit pas dépasser 1.000 charactères.</small>
+        }
+      </div>
+    }
   </fieldset>
 
   <fieldset class="flex column">
@@ -264,24 +305,27 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="secondaryPicturesForNotebook.length < 1">
-          <td>
-            <p>Aucune image secondaire ajoutée</p>
-          </td>
-        </tr>
-        <ng-container *ngIf="secondaryPicturesForNotebook.length > 0">
-          <tr *ngFor="let pictureUrl of secondaryPicturesForNotebook">
+        @if (secondaryPicturesForNotebook.length < 1) {
+          <tr>
             <td>
-              <p class="flex text-left"> {{ pictureUrl }} </p>
-            </td>
-            <td>
-              <img src="{{ pictureUrl }}" alt="image secondaire en cours de selection">
-            </td>
-            <td>
-              <i (click)="deleteSecondaryPictureFromList(pictureUrl)" class="fa-solid fa-trash-can pointer flex center"></i>
+              <p>Aucune image secondaire ajoutée</p>
             </td>
           </tr>
-        </ng-container>
+        } @else {
+          @for (pictureUrl of secondaryPicturesForNotebook; track pictureUrl) {
+            <tr>
+              <td>
+                <p class="flex text-left"> {{ pictureUrl }} </p>
+              </td>
+              <td>
+                <img src="{{ pictureUrl }}" alt="image secondaire en cours de selection">
+              </td>
+              <td>
+                <i (click)="deleteSecondaryPictureFromList(pictureUrl)" class="fa-solid fa-trash-can pointer flex center"></i>
+              </td>
+            </tr>
+          }
+        }
       </tbody>
     </table>
   </fieldset>

@@ -4,26 +4,27 @@ import { Component, ElementRef, ViewChild, Renderer2, HostListener, inject  } fr
 import { Menu } from 'src/app/shared/interfaces/Menu';
 import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
 import { BaseComponent } from 'src/app/base.component';
-import { RouterLink } from '@angular/router';
-import { NgClass, NgFor, NgIf } from '@angular/common';
-import { Subject } from 'rxjs';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
+import { Subject, filter } from 'rxjs';
 import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
 
 @Component({
   standalone: true,
-  imports: [ RouterLink, NgClass, NgFor, NgIf],
+  imports: [ RouterLink, NgClass ],
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent extends BaseComponent {
 
-  public activePageService = inject(ActivePageService);
+  protected activePageService = inject(ActivePageService);
+  private router = inject(Router);
   private renderer = inject(Renderer2);
   protected shoppingCartNotebookService = inject(ShoppingCartNotebookService);
   private apiRequestsService = inject(ApiRequestsService);
 
-  windowSize$ = new Subject<[number, number]>();
+  protected windowSize$ = new Subject<[number, number]>();
 
   @HostListener('window:resize', ['$event'])
   onResize(event : Event) {
@@ -33,12 +34,11 @@ export class HeaderComponent extends BaseComponent {
 
   @ViewChild('navBar') navBar!: ElementRef;
 
-  navbarUser: Menu[] = NAVBAR_USER;
-  isMenuBurgerChecked: boolean = false;
-  initialLoad: boolean = true;
-  activePage = this.activePageService.activePage
+  protected navbarUser: Menu[] = NAVBAR_USER;
+  protected isMenuBurgerChecked: boolean = false;
+  protected initialLoad: boolean = true;
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.getAllNotebooks();
   }
 
@@ -53,7 +53,7 @@ export class HeaderComponent extends BaseComponent {
     );
   }
 
-  getAllNotebooks(): void{
+  getAllNotebooks(): void {
     this.subscriptions.push(
       this.apiRequestsService.getAllNotebooks().subscribe({
         next: (notebooks) => this.shoppingCartNotebookService.items = notebooks,
@@ -67,11 +67,11 @@ export class HeaderComponent extends BaseComponent {
     this.initialLoad = false;
   }
 
-  openSubmenu(itemClicked : Menu){
-    const actualState = itemClicked.submenu?.isOpen
+  openSubmenu(itemClicked : Menu): void {
+    const actualState = itemClicked.submenu?.isOpen;
     this.closeSubmenu()
-    if(itemClicked.submenu){
-      itemClicked.submenu.isOpen = !actualState
+    if(itemClicked.submenu) {
+      itemClicked.submenu.isOpen = !actualState;
     }
   }
 
@@ -80,17 +80,28 @@ export class HeaderComponent extends BaseComponent {
     if (menuCheckbox.checked) {
       this.renderer.setProperty(menuCheckbox, 'checked', false);
     }
-    event.stopPropagation()
+
+    event.stopPropagation();
     this.isMenuBurgerChecked = false;
     this.activePageService.changeActivePage(routerLinkClicked);
-    this.closeSubmenu()
+    this.scrollTopAfterNavigate();
+    this.closeSubmenu();
   }
 
-  closeSubmenu(){
+  closeSubmenu(): void {
     for(let item of this.navbarUser){
-      if(item.submenu){
-        item.submenu.isOpen = false
-      }
-    }
+      if(item.submenu) {
+        item.submenu.isOpen = false;
+      };
+    };
+  }
+
+  scrollTopAfterNavigate(): void {
+    this.subscriptions.push(
+      this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        window.scrollTo(0, 0);
+      })
+    );
   }
 }
