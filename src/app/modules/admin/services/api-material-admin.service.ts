@@ -32,6 +32,10 @@ export class ApiMaterialAdminService {
   changeAvailability(material : MaterialDto): Observable<ResponseEntity>{
     return this.http.put<ResponseEntity>(URLAPI + "/materials/availability", material)
   }
+
+  changeAvailabilityForCustomization(material : MaterialDto): Observable<ResponseEntity>{
+    return this.http.put<ResponseEntity>(URLAPI + "/materials/availability-for-customization", material)
+  }
   
   delete(materialSlug : MaterialDto['slug']): Observable<ResponseEntity>{
     return this.http.delete<ResponseEntity>(URLAPI + "/materials/" + materialSlug)

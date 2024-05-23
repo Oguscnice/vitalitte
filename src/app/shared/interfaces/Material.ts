@@ -3,5 +3,6 @@ import { CreateMaterial } from "src/app/modules/admin/interfaces/Material";
 
 export interface MaterialDto extends CreateMaterial {
   slug : string,
-  available : boolean
+  available : boolean,
+  availableForCustomization: boolean
 }

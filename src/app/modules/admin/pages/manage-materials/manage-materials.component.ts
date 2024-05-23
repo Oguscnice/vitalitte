@@ -23,16 +23,17 @@ import { CreateMaterial } from '../../interfaces/Material';
                 
                 (materialToEdit)="putMaterial($event)"
                 (changeAvailabilityMaterial)="changeAvailabilityMaterial($event)"
+                (changeAvailabilityForCustomizationMaterial)="changeAvailabilityForCustomizationMaterial($event)"
                 (materialToDelete)="showModal($event)">
               </app-edit-delete-material>
 
               <anguille [message]="messageResponseFromBackend"/>
 
               <app-modal [modalVisible]="modalVisible"
-                        [modalText]="modalText"
-                        [multipleChoice]="true"
+                         [modalText]="modalText"
+                         [multipleChoice]="true"
                         
-                        (responseForModal)="responseForModal($event)">
+                         (responseForModal)="responseForModal($event)">
               </app-modal>`,
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
@@ -109,7 +110,7 @@ export class ManageMaterialsComponent extends BaseComponent {
     )
   }
 
-  changeAvailabilityMaterial(materialToChangeAvaibility : MaterialDto): void {
+  changeAvailabilityMaterial(materialToChangeAvaibility: MaterialDto): void {
     this.subscriptions.push(
       this.apiMaterialAdminService.changeAvailability(materialToChangeAvaibility).subscribe({
         next: (res) => {
@@ -120,6 +121,22 @@ export class ManageMaterialsComponent extends BaseComponent {
             }
           }
 
+        },
+        error: (err) => (this.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  changeAvailabilityForCustomizationMaterial(materialToChangeAvaibilityForCustomization: MaterialDto): void {
+    this.subscriptions.push(
+      this.apiMaterialAdminService.changeAvailabilityForCustomization(materialToChangeAvaibilityForCustomization).subscribe({
+        next: (res) => {
+          this.changeMessage(res.message);
+          for(let material of this.materials){
+            if(material.slug === materialToChangeAvaibilityForCustomization.slug){
+              material.availableForCustomization = !material.availableForCustomization
+            }
+          }
         },
         error: (err) => (this.changeMessage(err.error.message))
       })

@@ -32,14 +32,14 @@ export class EditMaterialComponent extends BaseComponent{
 
   protected isDropdownCategoryOpen : boolean = false;
   protected isFormSubmit : boolean = false;
-  modalVisible : boolean = false;
-  modalText! : string;
+  protected modalVisible : boolean = false;
+  protected modalText! : string;
 
   protected fileSize!: number;
 
   protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
-  editMaterialForm = this.formBuilder.group({
+  protected editMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     materialType : ['', [Validators.required]],
     price: ['', [priceValidator()]],

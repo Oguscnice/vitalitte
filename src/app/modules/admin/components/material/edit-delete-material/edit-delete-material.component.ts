@@ -19,6 +19,7 @@ export class EditDeleteMaterialComponent {
   @Input() materialTypes! : string[];
   @Output() materialToEdit: EventEmitter<MaterialDto> = new EventEmitter();
   @Output() changeAvailabilityMaterial: EventEmitter<MaterialDto> = new EventEmitter();
+  @Output() changeAvailabilityForCustomizationMaterial: EventEmitter<MaterialDto> = new EventEmitter();
   @Output() materialToDelete: EventEmitter<MaterialDto> = new EventEmitter();
 
   isTableVisible: boolean = true;
@@ -36,6 +37,7 @@ export class EditDeleteMaterialComponent {
   }
 
   changeAvailability = (material : MaterialDto) => this.changeAvailabilityMaterial.emit(material);
+  changeAvailabilityForCustomization = (material : MaterialDto) => this.changeAvailabilityForCustomizationMaterial.emit(material);
   edit = (materialEdited : MaterialDto) =>  this.materialToEdit.emit(materialEdited);
   delete = (materialSelected : MaterialDto) => this.materialToDelete.emit(materialSelected);
 }
