@@ -8,13 +8,13 @@ input {
 }
 
 input:focus {
-  // Styles spécifiques pour les inputs de type texte lorsqu'ils sont focus
+  // Styles spécifiques pour les inputs lorsqu'ils sont focus
   border-bottom: 2px solid $lilac-light;
   border-radius: 4px 4px 2px 2px;
 }
 
 input:hover {
-  // Styles spécifiques pour les inputs de type texte lorsqu'ils sont hover
+  // Styles spécifiques pour les inputs lorsqu'ils sont hover
   outline: 1px solid $lilac-dark;
 }
 
@@ -31,7 +31,7 @@ input[type="number"] {
 	/* Opéra*/
 	&::-o-inner-spin-button {
 		-o-appearance: none;
-		margin: 0; 
+		margin: 0;
 	}
 }
 
@@ -61,7 +61,7 @@ form {
       margin-top : $normal-margin;
       width: 100%;
     }
-  
+
     img {
       max-width: 180px;
       max-height: 180px;
@@ -69,18 +69,6 @@ form {
       margin-top : $normal-margin;
       border-radius: 8px;
       border : 1px solid $lilac;
-    }
-
-    .bubble {
-      position: absolute;
-      top: -120px;
-      background-color: $white;
-      border: 2px solid $lilac;
-      padding: 16px;
-      border-radius: 5px;
-      box-shadow: 4px 4px 8px $lilac-dark;
-      z-index: 5;
-      font-size: $triple-font-size;
     }
 
     editor {
@@ -106,9 +94,30 @@ form {
     gap: 8px;
   }
 
-  button[type="submit"] { 
+  button[type="submit"] {
     margin : $double-margin 0;
   }
+}
+
+.input-invalid {
+  color: $red;
+  font-weight: bold;
+  &::placeholder {
+    color: $red;
+    font-weight: bold;
+  }
+}
+
+.bubble {
+  position: absolute;
+  top: -120px;
+  background-color: $white;
+  border: 2px solid $lilac;
+  padding: 16px;
+  border-radius: 5px;
+  box-shadow: 4px 4px 8px $lilac-dark;
+  z-index: 5;
+  font-size: $triple-font-size;
 }
 
 // Breackpoint list
@@ -117,10 +126,4 @@ form {
   form {
     width: 100%;
   }
-}
-// Tablettes vers ordinateurs portables :
-@media screen and (min-width: 992px) {
-}
-// Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1235px) {
 }

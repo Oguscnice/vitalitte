@@ -10,7 +10,7 @@ import { PostMaterialComponent } from './components/material/post-material/post-
 import { EditDeleteMaterialComponent } from './components/material/edit-delete-material/edit-delete-material.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditorModule, TINYMCE_SCRIPT_SRC  } from '@tinymce/tinymce-angular';
-import { AnguilleComponent } from 'src/app/shared/components/anguille/anguille.component';
+import { AnguilleComponent } from 'src/app/components/anguille/anguille.component';
 import { EditMaterialComponent } from './pages/edit-material/edit-material.component';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ReturnAdminHomeComponent } from './components/return-admin-home/return-admin-home.component';
@@ -28,11 +28,11 @@ import { EditDeleteWorkshopComponent } from './components/workshop/edit-delete-w
 import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
 import { PostPublicationComponent } from './components/publication/post-publication/post-publication.component';
 import { EditDeletePublicationComponent } from './components/publication/edit-delete-publication/edit-delete-publication.component';
-import { PostGiftcardComponent } from './components/giftcard/post-giftcard/post-giftcard.component';
-import { EditDeleteGiftcardComponent } from './components/giftcard/edit-delete-giftcard/edit-delete-giftcard.component';
-import { ManageGiftcardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
 import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used/user-list-giftcards-used.component';
 import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.component';
+import {ManageGiftCardsComponent} from "./pages/manage-giftcards/manage-giftcards.component";
+import {EditDeleteGiftCardComponent} from "./components/giftcard/edit-delete-giftcard/edit-delete-giftcard.component";
+import {PostGiftCardComponent} from "./components/giftcard/post-giftcard/post-giftcard.component";
 
 @NgModule({
   declarations: [
@@ -44,7 +44,7 @@ import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.compo
     EditWorkshopComponent,
     EditNotebookComponent,
     ManageContactsComponent,
-    ManageGiftcardsComponent,
+    ManageGiftCardsComponent,
     ManageCategoriesCollectionsComponent,
     ManageWorkshopsComponent
   ],
@@ -74,8 +74,8 @@ import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.compo
     EditDeleteWorkshopComponent,
     PostPublicationComponent,
     EditDeletePublicationComponent,
-    PostGiftcardComponent,
-    EditDeleteGiftcardComponent,
+    PostGiftCardComponent,
+    EditDeleteGiftCardComponent,
     UserListGiftcardsUsedComponent,
   ],
   providers: [

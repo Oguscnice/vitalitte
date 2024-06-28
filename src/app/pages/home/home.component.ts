@@ -1,9 +1,8 @@
-import { AddDataSqlService } from './../../shared/services/add-data-sql.service';
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { BaseComponent } from 'src/app/base.component';
+import { AddDataSqlService } from '../../shared/services/add-data-sql.service';
+import {Component, ElementRef, ViewChild, inject, OnInit, Signal, AfterViewInit} from '@angular/core';
 import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
+import {DataSignalService} from "../../shared/services/data-signal.service";
 
 @Component({
   standalone: false,
@@ -11,15 +10,14 @@ import { ApiRequestsService } from 'src/app/shared/services/api-requests.service
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent extends BaseComponent{
+export class HomeComponent implements OnInit, AfterViewInit {
 
-  private apiRequestsService = inject(ApiRequestsService);
+  private dataSignal = inject(DataSignalService);
   private addData = inject(AddDataSqlService);
 
-  publicationsSpotlighted! : PublicationDto[];
+  publicationsSpotlighted: Signal<PublicationDto[]> = this.dataSignal.$publicationsSpotlighted;
   backgroundImageParentHome: string =
     '../../../assets/images/figma/school-work.jpg';
-
   backgroundImageBio: string = '../../../assets/images/loryane.jpg';
 
   handmadeNotebooksPictures : ImagesPreview[] = [
@@ -34,7 +32,7 @@ export class HomeComponent extends BaseComponent{
         imgAlt : "Image d'un carnet fait à la main"
       },
     ];
-  
+
   workshopPictures : ImagesPreview[] = [
       {
         imgSrc : "../../../assets/images/figma/atelier.jpg",
@@ -50,15 +48,15 @@ export class HomeComponent extends BaseComponent{
 
   @ViewChild('imgMonitored') imgMonitored!: ElementRef;
   @ViewChild('booktiqueSectionMonitored')
-  
+
   booktiqueSectionMonitored!: ElementRef;
 
-  ngOnInit(): void{
-    this.getPublicationsSpotlighted();
+  ngOnInit(): void {
+    this.dataSignal.getPublicationsSpotlighted();
     // this.addData.createAll();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     const imgElement: HTMLImageElement = this.imgMonitored.nativeElement;
 
     imgElement.onload = () => {
@@ -72,25 +70,5 @@ export class HomeComponent extends BaseComponent{
         imgElement.width + 'px'
       );
     };
-  }
-
-  getPublicationsSpotlighted(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getPublicationsSpotlighted('true').subscribe({
-        next: (publicationsSpotlighted) => {
-          this.publicationsSpotlighted = publicationsSpotlighted;
-          for(let publication of this.publicationsSpotlighted){
-            if(publication.description.length > 50){
-              publication.description = this.troncateString(publication.description, 50);
-            } 
-          } 
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  troncateString(value : string, length : number): string {
-      return value.length > length ? value.slice(0, length) + "..." : value
   }
 }

@@ -1,7 +1,9 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import {Component, inject, OnInit, Signal} from '@angular/core';
 import { BaseComponent } from 'src/app/base.component';
-import { PublciationPaginated, PublicationDto } from 'src/app/shared/interfaces/Publication';
+import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
+import {PaginationSignalService} from "../../../shared/services/pagination-signal.service";
+import {DataSignalService} from "../../../shared/services/data-signal.service";
 
 @Component({
   standalone: false,
@@ -60,7 +62,7 @@ import { ApiRequestsService } from 'src/app/shared/services/api-requests.service
                     width: 24%;
                   }
                 }
-                
+
                 .publications-section {
                   flex-direction: row;
 
@@ -72,98 +74,34 @@ import { ApiRequestsService } from 'src/app/shared/services/api-requests.service
             }
           `]
 })
-export class PublicationsComponent extends BaseComponent {
+export class PublicationsComponent extends BaseComponent implements OnInit {
 
-  private apiRequestsService = inject(ApiRequestsService);
-  protected publications! : PublicationDto[];
-  protected publicationsSpotlightedTrue! : PublicationDto[];
-
-  protected pageNumber: number = 0;
-  protected size: number = 10;
-  private counterPublications: number = 0;
-  private valueSearch : string = "";
-  isDropdownOpen: boolean = false;
+  private dataSignal = inject(DataSignalService);
+  private paginationSignal = inject(PaginationSignalService);
+  publications: Signal<PublicationDto[]> = this.dataSignal.$publications;
+  publicationsSpotlighted: Signal<PublicationDto[]> = this.dataSignal.$publicationsSpotlighted;
 
   backgroundImageParentHome: string =
     '../../../assets/images/figma/school-work.jpg';
 
   ngOnInit(): void {
     this.getPublicationsAndCounter();
-    this.getPublicationsSpotlighted();
+    this.dataSignal.getPublicationsSpotlighted();
+    this.subscribeToPublicationCounterSignal();
+  }
+
+  subscribeToPublicationCounterSignal(): void {
+    this.subscriptions.push(
+      this.dataSignal.$publicationsCounter.subscribe((counter:number): void => this.paginationSignal.setCounterItem(counter))
+    )
+  }
+
+  onValuePageChange(event : string): void {
+    this.getPublicationsAndCounter();
   }
 
   getPublicationsAndCounter(): void {
-    this.getPublicationPaginated();
-    this.getCounterPublications();
-  }
-
-  toggleDropdown(value: boolean): void {
-    this.isDropdownOpen = value;
-  }
-
-  updateSizeValue(value: number): void {
-    this.size = value;
-    this.getPublicationsAndCounter();
-    this.toggleDropdown(false);
-  }
-
-  formatObjectPublicationPaginated(): PublciationPaginated {
-    return {
-      valueSearch: this.valueSearch,
-      pagination: {
-        page: this.pageNumber,
-        size: this.size,
-      }
-    }
-  }
-
-  getPublicationPaginated(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getPublicationPaginated(this.formatObjectPublicationPaginated()).subscribe({
-        next: (publications) => this.publications = publications,
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getCounterPublications(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getAllPublicationsCounter(this.formatObjectPublicationPaginated()).subscribe({
-        next: (counter) => this.counterPublications = counter,
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getPublicationsSpotlighted(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getPublicationsSpotlighted('true').subscribe({
-        next: (publications) => this.publicationsSpotlightedTrue = publications,
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  calcLastPage(): number {
-    return Math.floor(this.counterPublications / this.size) + (this.counterPublications % this.size === 0 ? 0 : 1)
-  }
-
-  filteredByValueSearch(event: KeyboardEvent): void {
-    const inputElement = event.target as HTMLInputElement;
-    this.valueSearch = inputElement.value;
-  }
-
-  changePage(choice : 'first' | 'prev' | 'next' | 'last'): void {
-    if(choice === 'first') {
-      this.pageNumber = 0;
-    } else if (choice === 'last') {
-      this.pageNumber = this.calcLastPage();
-    } else if (choice === 'prev') {
-      this.pageNumber -= this.pageNumber < 1 ? 0 : 1
-    } else if (choice === 'next') {
-      this.pageNumber += this.pageNumber < this.calcLastPage() ? 1 : 0
-    }
-
-    this.getPublicationPaginated();
+    this.dataSignal.getPublicationsPaginated();
+    this.dataSignal.getCounterPublications();
   }
 }

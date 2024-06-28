@@ -24,25 +24,25 @@
           } @else if (newWorkshopForm.controls.title.errors?.['maxlength']) {
             <small>Le titre de l'atelier ne doit pas dépasser 255 charactères.</small>
           }
-        </div>        
+        </div>
       }
     </fieldset>
 
     <fieldset class="flex column">
       <label for="description">Description : </label>
       <editor [init]="toolBarConfig"
-
-              placeholder="Description.."
+              id="description"
+              placeholder="Description de l'atelier..."
               formControlName="description"
               autocomplete="off">
       </editor>
-      <p [style.color]=" this.newWorkshopForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.newWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 1000 </p>
+      <p [style.color]=" this.newWorkshopForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ this.newWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
       @if (isFormSubmit && newWorkshopForm.controls['description'].invalid) {
         <div>
           @if (newWorkshopForm.controls.description.errors?.['required']) {
             <small>La description de l'atelier est requise.</small>
           } @else if (newWorkshopForm.controls.description.errors?.['maxlength']) {
-            <small>La description de l'atelier ne doit pas dépasser 1000 charactères.</small>
+            <small>La description de l'atelier ne doit pas dépasser 65.534 charactères.</small>
           }
         </div>
       }
@@ -72,9 +72,9 @@
                  placeholder="Choississez l'adresse de l'atelier..."
                  autocomplete="off"
                  class="pointer"
-                 (keyup)="searchAdress($event)"
+                 (keyup)="searchAddress($event)"
                  (focus)="apiBanService.toggleDropdown(true)"
-                 [value]="this.newWorkshopForm.get('adress')?.value ? this.newWorkshopForm.get('adress')!.value : ''"/>
+                 [value]="this.newWorkshopForm.get('address')!.value ? this.newWorkshopForm.get('address')!.value : ''"/>
           <div class="arrow-icone flex center">
             @if (apiBanService.isDropdownBanOpen) {
               <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
@@ -83,10 +83,10 @@
             }
           </div>
         </div>
-        <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.adressList && apiBanService.adressList.length > 0}">
-          @for (adress of apiBanService.adressList; track adress) {
-            <li (click)="adressSelected(adress.properties.label); apiBanService.toggleDropdown(false) ">
-              {{ adress.properties.label | titlecase }}
+        <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.addressList && apiBanService.addressList.length > 0}">
+          @for (address of apiBanService.addressList; track address) {
+            <li (click)="onAddressClicked(address.properties.label); apiBanService.toggleDropdown(false) ">
+              {{ address.properties.label | titlecase }}
             </li>
           }
         </ul>
@@ -105,7 +105,7 @@
       <input type="number"
              id="price"
              formControlName="price"
-             placeholder="0"/>
+             placeholder="€"/>
       @if (isFormSubmit && newWorkshopForm.controls['price'].invalid) {
         <div>
           @if (newWorkshopForm.controls.price.errors?.['required']) {
@@ -124,28 +124,26 @@
       <input class="display-none"
              type="file"
              accept="image/png, image/jpeg, image/bmp, image/gif"
-             (change)="onFileSelected($event)"
+             (change)="onFileSelected($event, newWorkshopForm)"
              #fileUpload/>
       <input type="text"
+             class="display-none"
              id="picture"
-             formControlName="picture"
-             value="{{ newWorkshopForm.get('picture') }}"
-             (keyup)="changeImageValue($event)"
-             placeholder="URL de l'image..."/>
+             formControlName="picture"/>
 
       <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
 
       <img class="pointer"
            (click)="fileUpload.click()"
-           [src]="newWorkshopForm.get('picture')!.value"
+           [src]="newWorkshopForm.get('pictureThumbnail')!.value"
            alt="Photo à choisir pour le carnet"/>
 
       @if (isFormSubmit && newWorkshopForm.controls['picture'].invalid) {
         <div>
-          @if (fileSize > fileUploadService.SIZE_MAX) {
+          @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
             <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
           } @else if (newWorkshopForm.controls.price.errors?.['invalidUrl']) {
-            <small>L'image doit être au format d'une URL (commencer par => http:// ou https:// ou www.).</small>
+            <small>L'image doit être au format d'une URL (commencer par => http:// ou https://).</small>
           }
         </div>
       }
@@ -156,12 +154,13 @@
       <input type="number"
              id="registrations"
              formControlName="registrations"
-             placeholder="0"/>
+             placeholder="Indiquez un chiffre/nombre."/>
       <small>Laisser ' 0 ' pour un nombre de places illimtés</small>
+
       @if (isFormSubmit && newWorkshopForm.controls['registrations'].invalid) {
         <div>
           @if (newWorkshopForm.controls.registrations.errors?.['required']) {
-            <small>Le nombre de place doit être indiqué (mettre un grand nombre si illimité, exemple : 99999).</small>
+            <small>Le nombre de place doit être indiqué (même si ' 0 ' pour un nombre de places illimtés).</small>
           }
         </div>
       }
@@ -172,5 +171,5 @@
             (click)="submitNewWorkshopForm()">
       Créer
     </button>
-  </form>  
+  </form>
 }

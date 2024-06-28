@@ -1,4 +1,3 @@
-<anguille [message]="messageResponseFromBackend" />
 <app-return-admin-home/>
 
 <form (ngSubmit)="(editWorkshopForm.valid)"
@@ -27,19 +26,19 @@
   <fieldset class="flex column">
     <label for="description">Description : </label>
     <editor [init]="toolBarConfig"
-
+            id="description"
             placeholder="Description.."
             formControlName="description"
             autocomplete="off">
     </editor>
-    <p [style.color]=" this.editWorkshopForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 1000 </p>
-    
+    <p [style.color]=" this.editWorkshopForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ this.editWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+
     @if (isFormSubmit && editWorkshopForm.controls['description'].invalid) {
       <div>
         @if (editWorkshopForm.controls.description.errors?.['required']) {
           <small>La description de l'atelier est requise.</small>
         } @else if (editWorkshopForm.controls.description.errors?.['maxlength']) {
-          <small>La description de l'atelier ne doit pas dépasser 1000 charactères.</small>
+          <small>La description de l'atelier ne doit pas dépasser 65.534 charactères.</small>
         }
       </div>
     }
@@ -72,9 +71,9 @@
                placeholder="Choississez l'adresse de l'atelier..."
                autocomplete="off"
                class="pointer"
-               (keyup)="searchAdress($event)"
+               (keyup)="searchAddress($event)"
                (focus)="apiBanService.toggleDropdown(true)"
-               [value]="this.editWorkshopForm.get('adress')?.value ? this.editWorkshopForm.get('adress')!.value : ''"
+               [value]="this.editWorkshopForm.get('address')!.value ? this.editWorkshopForm.get('address')!.value : ''"
               />
         <div class="arrow-icone flex center">
           @if (apiBanService.isDropdownBanOpen) {
@@ -84,9 +83,9 @@
           }
         </div>
       </div>
-      <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.adressList && apiBanService.adressList.length > 0}">
-        @for (adress of apiBanService.adressList; track adress) {
-          <li (click)="adressSelected(adress.properties.label); apiBanService.toggleDropdown(false) ">
+      <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.addressList && apiBanService.addressList.length > 0}">
+        @for (adress of apiBanService.addressList; track adress) {
+          <li (click)="onAddressClicked(adress.properties.label); apiBanService.toggleDropdown(false)">
             {{ adress.properties.label | titlecase }}
           </li>
         }
@@ -132,9 +131,7 @@
     <input type="text"
            id="picture"
            formControlName="picture"
-           value="{{ editWorkshopForm.get('picture') }}"
-           (keyup)="changeImageValue($event)"
-           placeholder="URL de l'image..."/>
+           class="display-none"/>
 
     <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
 
@@ -145,7 +142,7 @@
 
     @if (isFormSubmit && editWorkshopForm.controls['picture'].invalid) {
       <div>
-        @if (fileSize > fileUploadService.SIZE_MAX) {
+        @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
           <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
         } @else if (editWorkshopForm.controls.picture.errors?.['invalidUrl']) {
           <small>L'image doit être une URL (commencer par http:// ou https:// ou www.).</small>
@@ -172,12 +169,6 @@
   <button class="btn-submit-admin"
           type="submit"
           (click)="submitEditWorkshopForm()">
-    Créer
+    Modifier
   </button>
 </form>
-
-<app-modal [modalVisible]="modalVisible"
-           [modalText]="modalText"
-           
-           (responseForModal)="responseForModal($event)">
-</app-modal>

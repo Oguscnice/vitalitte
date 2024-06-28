@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -25,8 +25,10 @@ import { Subject } from 'rxjs';
               height: 60px;
               background-color: $lilac;
               width: 100vw;
-              .footer-container{
+
+              .footer-container {
                 width: 100%;
+
                 i {
                   color: $white;
                   font-size: $triple-font-size;
@@ -36,16 +38,16 @@ import { Subject } from 'rxjs';
 
             @media screen and (min-width: 768px) {
               footer {
-                .footer-container{
-                  max-width: 650px;
+                .footer-container {
+                  max-width: $max-width-768px;
                 }
               }
             }
             // Tablettes vers ordinateurs portables :
             @media screen and (min-width: 992px) {
               footer {
-                .footer-container{
-                  max-width: 800px;
+                .footer-container {
+                  max-width: $max-width-992px;
                 }
               }
             }
@@ -53,15 +55,15 @@ import { Subject } from 'rxjs';
             // Ordinateurs portables vers ordinateurs de bureau :
             @media screen and (min-width: 1400px) {
               footer {
-                .footer-container{
-                  max-width: 1000px;
+                .footer-container {
+                  max-width: $max-width-1400px;
                 }
               }
             }
               `]
 })
-export class FooterComponent {
-  
+export class FooterComponent implements AfterViewInit {
+
   windowSize$ = new Subject<[number, number]>();
 
   @ViewChild('footer') footer!: ElementRef;
@@ -76,7 +78,7 @@ export class FooterComponent {
     this.adaptFooterHeight();
   }
 
-  adaptFooterHeight(): void{
+  adaptFooterHeight(): void {
     document.documentElement.style.setProperty(
       '--height-footer',
       this.footer.nativeElement.offsetHeight + 'px'

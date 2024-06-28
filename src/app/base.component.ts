@@ -27,4 +27,4 @@ export class BaseComponent {
   protected ngOnDestroy(): void {
     this.unsubscribeAll();
   }
-} 
+}

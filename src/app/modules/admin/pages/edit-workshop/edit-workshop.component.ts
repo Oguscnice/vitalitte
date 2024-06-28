@@ -1,18 +1,17 @@
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { Component, inject } from '@angular/core';
-import { BaseComponent } from 'src/app/base.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FileUploadService } from '../../services/file-upload.service';
+import {Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FileUploadService } from '../../shared/services/file-upload.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TransformApiService } from '../../services/transform-api.service';
 import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
-import { priceValidator } from '../../validators/priceValidators';
-import { urlValidator } from '../../validators/urlValidators';
-import { ApiWorkshopAdminService } from '../../services/api-workshop-admin.service';
-import { ApiBanService } from '../../services/api-ban.service';
-import { FileInfo } from '../../interfaces/FileInfo';
-import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
-import { futureDateValidator } from '../../validators/pastDate';
+import { priceValidator } from '../../shared/validators/priceValidators';
+import { urlValidator } from '../../shared/validators/urlValidators';
+import { ApiBanService } from '../../shared/services/api/api-ban.service';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../shared/variables/Other';
+import { futureDateValidator } from '../../shared/validators/pastDate';
+import {DataSignalService} from "../../../../shared/services/data-signal.service";
+import {Subscription} from "rxjs";
+import {FormHelperService} from "../../shared/services/form-helper.service";
+import { AdminWorkshopSignalService } from '../../shared/services/admin-workshop-signal.service';
 
 @Component({
   standalone: false,
@@ -21,127 +20,90 @@ import { futureDateValidator } from '../../validators/pastDate';
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
 
-export class EditWorkshopComponent extends BaseComponent {
+export class EditWorkshopComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
-  protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
-  private router  = inject(Router);
-  private transformApiService = inject(TransformApiService);
-  protected apiBanService = inject(ApiBanService);
-  private apiRequestsService = inject(ApiRequestsService);
-  private apiWorkshopAdminService = inject(ApiWorkshopAdminService);
+  private dataSignal = inject(DataSignalService);
+  private adminWorkshopSignal = inject(AdminWorkshopSignalService);
+  private formHelper = inject(FormHelperService);
+  fileUploadService = inject(FileUploadService);
+  apiBanService = inject(ApiBanService);
 
-  protected workshopSlug! : WorkshopDto['slug'];
-  protected workshopSelected! : WorkshopDto;
+  isFormSubmit : boolean = false;
 
-  protected isFormSubmit : boolean = false;
-  modalVisible : boolean = false;
-  modalText! : string;
+  toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
-  protected fileSize!: number;
-
-  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  private subscription!: Subscription;
 
   editWorkshopForm  = this.formBuilder.group({
-    slug: [this.workshopSlug, [Validators.required]],
+    slug: ['', [Validators.required]],
     title: ['', [Validators.required, Validators.maxLength(255)]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
     date: ['', [Validators.required, futureDateValidator()]],
     address: ['', [Validators.required]],
     price: ['', [Validators.required, priceValidator()]],
     picture: ['', [Validators.required, urlValidator()]],
+    pictureThumbnail: ['', [Validators.required, urlValidator()]],
     registrations: ['', [Validators.required]],
   });
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.workshopSlug = params['workshopSlug'];
-      this.getWorkshop();
-    });
+    this.route.params.subscribe((params) => this.dataSignal.getWorkshopBySlug(params['workshopSlug']));
+    this.subscription = this.dataSignal.$workshopBySlug.subscribe(
+      (workshop) => {
+        if (workshop) {
+          this.patchFormValue(workshop);
+        }
+      });
   }
 
-  getWorkshop(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getWorkshopBySlug(this.workshopSlug).subscribe({
-        next: (workshop) =>{
-          this.workshopSelected = workshop;
-          this.updateEditFormValue();
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
+  patchFormValue(workshop: WorkshopDto): void {
+    this.editWorkshopForm.get('slug')!.setValue(workshop.slug);
+    this.editWorkshopForm.get('title')!.setValue(workshop.title);
+    this.editWorkshopForm.get('description')!.setValue(workshop.description);
+    this.editWorkshopForm.get('date')!.setValue(this.formatDate(this.formHelper.jsonStringify(workshop.date)));
+    this.editWorkshopForm.get('address')!.setValue(workshop.address);
+    this.editWorkshopForm.get('price')!.setValue(workshop.price.toString());
+    this.editWorkshopForm.get('picture')!.setValue(workshop.picture);
+    this.editWorkshopForm.get('pictureThumbnail')!.setValue(workshop.pictureThumbnail);
+    this.editWorkshopForm.get('registrations')!.setValue((workshop.registrations).toString());
   }
 
-  updateEditFormValue(): void {
-    this.editWorkshopForm.get('slug')!.setValue(this.workshopSelected.slug);
-    this.editWorkshopForm.get('title')!.setValue(this.workshopSelected.title);
-    this.editWorkshopForm.get('description')!.setValue(this.workshopSelected.description);
-    this.editWorkshopForm.get('date')!.setValue((this.workshopSelected.date).toString());
-    this.editWorkshopForm.get('address')!.setValue(this.workshopSelected.address);
-    this.editWorkshopForm.get('price')!.setValue(this.workshopSelected.price.toString());
-    this.editWorkshopForm.get('picture')!.setValue(this.workshopSelected.picture);
-    this.editWorkshopForm.get('registrations')!.setValue((this.workshopSelected.registrations).toString());
+  formatDate(dateString: string): string {
+    // Retirer les guillemets de la chaîne JSON et convertir en format acceptable par datetime-local
+    return dateString.replace(/"/g, '');
   }
 
-  searchAdress(event: KeyboardEvent): void {
+  searchAddress(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
-    if(inputElement.value.length > 3){
-      this.apiBanService.getAdress(inputElement.value).subscribe((adress) => {
-        this.apiBanService.adressList = adress.features;
+    if (inputElement.value.length > 3) {
+      this.apiBanService.getAddress(inputElement.value).subscribe((address) => {
+        this.apiBanService.addressList = address.features;
       });
     }
   }
 
-  adressSelected(adsressClicked: string): void {
-    this.editWorkshopForm.get('address')!.setValue(adsressClicked);
+  onAddressClicked(addressClicked: string): void {
+    this.editWorkshopForm.get('address')!.setValue(addressClicked);
   }
 
-  async onFileSelected(event: Event): Promise<void> {
-
-    const inputElement = event.target as HTMLInputElement;
-    const selectedFile = inputElement.files?.[0];
-    let fileInfo: FileInfo | null = null;
-
-    if (selectedFile) {
-      if (selectedFile.size < this.fileUploadService.SIZE_MAX) {
-        fileInfo = await this.fileUploadService.fileUpload(event);
-        this.editWorkshopForm.get('picture')!.setValue(fileInfo.data.thumb.url);
-      };
-    }
-  }
-
-  changeImageValue(event: KeyboardEvent): void {
-    const inputElement = event.target as HTMLInputElement;
-    if(inputElement){
-      this.editWorkshopForm.get('picture')!.setValue(inputElement.value);
-    }
+  onFileSelected(event: Event): void {
+    this.fileUploadService.onFileSelected(event, this.editWorkshopForm).subscribe();
   }
 
   submitEditWorkshopForm(): void{
 
     this.isFormSubmit = true
-    
-    if(this.editWorkshopForm.valid){
-      let editedWorkshop : WorkshopDto = this.transformApiService.putWorkshop(this.editWorkshopForm)
-      this.put(editedWorkshop);
+
+    if (this.editWorkshopForm.valid) {
+      const EDITED_WORKSHOP : WorkshopDto = this.formHelper.formatFormToDto(this.editWorkshopForm)
+      this.adminWorkshopSignal.put(EDITED_WORKSHOP);
+      this.resetAllValues();
     }
   }
 
-  put(editedWorkshop : WorkshopDto): void {
-    this.subscriptions.push(
-      this.apiWorkshopAdminService.put(editedWorkshop).subscribe({
-        next: (res) => {
-          this.modalText = res.message;
-          this.modalVisible = true;
-          this.isFormSubmit = false;
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  responseForModal(response : boolean): void {
-    this.router.navigate(['/admin/gestion-des-ateliers']);
+  resetAllValues(): void {
+    this.isFormSubmit = false;
   }
 }

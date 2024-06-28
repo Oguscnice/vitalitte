@@ -10,7 +10,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { Page404Component } from './pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { httpInterceptorProviders } from './shared/interceptors';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NotebooksComponent } from './pages/notebooks-pages/notebooks/notebooks.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
@@ -39,6 +39,14 @@ import { PublicationSelectedComponent } from './pages/publications-pages/publica
 import { WorkshopThumbnailComponent } from './components/workshop-thumbnail/workshop-thumbnail.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { TitleCasePipe } from '@angular/common';
+import { AnguilleComponent } from './components/anguille/anguille.component';
+import {
+    ChangeSizePaginationAndValueSearchComponent
+} from "./components/change-size-pagination-and-value-search/change-size-pagination-and-value-search.component";
+import {
+  ChangePageButtonsPagination
+} from "./components/change-page-buttons-pagination/change-page-buttons-pagination.component";
+import {CheckoutComponent} from "./pages/checkout/checkout.component";
 
 
 @NgModule({
@@ -57,7 +65,8 @@ import { TitleCasePipe } from '@angular/common';
     CreateNotebookComponent,
     WorkshopsComponent,
     PublicationsComponent,
-    PublicationSelectedComponent
+    PublicationSelectedComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,
@@ -81,7 +90,10 @@ import { TitleCasePipe } from '@angular/common';
     NotebooksListComponent,
     PublicationThumbnailComponent,
     WorkshopThumbnailComponent,
-    ModalComponent
+    ModalComponent,
+    AnguilleComponent,
+    ChangeSizePaginationAndValueSearchComponent,
+    ChangePageButtonsPagination
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

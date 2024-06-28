@@ -2,10 +2,10 @@
 @import "../../scss/buttons.scss";
 @import "../../../styles.scss";
 
-.contact-page{
+.contact-page {
   section {
     flex-direction: column;
-    iframe{
+    iframe {
       margin-top: $triple-padding;
       @include outline-picture;
       height: 400px;
@@ -20,6 +20,7 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
 }
+
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .contact-page{
@@ -30,7 +31,7 @@
     }
     section {
       width: 100vw;
-      max-width: 650px;
+      max-width: $max-width-768px;
       flex-direction: row;
       iframe{
         max-height: 320px;

@@ -225,7 +225,11 @@ h3 {
   margin: $double-padding 0;
 }
 
-h4{
+h4 {
+  font-size: $double-font-size;
+}
+
+h5 {
   font-size: $double-font-size;
 }
 
@@ -310,7 +314,7 @@ router-outlet + * {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 80%;
+  max-width: $max-width-mobile;
   //hauteur minimum de toute la page, moins celle du header et footer, auquelle on ajoute leurs bordures de 1px
   min-height: calc(100vh - (var(--height-header) + (var(--height-footer) + $normal-margin)));
   margin : var(--height-header) auto 0 auto;
@@ -320,14 +324,22 @@ router-outlet + * {
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   router-outlet + * {
-    max-width: 650px;
+    max-width: $max-width-768px;
   }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   router-outlet + * {
-    max-width: 800px;
+    max-width: $max-width-992px;
+  }
+
+  .desktop-only {
+    display: block;
+  }
+
+  .mobile-only {
+    display: none;
   }
 
   p {
@@ -345,7 +357,7 @@ router-outlet + * {
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   router-outlet + * {
-    max-width: 1000px;
+    max-width: $max-width-1400px;
   }
 }
 

@@ -35,7 +35,7 @@
   .values-container {
     justify-content: space-between;
     width: 100vw;
-    max-width: 650px;
+    max-width: $max-width-768px;
     .value-icone-and-name {
       i,
       span {
@@ -52,7 +52,7 @@
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .values-container {
-    max-width: 800px;
+    max-width: $max-width-992px;
     .value-icone-and-name {
       i,
       span {

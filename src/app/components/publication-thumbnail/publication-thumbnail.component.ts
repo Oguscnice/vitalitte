@@ -8,7 +8,7 @@ import { PublicationDto } from 'src/app/shared/interfaces/Publication';
   imports: [ RouterLink ],
   template: `
               <div class="actuality-container flex pointer" [routerLink]="'/actualites/' + publication.slug">
-                <img [src]="publication.picture" alt="Image de l'article : {{publication.title}}">
+                <img [src]="publication.pictureThumbnail" alt="Image de l'article : {{ publication.title }}">
                 <div class="actuality-description">
                   <h4>{{ publication.title }}</h4>
                   <div class="actuality-text" [innerHTML]="publication.description"></div>

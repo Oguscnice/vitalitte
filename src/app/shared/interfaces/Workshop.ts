@@ -1,4 +1,4 @@
-import { CreateWorkshop } from "src/app/modules/admin/interfaces/Workshop";
+import { CreateWorkshop } from "../../modules/admin/shared/interfaces/Workshop";
 
 export interface WorkshopDto extends CreateWorkshop {
   slug : string,

@@ -1,13 +1,13 @@
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { ActivePageService } from './../../shared/services/active-page.service';
-import { Component, ElementRef, ViewChild, Renderer2, HostListener, inject  } from '@angular/core';
+import { ActivePageService } from '../../shared/services/active-page.service';
+import {Component, ElementRef, ViewChild, Renderer2, HostListener, inject, OnInit, AfterViewInit} from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
-import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
 import { BaseComponent } from 'src/app/base.component';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { Subject, filter } from 'rxjs';
 import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
+import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
 
 @Component({
   standalone: true,
@@ -16,15 +16,15 @@ import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent extends BaseComponent {
+export class HeaderComponent extends BaseComponent implements OnInit, AfterViewInit {
 
-  protected activePageService = inject(ActivePageService);
   private router = inject(Router);
   private renderer = inject(Renderer2);
-  protected shoppingCartNotebookService = inject(ShoppingCartNotebookService);
   private apiRequestsService = inject(ApiRequestsService);
+  shoppingCart = inject(ShoppingCartService);
+  activePageService = inject(ActivePageService);
 
-  protected windowSize$ = new Subject<[number, number]>();
+  windowSize$ = new Subject<[number, number]>();
 
   @HostListener('window:resize', ['$event'])
   onResize(event : Event) {
@@ -34,12 +34,13 @@ export class HeaderComponent extends BaseComponent {
 
   @ViewChild('navBar') navBar!: ElementRef;
 
-  protected navbarUser: Menu[] = NAVBAR_USER;
-  protected isMenuBurgerChecked: boolean = false;
-  protected initialLoad: boolean = true;
+  navbarUser: Menu[] = NAVBAR_USER;
+  isMenuBurgerChecked: boolean = false;
+  initialLoad: boolean = true;
 
   ngOnInit(): void {
     this.getAllNotebooks();
+    this.shoppingCart.setShoppingCart();
   }
 
   ngAfterViewInit(): void {
@@ -56,7 +57,9 @@ export class HeaderComponent extends BaseComponent {
   getAllNotebooks(): void {
     this.subscriptions.push(
       this.apiRequestsService.getAllNotebooks().subscribe({
-        next: (notebooks) => this.shoppingCartNotebookService.items = notebooks,
+        next: (notebooks) => {
+          // this.shoppingCart.items = notebooks,
+        },
         error: (err) => (this.changeMessage(err.error.message))
       })
     )

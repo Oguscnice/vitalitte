@@ -1,20 +1,18 @@
-import { Subscription } from 'rxjs';
 import { DecimalPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { H1Component } from 'src/app/components/h1/h1.component';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { PaypalComponent } from 'src/app/components/paypal/paypal.component';
-import { TransformApiService } from 'src/app/modules/admin/services/transform-api.service';
-import { AnguilleComponent } from 'src/app/shared/components/anguille/anguille.component';
+import { AnguilleComponent } from 'src/app/components/anguille/anguille.component';
 import { CreateInscription } from 'src/app/shared/interfaces/Inscription';
 import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { ShoppingCartWorkshopService } from 'src/app/shared/services/shopping-cart-workshop.service';
 import { phoneValidator } from 'src/app/shared/validators/PhoneValidator';
 import { quantityValidator } from 'src/app/shared/validators/QuantityValidator';
+import {FormHelperService} from "../../../modules/admin/shared/services/form-helper.service";
+import {DataSignalService} from "../../../shared/services/data-signal.service";
 
 @Component({
   standalone: true,
@@ -22,7 +20,6 @@ import { quantityValidator } from 'src/app/shared/validators/QuantityValidator';
   selector: 'app-workshop-selected',
   templateUrl: './workshop-selected.component.html',
   styles: [`
-
             @import "../../../scss/variables.scss";
             @import "../../../scss/forms.scss";
 
@@ -30,8 +27,7 @@ import { quantityValidator } from 'src/app/shared/validators/QuantityValidator';
             .workshop-resgistrations-free,
             .btn-normal,
             .total-price,
-            .price-per-person
-             {
+            .price-per-person {
               margin-top: $normal-margin;
             }
 
@@ -46,93 +42,58 @@ import { quantityValidator } from 'src/app/shared/validators/QuantityValidator';
 
           `]
 })
-export class WorkshopSelectedComponent extends BaseComponent{
+export class WorkshopSelectedComponent extends BaseComponent implements OnInit {
 
-  protected route = inject(ActivatedRoute);
-  private apiRequestsService = inject(ApiRequestsService);
-  protected shoppingCartWorkshop = inject(ShoppingCartWorkshopService);
+  private dataSignal = inject(DataSignalService);
   private formBuilder = inject(FormBuilder);
-  private transformApiService = inject(TransformApiService);
+  private formHelper = inject(FormHelperService);
+  route = inject(ActivatedRoute);
 
-  protected workshopSlug! : WorkshopDto['slug'];
-  protected workshopSelected! : WorkshopDto;
-  protected inscriptionsCount : number = 0;
-  protected inscriptionSlugNotConfirmed! : string;
-  private quantityChangeSubscription! : Subscription;
-  private oldQuantityChange : number = 0;
+  workshopSlug! : WorkshopDto['slug'];
+  currentWorkshop!: WorkshopDto | null;
 
-  protected isFormVisible: boolean = false;
-  protected isFormSubmit: boolean = false;
-
-  modalVisible : boolean = false;
-  modalText! : string;
+  isFormVisible: boolean = false;
+  isFormSubmit: boolean = false;
 
   newInscriptionForm = this.formBuilder.group({
     lastname: ['', [Validators.required, Validators.maxLength(255)]],
     firstname : ['', [Validators.required, Validators.maxLength(255)]],
     phone: ['', [Validators.required, phoneValidator()]],
     email: ['', [Validators.required, Validators.email]],
-    quantity: [0, [Validators.required, quantityValidator()]]
+    quantity: [0, [Validators.required, quantityValidator()]],
+    workshopDto: ['', [Validators.required]]
   });
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.workshopSlug = params['workshopSlug'];
-      this.findWorkshopBySlug()
-      this.findInscriptionsByWorkshopBySlug();
-    });
-
-    this.shoppingCartWorkshop.cleanLocalStorage();
-
-    // Surveiller les changements de quantity pour adapter le ShoppingCartWorkshop
-    this.quantityChangeSubscription = this.newInscriptionForm.get('quantity')!.valueChanges.subscribe({
-      next: (value) => {
-        if(value){
-          if(value > this.oldQuantityChange) {
-            this.shoppingCartWorkshop.addItem(this.workshopSlug);
-          } else if(value < this.oldQuantityChange) {
-            this.shoppingCartWorkshop.subtractItemToShoppingCart(this.workshopSlug);
-          }
-        } else if(!value) {
-          this.shoppingCartWorkshop.deleteItemToShoppingCart(this.workshopSlug);
-        }
-        this.oldQuantityChange = value!;
-      },
-      error: (err) => console.error('Error observing quantity changes:', err),
-      complete: () => console.log('Observation complete')
-    });
+    this.findWorkshopByUrlSlug();
+    this.subscribeToWorkShopByslugSignal();
   }
-  
 
-  override ngOnDestroy(): void {
-    if (this.quantityChangeSubscription) {
-      this.quantityChangeSubscription.unsubscribe();
+  private findWorkshopByUrlSlug(): void {
+    this.route.params.subscribe((params) => this.dataSignal.getWorkshopBySlug(params['workshopSlug']));
+  }
+
+  private subscribeToWorkShopByslugSignal(): void {
+    this.dataSignal.$workshopBySlug.subscribe((workshop) => {
+      this.currentWorkshop = workshop;
+      this.newInscriptionForm.get('workshopDto')!.setValue(this.formHelper.jsonStringify(this.currentWorkshop));
+    })
+  }
+
+  isWorkshopInFuture(workshop: WorkshopDto): boolean {
+    const TOMORROW = new Date();
+    TOMORROW.setDate(TOMORROW.getDate() + 1);
+    return new Date(workshop.date) > TOMORROW;
+  }
+
+  registrationsFree(): number {
+    if (this.dataSignal.$workshopsDisponibilities().length > 0) {
+      const WORKSHOP_DISPO = this.dataSignal.$workshopsDisponibilities().find(item => item.workshopSlug === this.currentWorkshop?.slug)
+      if (this.currentWorkshop) {
+        return this.currentWorkshop.registrations - WORKSHOP_DISPO!.disponibilities;
+      }
     }
-  }
-
-  findWorkshopBySlug(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getWorkshopBySlug(this.workshopSlug).subscribe({
-        next: (workshop) => {
-          this.workshopSelected = workshop;
-          this.shoppingCartWorkshop.items = [workshop];
-        },
-        error: (err) => this.changeMessage(err.error.message)
-      })
-    )
-  }
-
-  findInscriptionsByWorkshopBySlug(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getInscriptionsCounterByWorkshop(this.workshopSlug).subscribe({
-        next: (count) => this.inscriptionsCount = count,
-        error: (err) => this.changeMessage(err.error.message)
-      })
-    )
-  }
-
-  resgistrationsFree(): number {
-    return this.workshopSelected.registrations - this.inscriptionsCount;
+    return 0;
   }
 
   changePhoneValue(event: KeyboardEvent): void {
@@ -140,52 +101,27 @@ export class WorkshopSelectedComponent extends BaseComponent{
     this.newInscriptionForm.get('phone')!.setValue(inputElement.value);
   }
 
-  postNewInscription(): void {
+  totalPrice(): number {
+    if (this.newInscriptionForm.get('quantity')!.value) {
+      return this.newInscriptionForm.get('quantity')!.value! * this.currentWorkshop!.price;
+    }
+    return 0;
+  }
+
+  addCartInscription(): void {
 
     this.isFormSubmit = true;
 
-    if(this.newInscriptionForm.valid) {
-      const inscription : CreateInscription = this.transformApiService.postInscription(this.newInscriptionForm, this.workshopSelected);
-
-      this.subscriptions.push(
-        this.apiRequestsService.postInscription(inscription).subscribe({
-          next: (res) => {
-            this.inscriptionSlugNotConfirmed = res.message;
-            this.findWorkshopBySlug();
-            this.findInscriptionsByWorkshopBySlug();
-          },
-          error: (err) => this.changeMessage(err.error.message)
-        })
-      )
+    if (this.newInscriptionForm.valid) {
+      const CREATED_INSCRIPTION: CreateInscription = this.formHelper.formatFormAddValue(this.newInscriptionForm, 'workshopDto');
+      this.dataSignal.postInscription(CREATED_INSCRIPTION);
+      this.resetAllValues();
     }
   }
 
-  confirmNewInscription(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.confirmInscriptionBySlug(this.inscriptionSlugNotConfirmed).subscribe({
-        next: (res) => {          
-          this.modalText = res.message;
-          this.findWorkshopBySlug();
-          this.findInscriptionsByWorkshopBySlug();
-        },
-        error: (err) => this.changeMessage(err.error.message)
-      })
-    )
-  }
-
-  responsePaypal(event: 'success' | 'cancel' | 'error'): void {
-    this.modalVisible = true;
-    if(event === 'success'){
-      this.confirmNewInscription();
-    } else if(event === 'cancel'){
-      this.modalText = 'Annulation de la transaction Paypal.'
-    } else if(event === 'error'){
-      this.modalText = 'Erreur Paypal.'
-    }
-
-  }
-  
-  responseForModal(response: boolean): void {
-    this.modalVisible = false;
+  resetAllValues(): void {
+    this.newInscriptionForm.reset();
+    this.isFormSubmit = false;
+    this.isFormVisible = false;
   }
 }

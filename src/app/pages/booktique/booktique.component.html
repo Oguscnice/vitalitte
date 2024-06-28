@@ -1,15 +1,14 @@
 <div class="booktique-page flex column center">
-  
-  <app-h1 [titleChild]="titleParentBooktique" [backgroundImageChild]="backgroundImageParentHome"/>
+  <app-h1 [titleChild]="'Booktique'" [backgroundImageChild]="backgroundImageParentHome"/>
 
   <section class="cards-choice flex space-around">
-    <div class="card" (click)="userChoiceSelected('classic')">
+    <div class="card" (click)="userChoiceSelected('models')">
       <p class="heading">Carnets</p>
       <p class="sub-heading">Thématique</p>
       <p>&nbsp;</p>
       <p>Sélectionner</p>
     </div>
-    <div class="card" (click)="userChoiceSelected('personnalised')">
+    <div class="card" (click)="userChoiceSelected('handmades')">
       <p class="heading">Personnalisé</p>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
@@ -17,21 +16,14 @@
     </div>
   </section>
 
-  <section class="flex two-choices" [ngClass]="userChoice === 'classic' ? 'models-visible':'handmades-visible'">
-    <div class="models">
-      <h3>Liste des modèles</h3>
-      <app-shopping-notebooks-list [notebooksListChild]="notebooks"/>
+  <section class="flex two-choices" [ngClass]="{'models-visible': userChoice === 'models', 'handmades-visible': userChoice === 'handmades'}">
+    <div class="models flex center" #models>
+      <app-shopping-notebooks-list/>
     </div>
 
-    <div class="handmades">
+    <div class="handmades" #handmades>
       <h3>Créer mon Carnet</h3>
       <app-choices-personalized-creation/>
     </div>
   </section>
-
-  <section>
-    <p>Montant total : {{ shoppingCartNotebookService.totalPrice() | number: '0.2'}} €</p>
-    <app-paypal [shoppingCart]="shoppingCartNotebookService"></app-paypal>
-  </section>
-
 </div>

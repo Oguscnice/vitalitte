@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GiftCardDto } from 'src/app/shared/interfaces/GiftCard';
-import { ApiGiftcardUsedService } from '../../services/api-giftcard-used.service';
+import { ApiGiftcardUsedService } from '../../shared/services/api/api-giftcard-used.service';
 import { BaseComponent } from 'src/app/base.component';
-import { GiftCardUsedDto } from '../../interfaces/GiftCardUsed';
+import { GiftCardUsedDto } from '../../shared/interfaces/GiftCardUsed';
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
-import { ApiGiftcardService } from '../../services/api-giftcard.service';
+import { ApiGiftcardService } from '../../shared/services/api/api-giftcard.service';
 
 @Component({
   standalone: true,

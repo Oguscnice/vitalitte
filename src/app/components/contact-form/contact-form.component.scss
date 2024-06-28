@@ -12,11 +12,6 @@ form {
     .dropdown-container {
       width: 100%;
       margin: $half-margin 0;
-      .input-and-arrow {
-        .arrow-icone {
-          margin-top : 0px;
-        }
-      }
     }
   }
 
@@ -65,7 +60,7 @@ form {
       justify-content: center;
 
       textarea {
-        max-width: 650px;
+        max-width: $max-width-768px;
       }
     }
   }

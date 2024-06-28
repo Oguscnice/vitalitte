@@ -1,15 +1,16 @@
-import { ApiMaterialAdminService } from './../../services/api-material-admin.service';
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent } from 'src/app/base.component';
+import {Component, inject, OnInit, Signal} from '@angular/core';
+import {ActivatedRoute, Params} from '@angular/router';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
-import { FileUploadService } from '../../services/file-upload.service';
-import { FormBuilder, Validators } from '@angular/forms';
-import { urlValidator } from '../../validators/urlValidators';
-import { priceValidator } from '../../validators/priceValidators';
-import { FileInfo } from '../../interfaces/FileInfo';
-import { TransformApiService } from '../../services/transform-api.service';
-import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
+import { FileUploadService } from '../../shared/services/file-upload.service';
+import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { urlValidator } from '../../shared/validators/urlValidators';
+import { priceValidator } from '../../shared/validators/priceValidators';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../shared/variables/Other';
+import {FormHelperService} from "../../shared/services/form-helper.service";
+import {DataSignalService} from "../../../../shared/services/data-signal.service";
+import {AdminMaterialSignalService} from "../../shared/services/admin-material-signal.service";
+import {Subscription} from "rxjs";
+import {BaseComponent} from "../../../../base.component";
 
 @Component({
   standalone: false,
@@ -17,130 +18,81 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../variables/Other';
   templateUrl: './edit-material.component.html',
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
-export class EditMaterialComponent extends BaseComponent{
+export class EditMaterialComponent extends BaseComponent implements OnInit {
 
-  private  apiMaterialAdminService = inject(ApiMaterialAdminService);
-  private route = inject(ActivatedRoute);
-  protected fileUploadService = inject(FileUploadService);
-  private formBuilder = inject(FormBuilder);
-  private router  = inject(Router);
-  private transformApiService = inject(TransformApiService);
+  private route: ActivatedRoute  = inject(ActivatedRoute);
+  private formBuilder: FormBuilder = inject(FormBuilder);
+  private formHelper: FormHelperService = inject(FormHelperService);
+  private dataSignal: DataSignalService = inject(DataSignalService);
+  private adminMaterialSignal: AdminMaterialSignalService = inject(AdminMaterialSignalService);
+  fileUploadService: FileUploadService = inject(FileUploadService);
 
-  protected materialSlug! : MaterialDto['slug'];
-  protected materialSelected! : MaterialDto;
-  protected materialTypes : string[] = [];
+  materialTypes: Signal<string[]> = this.dataSignal.$materialTypes;
 
-  protected isDropdownCategoryOpen : boolean = false;
-  protected isFormSubmit : boolean = false;
-  protected modalVisible : boolean = false;
-  protected modalText! : string;
+  isCategoryDropdownOpen : boolean = false;
+  isFormSubmit : boolean = false;
+  private subscription!: Subscription;
 
-  protected fileSize!: number;
+  toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
-  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
-
-  protected editMaterialForm = this.formBuilder.group({
+  editMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
+    slug: ['', [Validators.required]],
     materialType : ['', [Validators.required]],
     price: ['', [priceValidator()]],
-    description: ['', [Validators.required, Validators.maxLength(1000)]],
-    picture: ['', [Validators.required, urlValidator()]]
+    description: ['', [Validators.required, Validators.maxLength(65534)]],
+    picture: ['', [Validators.required, urlValidator()]],
+    pictureThumbnail: ['', [Validators.required, urlValidator()]]
   });
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.materialSlug = params['materielSlug'];
-      this.getMaterial();
-      this.getAllMaterialsTypes();
-    });
+    this.findMaterialSlugInUrl();
+    this.dataSignal.getAllMaterialsTypes();
+    this.subscribeToMaterialSlugChanges();
   }
 
-  getMaterial(): void {
+  subscribeToMaterialSlugChanges(): void {
     this.subscriptions.push(
-      this.apiMaterialAdminService.getBySlug(this.materialSlug).subscribe({
-        next: (material) =>{
-          this.materialSelected = material;
-          this.updateEditFormValue();
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
+      this.subscription = this.dataSignal.$materialBySlug.subscribe(
+        (material: MaterialDto | null): void => {
+          if (material) {
+            this.patchFormValue(material);
+          }
+        })
     )
   }
 
-  getAllMaterialsTypes(): void {
-    this.subscriptions.push(
-      this.apiMaterialAdminService.getAllMaterialsTypes().subscribe({
-        next: (materialsTypes) => this.materialTypes = materialsTypes,
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
+  findMaterialSlugInUrl(): void {
+    this.route.params.subscribe((params: Params) => this.dataSignal.getMaterialBySlug(params['materielSlug']));
   }
 
-  updateEditFormValue(): void {
-    this.editMaterialForm.get('name')!.setValue(this.materialSelected.name);
-    this.editMaterialForm.get('price')!.setValue(this.materialSelected.price.toString());
-    this.editMaterialForm.get('materialType')!.setValue(this.materialSelected.materialType);
-    this.editMaterialForm.get('description')!.setValue(this.materialSelected.description);
-    this.editMaterialForm.get('picture')!.setValue(this.materialSelected.picture);
+  patchFormValue(material: MaterialDto): void {
+    this.editMaterialForm.get('name')!.setValue(material.name);
+    this.editMaterialForm.get('slug')!.setValue(material.slug);
+    this.editMaterialForm.get('price')!.setValue(material.price.toString());
+    this.editMaterialForm.get('materialType')!.setValue(material.materialType);
+    this.editMaterialForm.get('description')!.setValue(material.description);
+    this.editMaterialForm.get('picture')!.setValue(material.picture);
+    this.editMaterialForm.get('pictureThumbnail')!.setValue(material.pictureThumbnail);
   }
 
-  toggleDropdown(): void{
-    this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen
+  toggleDropdown(dropdownClicked : 'Category'): void {
+    this[`is${dropdownClicked}DropdownOpen`] = !this[`is${dropdownClicked}DropdownOpen`];
   }
 
-  materialTypeClicked(valueClicked : string): void {
+  onMaterialTypeClicked(valueClicked : string): void {
     this.editMaterialForm.controls['materialType'].setValue(valueClicked);
   }
 
-  async onFileSelected(event: Event): Promise<void> {
-
-    const inputElement = event.target as HTMLInputElement;
-    const selectedFile = inputElement.files?.[0];
-    let fileInfo: FileInfo | null = null;
-
-    if (selectedFile) {
-      this.fileSize = selectedFile.size;
-
-      if (this.fileSize < this.fileUploadService.SIZE_MAX) {
-        fileInfo = await this.fileUploadService.fileUpload(event);
-        this.editMaterialForm.get('picture')!.setValue(fileInfo.data.thumb.url);
-      };
-    } else {
-      this.editMaterialForm.get('picture')!.setValue(this.fileUploadService.imageMaterialDefault);
-    }
-  }
-
-  changeImageValue(event: KeyboardEvent): void {
-    const inputElement = event.target as HTMLInputElement;
-    if(inputElement){
-      this.editMaterialForm.get('picture')!.setValue(inputElement.value);
-    }
+  onFileSelected(event: Event, form: FormGroup): void {
+    this.fileUploadService.onFileSelected(event, form).subscribe();
   }
 
   submitEditMaterialForm(): void {
-
     this.isFormSubmit = true
-    
-    if(this.editMaterialForm.valid){
-      let materialToEdit : MaterialDto = this.transformApiService.putMateriel(this.editMaterialForm, this.materialSlug)
-      this.putMaterial(materialToEdit);
+    if (this.editMaterialForm.valid) {
+      const EDITED_MATERIAL: MaterialDto = this.formHelper.formatFormToDto(this.editMaterialForm)
+      this.adminMaterialSignal.put(EDITED_MATERIAL);
     }
-  }
-
-  responseForModal(response : boolean): void {
-    this.router.navigate(['/admin/gestion-des-materiaux']);
-  }
-
-  putMaterial(materialToEdit : MaterialDto): void{
-    this.subscriptions.push(
-      this.apiMaterialAdminService.put(materialToEdit).subscribe({
-        next: (res) => {
-          this.modalText = res.message;
-          this.modalVisible = true;
-          this.isFormSubmit = false;
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
   }
 }

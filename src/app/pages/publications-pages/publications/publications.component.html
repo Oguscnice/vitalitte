@@ -1,76 +1,34 @@
 <app-h1 [titleChild]="'Actualités'"
         [backgroundImageChild]="backgroundImageParentHome"></app-h1>
 
-<div class="publications flex column center">
-  <h3 class="flex center">Actus du moment</h3>
-  <div class="flex wrap space-between publications-section">
-    @for (publication of publicationsSpotlightedTrue; track publication) {
-      <app-publication-thumbnail [publication]="publication"/>
-    }
-  </div>
-</div>
-
-<div class="publications flex column center">
-  <h3 class="flex center">Toutes nos actualités</h3>
-  <div class="flex center space-around input-search">
-    <input type="text"
-           placeholder="Mot(s) recherché(s)"
-           (keyup)="filteredByValueSearch($event)">
-    <button class="btn-normal" (click)="getPublicationsAndCounter()">
-      Chercher
-    </button>
-  </div>
-
-  <div class="dropdown-container">
-    <div class="input-and-arrow flex">
-      <input id="inputSearchPublication"
-            type="text"
-            class="pointer"
-            [value]="size"
-            (focus)="toggleDropdown(true)"
-            readonly/>
-      <div class="arrow-icone flex center">
-        @if (isDropdownOpen) {
-          <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false)"></i>
-        } @else {
-          <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true)"></i>
-        }
-      </div>
-    </div>
-
-    <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownOpen}">
-      @for (number of [10, 20, 50]; track number) {
-        <li (click)="updateSizeValue(number)">
-          {{ number }}
-        </li>
+<h3 class="flex center">Actus du moment</h3>
+@if (publicationsSpotlighted().length > 0) {
+  <div class="publications flex column center">
+    <div class="flex wrap space-between publications-section">
+      @for (publication of publicationsSpotlighted(); track publication) {
+        <app-publication-thumbnail [publication]="publication"/>
       }
-    </ul>
+    </div>
   </div>
-  <div class="flex wrap space-between publications-section">
-    @for (publication of publications; track publication) {
-      <app-publication-thumbnail [publication]="publication"/>
-    }
+} @else {
+  <h4 class="flex center">Pas d'actualité mise en valeur</h4>
+}
+
+<h3 class="flex center">Toutes nos actualités</h3>
+@if (publications().length > 0) {
+
+  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+
+  <div class="publications flex column center">
+    <div class="flex wrap space-between publications-section">
+      @for (publication of publications(); track publication) {
+        <app-publication-thumbnail [publication]="publication"/>
+      }
+    </div>
   </div>
-</div>
 
-<div class="flex space-around choice-page">
-  <i [ngClass]="{'disabled': pageNumber === 0 }"
-     class="fa-solid fa-angles-left pointer"
-     (click)="changePage('first')">
-  </i>
-  <i [ngClass]="{'disabled': pageNumber === 0 }"
-     class="fa-solid fa-angle-left pointer"
-     (click)="changePage('prev')">
-  </i>
+  <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+} @else {
+  <h4 class="flex center">Pas d'actualité.</h4>
+}
 
-    Page {{ pageNumber + 1 }} / {{ calcLastPage() }}
-
-  <i [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
-     class="fa-solid fa-angle-right pointer"
-     (click)="changePage('next')">
-  </i>
-  <i [ngClass]="{'disabled': pageNumber + 1 === calcLastPage() }"
-     class="fa-solid fa-angles-right pointer"
-     (click)="changePage('last')">
-  </i>
-</div>

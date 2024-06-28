@@ -5,9 +5,9 @@
   <h3 class="flex pointer"
       [routerLink]="'/'">VitaLitté</h3>
   <div class="shopping-cart-counter"
-      [ngClass]="shoppingCartNotebookService.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
+      [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
     <i class="fa-solid fa-cart-shopping"></i>
-    <p class="flex center">{{shoppingCartNotebookService.counterTotalShoppingCart()}}</p>
+    <p class="flex center"> {{ shoppingCart.counterTotalShoppingCart() }} </p>
   </div>
   <ul
     class="flex center space-around"
@@ -31,7 +31,7 @@
             'active': item.routerLink === activePageService.activePage,
             'submenu-close' : item.submenu && item.submenu.isOpen }">
           {{ item.name }}
-        </p> 
+        </p>
         @if (item.submenu) {
           <div class="flex center space-around submenu"
               [ngClass]="item.submenu.isOpen ? '' : 'close' ">
@@ -41,12 +41,12 @@
                   [href]="item.routerLink + '#' + subItem.anchor"
                   (click)="closeMenuBurger(menuCheckbox, item.routerLink, $event)">
                   {{subItem.name}}
-                </a>          
+                </a>
               }
-          </div>        
+          </div>
         }
 
-      </li>      
+      </li>
     }
 
   </ul>

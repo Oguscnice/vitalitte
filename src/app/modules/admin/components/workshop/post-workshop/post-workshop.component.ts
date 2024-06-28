@@ -1,16 +1,18 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { FileUploadService } from '../../../services/file-upload.service';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TransformApiService } from '../../../services/transform-api.service';
-import { CreateWorkshop } from '../../../interfaces/Workshop';
+import {Component, inject, OnInit} from '@angular/core';
+import { FileUploadService } from '../../../shared/services/file-upload.service';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { CreateWorkshop } from '../../../shared/interfaces/Workshop';
 import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
-import { urlValidator } from '../../../validators/urlValidators';
-import { priceValidator } from '../../../validators/priceValidators';
+import { urlValidator } from '../../../shared/validators/urlValidators';
+import { priceValidator } from '../../../shared/validators/priceValidators';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
-import { ApiBanService } from '../../../services/api-ban.service';
-import { FileInfo } from '../../../interfaces/FileInfo';
-import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
+import { ApiBanService } from '../../../shared/services/api/api-ban.service';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
+import {AdminWorkshopSignalService} from "../../../shared/services/admin-workshop-signal.service";
+import {FormHelperService} from "../../../shared/services/form-helper.service";
+import {BaseComponent} from "../../../../../base.component";
+import {AnguilleSignalService} from "../../../../../shared/services/anguille-signal.service";
 
 @Component({
   selector: 'app-post-workshop',
@@ -20,77 +22,70 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })
 
-export class PostWorkshopComponent {
+export class PostWorkshopComponent extends BaseComponent implements OnInit {
 
-  protected fileUploadService = inject(FileUploadService);
-  private formBuilder = inject(FormBuilder);
-  private transformApiService = inject(TransformApiService);
-  protected apiBanService = inject(ApiBanService)
+  private formBuilder: FormBuilder = inject(FormBuilder);
+  private formHelper: FormHelperService = inject(FormHelperService);
+  private adminWorkshopSignal: AdminWorkshopSignalService = inject(AdminWorkshopSignalService);
+  private anguilleSignal: AnguilleSignalService = inject(AnguilleSignalService);
+  apiBanService: ApiBanService = inject(ApiBanService);
+  fileUploadService: FileUploadService = inject(FileUploadService);
 
-  @Output() newWorkshop: EventEmitter<CreateWorkshop> = new EventEmitter();
+  isFormVisible: boolean = false;
+  isFormSubmit: boolean = false;
 
-  protected isFormVisible : boolean = false;
-  protected isFormSubmit : boolean = false;
-
-  protected fileSize!: number;
-
-  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   newWorkshopForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.maxLength(255)]],
-    description: ['', [Validators.required, Validators.maxLength(1000)]],
+    description: ['', [Validators.required, Validators.maxLength(65534)]],
     date: ['', [Validators.required]],
     address: ['', [Validators.required]],
     price: ['', [Validators.required, priceValidator()]],
     picture: ['', [Validators.required, urlValidator()]],
-    registrations: [0, [Validators.required]],
+    pictureThumbnail: ['', [Validators.required, urlValidator()]],
+    registrations: ['', [Validators.required]],
   });
 
   ngOnInit(): void {
-    this.newWorkshopForm.get('picture')!.setValue(this.fileUploadService.imageActivityDefault);
+    this.fileUploadService.patchImage(this.newWorkshopForm, this.fileUploadService.imageActivityDefault, this.fileUploadService.imageActivityDefaultThumbnail)
   }
 
-  searchAdress(event: KeyboardEvent): void {
-    const inputElement = event.target as HTMLInputElement;
-    if(inputElement.value.length > 3){
-      this.apiBanService.getAdress(inputElement.value).subscribe((adress) => {
-        this.apiBanService.adressList = adress.features;
-      });
+  searchAddress(event: KeyboardEvent): void {
+    const INPUT_ELEMENT: HTMLInputElement = event.target as HTMLInputElement;
+    if (INPUT_ELEMENT.value.length > 3) {
+      this.subscriptions.push(
+        this.apiBanService.getAddress(INPUT_ELEMENT.value).subscribe({
+          next: (address): void => this.apiBanService.addressList = address.features,
+          error: (err): void => this.anguilleSignal.changeMessage(err.error.message)
+        })
+      )
     }
   }
 
-  adressSelected(addressClicked: string): void {
+  onFileSelected(event: Event, form: FormGroup): void {
+    this.fileUploadService.onFileSelected(event, form).subscribe();
+  }
+
+  onAddressClicked(addressClicked: string): void {
     this.newWorkshopForm.get('address')!.setValue(addressClicked);
-  }
-
-  async onFileSelected(event: Event): Promise<void> {
-
-    const inputElement = event.target as HTMLInputElement;
-    const selectedFile = inputElement.files?.[0];
-    let fileInfo: FileInfo | null = null;
-
-    if (selectedFile) {
-      if (selectedFile.size < this.fileUploadService.SIZE_MAX) {
-        fileInfo = await this.fileUploadService.fileUpload(event);
-        this.newWorkshopForm.get('picture')!.setValue(fileInfo.data.thumb.url);
-      };
-    }
-  }
-
-  changeImageValue(event: KeyboardEvent): void {
-    const inputElement = event.target as HTMLInputElement;
-    if(inputElement){
-      this.newWorkshopForm.get('picture')!.setValue(inputElement.value);
-    }
   }
 
   submitNewWorkshopForm(): void {
 
-    this.isFormSubmit = true
+    this.isFormSubmit = true;
 
-    if(this.newWorkshopForm.valid){
-      let createdWorkshop : CreateWorkshop = this.transformApiService.postWorkshop(this.newWorkshopForm)
-      this.newWorkshop.emit(createdWorkshop);
+    if (this.newWorkshopForm.valid) {
+      const CREATED_WORKSHOP: CreateWorkshop = this.formHelper.formatFormToDto<CreateWorkshop>(this.newWorkshopForm)
+      this.adminWorkshopSignal.post(CREATED_WORKSHOP);
+      this.resetAllValues();
     }
+  }
+
+  resetAllValues(): void {
+    this.isFormSubmit = false;
+    this.isFormVisible = false;
+    this.newWorkshopForm.reset();
+    this.fileUploadService.patchImage(this.newWorkshopForm, this.fileUploadService.imageActivityDefault, this.fileUploadService.imageActivityDefaultThumbnail)
   }
 }

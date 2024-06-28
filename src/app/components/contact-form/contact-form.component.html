@@ -14,8 +14,8 @@
       id="lastname"
       (keyup)="changeLastnameValue($event)"
     />
-  
-    @if (isFormClicked && hasErrors) {
+
+    @if (isFormSubmit && hasErrors) {
       <div class="errors">
         @if (lastnameValue && lastnameValue.length > 255) {
           <small>Le nom ne doit pas comporter plus de<strong>255 caractères</strong>.</small>
@@ -37,8 +37,8 @@
       id="firstname"
       (keyup)="changeFirstnameValue($event)"
     />
-  
-    @if (isFormClicked && hasErrors) {
+
+    @if (isFormSubmit && hasErrors) {
       <div class="errors">
         @if (firstnameValue && lastnameValue.length > 255) {
           <small>Le prénom ne doit pas comporter plus de<strong>255 caractères</strong>.</small>
@@ -61,7 +61,7 @@
       placeholder="Ex: email@example.com"
       (keyup)="changeEmailValue($event)"
     />
-    @if (isFormClicked && hasErrors) {
+    @if (isFormSubmit && hasErrors) {
       <div class="errors">
         @if (!validateEmail()) {
           <small>Renseigner un email au bon format<strong>bon format</strong>.</small>
@@ -82,7 +82,7 @@
       id="phone"
       (keyup)="changePhoneValue($event)"
     />
-    @if (isFormClicked && hasErrors) {
+    @if (isFormSubmit && hasErrors) {
       <div class="errors">
         @if (validatePhone()) {
           <small>Merci d'entrer un numéro de téléphone à<strong>10 chiffres</strong>.</small>
@@ -123,7 +123,7 @@
       </ul>
     </div>
 
-    @if (isFormClicked && hasErrors) {
+    @if (isFormSubmit && hasErrors) {
       <div class="errors">
         @if (!themeValue) {
           <small>Le thème est <strong>obligatoire</strong>.</small>
@@ -142,7 +142,7 @@
   </textarea>
   <small [ngStyle]="{'color' : messageValue.length > 999 ? 'red' : ''}">Charactère(s) {{ messageValue.length }} / 1000 maximum</small>
 
-  @if (hasErrors && isFormClicked) {
+  @if (hasErrors && isFormSubmit) {
     <div class="errors">
       @if (messageValue && messageValue.length > 1000) {
         <small>Le message ne doit pas comporter plus de<strong>1000 caractères</strong>.</small>

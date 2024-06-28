@@ -32,13 +32,13 @@
     <fieldset class="flex column">
       <label for="description">Description : </label>
       <editor [init]="toolBarConfig"
-
+              id="description"
               placeholder="Description.."
               formControlName="description"
               autocomplete="off">
       </editor>
       <p [style.color]=" this.newPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.newPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
-      
+
       @if (isFormSubmit && newPublicationForm.controls['description'].invalid) {
         <div>
           @if (newPublicationForm.controls.description.errors?.['required']) {
@@ -60,23 +60,21 @@
       <input type="text"
              id="picture"
              formControlName="picture"
-             value="{{ newPublicationForm.get('picture') }}"
-             (keyup)="changeImageValue($event)"
-             placeholder="URL de l'image..."/>
+             class="display-none">
 
-      <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+      <small>Cliquez sur l'image pour en télécharger une.</small>
 
       <img class="pointer"
            (click)="fileUpload.click()"
-           [src]="newPublicationForm.get('picture')!.value"
+           [src]="newPublicationForm.get('pictureThumbnail')!.value"
            alt="Photo à choisir pour le carnet"/>
 
       @if (isFormSubmit && newPublicationForm.controls['picture'].invalid) {
         <div>
-          @if (fileSize > fileUploadService.SIZE_MAX) {
+          @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
             <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
           } @else if (newPublicationForm.controls.description.errors?.['invalidUrl']) {
-            <small>L'image doit respecter le format d'une URL (http://, https:// ou www.).</small>
+            <small>L'image doit respecter le format d'une URL (http://, https://).</small>
           }
         </div>
       }

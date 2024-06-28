@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import { IPayPalConfig, ICreateOrderRequest, NgxPayPalModule, IClientAuthorizeCallbackData } from 'ngx-paypal';
-import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
-import { ShoppingCartWorkshopService } from 'src/app/shared/services/shopping-cart-workshop.service';
+import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
 
 @Component({
   standalone: true,
@@ -12,8 +11,10 @@ import { ShoppingCartWorkshopService } from 'src/app/shared/services/shopping-ca
 })
 export class PaypalComponent {
 
-  @Input() shoppingCart! : ShoppingCartNotebookService | ShoppingCartWorkshopService
+  // @Input() shoppingCart! : ShoppingCartNotebookService | ShoppingCartWorkshopService
   @Output() responsePaypal: EventEmitter<'success' | 'cancel' | 'error'> = new EventEmitter();
+
+  private shoppingCart = inject(ShoppingCartService);
   public payPalConfig? : IPayPalConfig;
 
   ngOnInit(): void {
@@ -21,7 +22,7 @@ export class PaypalComponent {
   }
 
   private initConfig(): void {
-    
+
       this.payPalConfig = {
           currency: 'EUR',
           clientId: 'AYYE0u97Tpi9PeuAMjG1gub3z0j9o65rmMhXfbzotEK5T9QPLumA5-VyFnFgpt_oD1EVw2nO8X9n46ju',

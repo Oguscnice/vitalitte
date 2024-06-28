@@ -1,10 +1,12 @@
 <div class="title-functionality flex center">
   <h4 class="flex center">Gérer les Carnets</h4>
-  <i class="fa-solid fa-arrow-down" (click)="isTableVisible = !isTableVisible" [ngClass]="{'rotated180': isTableVisible}"></i>
+  <i class="fa-solid fa-arrow-down"
+     (click)="isTableVisible = !isTableVisible"
+     [ngClass]="{'rotated180': isTableVisible}"></i>
 </div>
 
 
-@if (notebooks && isTableVisible) {
+@if (notebooks() && notebooks().length > 0 && isTableVisible) {
   <table>
     <thead>
       <tr>
@@ -22,16 +24,16 @@
         </td>
       </tr>
     </thead>
-  
+
     <tbody>
-      @for (notebook of notebooks; track notebook; let index = $index) {
+      @for (notebook of notebooks(); track notebook; let index = $index) {
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
           <td>
             <div class="toggle-switch" (click)="changeAvailability(notebook)">
               <input class="toggle-input"
                       type="checkbox"
                       [checked]="notebook.available">
-              <label class="toggle-label" for="toggle"></label>
+              <label class="toggle-label"></label>
             </div>
           </td>
           <td class="flex column">
@@ -42,12 +44,12 @@
               [routerLink]="'/admin/editer-carnet/' + notebook.slug"></i>
           </td>
           <td>
-            <i class="fa-solid fa-trash-can flex center" (click)="delete(notebook)"></i>
+            <i class="fa-solid fa-trash-can flex center" (click)="onDeleteClick(notebook)"></i>
           </td>
         </tr>
       }
     </tbody>
   </table>
-} @else if (!notebooks || notebooks.length <= 0) {
-  <h5>Aucun Carnets</h5>
+} @else if ((!notebooks || notebooks.length < 1) && isTableVisible) {
+  <h5>Aucun Carnet</h5>
 }

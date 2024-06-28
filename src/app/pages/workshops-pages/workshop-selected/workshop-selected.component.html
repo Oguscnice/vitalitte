@@ -1,14 +1,13 @@
-@if(workshopSelected) {
-  <app-h1 [titleChild]="'Atelier : ' + workshopSelected.title" [backgroundImageChild]="workshopSelected.picture"/>
+@if (currentWorkshop) {
+  <app-h1 [titleChild]="'Atelier : ' + currentWorkshop.title" [backgroundImageChild]="currentWorkshop.picture"/>
 
-  <div class="workshop-content" [innerHTML]="workshopSelected.description"></div>
-
-  @if(resgistrationsFree() > 0) {
-    @if (workshopSelected.available) {
-      @if(resgistrationsFree() === 1) {
-        <p class="workshop-resgistrations-free">Place disponible : {{ resgistrationsFree() }} </p>
+  <div class="workshop-content" [innerHTML]="currentWorkshop.description"></div>
+  @if (registrationsFree() > 0) {
+    @if (currentWorkshop.available && isWorkshopInFuture(currentWorkshop)) {
+      @if (registrationsFree() === 1) {
+        <p class="workshop-resgistrations-free">Place disponible : {{ registrationsFree() }} </p>
       } @else {
-        <p class="workshop-resgistrations-free">Places disponibles : {{ resgistrationsFree() }} </p> 
+        <p class="workshop-resgistrations-free">Places disponibles : {{ registrationsFree() }} </p>
       }
       <button class="btn-normal" (click)="isFormVisible = !isFormVisible"> Formulaire d'inscription </button>
     } @else {
@@ -21,11 +20,11 @@
     </div>
   }
 
-  @if(isFormVisible && resgistrationsFree() > 0) {
+  @if (isFormVisible && registrationsFree() > 0) {
     <form (ngSubmit)="(newInscriptionForm.valid)"
           [formGroup]="newInscriptionForm"
           #myForm="ngForm">
-    
+
       <fieldset class="flex column">
         <label for="lastname">Nom :</label>
         <input type="text"
@@ -33,10 +32,10 @@
                placeholder="Nom..."
                formControlName="lastname"
                autocomplete="off"/>
-    
-        @if(isFormSubmit && myForm.submitted && newInscriptionForm.controls['lastname'].invalid) {
+
+        @if (isFormSubmit && myForm.submitted && newInscriptionForm.controls['lastname'].invalid) {
           <div>
-            @if(newInscriptionForm.controls.lastname.errors?.['required']) {
+            @if (newInscriptionForm.controls.lastname.errors?.['required']) {
               <small>Le nom de famille est obligatoire.</small>
             } @else if(newInscriptionForm.controls.lastname.errors?.['maxlength']) {
               <small>Le nom de famille ne doit pas dépasser 255 charactères.</small>
@@ -44,7 +43,7 @@
           </div>
         }
       </fieldset>
-    
+
       <fieldset class="flex column">
         <label for="firstname">Prénom :</label>
         <input type="text"
@@ -52,19 +51,19 @@
                placeholder="Prénom..."
                formControlName="firstname"
                autocomplete="off"/>
-    
-        @if(isFormSubmit && myForm.submitted && newInscriptionForm.controls['firstname'].invalid) {
+
+        @if (isFormSubmit && myForm.submitted && newInscriptionForm.controls['firstname'].invalid) {
           <div>
-            @if(newInscriptionForm.controls.firstname.errors?.['required']) {
+            @if (newInscriptionForm.controls.firstname.errors?.['required']) {
               <small>Le prénom est obligatoire.</small>
-            } @else if(newInscriptionForm.controls.firstname.errors?.['maxlength']) {
+            } @else if (newInscriptionForm.controls.firstname.errors?.['maxlength']) {
               <small>Le prénom ne doit pas dépasser 255 charactères.</small>
             }
           </div>
         }
-    
+
       </fieldset>
-    
+
       <fieldset class="flex column">
         <label for="phone">Téléphone :</label>
         <input
@@ -74,17 +73,17 @@
           id="phone"
           (keyup)="changePhoneValue($event)"
         />
-        @if(isFormSubmit && myForm.submitted && newInscriptionForm.controls['phone'].invalid) {
+        @if (isFormSubmit && myForm.submitted && newInscriptionForm.controls['phone'].invalid) {
           <div>
-            @if(newInscriptionForm.controls.phone.errors?.['required']) {
+            @if (newInscriptionForm.controls.phone.errors?.['required']) {
               <small>Le téléphone est obligatoire.</small>
-            } @else if(newInscriptionForm.controls.phone.errors?.['invalidPhone']) {
+            } @else if (newInscriptionForm.controls.phone.errors?.['invalidPhone']) {
               <small>Le téléphone doit être composé de 10 chiffres commençant par '0' (ex : 06 12 34 56 78) ou 12 charactères commençant par '+' (ex : +33 6 12 34 56 78).</small>
             }
           </div>
         }
       </fieldset>
-    
+
       <fieldset class="flex column">
         <label for="email">Email :</label>
         <input type="text"
@@ -92,49 +91,46 @@
                placeholder="Email..."
                formControlName="email"
                autocomplete="off"/>
-    
-        @if(isFormSubmit && myForm.submitted && newInscriptionForm.controls['email'].invalid) {
+
+        @if (isFormSubmit && myForm.submitted && newInscriptionForm.controls['email'].invalid) {
           <div>
-            @if(newInscriptionForm.controls.email.errors?.['required']) {
+            @if (newInscriptionForm.controls.email.errors?.['required']) {
               <small>L'email est obligatoire.</small>
-            } @else if(newInscriptionForm.controls.email.errors?.['email']) {
+            } @else if (newInscriptionForm.controls.email.errors?.['email']) {
               <small>L'email ne respecte pas le format d'une adresse mail'.</small>
             }
           </div>
         }
-    
+
       </fieldset>
-    
+
       <fieldset class="flex column">
         <label for="quantity">Combien de places ?</label>
-        <div class="flex">
-          <p class="price-per-person"> {{ workshopSelected.price | number:'0.2' }}€ /personne </p>
-          <input type="number"
-                id="quantity"
-                formControlName="quantity"
-                min="0"
-                [max]="workshopSelected.registrations === 0 || resgistrationsFree() > 5 ? 5 : resgistrationsFree()"/>
-        </div>
-        @if(isFormSubmit && newInscriptionForm.controls['quantity'].invalid) {
+        <small class="price-per-person"> {{ currentWorkshop.price | number:'0.2' }}€ /personne </small>
+        <input type="number"
+               id="quantity"
+               formControlName="quantity"
+               placeholder="0"
+               min="0"
+               [max]="currentWorkshop.registrations === 0 || registrationsFree() > 5 ? 5 : registrationsFree()"/>
+        @if (isFormSubmit && newInscriptionForm.controls['quantity'].invalid) {
         <div>
-          @if(newInscriptionForm.controls.quantity.errors?.['required']) {
+          @if (newInscriptionForm.controls.quantity.errors?.['required']) {
             <small>La quantité est obligatoire.</small>
-          } @else if(newInscriptionForm.controls.quantity.errors?.['quantityError']) {
+          } @else if (newInscriptionForm.controls.quantity.errors?.['quantityError']) {
             <small>La quantité doit être comprise entre 1 et 5.</small>
           }
         </div>
         }
-    
       </fieldset>
-    
-      <p class="total-price">Montant total : {{ shoppingCartWorkshop.totalPrice()| number: '0.2'}} €</p>
 
-      @if(!inscriptionSlugNotConfirmed) {
-        <button class="btn-normal" (click)="postNewInscription()">S'inscrire</button>
-      } @else if(inscriptionSlugNotConfirmed) {
-        <app-paypal [shoppingCart]="shoppingCartWorkshop"
-                    (responsePaypal)="responsePaypal($event)"></app-paypal>
-      }
+      <p class="total-price">Montant total : {{ totalPrice() | number: '0.2'}} €</p>
+
+      <button class="btn-submit-admin"
+              type="submit"
+              (click)="addCartInscription()">
+        Ajouter au Panier
+      </button>
 
     </form>
   }
@@ -144,11 +140,3 @@
           [backgroundImageChild]="'../../../../assets/images/figma/lost-workshop.jpg'">
   </app-h1>
 }
-
-<anguille [message]="messageResponseFromBackend" />
-
-<app-modal [modalVisible]="modalVisible"
-           [modalText]="modalText"
-        
-           (responseForModal)="responseForModal($event)">
-</app-modal>

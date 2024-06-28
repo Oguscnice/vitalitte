@@ -15,6 +15,7 @@ import { WorkshopsComponent } from './pages/workshops-pages/workshop/workshops.c
 import { PublicationsComponent } from './pages/publications-pages/publications/publications.component';
 import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
 import { WorkshopSelectedComponent } from './pages/workshops-pages/workshop-selected/workshop-selected.component';
+import {CheckoutComponent} from "./pages/checkout/checkout.component";
 
 const routes: Routes = [
   {
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'carnets-pret-a-emploi', component : NotebooksPreparedComponent},
   { path: 'carnets/:notebookSlug', component : NotebookSelectedComponent},
   { path: 'carnets', component: NotebooksComponent },
+  { path: 'panier', component: CheckoutComponent },
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: 'page-404' },
 ];

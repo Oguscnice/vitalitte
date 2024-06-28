@@ -1,8 +1,7 @@
-import { PublciationPaginated } from './../interfaces/Publication';
-import { GoogleReviews, Review } from './../interfaces/GoogleReviews';
+import { GoogleReviews, Review } from '../interfaces/GoogleReviews';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { MaterialDto } from '../interfaces/Material';
 import { URLAPI } from '../variables/Others';
 import { NotebookDto } from '../interfaces/Notebook';
@@ -12,7 +11,7 @@ import { WorkshopDto } from '../interfaces/Workshop';
 import { CreateInscription, InscriptionDto } from '../interfaces/Inscription';
 import { ResponseEntity } from '../interfaces/ResponseEntity';
 import { PublicationDto } from '../interfaces/Publication';
-import { Pagination } from '../interfaces/Pagination';
+import {PaginationWithSearchValue} from '../interfaces/Pagination';
 
 @Injectable({
   providedIn: 'root',
@@ -24,9 +23,16 @@ export class ApiRequestsService {
   //-------------------
   //-----Matériels-----
   //-------------------
-
   getAllMaterials(): Observable<MaterialDto[]> {
     return this.http.get<MaterialDto[]>(URLAPI + "/materials")
+  }
+
+  getMaterialBySlug(materialSlug: MaterialDto['slug']): Observable<MaterialDto> {
+    return this.http.get<MaterialDto>(URLAPI + "/materials/" + materialSlug)
+  }
+
+  getAllMaterialsTypes(): Observable<string[]>{
+    return this.http.get<string[]>(URLAPI + "/materials/types")
   }
 
   //-------------------
@@ -69,10 +75,6 @@ export class ApiRequestsService {
   //-----Workshops-----
   //-------------------
 
-  getAllWorkshops(): Observable<WorkshopDto[]> {
-    return this.http.get<WorkshopDto[]>(URLAPI + "/workshops")
-  }
-
   getWorkshopsIsAvailable(value : boolean): Observable<WorkshopDto[]> {
     return this.http.get<WorkshopDto[]>(URLAPI + "/workshops/isAvailable/" + value.toString())
   }
@@ -81,7 +83,7 @@ export class ApiRequestsService {
     return this.http.get<WorkshopDto[]>(URLAPI + "/workshops/date-to-come")
   }
 
-  getWorkshopsByPastDate(pagination : Pagination): Observable<WorkshopDto[]> {
+  getWorkshopsByPastDate(pagination : PaginationWithSearchValue): Observable<WorkshopDto[]> {
     return this.http.post<WorkshopDto[]>(URLAPI + "/workshops/past-date/paginated", pagination)
   }
 
@@ -101,8 +103,8 @@ export class ApiRequestsService {
   //----Inscriptions---
   //-------------------
 
-  postInscription(inscription : CreateInscription): Observable<ResponseEntity> {
-    return this.http.post<ResponseEntity>(URLAPI + "/inscriptions", inscription)
+  postInscription(inscription : CreateInscription): Observable<InscriptionDto> {
+    return this.http.post<InscriptionDto>(URLAPI + "/inscriptions", inscription)
   }
 
   confirmInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<ResponseEntity> {
@@ -117,12 +119,8 @@ export class ApiRequestsService {
   //----Publications---
   //-------------------
 
-  getAllPublications(): Observable<PublicationDto[]> {
-    return this.http.get<PublicationDto[]>(URLAPI + "/publications")
-  }
-
-  getAllPublicationsCounter(publciationPaginated: PublciationPaginated): Observable<number> {
-    return this.http.post<number>(URLAPI + "/publications/count", publciationPaginated)
+  getCounterPublications(paginationWithSearchValue: PaginationWithSearchValue): Observable<number> {
+    return this.http.post<number>(URLAPI + "/publications/counter", paginationWithSearchValue)
   }
 
   getPublicationsSpotlighted(value : string): Observable<PublicationDto[]> {
@@ -133,15 +131,15 @@ export class ApiRequestsService {
     return this.http.get<PublicationDto>(URLAPI + "/publications/" + publicationSlug)
   }
 
-  getPublicationPaginated(publciationPaginated: PublciationPaginated): Observable<PublicationDto[]> {
-    return this.http.post<PublicationDto[]>(URLAPI + "/publications/paginated" , publciationPaginated)
+  getPublicationPaginated(paginationWithSearchValue: PaginationWithSearchValue): Observable<PublicationDto[]> {
+    return this.http.post<PublicationDto[]>(URLAPI + "/publications/paginated", paginationWithSearchValue)
   }
 
   //-------------------
   //-----GiftCards-----
   //-------------------
 
-  getIsExpiredGiftCard(code : string): Observable<boolean> {
+  isExpiredGiftCard(code : string): Observable<boolean> {
     return this.http.get<boolean>(URLAPI + "/giftCards/is-expired/" + code)
   }
 
@@ -152,8 +150,8 @@ export class ApiRequestsService {
   private googleAccountId : string = "";
   private googleLocationId : string = "";
 
-  getGoogleReviews(): Observable<any> {
-  // getGoogleReviews(): Observable<GoogleReviews[]> {
+  // getGoogleReviews(): Observable<any> {
+  getGoogleReviews(): Observable<GoogleReviews[]> {
     return this.http.get<GoogleReviews[]>(`https://mybusiness.googleapis.com/v4/accounts/${this.googleAccountId}/locations/${this.googleLocationId}/reviews`)
   }
 

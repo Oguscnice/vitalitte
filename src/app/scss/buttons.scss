@@ -13,6 +13,8 @@
   color: $white;
   @include text-shadow (0.4px, $black);
   cursor: pointer;
+  min-height: 40px;
+  min-width: 40px;
 }
 
 .btn-grey {
@@ -22,12 +24,37 @@
   cursor: not-allowed;
 }
 
+.btn-filter {
+  border-radius: 8px;
+  margin: calc($half-margin / 2);
+  padding: $double-padding;
+  font-family: $font-family-text;
+  font-size: $double-font-size;
+  text-align: center;
+  cursor: pointer;
+  min-height: 40px;
+  min-width: 40px;
+  transition: all 0.2s;
+}
+
+.btn-filter-inactive {
+  border-color: $lilac-dark-transparent;
+  background-color: $lilac-light-opacity-low;
+  color: $lilac-dark;
+  box-shadow: 4px 4px 2px rgba($lilac-light, 0.4);
+}
+
+.btn-filter-active {
+  border-color: $lilac-dark;
+  background-color: $lilac;
+  color: $white;
+  box-shadow: 8px 8px 4px rgba($lilac, 0.4);
+}
+
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .btn-normal {
     font-size: $normal-font-size;
-    padding: 0px;
-    height: 40px;
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
-import { NAVBAR_ADMIN } from '../../variables/Navbar';
+import { NAVBAR_ADMIN } from '../../shared/variables/Navbar';
 
 @Component({
   standalone: false,

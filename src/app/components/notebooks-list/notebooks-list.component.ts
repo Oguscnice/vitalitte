@@ -13,7 +13,7 @@ import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
                   <h5>{{notebook.name | titlecase}}</h5>
                   <div class="image-and-filter-color flex column pointer"
                       [routerLink]="'/carnets/' + notebook.slug">
-                    <img src="{{notebook.mainPicture}}" alt="Photo d'un carnet"/>
+                    <img src="{{ notebook.picture }}" alt="Photo d'un carnet"/>
                     <div class="filter-color"></div>
                   </div>
                   <div [innerHTML]="notebook.introduction"></div>

@@ -1,12 +1,15 @@
 <div class="title-functionality flex center">
-  <h4 class="flex center">Gérer les Ateliers</h4>
+  <h4 class="flex center">Gérer les Publications</h4>
   <i class="fa-solid fa-arrow-down"
      (click)="isTableVisible = !isTableVisible"
      [ngClass]="{'rotated180': isTableVisible}">
   </i>
 </div>
 
-@if (publications && isTableVisible) {
+@if (publications() && isTableVisible) {
+
+  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+
   <table>
     <thead>
       <tr>
@@ -20,8 +23,11 @@
           <p>Des.</p>
         </td>
         <td>
+          <p>Image</p>
+        </td>
+        <td>
           <p>Modif.</p>
-        </td>      
+        </td>
         <td>
           <p>Supp.</p>
         </td>
@@ -29,14 +35,14 @@
     </thead>
 
     <tbody>
-      @for (publication of publications; track publication; let index = $index) {
+      @for (publication of publications(); track publication; let index = $index) {
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
             <td>
               <div class="toggle-switch" (click)="changeSpotlight(publication)">
                 <input class="toggle-input"
                        type="checkbox"
                        [checked]="publication.spotlighted">
-                <label class="toggle-label" for="toggle"></label>
+                <label class="toggle-label"></label>
               </div>
             </td>
           <td>
@@ -47,27 +53,43 @@
             </i>
           </td>
           <td class="flex center">
-            <img src="{{publication.picture}}" alt="Photo de l'atelier {{publication.title}}">
+            <img src="{{ publication.pictureThumbnail }}" alt="Photo de la publication {{ publication.title }}">
           </td>
           <td>
-            <i class="fa-solid fa-pencil pointer flex center" (click)="edit(publication)"></i>
+            @if (publication.slug !== editPublicationForm.get('slug')!.value) {
+              <i class="fa-solid fa-pencil pointer flex center" (click)="patchFormValue(publication)"></i>
+            } @else {
+              <i class="fa-solid fa-circle-xmark flex center" (click)="patchFormValue(null)"></i>
+            }
           </td>
           <td>
             <i (click)="delete(publication)" class="fa-solid fa-trash-can pointer flex center"></i>
           </td>
-        </tr>        
+        </tr>
       }
 
     </tbody>
-  </table>  
-} @else if (!publications || publications.length <= 0) {
-  <h5>Aucun Atelier</h5>
+  </table>
+
+  @if (publications() && publications().length > 0) {
+    <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+  }
+
+} @else if ((!publications || publications.length <= 0) && isTableVisible) {
+  <h5>Aucune publication</h5>
 }
 
-@if (publicationToEdit) {
+@if (editPublicationForm.get('slug')!.value) {
+
   <form (ngSubmit)="(editPublicationForm.valid)"
         [formGroup]="editPublicationForm"
         #myForm="ngForm">
+
+    <button class="btn-submit-admin"
+            (click)="patchFormValue(null)">
+      Annuler l'édition
+    </button>
+
 
     <fieldset class="flex column">
       <label for="title">Titre de la publication :</label>
@@ -91,13 +113,13 @@
     <fieldset class="flex column">
       <label for="description">Description : </label>
       <editor [init]="toolBarConfig"
-
+              id="description"
               placeholder="Description.."
               formControlName="description"
               autocomplete="off">
       </editor>
       <p [style.color]=" this.editPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
-      
+
       @if (isFormSubmit && editPublicationForm.controls['description'].invalid) {
         <div>
           @if (editPublicationForm.controls.description.errors?.['required']) {
@@ -119,11 +141,9 @@
       <input type="text"
              id="picture"
              formControlName="picture"
-             value="{{ editPublicationForm.get('picture') }}"
-             (keyup)="changeImageValue($event)"
-             placeholder="URL de l'image..."/>
+             class="display-none"/>
 
-      <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+      <small>Cliquez sur l'image pour en télécharger une.</small>
 
       <img class="pointer"
            (click)="fileUpload.click()"
@@ -132,7 +152,7 @@
 
       @if (isFormSubmit && editPublicationForm.controls['picture'].invalid) {
         <div>
-          @if (fileSize > fileUploadService.SIZE_MAX) {
+          @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
             <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
           }
         </div>
@@ -142,13 +162,7 @@
     <button class="btn-submit-admin"
             type="submit"
             (click)="submitEditPublicationForm()">
-      Créer
+      Modifier
     </button>
   </form>
 }
-
-<app-modal [modalVisible]="modalVisible"
-           [modalText]="modalText"
-
-           (responseForModal)="responseForModal($event)">
-</app-modal>

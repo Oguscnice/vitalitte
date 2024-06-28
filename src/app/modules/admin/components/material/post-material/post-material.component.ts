@@ -1,15 +1,16 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FileUploadService } from '../../../services/file-upload.service';
-import { urlValidator } from '../../../validators/urlValidators';
-import { priceValidator } from '../../../validators/priceValidators';
-import { FileInfo } from '../../../interfaces/FileInfo';
-import { CreateMaterial } from '../../../interfaces/Material';
+import {Component, Input, Output, EventEmitter, inject, OnInit, Signal} from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FileUploadService } from '../../../shared/services/file-upload.service';
+import { urlValidator } from '../../../shared/validators/urlValidators';
+import { priceValidator } from '../../../shared/validators/priceValidators';
+import { CreateMaterial } from '../../../shared/interfaces/Material';
 import { NgClass, TitleCasePipe } from '@angular/common';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
-import { TransformApiService } from '../../../services/transform-api.service';
-import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
+import {FormHelperService} from "../../../shared/services/form-helper.service";
+import {DataSignalService} from "../../../../../shared/services/data-signal.service";
+import {AdminMaterialSignalService} from "../../../shared/services/admin-material-signal.service";
 
 @Component({
   standalone: true,
@@ -18,84 +19,61 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
   templateUrl: './post-material.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })
-export class PostMaterialComponent {
+export class PostMaterialComponent implements OnInit {
 
-  protected fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
-  private transformApiService = inject(TransformApiService);
+  private formHelper = inject(FormHelperService);
+  private dataSignal = inject(DataSignalService);
+  private adminMaterialSignal = inject(AdminMaterialSignalService);
+  fileUploadService = inject(FileUploadService);
 
-  @Input() materialTypes! : string[];
-  @Output() newMaterial: EventEmitter<CreateMaterial> = new EventEmitter();
+  materialTypes: Signal<string[]> = this.dataSignal.$materialTypes;
 
-  isFormVisible : boolean = false;
-  isDropdownCategoryOpen : boolean = false;
-  isFormSubmit : boolean = false;
+  isFormVisible: boolean = false;
+  isCategoryDropdownOpen: boolean = false;
+  isFormSubmit: boolean = false;
 
-  fileSize!: number;
+  toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
-  protected toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
-  
   newMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     materialType : ['', [Validators.required]],
-    price: ['', [priceValidator()]],
-    description: ['', [Validators.required, Validators.maxLength(1000)]],
-    picture: ['', [Validators.required, urlValidator()]]
+    price: ['', [Validators.required, priceValidator()]],
+    description: ['', [Validators.required, Validators.maxLength(65534)]],
+    picture: ['', [Validators.required, urlValidator()]],
+    pictureThumbnail: ['', [Validators.required, urlValidator()]]
   });
 
-  toggleDropdown(value : boolean): void{
-    this.isDropdownCategoryOpen = value
+  ngOnInit(): void {
+      this.fileUploadService.patchImage(this.newMaterialForm, this.fileUploadService.imageMaterialDefault, this.fileUploadService.imageMaterialDefaultThumbnail);
+      this.dataSignal.getAllMaterialsTypes();
   }
 
-  addEuroSign(event: any) {
-    const input = event.target;
-    const value = input.value;
+  toggleDropdown(dropdownClicked : 'Category'): void {
+    this[`is${dropdownClicked}DropdownOpen`] = !this[`is${dropdownClicked}DropdownOpen`];
+  }
 
-    if (!isNaN(value)) {
-        input.value = value + " €";
-    }
-}
+  onFileSelected(event: Event, form: FormGroup): void {
+    this.fileUploadService.onFileSelected(event, form).subscribe();
+  }
 
-  materialTypeClicked(valueClicked : string){
+  onMaterialTypeClicked(valueClicked : string): void {
     this.newMaterialForm.controls['materialType'].setValue(valueClicked);
   }
 
-  changeImageValue(event: KeyboardEvent): void {
-    const inputElement = event.target as HTMLInputElement;
-    if(inputElement){
-      this.newMaterialForm.get('picture')!.setValue(inputElement.value);
-    }
-  }
-
-  async onFileSelected(event: Event): Promise<void> {
-
-    const inputElement = event.target as HTMLInputElement;
-    const selectedFile = inputElement.files?.[0];
-    let fileInfo: FileInfo | null = null;
-
-    if (selectedFile) {
-      this.fileSize = selectedFile.size;
-
-      if (this.fileSize < this.fileUploadService.SIZE_MAX) {
-        fileInfo = await this.fileUploadService.fileUpload(event);
-        this.newMaterialForm.get('picture')!.setValue(fileInfo.data.thumb.url);
-      };
-    } else {
-      this.newMaterialForm.get('picture')!.setValue(this.fileUploadService.imageMaterialDefault);
-    }
-  }
-
   submitNewMaterialForm(): void {
-
     this.isFormSubmit = true
-    
-    if(this.newMaterialForm.valid){
-      let createMaterial : CreateMaterial = this.transformApiService.postMaterielType(this.newMaterialForm)
-      this.newMaterial.emit(createMaterial);
-      // Après avoir envoyé, on remet les variables à zéro
-      this.isFormSubmit = false;
-      this.newMaterialForm.reset()
-      this.newMaterialForm.get('picture')!.setValue(this.fileUploadService.imageMaterialDefault);
+    if (this.newMaterialForm.valid) {
+      const CREATE_MATERIAL:  CreateMaterial = this.formHelper.formatFormToDto<CreateMaterial>(this.newMaterialForm);
+      this.adminMaterialSignal.post(CREATE_MATERIAL);
+      this.resetAllValues();
     }
+  }
+
+  resetAllValues(): void {
+    this.isFormSubmit = false;
+    this.isFormVisible = false;
+    this.newMaterialForm.reset()
+    this.fileUploadService.patchImage(this.newMaterialForm, this.fileUploadService.imageMaterialDefault, this.fileUploadService.imageMaterialDefault);
   }
 }

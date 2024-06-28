@@ -32,8 +32,8 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .notebook-selected-page{
-    div{ 
-      max-width: 650px;
+    div{
+      max-width: $max-width-768px;
     }
   }
 }

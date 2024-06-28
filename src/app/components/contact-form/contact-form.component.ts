@@ -12,7 +12,7 @@ import { NgClass, NgStyle } from '@angular/common';
 })
 export class ContactFormComponent {
 
-  isFormClicked: boolean = false;
+  isFormSubmit: boolean = false;
   hasErrors: boolean = false;
   isLoaderVisible: boolean = false;
   isDropdownOpen: boolean = false;
@@ -33,61 +33,61 @@ export class ContactFormComponent {
   toggleDropdown(value: boolean): void {
     this.isDropdownOpen = value;
   }
-  
+
   changeLastnameValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.lastnameValue = inputElement.value;
   }
-  
+
   changeFirstnameValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.firstnameValue = inputElement.value;
   }
-  
+
   changeEmailValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.emailValue = inputElement.value;
     this.validateEmail();
   }
-  
+
   changePhoneValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.phoneValue = inputElement.value;
   }
-  
+
   changeThemeValue(themeClicked: string): void {
     this.themeValue = themeClicked;
   }
-  
+
   changeMessageValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.messageValue = inputElement.value;
   }
-  
+
   validateEmail(): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(this.emailValue);
   }
-  
+
   validatePhone(): boolean {
     const phoneRegex = /^[0-9]{10}$/;
     return (this.phoneValue.match(phoneRegex) !== null);
   }
-  
+
   checkStringValidity(value: string, min: number, max: number): boolean {
     if (value && value.length >= min && value.length <= max) {
       return true;
     }
     return false;
   }
-  
+
   changeSubmitted(): void {
-    this.isFormClicked = true;
+    this.isFormSubmit = true;
     if (this.checkErrors()) {
       this.isLoaderVisible = true;
     }
   }
-  
+
   checkErrors(): boolean {
     if (
       this.checkStringValidity(this.emailValue, 3, 255) &&

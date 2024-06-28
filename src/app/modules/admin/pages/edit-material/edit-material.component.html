@@ -1,5 +1,4 @@
-<anguille [message]="messageResponseFromBackend" />
-
+<script src="../../shared/services/admin-data-signal.service.ts"></script>
 <app-return-admin-home/>
 
 <form (ngSubmit)="(editMaterialForm.valid)"
@@ -35,21 +34,20 @@
                placeholder="Choississez le type de matériel..."
                autocomplete="off"
                class="pointer"
-               (focus)="toggleDropdown()"
-               (blur)="toggleDropdown()"
+               (focus)="toggleDropdown('Category')"
                readonly/>
         <div class="arrow-icone flex center">
-          @if (isDropdownCategoryOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown()"></i>
+          @if (isCategoryDropdownOpen) {
+            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Category')"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown()"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Category')"></i>
           }
         </div>
       </div>
 
-      <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownCategoryOpen}">
-        @for (type of materialTypes; track type) {
-          <li (click)="materialTypeClicked(type); toggleDropdown() ">
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isCategoryDropdownOpen}">
+        @for (type of materialTypes(); track type) {
+          <li (click)="onMaterialTypeClicked(type); toggleDropdown('Category') ">
             {{ type | titlecase }}
           </li>
         }
@@ -86,18 +84,18 @@
   <fieldset class="flex column">
     <label for="description">Description du matériel : </label>
     <editor [init]="toolBarConfig"
-
+            id="description"
             placeholder="Description du matériel.."
             formControlName="description"
             autocomplete="off">
     </editor>
-    
+    <p [style.color]=" this.editMaterialForm.get('description')!.value && this.editMaterialForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ this.editMaterialForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
     @if (isFormSubmit && editMaterialForm.controls['description'].invalid) {
       <div>
         @if (editMaterialForm.controls.description.errors?.['required']) {
           <small>La descritpion du matériel est requise.</small>
         } @else if (editMaterialForm.controls.description.errors?.['maxlength']) {
-          <small>La descritpion du matériel ne doit pas dépasser 1.000 charactères.</small>
+          <small>La descritpion du matériel ne doit pas dépasser 65.534 charactères.</small>
         }
       </div>
     }
@@ -111,17 +109,15 @@
     <input class="display-none"
            type="file"
            accept="image/png, image/jpeg, image/bmp, image/gif"
-           (change)="onFileSelected($event)"
+           (change)="onFileSelected($event, editMaterialForm)"
            #fileUpload/>
     <input type="text"
            id="picture"
            formControlName="picture"
-           value="{{ this.editMaterialForm.get('picture')!.value }}"
-           (keyup)="changeImageValue($event)"
-           placeholder="URL de l'image..."/>
+           class="display-none"/>
     @if (isFormSubmit && editMaterialForm.controls['picture'].invalid) {
       <div>
-        @if (fileSize > fileUploadService.SIZE_MAX) {
+        @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
           <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
         } @else if (editMaterialForm.controls.picture.errors?.['invalidUrl']) {
           <small>L'image doit être une URL (commencer par => http:// ou https:// ou www.).</small>
@@ -130,7 +126,7 @@
     }
     <img class="pointer"
          (click)="fileUpload.click()"
-         src="{{ this.editMaterialForm.get('picture')!.value }}"
+         src="{{ this.editMaterialForm.get('pictureThumbnail')!.value }}"
          alt="Photo à choisir pour le matériel"/>
   </fieldset>
 
@@ -141,8 +137,3 @@
   </button>
 </form>
 
-<app-modal [modalVisible]="modalVisible"
-           [modalText]="modalText"
-           
-           (responseForModal)="responseForModal($event)">
-</app-modal>

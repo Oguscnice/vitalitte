@@ -19,18 +19,18 @@
 
     <h4>Modèles :</h4>
 
-    <app-notebooks-list [notebooksListChild]="notebooks"/>
-    
+    <app-notebooks-list [notebooksListChild]="notebooks()"/>
+
     <h4>Encore plus de modèle içi...</h4>
     <button class="btn-normal" routerLink="/carnets-pret-a-emploi">
       Voir tous les modèles
     </button>
 
     <h2>Les "sur mesures"</h2>
-    <p> Chaque carnet que nous fabriquons à la main est un hommage 
-      à l'artisanat authentique. Avec un engagement profond envers 
-      l'éco-responsabilité, chaque page est méticuleusement 
-      confectionnée pour stimuler votre créativité tout en 
+    <p> Chaque carnet que nous fabriquons à la main est un hommage
+      à l'artisanat authentique. Avec un engagement profond envers
+      l'éco-responsabilité, chaque page est méticuleusement
+      confectionnée pour stimuler votre créativité tout en
       respectant notre précieuse planète.</p>
 
     <p class="similar-title">A vous de choisir !!!</p>
@@ -84,10 +84,7 @@
       </div>
       <div class="custom-card flex">
         <div class="image-and-filter-color flex column">
-          <img
-          src="../../../assets/images/figma/idée.jpg"
-          alt="Photo d'une reliure"
-          />
+          <img src="../../../assets/images/figma/idée.jpg" alt="Photo d'une reliure"/>
           <div class="filter-color"></div>
         </div>
         <div class="title-description">

@@ -1,5 +1,5 @@
-@if (publicationsSpotlighted && publicationsSpotlighted.length > 0) {
-  <app-news-headband [publicationsSpotlighted]="publicationsSpotlighted"/>
+@if (publicationsSpotlighted() && publicationsSpotlighted().length > 0) {
+  <app-news-headband [publicationsSpotlighted]="publicationsSpotlighted()"/>
 }
 
 <app-h1 [titleChild]="'Bienvenue'" [backgroundImageChild]="backgroundImageParentHome"/>
@@ -31,10 +31,6 @@
 
 <div class="image-and-filter-color image-biography"
       routerLink="/qui-suis-je">
-  <!-- <img  class="pointer"
-  [src]="backgroundImageBio" alt="Photo de l'artiste">
-  <h2 class="flex center">A Propos...</h2>
-  <div class="filter-color"></div> -->
 
     <img class="pointer" [src]="backgroundImageBio" alt="Photo de l'artiste"/>
     <div class="filter-color"></div>

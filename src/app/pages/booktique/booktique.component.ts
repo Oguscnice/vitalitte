@@ -1,43 +1,41 @@
-import { Component, inject } from '@angular/core';
-import { BaseComponent } from 'src/app/base.component';
-import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { ShoppingCartNotebookService } from '../../shared/services/shopping-cart-notebook.service';
+import {AfterViewChecked, AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {Subject} from "rxjs";
 
 @Component({
   standalone: false,
   selector: 'app-booktique',
   templateUrl: './booktique.component.html',
-  styleUrls: ['./booktique.component.scss']
+  styleUrls: ['./booktique.component.scss'],
 })
-export class BooktiqueComponent extends BaseComponent{
+export class BooktiqueComponent implements AfterViewChecked {
 
-  private apiRequestsService = inject(ApiRequestsService);
-  protected shoppingCartNotebookService = inject(ShoppingCartNotebookService);
+  backgroundImageParentHome: string = '../../../assets/images/figma/booktique.jpg';
+  userChoice: 'models' | 'handmades' = 'models';
 
-  notebooks! : NotebookDto[];
+  windowSize$ = new Subject<[number, number]>();
 
-  titleParentBooktique: string = 'Booktique';
-  backgroundImageParentHome : string = '../../../assets/images/figma/booktique.jpg';
-  userChoice : 'classic' | 'personnalised' = 'classic';
+  @ViewChild('models') models!: ElementRef;
+  @ViewChild('handmades') handmades!: ElementRef;
 
-  ngOnInit(): void {
-    this.getAllNotebooks();
+  @HostListener('window:resize', ['$event'])
+  onResize(event : Event) {
+    this.windowSize$.next([window.innerWidth, window.innerHeight]);
+    this.adaptSectionHeight();
   }
 
-  getAllNotebooks(): void{
-    this.subscriptions.push(
-      this.apiRequestsService.getAllNotebooks().subscribe({
-        next: (notebooks) => {
-          this.notebooks = notebooks;
-          this.shoppingCartNotebookService.items = notebooks
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
+  ngAfterViewChecked(): void {
+    this.adaptSectionHeight();
   }
 
-  userChoiceSelected(choice : 'classic' | 'personnalised') : void{
+  adaptSectionHeight(): void {
+    const MAX_VALUE = this.models.nativeElement.offsetHeight > this.handmades.nativeElement.offsetHeight ? this.models.nativeElement.offsetHeight : this.handmades.nativeElement.offsetHeight;
+    document.documentElement.style.setProperty(
+      '--height-booktique-page',
+      MAX_VALUE + 'px'
+    );
+  }
+
+  userChoiceSelected(choice : 'models' | 'handmades'): void {
     this.userChoice = choice;
   }
 }
