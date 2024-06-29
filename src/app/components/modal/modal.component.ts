@@ -1,37 +1,40 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Signal, inject } from '@angular/core';
+import { ModalSignalService } from 'src/app/shared/services/modal-signal.service';
 
 @Component({
   standalone : true,
   imports: [],
   selector: 'app-modal',
   template: ` <div class="modal-confirmation-page flex column center"
-                   [class]="modalVisible ? 'modal-visible' : ''">
+                   [class]="modalVisible() ? 'modal-visible' : ''">
 
                 <div class="content-text-and-buttons flex column center space-between"
-                     [class]="!multipleChoice ? 'no-margin' : ''">
+                     [class]="!multipleChoice() ? 'no-margin' : ''">
 
-                  <p [innerHTML]="modalText"></p>
+                  <p [innerHTML]="modalText()"></p>
 
-                  <button (click)="closeModalAndSendResponseIfExist()"
-                          [class]="!multipleChoice ? 'btn-medium-admin flex center pointer' : 'display-none'">
-                    OK !
-                  </button>
-
-                  <div [class]="multipleChoice ? 'two-buttons flex' : 'display-none'">
-                    <button
-                      (click)="closeModalAndSendResponseIfExist('false')"
-                      class="btn-admin-cancel"
-                    >
-                      Annuler
+                  @if (!multipleChoice()) {
+                    <button (click)="modalSignal.closeModalAndSendResponseIfExist(true)"
+                            class="btn-medium-admin flex center pointer">
+                      OK !
                     </button>
+                  } @else {
+                    <div class="two-buttons flex">
+                      <button
+                        (click)="modalSignal.closeModalAndSendResponseIfExist(false)"
+                        class="btn-admin-cancel"
+                      >
+                        Annuler
+                      </button>
 
-                    <button
-                      (click)="closeModalAndSendResponseIfExist('true')"
-                      class="btn-admin-valid"
-                    >
-                      Valider
-                    </button>
-                  </div>
+                      <button
+                        (click)="modalSignal.closeModalAndSendResponseIfExist(true)"
+                        class="btn-admin-valid"
+                      >
+                        Valider
+                      </button>
+                    </div>
+                  }
 
                 </div>
 
@@ -40,14 +43,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ModalComponent {
 
-  @Input() modalVisible : boolean = false;
-  @Input() modalText : string = '';
-  @Input() multipleChoice : boolean = false;
+  protected modalSignal = inject(ModalSignalService);
 
-  @Output() responseForModal: EventEmitter<boolean> = new EventEmitter();
+  modalVisible: Signal<boolean> = this.modalSignal.$isModalVisible;
+  modalText: Signal<string> = this.modalSignal.$message;
+  multipleChoice: Signal<boolean> = this.modalSignal.$multipleChoice;
 
-  closeModalAndSendResponseIfExist(response?: string): void {
-    this.modalVisible = false
-    this.responseForModal.emit(response == 'true' ? true : false);
+  closeModal(response: boolean): void {
+    this.modalSignal.closeModalAndSendResponseIfExist(response);
   }
 }

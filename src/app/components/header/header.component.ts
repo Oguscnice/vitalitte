@@ -1,27 +1,28 @@
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { ActivePageService } from './../../shared/services/active-page.service';
-import { Component, ElementRef, ViewChild, Renderer2, HostListener, inject  } from '@angular/core';
+import { ActivePageService } from '../../shared/services/active-page.service';
+import {Component, ElementRef, ViewChild, Renderer2, HostListener, inject, OnInit, AfterViewInit} from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
-import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
 import { BaseComponent } from 'src/app/base.component';
-import { RouterLink } from '@angular/router';
-import { NgClass, NgFor, NgIf } from '@angular/common';
-import { Subject } from 'rxjs';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
+import { Subject, filter } from 'rxjs';
 import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
+import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
 
 @Component({
   standalone: true,
-  imports: [ RouterLink, NgClass, NgFor, NgIf],
+  imports: [ RouterLink, NgClass ],
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent extends BaseComponent {
+export class HeaderComponent extends BaseComponent implements OnInit, AfterViewInit {
 
-  public activePageService = inject(ActivePageService);
+  private router = inject(Router);
   private renderer = inject(Renderer2);
-  public shoppingCartService = inject(ShoppingCartService);
   private apiRequestsService = inject(ApiRequestsService);
+  shoppingCart = inject(ShoppingCartService);
+  activePageService = inject(ActivePageService);
 
   windowSize$ = new Subject<[number, number]>();
 
@@ -36,10 +37,10 @@ export class HeaderComponent extends BaseComponent {
   navbarUser: Menu[] = NAVBAR_USER;
   isMenuBurgerChecked: boolean = false;
   initialLoad: boolean = true;
-  activePage = this.activePageService.activePage
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.getAllNotebooks();
+    this.shoppingCart.setShoppingCart();
   }
 
   ngAfterViewInit(): void {
@@ -53,10 +54,12 @@ export class HeaderComponent extends BaseComponent {
     );
   }
 
-  getAllNotebooks(): void{
+  getAllNotebooks(): void {
     this.subscriptions.push(
       this.apiRequestsService.getAllNotebooks().subscribe({
-        next: (notebooks) => this.shoppingCartService.notebooks = notebooks,
+        next: (notebooks) => {
+          // this.shoppingCart.items = notebooks,
+        },
         error: (err) => (this.changeMessage(err.error.message))
       })
     )
@@ -67,11 +70,11 @@ export class HeaderComponent extends BaseComponent {
     this.initialLoad = false;
   }
 
-  openSubmenu(itemClicked : Menu){
-    const actualState = itemClicked.submenu?.isOpen
+  openSubmenu(itemClicked : Menu): void {
+    const actualState = itemClicked.submenu?.isOpen;
     this.closeSubmenu()
-    if(itemClicked.submenu){
-      itemClicked.submenu.isOpen = !actualState
+    if(itemClicked.submenu) {
+      itemClicked.submenu.isOpen = !actualState;
     }
   }
 
@@ -80,17 +83,28 @@ export class HeaderComponent extends BaseComponent {
     if (menuCheckbox.checked) {
       this.renderer.setProperty(menuCheckbox, 'checked', false);
     }
-    event.stopPropagation()
+
+    event.stopPropagation();
     this.isMenuBurgerChecked = false;
     this.activePageService.changeActivePage(routerLinkClicked);
-    this.closeSubmenu()
+    this.scrollTopAfterNavigate();
+    this.closeSubmenu();
   }
 
-  closeSubmenu(){
+  closeSubmenu(): void {
     for(let item of this.navbarUser){
-      if(item.submenu){
-        item.submenu.isOpen = false
-      }
-    }
+      if(item.submenu) {
+        item.submenu.isOpen = false;
+      };
+    };
+  }
+
+  scrollTopAfterNavigate(): void {
+    this.subscriptions.push(
+      this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        window.scrollTo(0, 0);
+      })
+    );
   }
 }

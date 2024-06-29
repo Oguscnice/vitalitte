@@ -1,136 +1,168 @@
 <div class="title-functionality flex center">
-  <h4 class="flex center">Gérer les Ateliers</h4>
+  <h4 class="flex center">Gérer les Publications</h4>
   <i class="fa-solid fa-arrow-down"
      (click)="isTableVisible = !isTableVisible"
      [ngClass]="{'rotated180': isTableVisible}">
   </i>
 </div>
 
-<div *ngIf="!publications || publications.length <= 0">Aucun Atelier</div>
-<table *ngIf="publications && isTableVisible">
-  <thead>
-    <tr>
-      <td>
-        <p>Accueil</p>
-      </td>
-      <td>
-        <p>Titre</p>
-      </td>
-      <td>
-        <p>Des.</p>
-      </td>
-      <td>
-        <p>Modif.</p>
-      </td>      
-      <td>
-        <p>Supp.</p>
-      </td>
-    </tr>
-  </thead>
+@if (publications() && isTableVisible) {
 
-  <tbody>
-    <tr *ngFor="let publication of publications ; let index = index"
-        [ngClass]="index % 2 ? 'bg-dark' : ''">
+  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+
+  <table>
+    <thead>
+      <tr>
         <td>
-          <div class="toggle-switch" (click)="changeSpotlight(publication)">
-            <input class="toggle-input"
-                   type="checkbox"
-                   [checked]="publication.spotlighted">
-            <label class="toggle-label" for="toggle"></label>
-          </div>
+          <p>Accueil</p>
         </td>
-      <td>
-        <p class="flex text-left">{{ publication.title | titlecase }}</p>
-      </td>
-      <td>
-        <i class="fa-solid fa-file-lines pointer flex center"
-           (click)="openModalWithDescription(publication.description)">
-        </i>
-      </td>
-      <td class="flex center">
-        <img src="{{publication.picture}}"
-             alt="Photo de l'atelier {{publication.title}}">
-      </td>
-      <td>
-        <i class="fa-solid fa-pencil pointer flex center" (click)="edit(publication)"></i>
-      </td>
-      <td>
-        <i (click)="delete(publication)" class="fa-solid fa-trash-can pointer flex center"></i>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <td>
+          <p>Titre</p>
+        </td>
+        <td>
+          <p>Des.</p>
+        </td>
+        <td>
+          <p>Image</p>
+        </td>
+        <td>
+          <p>Modif.</p>
+        </td>
+        <td>
+          <p>Supp.</p>
+        </td>
+      </tr>
+    </thead>
 
-<form *ngIf="publicationToEdit"
-      (ngSubmit)="(editPublicationForm.valid)"
-      [formGroup]="editPublicationForm"
-      #myForm="ngForm">
+    <tbody>
+      @for (publication of publications(); track publication; let index = $index) {
+        <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+            <td>
+              <div class="toggle-switch" (click)="changeSpotlight(publication)">
+                <input class="toggle-input"
+                       type="checkbox"
+                       [checked]="publication.spotlighted">
+                <label class="toggle-label"></label>
+              </div>
+            </td>
+          <td>
+            <p class="flex text-left">{{ publication.title | titlecase }}</p>
+          </td>
+          <td>
+            <i class="fa-solid fa-file-lines pointer flex center" (click)="openModalWithDescription(publication.description)">
+            </i>
+          </td>
+          <td class="flex center">
+            <img src="{{ publication.pictureThumbnail }}" alt="Photo de la publication {{ publication.title }}">
+          </td>
+          <td>
+            @if (publication.slug !== editPublicationForm.get('slug')!.value) {
+              <i class="fa-solid fa-pencil pointer flex center" (click)="patchFormValue(publication)"></i>
+            } @else {
+              <i class="fa-solid fa-circle-xmark flex center" (click)="patchFormValue(null)"></i>
+            }
+          </td>
+          <td>
+            <i (click)="delete(publication)" class="fa-solid fa-trash-can pointer flex center"></i>
+          </td>
+        </tr>
+      }
 
-  <fieldset class="flex column">
-    <label for="title">Titre de la publication :</label>
-    <input type="text"
-            id="title"
-            placeholder="Titre..."
-            formControlName="title"
-            autocomplete="off"/>
+    </tbody>
+  </table>
 
-    <div *ngIf="isFormSubmit && myForm.submitted && editPublicationForm.controls['title'].invalid">
-      <small *ngIf="editPublicationForm.controls.title.errors?.['required']">Le titre de la publication est obligatoire.</small>
-      <small *ngIf="editPublicationForm.controls.title.errors?.['maxlength']">Le titre de la publication ne doit pas dépasser 255 charactères.</small>
-    </div>
-  </fieldset>
+  @if (publications() && publications().length > 0) {
+    <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+  }
 
-  <fieldset class="flex column">
-    <label for="description">Description : </label>
-    <editor [init]="toolBarConfig"
+} @else if ((!publications || publications.length <= 0) && isTableVisible) {
+  <h5>Aucune publication</h5>
+}
 
-            placeholder="Description.."
-            formControlName="description"
-            autocomplete="off">
-    </editor>
-    <p [style.color]=" this.editPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
-    
-    <div *ngIf="isFormSubmit && editPublicationForm.controls['description'].invalid">
-      <small *ngIf="editPublicationForm.controls.description.errors?.['required']">La description de l'atelier est requise.</small>
-      <small *ngIf="editPublicationForm.controls.description.errors?.['maxlength']">La description de l'atelier ne doit pas dépasser 2000 charactères.</small>
-    </div>
-  </fieldset>
+@if (editPublicationForm.get('slug')!.value) {
 
-  <fieldset class="flex column">
-    <label for="picture">Image : </label>
-    <input class="display-none"
-           type="file"
-           accept="image/png, image/jpeg, image/bmp, image/gif"
-           (change)="onFileSelected($event)"
-           #fileUpload/>
-    <input type="text"
-           id="picture"
-           formControlName="picture"
-           value="{{ editPublicationForm.get('picture') }}"
-           (keyup)="changeImageValue($event)"
-           placeholder="URL de l'image..."/>
+  <form (ngSubmit)="(editPublicationForm.valid)"
+        [formGroup]="editPublicationForm"
+        #myForm="ngForm">
 
-    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+    <button class="btn-submit-admin"
+            (click)="patchFormValue(null)">
+      Annuler l'édition
+    </button>
 
-    <img class="pointer"
-         (click)="fileUpload.click()"
-         [src]="editPublicationForm.get('picture')!.value"
-         alt="Photo à choisir pour le carnet"/>
 
-    <div *ngIf="isFormSubmit && editPublicationForm.controls['picture'].invalid">
-      <small *ngIf="fileSize > fileUploadService.SIZE_MAX">Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
-    </div>
-  </fieldset>
+    <fieldset class="flex column">
+      <label for="title">Titre de la publication :</label>
+      <input type="text"
+              id="title"
+              placeholder="Titre..."
+              formControlName="title"
+              autocomplete="off"/>
 
-  <button class="btn-submit-admin"
-          type="submit"
-          (click)="submitEditPublicationForm()">
-  Créer
-  </button>
-</form>
+      @if (isFormSubmit && myForm.submitted && editPublicationForm.controls['title'].invalid) {
+        <div>
+          @if (editPublicationForm.controls.title.errors?.['required']) {
+            <small>Le titre de la publication est obligatoire.</small>
+          } @else if (editPublicationForm.controls.title.errors?.['maxlength']) {
+            <small>Le titre de la publication ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
 
-<app-modal [modalVisible]="modalVisible"
-           [modalText]="modalText"
+    <fieldset class="flex column">
+      <label for="description">Description : </label>
+      <editor [init]="toolBarConfig"
+              id="description"
+              placeholder="Description.."
+              formControlName="description"
+              autocomplete="off">
+      </editor>
+      <p [style.color]=" this.editPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
 
-           (responseForModal)="responseForModal($event)">
-</app-modal>
+      @if (isFormSubmit && editPublicationForm.controls['description'].invalid) {
+        <div>
+          @if (editPublicationForm.controls.description.errors?.['required']) {
+            <small>La description de l'atelier est requise.</small>
+          } @else if (editPublicationForm.controls.description.errors?.['maxlength']) {
+            <small>La description de l'atelier ne doit pas dépasser 2000 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="picture">Image : </label>
+      <input class="display-none"
+             type="file"
+             accept="image/png, image/jpeg, image/bmp, image/gif"
+             (change)="onFileSelected($event)"
+             #fileUpload/>
+      <input type="text"
+             id="picture"
+             formControlName="picture"
+             class="display-none"/>
+
+      <small>Cliquez sur l'image pour en télécharger une.</small>
+
+      <img class="pointer"
+           (click)="fileUpload.click()"
+           [src]="editPublicationForm.get('picture')!.value"
+           alt="Photo à choisir pour le carnet"/>
+
+      @if (isFormSubmit && editPublicationForm.controls['picture'].invalid) {
+        <div>
+          @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
+            <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <button class="btn-submit-admin"
+            type="submit"
+            (click)="submitEditPublicationForm()">
+      Modifier
+    </button>
+  </form>
+}

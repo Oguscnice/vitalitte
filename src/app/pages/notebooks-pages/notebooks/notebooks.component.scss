@@ -65,10 +65,10 @@ $customization-picture-size : 120px;
 @media screen and (min-width: 768px) {
   .creations-page{
     .cards-choice{
-      max-width: 650px;
+      max-width: $max-width-768px;
     }
     .user-choice{
-      max-width: 650px;
+      max-width: $max-width-768px;
     }
   }
 }

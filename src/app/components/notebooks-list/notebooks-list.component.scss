@@ -4,12 +4,12 @@
 
 $notebook-picture-size : calc(100vw - ($fourth-padding * 2));
 
-.notebooks-list{
-  h5{
+.notebooks-list {
+  h5 {
     font-size: $double-font-size;
     padding-bottom: $triple-padding;
   }
-  p{
+  p {
     padding: $double-padding 0;
     text-align: left;
     font-size: $normal-font-size;

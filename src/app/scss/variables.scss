@@ -8,12 +8,20 @@
   --width-img-monitored: 0px;
 }
 
+// ----- max-width -----
+$max-width-mobile: 80%;
+$max-width-768px: 650px;
+$max-width-992px: 800px;
+$max-width-1400px: 1000px;
+
 // ----- color -----
 $white: #ffffff;
 $black: #000000;
+$grey: grey;
 $lilac: rgba(182, 100, 210);
 $lilac-light: rgb(217, 117, 250);
 $lilac-dark: rgb(140, 76, 161);
+$lilac-dark-transparent: rgba($lilac-dark, 0.5);
 $lilac-light-opacity-low: #f67cfa42;
 $orange : orange;
 $brown : brown;
@@ -34,6 +42,7 @@ $normal-margin: 40px;
 $double-margin: 2 * $normal-margin;
 $triple-margin: 3 * $normal-margin;
 $fourth-margin: 4 * $normal-margin;
+// $double-half-margin: calc($normal-margin / 4);
 $half-margin: calc($normal-margin / 2);
 
 // ----- border radius -----
@@ -73,15 +82,13 @@ $z-index: 1;
   height: calc((100vw - (2 * $fourth-padding)) / 3);
 }
 
-
-@mixin text-shadow ($height, $color) {
-  text-shadow : 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
-        0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
-        0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
-        0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
-        0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color, 0 0 $height, $color,
-        0 0 $height, $color;
-} 
+@mixin text-shadow($height, $color) {
+  $shadows: 0 0 $height $color;
+  @for $i from 1 through 5 {
+    $shadows: #{$shadows}, 0 0 #{$height * $i} #{$color};
+  }
+  text-shadow: #{$shadows};
+}
 
 @mixin inputStyleBorder {
   background-color: #f5f5f5;

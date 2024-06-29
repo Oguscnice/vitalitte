@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
-import { NAVBAR_ADMIN } from '../../variables/Navbar';
+import { NAVBAR_ADMIN } from '../../shared/variables/Navbar';
 
 @Component({
+  standalone: false,
   selector: 'app-admin-home',
   template: ` <h1>Accueil Admin</h1>
               <h2>Votre tableau de bord pour la gestion</h2>
               <div class="btns-admin-home flex wrap center">
-                <div class="btn-medium-admin flex center pointer"
-                    *ngFor="let item of navbarAdmin" [routerLink]="[item.routerLink]">
-                  {{ item.name }}
-                </div>
+                @for (item of navbarAdmin; track item) {
+                  <div class="btn-medium-admin flex center pointer" [routerLink]="[item.routerLink]">
+                    {{ item.name }}
+                  </div>
+                }
               </div>`,
   styles: [`
             @import "../../scss/admin-general.scss";

@@ -1,25 +1,51 @@
 @import "../../scss/variables.scss";
 @import "../../../styles.scss";
 
-.booktique-page{
-  .cards-choice{
+.booktique-page {
+
+  .cards-choice {
     width: 100%;
     max-width: 600px;
+    margin: $triple-padding 0;
+
   }
-  .two-choices{
+
+  .two-choices {
     position: relative;
-    width: calc(100vw * 2);
-    transition : left 1s;
-    .models,
-    .handmades{
-      width: 50%;
+    width: 100%;
+    height: var(--height-booktique-page);
+    transition: left 0.4s ease-in-out;
+
+    div {
+      h3 {
+        margin-top: 0px;
+        margin-bottom: $triple-padding;
+      }
     }
-  }
-  .models-visible{
-    left : 50vw;
-  }
-  .handmades-visible{
-    left : -50vw;
+
+    &.models-visible {
+      left: 0;
+    }
+
+    &.handmades-visible {
+      left: -100%;
+    }
+
+    .models,
+    .handmades {
+      position: absolute;
+      width: 100%;
+      height: max-content;
+      transition: left 0.4s ease;
+    }
+
+    .models {
+      left: 0;
+    }
+
+    .handmades {
+      left: 100%;
+    }
   }
 }
 
@@ -27,37 +53,22 @@
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
-  .booktique-page{
-    .cards-choice{
-      max-width: 650px;
-    }
-    .two-choices{
-      max-width: calc(650px * 2);
-    }
+  .cards-choice{
+    max-width: $max-width-768px;
   }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
-  .booktique-page{
-    .cards-choice{
-      max-width: 800px;
-    }
-    .two-choices{
-      max-width: calc(800px * 2);
-    }
+  .cards-choice {
+    max-width: $max-width-992px;
   }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
-  .booktique-page{
-    .cards-choice{
-      max-width: 1000px;
-    }
-    .two-choices{
-      max-width: calc(1000px * 2);
-    }
+  .cards-choice {
+    max-width: $max-width-1400px;
   }
 }
 
@@ -71,7 +82,7 @@
   background-color: #000;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   padding: 12px;
   gap: 12px;

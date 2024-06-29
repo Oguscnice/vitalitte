@@ -1,65 +1,77 @@
-import { DecimalPipe, NgFor, TitleCasePipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {DecimalPipe, NgClass, TitleCasePipe} from '@angular/common';
+import {Component, inject, Signal, OnInit} from '@angular/core';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
-import { ShoppingCart } from 'src/app/shared/interfaces/ShoppingCart';
-import { ShoppingCartService } from 'src/app/shared/services/shopping-cart.service';
+import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
+import {DataSignalService} from "../../shared/services/data-signal.service";
+import {RouterLink} from "@angular/router";
+import {CategoryDto} from "../../shared/interfaces/Category";
+import {CollectionDto} from "../../shared/interfaces/Collection";
+import {ReactiveFormsModule} from "@angular/forms";
+import {FilterNotebooksPipe} from "../../shared/services/pipes/filter-notebooks.pipe";
 
 @Component({
   standalone: true,
-  imports: [ NgFor, TitleCasePipe, DecimalPipe ],
+  imports: [TitleCasePipe, DecimalPipe, NgClass, RouterLink, ReactiveFormsModule, FilterNotebooksPipe],
   selector: 'app-shopping-notebooks-list',
-  template: ` <div class="shopping-notebooks-list">
-                <div *ngFor="let notebook of notebooksListChild"
-                    class="shopping-notebooks-container flex">
-                  <img src="{{notebook.mainPicture}}"
-                      alt="Image du Carnet {{notebook.name}}">
-                  <div class="title-and-price flex column center">
-                    <h4>{{notebook.name | titlecase }}</h4>
-                    <p>{{notebook.price | number: '0.2'}} €</p>
-                    <div class="shopping-cart-gestion flex">
-                      <button (click)="subtractNotebookToShoppingCart(notebook.slug)">-</button>
-                      <p>{{ shoppingCartService.counterQuantityBySlug(notebook.slug) }}</p>
-                      <button (click)="addNotebookToShoppingCart(notebook.slug)">+</button>
-                    </div>
-                  </div>
-                </div>
-              </div>`,
-  styles: [`
-            @import "../../scss/variables.scss";
-            @import "../../scss/buttons.scss";
-            @import "../../../styles.scss";
-
-            .shopping-notebooks-list{
-              .shopping-notebooks-container{
-                width: calc(100vw - ($fourth-padding * 2));
-                min-height: calc((100vw - ($fourth-padding * 2)) / 4);
-                img{
-                  width: calc((100vw - ($fourth-padding * 2)) / 2);
-                }
-                .title-and-price{
-                  width: calc((100vw - ($fourth-padding * 2)) / 2);
-                }
-              }
-            }
-          `]
+  templateUrl: './shopping-notebooks-list.component.html',
+  styleUrls: ['./shopping-notebooks-list.component.scss']
 })
-export class ShoppingNotebooksListComponent {
+export class ShoppingNotebooksListComponent implements OnInit {
 
-  @Input() notebooksListChild! : NotebookDto[];
+  private dataSignal = inject(DataSignalService);
+  shoppingCart = inject(ShoppingCartService);
+  quantityIncreased: boolean = false;
+  quantityDecreased: boolean = false;
+  cartToAnimate: string = "";
 
-  constructor(
-    public shoppingCartService : ShoppingCartService
-    ){}
+  notebooks: Signal<NotebookDto[]> = this.dataSignal.$notebooks;
+  categories: Signal<CategoryDto[]> = this.dataSignal.$categories;
+  collections: Signal<CollectionDto[]> = this.dataSignal.$collections;
+  categorySelected: CategoryDto | null = null;
+  collectionSelected: CollectionDto | null = null;
+  isCategoryDropdownOpen: boolean = false;
+  isCollectionDropdownOpen: boolean  = false;
+  isMaterialsDropdownOpen: boolean  = false;
 
-
-  addNotebookToShoppingCart(itemSlug : string) : void{  
-    this.shoppingCartService.addNotebook(itemSlug)
-    this.shoppingCartService.counterQuantityBySlug(itemSlug);
+  ngOnInit(): void {
+    this.dataSignal.getAllNotebooks();
+    this.dataSignal.getAllCategories();
+    this.dataSignal.getAllCollections();
   }
 
-  subtractNotebookToShoppingCart(itemSlug : string) : void{
-    this.shoppingCartService.subtractNotebookToShoppingCart(itemSlug)
-    this.shoppingCartService.counterQuantityBySlug(itemSlug);
+  onCategorySelected(category: CategoryDto | null): void {
+    this.categorySelected = this.categorySelected === category ? null : category;
   }
 
+  onCollectionSelected(collection: CollectionDto | null): void {
+    this.collectionSelected = this.collectionSelected === collection ? null : collection;
+  }
+
+  toggleDropdown(dropdownClicked : 'Collection' | 'Category' | 'Materials'): void {
+    const actualValue = this[`is${dropdownClicked}DropdownOpen`];
+    this.isCategoryDropdownOpen = false;
+    this.isCollectionDropdownOpen = false;
+    this.isMaterialsDropdownOpen = false;
+    this[`is${dropdownClicked}DropdownOpen`] = !actualValue;
+  }
+
+  increase(notebook: NotebookDto): void {
+    this.quantityIncreased = true;
+    this.quantityDecreased = false;
+    this.cartToAnimate = notebook.slug;
+    this.shoppingCart.subtractItem(notebook, 'notebooks')
+    setTimeout(() => {
+      this.quantityIncreased = false;
+    }, 200);
+  }
+
+  decrease(notebook: NotebookDto): void {
+    this.quantityIncreased = false;
+    this.quantityDecreased = true;
+    this.cartToAnimate = notebook.slug;
+    this.shoppingCart.addItem(notebook, 'notebooks');
+    setTimeout(() => {
+      this.quantityDecreased = false;
+    }, 200);
+  }
 }

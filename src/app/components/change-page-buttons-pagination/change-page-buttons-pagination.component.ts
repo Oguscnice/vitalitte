@@ -1,0 +1,61 @@
+import {Component, EventEmitter, inject, Output} from '@angular/core';
+import {AsyncPipe, NgClass} from "@angular/common";
+import {PaginationSignalService} from "../../shared/services/pagination-signal.service";
+
+@Component({
+  selector: 'app-change-page-buttons-pagination',
+  standalone: true,
+  imports: [NgClass, AsyncPipe],
+  template: `
+              <div class="btns-change-page flex center space-around">
+                <i
+                  class="btn pointer fa-solid fa-backward-fast"
+                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() === 0 }"
+                  (click)="this.onChangePage('first')">
+                </i>
+
+                <i
+                  class="btn pointer fa-solid fa-chevron-left"
+                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() === 0 }"
+                  (click)="this.onChangePage('prev')">
+                </i>
+
+                <p>Page {{ paginationSignal.$currentPageNumber() + 1 }} / {{ paginationSignal.$lastPage() }}</p>
+
+                <i
+                  class="btn pointer fa-solid fa-chevron-right"
+                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() + 1 === paginationSignal.$lastPage() }"
+                  (click)="this.onChangePage('next')">
+                </i>
+
+                <i
+                  class="btn pointer fa-solid fa-forward-fast"
+                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() + 1 === paginationSignal.$lastPage() }"
+                  (click)="this.onChangePage('last')">
+                </i>
+              </div>
+            `,
+  styles: [`
+    @import "../../scss/variables.scss";
+
+    .btns-change-page {
+      margin: $double-margin auto;
+      max-width: 400px;
+
+      p {
+        font-size: $triple-font-size;
+      }
+    }
+  `]
+})
+export class ChangePageButtonsPagination {
+
+  paginationSignal: PaginationSignalService = inject(PaginationSignalService);
+
+  @Output() onPageChange: EventEmitter<string> = new EventEmitter();
+
+  onChangePage(choice : 'first' | 'prev' | 'next' | 'last'): void {
+    this.paginationSignal.changeCurrentPage(choice);
+    this.onPageChange.emit(choice);
+  }
+}

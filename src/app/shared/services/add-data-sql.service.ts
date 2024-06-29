@@ -1,18 +1,21 @@
-import { ApiNotebookAdminService } from './../../modules/admin/services/api-notebook-admin.service';
+import { ApiNotebookAdminService } from '../../modules/admin/shared/services/api/api-notebook-admin.service';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { ApiCategoryAdminService } from './../../modules/admin/services/api-category-admin.service';
-import { ApiMaterialAdminService } from './../../modules/admin/services/api-material-admin.service';
+import { ApiCategoryAdminService } from '../../modules/admin/shared/services/api/api-category-admin.service';
+import { ApiMaterialAdminService } from '../../modules/admin/shared/services/api/api-material-admin.service';
 import { Injectable, inject } from '@angular/core';
-import { CreateMaterial } from 'src/app/modules/admin/interfaces/Material';
+import { CreateMaterial } from '../../modules/admin/shared/interfaces/Material';
 import { CategoryDto } from '../interfaces/Category';
 import { MaterialDto } from '../interfaces/Material';
-import { CreateNotebook } from 'src/app/modules/admin/interfaces/Notebook';
+import { CreateNotebook } from '../../modules/admin/shared/interfaces/Notebook';
 import { CollectionDto } from '../interfaces/Collection';
-import { ApiCollectionAdminService } from 'src/app/modules/admin/services/api-collection-admin.service';
-import { ApiWorkshopAdminService } from 'src/app/modules/admin/services/api-workshop-admin.service';
-import { CreateWorkshop } from 'src/app/modules/admin/interfaces/Workshop';
-import { CreatePublication } from 'src/app/modules/admin/interfaces/Publication';
-import { ApiPublicationAdminService } from 'src/app/modules/admin/services/api-publication-admin.service';
+import { ApiCollectionAdminService } from '../../modules/admin/shared/services/api/api-collection-admin.service';
+import { ApiWorkshopAdminService } from '../../modules/admin/shared/services/api/api-workshop-admin.service';
+import { CreateWorkshop } from '../../modules/admin/shared/interfaces/Workshop';
+import { CreatePublication } from '../../modules/admin/shared/interfaces/Publication';
+import { ApiPublicationAdminService } from '../../modules/admin/shared/services/api/api-publication-admin.service';
+import { SecondaryPictureDto } from '../interfaces/SecondaryPicture';
+import {CreateGiftCard} from "../../modules/admin/shared/interfaces/GiftCard";
+import {ApiGiftcardService} from "../../modules/admin/shared/services/api/api-giftcard.service";
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +29,7 @@ export class AddDataSqlService {
   private apiCollectionAdminService = inject(ApiCollectionAdminService);
   private apiWorkshopAdminService = inject(ApiWorkshopAdminService);
   private apiPublicationAdminService = inject(ApiPublicationAdminService);
+  private apiGiftCardAdminService = inject(ApiGiftcardService);
 
   createAll(){
     // ils s'enchainent avec les autres
@@ -35,7 +39,7 @@ export class AddDataSqlService {
   categories! : CategoryDto[];
   materials! : MaterialDto[];
   collections! : CollectionDto[];
-  
+
   createCategories(): void{
     for (let category of this.categoriesToCreate){
       this.apiCategoryAdminService.post(category).subscribe({
@@ -78,7 +82,7 @@ export class AddDataSqlService {
   }
 
 
-  createMaterials(): void{
+  createMaterials(): void {
     for (let material of this.materialsToCreate){
         this.apiMaterialAdminService.post(material).subscribe({
           next: (response) => console.log(response),
@@ -88,7 +92,7 @@ export class AddDataSqlService {
       this.getAllMaterials()
   }
 
-  getAllMaterials(){
+  getAllMaterials(): void {
     this.apiRequestsService.getAllMaterials().subscribe({
         next: (materials) => {
             this.materials = materials
@@ -124,16 +128,20 @@ export class AddDataSqlService {
 
     return materialsRandom;
   }
-  
-  selectRandomSecondaryPictures(): string[]{
 
-    let secondaryPictures : string[] = [];
+  selectRandomSecondaryPictures(): SecondaryPictureDto[]{
+
+    let secondaryPictures : SecondaryPictureDto[] = [];
     let randomPicturesNumber = Math.floor(Math.random() * 5);
 
     for(let i = 0; i < randomPicturesNumber; i++){
-        let randomIndex = Math.floor(Math.random() * this.secondaryPictures.length);
-        if(!secondaryPictures.includes(this.secondaryPictures[randomIndex])){
-            secondaryPictures.push(this.secondaryPictures[randomIndex])
+        const RANDOM_INDEX = Math.floor(Math.random() * this.secondaryPictures.length);
+        if(!secondaryPictures.some(item => item.picture === this.secondaryPictures[RANDOM_INDEX])) {
+          const secPic = {
+            picture : this.secondaryPictures[RANDOM_INDEX],
+            pictureThumbnail : this.secondaryPictures[RANDOM_INDEX]
+          }
+            secondaryPictures.push(secPic)
         }
     }
 
@@ -146,20 +154,22 @@ export class AddDataSqlService {
            return (this.secondaryPictures[randomIndex])
 
     }
-  
 
-  createNotebooks(): void{
-    for(let notebook of this.notebooksToCreate){
-        let newNotebook : CreateNotebook = {
+
+  createNotebooks(): void {
+    for (const notebook of this.notebooksToCreate) {
+      const picture = this.selectOneRandomSecondaryPictures();
+      const newNotebook: CreateNotebook = {
             name : notebook.name,
-            mainPicture : this.selectOneRandomSecondaryPictures(),
+            picture : picture,
+            pictureThumbnail : picture,
             introduction : notebook.introduction,
             price : notebook.price,
             description : notebook.description,
             materialsDto : this.selectRandomMaterials(),
             categoryDto : this.selectRandomCategory(),
             collectionDto : this.selectRandomCollection(),
-            secondaryPictures : this.selectRandomSecondaryPictures()
+            secondaryPicturesDto : this.selectRandomSecondaryPictures()
         }
 
         console.log(newNotebook);
@@ -182,75 +192,98 @@ export class AddDataSqlService {
           },
           error: (err) => console.log(err),
         })
-    } 
+    }
   }
 
   createPublications(): void {
-    for(let publication of this.publicationsToCreate){
+    for (let publication of this.publicationsToCreate) {
       this.apiPublicationAdminService.post(publication).subscribe({
           next: (response) => {
             console.log(response);
           },
           error: (err) => console.log(err),
         })
-    } 
+    }
+    this.createGiftCards();
+  }
+
+  createGiftCards(): void {
+    for(let giftCard of this.giftCardsToCreate){
+      this.apiGiftCardAdminService.post(giftCard).subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (err) => console.log(err),
+      })
+    }
   }
 
   publicationsToCreate: CreatePublication[] = [
       {
         title: "Atelier d'inspiration : Créez votre propre carnet artistique !",
         description: "<p>Rejoignez-nous lors de notre prochain atelier o&ugrave; vous pourrez laisser libre cours &agrave; votre cr&eacute;ativit&eacute; en fabriquant votre propre carnet, guid&eacute; par nos artisans exp&eacute;riment&eacute;s.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Rencontre avec l'artisan : Découvrez l'histoire derrière nos créations !",
         description: "<p>Plongez dans l'univers de la fabrication artisanale en rencontrant notre artisan principal, qui partagera ses inspirations et son savoir-faire lors d'une s&eacute;ance exclusive.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Concours de design : Montrez votre talent et gagnez des carnets exclusifs !",
         description: "<p>Participez &agrave; notre concours de design et montrez-nous votre cr&eacute;ativit&eacute; en proposant votre propre motif de carnet. Les gagnants recevront une collection de nos carnets exclusifs en r&eacute;compense.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Carnets sur mesure : Personnalisez votre compagnon d'écriture !",
         description: "<p>Exprimez votre individualit&eacute; en commandant un carnet enti&egrave;rement personnalis&eacute;, adapt&eacute; &agrave; vos besoins et &agrave; votre style.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Cadeau artisanal : Offrez un carnet unique pour célébrer les moments spéciaux !",
         description: "<p>Faites de chaque occasion un souvenir inoubliable en offrant un cadeau artisanal unique, tel qu'un carnet fait &agrave; la main, parfait pour capturer les moments pr&eacute;cieux de la vie.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Édition limitée : Nos nouveaux carnets inspirés de la nature sont disponibles !",
         description: "<p>Explorez la beaut&eacute; de la nature &agrave; travers notre derni&egrave;re &eacute;dition limit&eacute;e de carnets, orn&eacute;s de motifs floraux et de textures organiques uniques.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Carnets éco-responsables : Engagez-vous pour un avenir plus vert avec nos produits durables !",
         description: "<p>Faites un pas vers un mode de vie plus respectueux de l'environnement en optant pour nos carnets &eacute;co-responsables, fabriqu&eacute;s &agrave; partir de mat&eacute;riaux durables et recycl&eacute;s.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Nouvelle collection artisanale : Découvrez nos carnets exclusifs !",
         description: "<p>Plongez dans l'artisanat authentique avec notre derni&egrave;re collection de carnets, alliant qualit&eacute;, design et durabilit&eacute;.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Artisanat local : Soutenez nos créateurs locaux en achetant des carnets faits à la main !",
         description: "<p>Valorisez l'artisanat local et soutenez nos talentueux artisans en choisissant nos carnets faits &agrave; la main, fabriqu&eacute;s avec amour et d&eacute;vouement dans notre atelier.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: "Nouvelle technique de reliure : Découvrez notre dernière innovation artisanale !",
         description: "<p>Explorez notre toute nouvelle technique de reliure, fusionnant tradition et innovation pour cr&eacute;er des carnets &agrave; la fois &eacute;l&eacute;gants et r&eacute;sistants, parfaits pour accompagner vos aventures quotidiennes.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       },
       {
         title: " Offrez un carnet ",
         description: "<p>Valorisez l'artisanat local et soutenez nos talentueux artisans en choisissant nos carnets faits &agrave; la main, fabriqu&eacute;s avec amour et d&eacute;vouement dans notre atelier.</p> <p>Participez &agrave; notre concours de design et montrez-nous votre cr&eacute;ativit&eacute; en proposant votre propre motif de carnet. Les gagnants recevront une collection de nos carnets exclusifs en r&eacute;compense.</p> <p>Explorez notre toute nouvelle technique de reliure, fusionnant tradition et innovation pour cr&eacute;er des carnets &agrave; la fois &eacute;l&eacute;gants et r&eacute;sistants, parfaits pour accompagner vos aventures quotidiennes.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
+        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
       }
     ]
 
@@ -262,6 +295,7 @@ export class AddDataSqlService {
       address : "123 Rue des Nuages, Ville-sur-Mer, France",
       price : (5.99),
       picture : "https://pliereliure.com/569-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      pictureThumbnail : "https://pliereliure.com/569-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
       registrations : 8
     },
     {
@@ -271,8 +305,9 @@ export class AddDataSqlService {
       address : "456 Avenue de l'Arc-en-Ciel, Ville-en-Montagne, Canada",
       price : (0),
       picture : "https://pliereliure.com/1386-large_default/carnet-artisanal-carnettiste-artistique.jpg",
+      pictureThumbnail : "https://pliereliure.com/1386-large_default/carnet-artisanal-carnettiste-artistique.jpg",
       registrations : 3
-    },    
+    },
     {
       title : "Atelier Carnets Artisanaux",
       description : "À l'Atelier Carnets Artisanaux, nous nous engageons à créer des produits authentiques qui capturent l'essence de l'artisanat traditionnel. Chaque carnet que nous produisons est le résultat d'un processus méticuleux réalisé à la main, depuis la sélection attentive des matériaux jusqu'à la finition minutieuse. Nos artisans passionnés mettent leur expertise et leur savoir-faire au service de la création de carnets uniques en leur genre, où la qualité et l'attention aux détails sont primordiales. Nos carnets artisanaux sont conçus pour inspirer la créativité et encourager l'expression personnelle, offrant un espace où les idées peuvent s'épanouir et les histoires peuvent prendre vie. Avec leur charme intemporel et leur qualité exceptionnelle, nos carnets sont bien plus que de simples objets ; ce sont des compagnons précieux qui enrichissent la vie quotidienne.",
@@ -280,8 +315,9 @@ export class AddDataSqlService {
       address : "789 Boulevard des Étoiles, Ville-aux-Étoiles, Australie",
       price : (10),
       picture : "https://pliereliure.com/568-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      pictureThumbnail : "https://pliereliure.com/568-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
       registrations : 999
-    },    
+    },
     {
       title : "Studio de Reliure Créative",
       description : "Bienvenue à la Papeterie Artisanale des Mots, où chaque carnet est une œuvre d'art en soi. Dans notre atelier, nous célébrons la beauté de l'écriture à la main et la puissance des mots, en créant des carnets qui inspirent la créativité et captivent l'imagination. Nos artisans passionnés utilisent des matériaux de qualité supérieure et des techniques de reliure traditionnelles pour concevoir des carnets uniques qui sont à la fois fonctionnels et esthétiquement plaisants. Chaque détail est soigneusement considéré, des motifs exquis sur les couvertures aux pages lisses et agréables au toucher. Que ce soit pour écrire, dessiner ou simplement pour laisser libre cours à votre imagination, nos carnets artisanaux sont conçus pour vous accompagner dans tous vos voyages créatifs.",
@@ -289,8 +325,9 @@ export class AddDataSqlService {
       address : "1010 Rue de la Licorne, Ville-enchantée, Royaume-Uni",
       price : (5.99),
       picture : "https://pliereliure.com/333-large_default/carnet-artisanal-de-notes-avec-petit-message.jpg",
+      pictureThumbnail : "https://pliereliure.com/333-large_default/carnet-artisanal-de-notes-avec-petit-message.jpg",
       registrations : 2
-    },    
+    },
     {
       title : "L'Atelier des Carnets d'Écriture",
       description : "Au Studio de Reliure Créative, nous sommes dévoués à l'art intemporel de la reliure artisanale. Chaque carnet qui quitte notre atelier est le fruit d'un processus méticuleux et passionné, où chaque étape est effectuée à la main avec une attention méticuleuse aux détails. Nos artisans talentueux utilisent des matériaux de haute qualité, allant du papier de qualité supérieure aux tissus et cuirs exquis, pour créer des carnets qui allient fonctionnalité et esthétique. Chaque carnet est conçu pour être une œuvre d'art en soi, offrant un espace où les idées peuvent s'épanouir et les pensées peuvent être capturées. Qu'il s'agisse d'un carnet de voyage, d'un journal intime ou d'un carnet de croquis, nos créations sont conçues pour inspirer la créativité et enrichir la vie de nos clients.",
@@ -298,8 +335,9 @@ export class AddDataSqlService {
       address : "1313 Avenue de la Lune, Ville-lunaire, États-Unis",
       price : (0),
       picture : "https://latelierdestephanieaguado.com/wp-content/uploads/2020/05/mini-carnet-07.jpg",
+      pictureThumbnail : "https://latelierdestephanieaguado.com/wp-content/uploads/2020/05/mini-carnet-07.jpg",
       registrations : 9
-    },    
+    },
     {
       title : "Carnet",
       description : "L'Atelier des Carnets d'Écriture est un sanctuaire pour les amoureux de l'écriture et du papier de qualité. Dans notre atelier, nous mettons l'accent sur l'artisanat traditionnel et la qualité exceptionnelle, en utilisant des techniques de reliure ancestrales pour créer des carnets qui sont à la fois beaux et fonctionnels. Chaque carnet est conçu avec soin et attention aux détails, depuis la sélection des matériaux jusqu'à la finition finale. Nos artisans expérimentés mettent leur expertise au service de la création de carnets uniques en leur genre, offrant un espace où les pensées peuvent s'épanouir et les idées peuvent prendre forme. Qu'il s'agisse d'un carnet de voyage rempli d'aventures ou d'un journal intime rempli de souvenirs, nos créations sont conçues pour inspirer et enrichir la vie de nos clients, une page à la fois.",
@@ -307,8 +345,9 @@ export class AddDataSqlService {
       address : "1313 Avenue de la Lune, Ville-lunaire, États-Unis",
       price : 7.89,
       picture : "https://pliereliure.com/565-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      pictureThumbnail : "https://pliereliure.com/565-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
       registrations : 10
-    },    
+    },
     {
       title : "Artisanat Carnet",
       description : "L'Atelier des Carnets d'Écriture est un sanctuaire pour les amoureux de l'écriture et du papier de qualité. Dans notre atelier, nous mettons l'accent sur l'artisanat traditionnel et la qualité exceptionnelle, en utilisant des techniques de reliure ancestrales pour créer des carnets qui sont à la fois beaux et fonctionnels. Chaque carnet est conçu avec soin et attention aux détails, depuis la sélection des matériaux jusqu'à la finition finale. Nos artisans expérimentés mettent leur expertise au service de la création de carnets uniques en leur genre, offrant un espace où les pensées peuvent s'épanouir et les idées peuvent prendre forme. Qu'il s'agisse d'un carnet de voyage rempli d'aventures ou d'un journal intime rempli de souvenirs, nos créations sont conçues pour inspirer et enrichir la vie de nos clients, une page à la fois.",
@@ -316,6 +355,7 @@ export class AddDataSqlService {
       address : "1515 Chemin de la Magie, Ville-mystère, Espagne",
       price : (5.99),
       picture : "https://pliereliure.com/img/cms/30-03.jpg",
+      pictureThumbnail : "https://pliereliure.com/img/cms/30-03.jpg",
       registrations : 80
     }
   ]
@@ -340,6 +380,7 @@ export class AddDataSqlService {
           "price": 7.85,
           "description": "<p>Cette reliure artisanale tient son nom des coptes, ch&eacute;tiens d&rsquo;Egypte, qui seraiet les premiers &agrave; cr&eacute;er des livres constitu&eacute;s de cahiers cousus ensemble. Ses caract&eacute;riques sont de ne pas utiliser de colle et d&rsquo;avoir un dos ouvert avec la couture apparente : les couvertures et les cahiers sont reli&eacute;s par une couture en forme de tresse.</p>\n<p>Elle permet une ouverture du livre &agrave; plat.</p>",
           "picture": "https://www.reliurealamain.fr/wp-content/uploads/2018/04/Copte-marbr%C3%A9.jpg",
+          "pictureThumbnail": "https://www.reliurealamain.fr/wp-content/uploads/2018/04/Copte-marbr%C3%A9.jpg",
           "materialType": "RELIURE",
       },
       {
@@ -347,6 +388,7 @@ export class AddDataSqlService {
           "price": 3.80,
           "description": "<p>Cette technique de reliure artisanale permet de relier &lsquo;simplement&rsquo; des ouvrages peu &eacute;pais et ne n&eacute;cessie pas de mat&eacute;riel professionnel. Les feuilles sont assembl&eacute;es en cahiers qui sont cousus entre eux le long de la tranche. Le dos du corps d&rsquo;ouvrage est coll&eacute; et est reli&eacute; &agrave; la couverture gr&acirc;ce au collage des pages de garde.</p>",
           "picture": "https://i.pinimg.com/originals/97/e3/53/97e353825b7888020a83c652ce1ef216.jpg",
+          "pictureThumbnail": "https://i.pinimg.com/originals/97/e3/53/97e353825b7888020a83c652ce1ef216.jpg",
           "materialType": "RELIURE",
       },
       {
@@ -354,6 +396,7 @@ export class AddDataSqlService {
           "price": 3.50,
           "description": "<p>&nbsp;format A5 orientation paysage : environ 21,5 x 15 cm, &eacute;paisseur environ 3 cm.</p>",
           "picture": "http://www.format-papier-a0-a1-a2-a3-a4-a5.fr/format-a5/surface-A5.jpg",
+          "pictureThumbnail": "http://www.format-papier-a0-a1-a2-a3-a4-a5.fr/format-a5/surface-A5.jpg",
           "materialType": "PAPIER",
       },
       {
@@ -361,6 +404,7 @@ export class AddDataSqlService {
           "price": 2.80,
           "description": "<p>format A4 orientation portrait, environ 21,5 x 30 cm, &eacute;paisseur environ 3 cm.</p>",
           "picture": "http://www.format-papier-a0-a1-a2-a3-a4-a5.fr/format-a4/format-a4.jpg",
+          "pictureThumbnail": "http://www.format-papier-a0-a1-a2-a3-a4-a5.fr/format-a4/format-a4.jpg",
           "materialType": "PAPIER",
       },
       {
@@ -368,6 +412,7 @@ export class AddDataSqlService {
           "price": 5.60,
           "description": "<p>du joli carton</p>",
           "picture": "http://pmco.com.mx/wp-content/uploads/2020/07/LAMINA-DE-CARTON.jpg",
+          "pictureThumbnail": "http://pmco.com.mx/wp-content/uploads/2020/07/LAMINA-DE-CARTON.jpg",
           "materialType": "COUVERTURE",
       },
       {
@@ -375,6 +420,7 @@ export class AddDataSqlService {
           "price": 4.50,
           "description": "<p>superbe papier recycl&eacute;</p>",
           "picture": "http://www.purplejumble.com/wp-content/uploads/2021/09/66D25212-E768-4C38-A0F7-939FC59FFF9A.jpeg",
+          "pictureThumbnail": "http://www.purplejumble.com/wp-content/uploads/2021/09/66D25212-E768-4C38-A0F7-939FC59FFF9A.jpeg",
           "materialType": "COUVERTURE",
       },
       {
@@ -382,6 +428,7 @@ export class AddDataSqlService {
           "price": 8.95,
           "description": "<p>Cette technique de reliure artisanale est h&eacute;rit&eacute;e des traditions japonaises. Les feuilles simples sont assembl&eacute;s entre les deux plats de couverture et sont cousus avec la couverture par une couture apparente. Ce type de reliure offre un r&eacute;sultat esth&eacute;tique mais avec une ouverture r&eacute;duite.</p>",
           "picture": "https://www.sayonneara.fr/wp-content/uploads/2019/02/thumbnail_reliure-japonaise.jpg",
+          "pictureThumbnail": "https://www.sayonneara.fr/wp-content/uploads/2019/02/thumbnail_reliure-japonaise.jpg",
           "materialType": "RELIURE",
       },
       {
@@ -389,6 +436,7 @@ export class AddDataSqlService {
           "price": 5.99,
           "description": "<p>C&rsquo;est la reliure traditionnelle, n&eacute;cessitant un savoir faire et&nbsp; de nombreuses op&eacute;rations.<br>Dans cette reliure artisanale, le dos du livre est ind&eacute;pendant des pages, c&rsquo;est &agrave; dire que seules les pages de garde sont coll&eacute;es &agrave; la couverture, une ficelle ou un ruban assure la solidit&eacute; du collage entre le coprs d&rsquo;ouvrage et la couverture. Le dos est souvent courb&eacute; afin de permettre une amplitude d&rsquo;ouverture du livre.</p>\n<p>Les reliures pr&eacute;sent&eacute;es par la suite ne demande pas de mat&eacute;riel de professionnel</p>",
           "picture": "https://www.plumetismagazine.net/medias/2015/12/couture_3-690x370.jpg",
+          "pictureThumbnail": "https://www.plumetismagazine.net/medias/2015/12/couture_3-690x370.jpg",
           "materialType": "RELIURE",
       },
       {
@@ -396,6 +444,7 @@ export class AddDataSqlService {
           "price": 9.99,
           "description": "<p>peau de vache morte</p>",
           "picture": "https://cdn.shopify.com/s/files/1/2574/6280/products/image_6ddedc23-d3e7-4c7f-b995-3307b9d3e79d.jpg?v=1570187484",
+          "pictureThumbnail": "https://cdn.shopify.com/s/files/1/2574/6280/products/image_6ddedc23-d3e7-4c7f-b995-3307b9d3e79d.jpg?v=1570187484",
           "materialType": "COUVERTURE",
       }
   ]
@@ -403,7 +452,7 @@ export class AddDataSqlService {
   notebooksToCreate = [
     {
     name : 'le végétal',
-    introduction : `Une immersion dans la nature à chaque page. Teintes vertes apaisantes évoquent les feuillages luxuriants. Fait main avec un engagement écologique, chaque carnet offre un espace pour vos pensées créatives. Inspiré par la nature, ce carnet biodégradable vous encourage à cultiver vos idées tout en préservant notre environnement, page après page.`, 
+    introduction : `Une immersion dans la nature à chaque page. Teintes vertes apaisantes évoquent les feuillages luxuriants. Fait main avec un engagement écologique, chaque carnet offre un espace pour vos pensées créatives. Inspiré par la nature, ce carnet biodégradable vous encourage à cultiver vos idées tout en préservant notre environnement, page après page.`,
     price : 1.50,
     secondaryPictures : [],
     description : `une célébration de la nature et de la durabilité. Sa couverture, réalisée à la main à partir de matériaux écologiques, reflète la richesse de la vie végétale avec des motifs floraux délicats et des teintes organiques. Chaque détail est une ode à la beauté naturelle, mettant en lumière la diversité des plantes qui peuplent notre planète. À l'intérieur, les pages en papier recyclé offrent une toile respectueuse de l'environnement pour capturer les pensées, les croquis ou les notes. La texture douce du papier invite à l'exploration créative, tandis que des empreintes végétales subtiles rappellent le lien intrinsèque entre l'homme et la nature. Des illustrations botaniques exquises et des motifs inspirés par la flore mondiale parsèment les pages, créant une expérience immersive au cœur du règne végétal. Des nuances de vert apaisantes et des touches de couleur inspirées des plantes ajoutent une dimension artistique, faisant de chaque page un jardin miniature. Le carnet artisanal bio végétal incarne l'éthique d'une fabrication respectueuse de l'environnement, soulignant l'importance de préserver la biodiversité. En choisissant ce carnet, vous optez pour un compagnon d'écriture qui capture l'énergie vivifiante de la nature, tout en soutenant des pratiques responsables pour une planète plus verte.`,
@@ -411,7 +460,7 @@ export class AddDataSqlService {
     },
     {
     name : 'le braise',
-    introduction : `Une odyssée enflammée à chaque écriture. Les teintes chaudes évoquent les flammes dansantes. Réalisé à la main avec passion, chaque page offre un espace pour vos pensées ardentes. Inspiré par le feu, ce carnet biodégradable vous invite à graver vos idées tout en préservant notre planète, chaque mot s'embrasant sur ses pages.`, 
+    introduction : `Une odyssée enflammée à chaque écriture. Les teintes chaudes évoquent les flammes dansantes. Réalisé à la main avec passion, chaque page offre un espace pour vos pensées ardentes. Inspiré par le feu, ce carnet biodégradable vous invite à graver vos idées tout en préservant notre planète, chaque mot s'embrasant sur ses pages.`,
     price : 12.50,
     secondaryPictures : [],
     description : `évoque la puissance primitive et réconfortante du feu. Sa couverture, méticuleusement conçue à la main à partir de matériaux écologiques, reflète la lueur chaleureuse des braises avec des nuances de rouge, d'orange et de noir. Les motifs captivent l'esprit, évoquant le mouvement hypnotique des flammes dansantes. À l'intérieur, les pages en papier recyclé révèlent une toile résistante mais délicate, prête à accueillir les pensées ardentes et les idées passionnées. Chaque feuille semble prête à s'embraser, créant une toile où l'expression artistique ou l'écriture prend vie de manière flamboyante. Des illustrations captivantes de flammes tourbillonnantes et de braises incandescentes animent les pages, évoquant la vitalité et la force du feu. Des teintes de rouge, d'or et de noir créent un contraste saisissant, tandis que des détails subtils rappellent la ferveur de l'élément feu. Le carnet artisanal bio sur le thème de la braise et du feu symbolise la passion et la créativité brûlante. En choisissant ce carnet, vous emportez avec vous non seulement un objet artisanal magnifiquement conçu, mais aussi un rappel de la force inspiratrice du feu qui a captivé l'humanité depuis ses débuts.`,
@@ -469,5 +518,44 @@ export class AddDataSqlService {
     "https://www.skinproject.fr/2610-large_default/carnet-en-cuir-a-crochet-figuratif.jpg",
     "https://millastudio.fr/wp-content/uploads/2022/02/20220207_162149-scaled.jpg",
     "https://les-ames-papier.com/wp-content/uploads/2019/06/crisscross-225x300.jpg"
+  ]
+
+  giftCardsToCreate: CreateGiftCard[] = [
+    {
+      code:"code de noel",
+      rising: 0.65,
+      percentage: true,
+      expiryDate: new Date(new Date().getFullYear(), new Date().setMonth(new Date().getMonth()+1), 24)
+    },
+    {
+      code:"code d'été",
+      rising: 5,
+      percentage: true,
+      expiryDate: new Date(new Date().getFullYear(), 8, 31)
+    },
+    {
+      code:"la rentrée en folie",
+      rising: 20,
+      percentage: false,
+      expiryDate: new Date(new Date().getFullYear(), 8, 15)
+    },
+    {
+      code:"code de d'anniversaire",
+      rising: 10,
+      percentage: true,
+      expiryDate: new Date(new Date().getFullYear(), 10, 10)
+    },
+    {
+      code:"fete des mères 2024",
+      rising: 20,
+      percentage: false,
+      expiryDate: new Date(new Date().getFullYear(), 6, 10)
+    },
+    {
+      code:"offre de bienvenue",
+      rising: 5,
+      percentage: false,
+      expiryDate: new Date(new Date().getFullYear(), 6, 10)
+    },
   ]
 }

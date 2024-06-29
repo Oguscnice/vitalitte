@@ -1,25 +1,24 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GiftCardDto } from 'src/app/shared/interfaces/GiftCard';
-import { ApiGiftcardUsedService } from '../../services/api-giftcard-used.service';
+import { ApiGiftcardUsedService } from '../../shared/services/api/api-giftcard-used.service';
 import { BaseComponent } from 'src/app/base.component';
-import { GiftCardUsedDto } from '../../interfaces/GiftCardUsed';
+import { GiftCardUsedDto } from '../../shared/interfaces/GiftCardUsed';
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
-import { ApiGiftcardService } from '../../services/api-giftcard.service';
+import { ApiGiftcardService } from '../../shared/services/api/api-giftcard.service';
 
 @Component({
-  selector: 'app-user-list-giftcards-used',
   standalone: true,
-  imports: [ NgIf, NgFor, NgClass, DatePipe ],
+  imports: [ NgClass, DatePipe ],
+  selector: 'app-user-list-giftcards-used',
   templateUrl: './user-list-giftcards-used.component.html',
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
 export class UserListGiftcardsUsedComponent extends BaseComponent {
 
-  public route = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
   private apiGiftcardUsedService = inject(ApiGiftcardUsedService);
   private apiGiftcardService = inject(ApiGiftcardService);
-
 
   giftcardCode! : GiftCardDto['code'];
   giftcard! : GiftCardDto;

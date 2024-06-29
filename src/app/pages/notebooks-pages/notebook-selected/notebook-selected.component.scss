@@ -11,13 +11,13 @@
     p{
       font-size: $triple-font-size;
     }
-    .descriptions-list{
-      margin: $normal-margin 0;
-      .description{
-        font-size: $double-font-size;
-        text-align: left;
-      }
-    }
+    // .descriptions-list{
+    //   margin: $normal-margin 0;
+    //   .description{
+    //     font-size: $double-font-size;
+    //     text-align: left;
+    //   }
+    // }
     .components-list{
       width: 100%;
       font-size: calc($normal-font-size * 1.2);
@@ -32,8 +32,8 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .notebook-selected-page{
-    div{ 
-      max-width: 650px;
+    div{
+      max-width: $max-width-768px;
     }
   }
 }

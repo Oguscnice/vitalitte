@@ -1,13 +1,13 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { BaseComponent } from 'src/app/base.component';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-biography',
   templateUrl: './biography.component.html',
   styleUrls: ['./biography.component.scss'],
 })
-export class BiographyComponent extends BaseComponent{
-  titleParentHome = 'Qui suis je ?';
+export class BiographyComponent implements AfterViewInit {
+
   backgroundImageParentHome = '../../../assets/images/figma/couverture.jpg';
 
   @ViewChild('imgMonitored') imgMonitored!: ElementRef;

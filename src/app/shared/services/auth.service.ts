@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
@@ -10,22 +10,22 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {}
 
-  ngOnInit() {}
+  private http = inject(HttpClient);
+  private router = inject(Router);
 
-  signup(form: FormGroup): Observable<any> {
+  public signup(form: FormGroup): Observable<any> {
     return this.http.post(URLAPI + 'auth/signup', form.value);
   }
 
-  signin(email: string, password: string): Observable<any> {
+  public signin(email: string, password: string): Observable<any> {
     return this.http.post(URLAPI + 'auth/signin', {
       email: email,
       password: password,
     });
   }
 
-  logout(): void {
+  public logout(): void {
     localStorage.removeItem('USER_INFOS');
     this.router.navigate(['']);
   }

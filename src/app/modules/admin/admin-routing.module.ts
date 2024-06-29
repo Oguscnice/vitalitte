@@ -11,7 +11,7 @@ import { ManageCategoriesCollectionsComponent } from './pages/manage-categories-
 import { EditNotebookComponent } from './pages/edit-notebook/edit-notebook.component';
 import { ManageWorkshopsComponent } from './pages/manage-workshops/manage-workshops.component';
 import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
-import { ManageGiftcardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
+import { ManageGiftCardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
 import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used/user-list-giftcards-used.component';
 
 const routes: Routes = [
@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: 'editer-carnet/:notebookSlug', component : EditNotebookComponent},
   { path: 'gestion-des-ateliers', component: ManageWorkshopsComponent },
   { path: 'editer-atelier/:workshopSlug', component : EditWorkshopComponent},
-  { path: 'gestion-des-cartes-cadeaux', component: ManageGiftcardsComponent },
+  { path: 'gestion-des-cartes-cadeaux', component: ManageGiftCardsComponent },
   { path: 'utilisateurs-carte-cadeaux/:giftcardCode', component: UserListGiftcardsUsedComponent },
   { path: 'gestion-des-publications', component: ManagePublicationsComponent },
   { path: 'gestion-des-contacts', component: ManageContactsComponent },

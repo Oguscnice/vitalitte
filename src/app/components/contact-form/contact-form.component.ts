@@ -1,18 +1,21 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoaderComponent } from '../loader/loader.component';
+import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   standalone: true,
-  imports: [ ReactiveFormsModule, NgIf, NgFor ],
+  imports: [ ReactiveFormsModule, LoaderComponent, NgClass, NgStyle ],
   selector: 'app-contact-form',
   templateUrl: './contact-form.component.html',
   styleUrls: ['./contact-form.component.scss']
 })
 export class ContactFormComponent {
-  isFormClicked: boolean = false;
+
+  isFormSubmit: boolean = false;
   hasErrors: boolean = false;
   isLoaderVisible: boolean = false;
+  isDropdownOpen: boolean = false;
 
   lastnameValue: string = '';
   firstnameValue: string = '';
@@ -20,61 +23,71 @@ export class ContactFormComponent {
   phoneValue: string = '';
   themeValue: string = '';
   messageValue: string = '';
-  
-  changeLastnameValue(event: KeyboardEvent) {
+
+  themeList: string[] = [
+    "Carnets",
+    "Ateliers",
+    "Autre sujet"
+  ]
+
+  toggleDropdown(value: boolean): void {
+    this.isDropdownOpen = value;
+  }
+
+  changeLastnameValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.lastnameValue = inputElement.value;
   }
-  
-  changeFirstnameValue(event: KeyboardEvent) {
+
+  changeFirstnameValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.firstnameValue = inputElement.value;
   }
-  
-  changeEmailValue(event: KeyboardEvent) {
+
+  changeEmailValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.emailValue = inputElement.value;
     this.validateEmail();
   }
-  
-  changePhoneValue(event: KeyboardEvent) {
+
+  changePhoneValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.phoneValue = inputElement.value;
   }
-  
-  changeThemeValue(themeClicked: string) {
+
+  changeThemeValue(themeClicked: string): void {
     this.themeValue = themeClicked;
   }
-  
-  changeMessageValue(event: KeyboardEvent) {
+
+  changeMessageValue(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement;
     this.messageValue = inputElement.value;
   }
-  
+
   validateEmail(): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(this.emailValue);
   }
-  
+
   validatePhone(): boolean {
     const phoneRegex = /^[0-9]{10}$/;
     return (this.phoneValue.match(phoneRegex) !== null);
   }
-  
+
   checkStringValidity(value: string, min: number, max: number): boolean {
     if (value && value.length >= min && value.length <= max) {
       return true;
     }
     return false;
   }
-  
-  changeSubmitted() {
-    this.isFormClicked = true;
+
+  changeSubmitted(): void {
+    this.isFormSubmit = true;
     if (this.checkErrors()) {
       this.isLoaderVisible = true;
     }
   }
-  
+
   checkErrors(): boolean {
     if (
       this.checkStringValidity(this.emailValue, 3, 255) &&

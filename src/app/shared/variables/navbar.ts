@@ -17,13 +17,13 @@ export const NAVBAR_USER: Menu[] = [
     submenu : null
   },
   {
-    name: 'Galerie Photos',
-    routerLink: '/galerie-photos',
+    name: 'Actualités',
+    routerLink: '/actualites',
     submenu : null
   },
   {
-    name: 'Actualités',
-    routerLink: '/actualites',
+    name: 'Booktique',
+    routerLink: '/booktique',
     submenu : null
   },
   {
@@ -33,18 +33,18 @@ export const NAVBAR_USER: Menu[] = [
       isOpen : false,
       items : [    
             { name : "Ma démarche", anchor : "myApproach" },
-            { name : "Qui suis-je ?", anchor : "whoAmI" }
+            { name : "Qui suis-je ?", anchor : "who-am-i" }
              ]
               },
-  },
-  {
-    name: 'Booktique',
-    routerLink: '/booktique',
-    submenu : null
   },
   {
     name: 'Contact',
     routerLink: '/contact',
     submenu : null
-  },
+  }
+  // {
+  //   name: 'Galerie Photos',
+  //   routerLink: '/galerie-photos',
+  //   submenu : null
+  // },
 ];

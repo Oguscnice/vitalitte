@@ -1,4 +1,4 @@
-import { CreateGiftCard } from "src/app/modules/admin/interfaces/GiftCard";
+import { CreateGiftCard } from "../../modules/admin/shared/interfaces/GiftCard";
 
 export interface GiftCardDto extends CreateGiftCard {
   slug: string

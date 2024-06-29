@@ -1,0 +1,142 @@
+@if (currentWorkshop) {
+  <app-h1 [titleChild]="'Atelier : ' + currentWorkshop.title" [backgroundImageChild]="currentWorkshop.picture"/>
+
+  <div class="workshop-content" [innerHTML]="currentWorkshop.description"></div>
+  @if (registrationsFree() > 0) {
+    @if (currentWorkshop.available && isWorkshopInFuture(currentWorkshop)) {
+      @if (registrationsFree() === 1) {
+        <p class="workshop-resgistrations-free">Place disponible : {{ registrationsFree() }} </p>
+      } @else {
+        <p class="workshop-resgistrations-free">Places disponibles : {{ registrationsFree() }} </p>
+      }
+      <button class="btn-normal" (click)="isFormVisible = !isFormVisible"> Formulaire d'inscription </button>
+    } @else {
+      <p class="workshop-resgistrations-free">Inscription Indisponible.</p>
+    }
+  } @else {
+    <div class="flex center">
+      <button class="btn-normal btn-grey">COMPLET</button>
+      <p class="workshop-resgistrations-free">Plus de place disponible.</p>
+    </div>
+  }
+
+  @if (isFormVisible && registrationsFree() > 0) {
+    <form (ngSubmit)="(newInscriptionForm.valid)"
+          [formGroup]="newInscriptionForm"
+          #myForm="ngForm">
+
+      <fieldset class="flex column">
+        <label for="lastname">Nom :</label>
+        <input type="text"
+               id="lastname"
+               placeholder="Nom..."
+               formControlName="lastname"
+               autocomplete="off"/>
+
+        @if (isFormSubmit && myForm.submitted && newInscriptionForm.controls['lastname'].invalid) {
+          <div>
+            @if (newInscriptionForm.controls.lastname.errors?.['required']) {
+              <small>Le nom de famille est obligatoire.</small>
+            } @else if(newInscriptionForm.controls.lastname.errors?.['maxlength']) {
+              <small>Le nom de famille ne doit pas dépasser 255 charactères.</small>
+            }
+          </div>
+        }
+      </fieldset>
+
+      <fieldset class="flex column">
+        <label for="firstname">Prénom :</label>
+        <input type="text"
+               id="firstname"
+               placeholder="Prénom..."
+               formControlName="firstname"
+               autocomplete="off"/>
+
+        @if (isFormSubmit && myForm.submitted && newInscriptionForm.controls['firstname'].invalid) {
+          <div>
+            @if (newInscriptionForm.controls.firstname.errors?.['required']) {
+              <small>Le prénom est obligatoire.</small>
+            } @else if (newInscriptionForm.controls.firstname.errors?.['maxlength']) {
+              <small>Le prénom ne doit pas dépasser 255 charactères.</small>
+            }
+          </div>
+        }
+
+      </fieldset>
+
+      <fieldset class="flex column">
+        <label for="phone">Téléphone :</label>
+        <input
+          type="tel"
+          placeholder="06 11 22 33 44"
+          name="phone"
+          id="phone"
+          (keyup)="changePhoneValue($event)"
+        />
+        @if (isFormSubmit && myForm.submitted && newInscriptionForm.controls['phone'].invalid) {
+          <div>
+            @if (newInscriptionForm.controls.phone.errors?.['required']) {
+              <small>Le téléphone est obligatoire.</small>
+            } @else if (newInscriptionForm.controls.phone.errors?.['invalidPhone']) {
+              <small>Le téléphone doit être composé de 10 chiffres commençant par '0' (ex : 06 12 34 56 78) ou 12 charactères commençant par '+' (ex : +33 6 12 34 56 78).</small>
+            }
+          </div>
+        }
+      </fieldset>
+
+      <fieldset class="flex column">
+        <label for="email">Email :</label>
+        <input type="text"
+               id="email"
+               placeholder="Email..."
+               formControlName="email"
+               autocomplete="off"/>
+
+        @if (isFormSubmit && myForm.submitted && newInscriptionForm.controls['email'].invalid) {
+          <div>
+            @if (newInscriptionForm.controls.email.errors?.['required']) {
+              <small>L'email est obligatoire.</small>
+            } @else if (newInscriptionForm.controls.email.errors?.['email']) {
+              <small>L'email ne respecte pas le format d'une adresse mail'.</small>
+            }
+          </div>
+        }
+
+      </fieldset>
+
+      <fieldset class="flex column">
+        <label for="quantity">Combien de places ?</label>
+        <small class="price-per-person"> {{ currentWorkshop.price | number:'0.2' }}€ /personne </small>
+        <input type="number"
+               id="quantity"
+               formControlName="quantity"
+               placeholder="0"
+               min="0"
+               [max]="currentWorkshop.registrations === 0 || registrationsFree() > 5 ? 5 : registrationsFree()"/>
+        @if (isFormSubmit && newInscriptionForm.controls['quantity'].invalid) {
+        <div>
+          @if (newInscriptionForm.controls.quantity.errors?.['required']) {
+            <small>La quantité est obligatoire.</small>
+          } @else if (newInscriptionForm.controls.quantity.errors?.['quantityError']) {
+            <small>La quantité doit être comprise entre 1 et 5.</small>
+          }
+        </div>
+        }
+      </fieldset>
+
+      <p class="total-price">Montant total : {{ totalPrice() | number: '0.2'}} €</p>
+
+      <button class="btn-submit-admin"
+              type="submit"
+              (click)="addCartInscription()">
+        Ajouter au Panier
+      </button>
+
+    </form>
+  }
+
+} @else {
+  <app-h1 [titleChild]="'Erreur, Atelier non trouvé'"
+          [backgroundImageChild]="'../../../../assets/images/figma/lost-workshop.jpg'">
+  </app-h1>
+}

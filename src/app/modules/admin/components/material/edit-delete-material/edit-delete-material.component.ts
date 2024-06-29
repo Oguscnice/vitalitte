@@ -1,41 +1,78 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, inject, OnInit, Signal} from '@angular/core';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
-import { MaterialEditable } from '../../../interfaces/EditableObject';
-import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import {DataSignalService} from "../../../../../shared/services/data-signal.service";
+import {AdminMaterialSignalService} from "../../../shared/services/admin-material-signal.service";
+import {
+  ChangePageButtonsPagination
+} from "../../../../../components/change-page-buttons-pagination/change-page-buttons-pagination.component";
+import {PaginationWithSearchValue} from "../../../../../shared/interfaces/Pagination";
+import {BaseComponent} from "../../../../../base.component";
+import {ModalSignalService} from "../../../../../shared/services/modal-signal.service";
+import {
+  ChangeSizePaginationAndValueSearchComponent
+} from "../../../../../components/change-size-pagination-and-value-search/change-size-pagination-and-value-search.component";
+import {PaginationSignalService} from "../../../../../shared/services/pagination-signal.service";
 
 @Component({
   selector: 'app-edit-delete-material',
   standalone: true,
-  imports: [ NgClass, NgIf, NgFor, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent ],
+  imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent, ChangePageButtonsPagination, ChangeSizePaginationAndValueSearchComponent ],
   templateUrl: './edit-delete-material.component.html',
-  styles: [ `@import "../../../scss/admin-general.scss"; `]
-})
-export class EditDeleteMaterialComponent {
+  styles: [`
+    @import "../../../scss/admin-general.scss";
 
-  @Input() materials! : MaterialDto[];
-  @Input() materialTypes! : string[];
-  @Output() materialToEdit: EventEmitter<MaterialDto> = new EventEmitter();
-  @Output() changeAvailabilityMaterial: EventEmitter<MaterialDto> = new EventEmitter();
-  @Output() materialToDelete: EventEmitter<MaterialDto> = new EventEmitter();
+    .material-name {
+      max-width: 40vw;
+      overflow-x: hidden;
+    }
+  `]
+})
+export class EditDeleteMaterialComponent extends BaseComponent implements OnInit {
+
+  private dataSignal = inject(DataSignalService);
+  private adminMaterialSignal = inject(AdminMaterialSignalService);
+  private paginationSignal = inject(PaginationSignalService);
+  modalSignal : ModalSignalService = inject(ModalSignalService);
+
+  materials: Signal<MaterialDto[]> = this.dataSignal.$materials;
 
   isTableVisible: boolean = true;
 
-  modalVisible : boolean = false;
-  modalText! : string;
-
-  openModalWithDescription(materialDescription : MaterialEditable['description']): void{
-    this.modalVisible = true;
-    this.modalText = materialDescription;
+  ngOnInit(): void {
+    this.subscribeCounterMaterialValueChange();
+    this.reloadPaginationValueAndCounter();
   }
 
-  responseForModal(response: boolean): void {
-    this.modalVisible = false;
+  onValuePageChange(event : string): void {
+    this.reloadPaginationValueAndCounter();
   }
 
-  changeAvailability = (material : MaterialDto) => this.changeAvailabilityMaterial.emit(material);
-  edit = (materialEdited : MaterialDto) =>  this.materialToEdit.emit(materialEdited);
-  delete = (materialSelected : MaterialDto) => this.materialToDelete.emit(materialSelected);
+  subscribeCounterMaterialValueChange(): void {
+    this.subscriptions.push(
+      this.adminMaterialSignal.$counter.subscribe((counter: number) => this.paginationSignal.setCounterItem(counter))
+    )
+  }
+
+  private getNewMaterialsPaginated(): void {
+    const PAGINATION_WITH_SEARCH_VALUE: PaginationWithSearchValue = this.paginationSignal.transformToPaginationWithSearchValue();
+    this.adminMaterialSignal.getPaginatedWithSearchValue(PAGINATION_WITH_SEARCH_VALUE);
+  }
+
+  private getNewCounterMaterialsPaginated(): void {
+    const PAGINATION_WITH_SEARCH_VALUE = this.paginationSignal.transformToPaginationWithSearchValue();
+    this.adminMaterialSignal.getCounterWithSearchValue(PAGINATION_WITH_SEARCH_VALUE);
+  }
+
+  reloadPaginationValueAndCounter(): void {
+    this.getNewMaterialsPaginated();
+    this.getNewCounterMaterialsPaginated();
+  }
+
+  changeAvailability = (material : MaterialDto) => this.adminMaterialSignal.changeAvailabilityMaterial(material);
+  changeAvailabilityForCustomization = (material : MaterialDto) => this.adminMaterialSignal.changeAvailabilityForCustomizationMaterial(material);
+  delete = (materialSelected : MaterialDto) => this.adminMaterialSignal.confirmationModalForDeleteMaterial(materialSelected);
 }

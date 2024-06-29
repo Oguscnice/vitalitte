@@ -1,0 +1,32 @@
+<app-h1 titleChild="Nos Ateliers"
+        [backgroundImageChild]="backgroundImageParent"></app-h1>
+
+<h3>A venir</h3>
+@if(workshopsWithDateToCome() && workshopsWithDateToCome().length > 0) {
+  <div class="workshops flex wrap space-around">
+    @for(workshop of workshopsWithDateToCome(); track workshop) {
+        <app-workshop-thumbnail [workshop]="workshop"
+                                [disponibility]="inscriptionsReservedByWorkshopSlug(workshop.slug)"/>
+    }
+  </div>
+} @else {
+  <h3>Aucun Atelier à venir</h3>
+}
+
+<h3>Passé(s)</h3>
+
+<app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+
+@if(workshopsWithPastDate() && workshopsWithPastDate().length > 0) {
+  <div class="workshops flex wrap space-around">
+    @for(workshop of workshopsWithPastDate(); track workshop) {
+      <app-workshop-thumbnail [workshop]="workshop"
+                             [disponibility]="inscriptionsReservedByWorkshopSlug(workshop.slug)"/>
+    }
+  </div>
+
+  <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+
+} @else {
+  <h3>Pas d'Atelier passé</h3>
+}

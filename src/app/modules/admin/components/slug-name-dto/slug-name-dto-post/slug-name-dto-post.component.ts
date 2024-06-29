@@ -1,67 +1,94 @@
-import { NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, Input, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SlugNameDto } from '../../../interfaces/SlugNameDto';
+import { AnguilleComponent } from 'src/app/components/anguille/anguille.component';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { BaseComponent } from 'src/app/base.component';
+import { AdminCollectionSignalService } from '../../../shared/services/admin-collection-signal.service';
+import { AdminCategorySignalService } from '../../../shared/services/admin-category-signal.service';
 
 @Component({
-  selector: 'app-slug-name-dto-post',
   standalone: true,
-  imports: [ NgFor, NgIf, NgClass, ReactiveFormsModule ],
-  template: ` <div class="title-functionality flex center">
-                <h4>Créer une {{ type }}:</h4>
+  imports: [ NgClass, ReactiveFormsModule, AnguilleComponent, ModalComponent ],
+  selector: 'app-slug-name-dto-post',
+  template: `
+              <div class="title-functionality flex center">
+                <h4>Créer une {{ type }} :</h4>
                 <i class="fa-solid fa-circle-plus"
-                  (click)="isFormVisible = !isFormVisible"
-                  [ngClass]="{'rotated45': isFormVisible}"></i>
+                   (click)="isFormVisible = !isFormVisible"
+                   [ngClass]="{'rotated45': isFormVisible}"></i>
               </div>
 
-              <form *ngIf="isFormVisible"
-                    (ngSubmit)="(newItemForm.valid)"
-                    [formGroup]="newItemForm"
-                    #myForm="ngForm">
-                <fieldset class="flex column">
-                  <label for="name">Nom :</label>
-                  <input type="text"
-                         id="name"
-                         placeholder="Nom..."
-                         formControlName="name"
-                         autocomplete="off"/>
+              @if (isFormVisible) {
+                <form (ngSubmit)="(newItemForm.valid)"
+                     [formGroup]="newItemForm"
+                     #myForm="ngForm">
 
-                  <div *ngIf="isFormSubmit && myForm.submitted && newItemForm.controls['name'].invalid">
-                    <small *ngIf="newItemForm.controls.name.errors?.['required']">Le nom de la catégorie est obligatoire.</small>
-                    <small *ngIf="newItemForm.controls.name.errors?.['maxlength']">Le nom de la catégorie ne doit pas dépasser 255 charactères.</small>
-                  </div>
-                </fieldset>
-                
-                <button class="btn-submit-admin"
-                        type="submit"
-                        (click)="submitNewItemForm()">
-                  Créer
-                </button>
-              </form>`,
-  styles: [` @import "../../../scss/admin-general.scss"; `]
+                  <fieldset class="flex column">
+                    <label for="name">Nom :</label>
+                    <input type="text"
+                           id="name"
+                           placeholder="Nom..."
+                           formControlName="name"
+                           autocomplete="off"/>
+
+                    @if (isFormSubmit && myForm.submitted && newItemForm.controls['name'].invalid) {
+                      <div>
+                        @if (newItemForm.controls.name.errors?.['required']) {
+                          <small>Le nom de {{ type }} est obligatoire.</small>
+                        } @else if (newItemForm.controls.name.errors?.['maxlength']) {
+                          <small>Le nom de {{ type }} ne doit pas dépasser 255 charactères.</small>
+                        }
+                      </div>
+                    }
+                  </fieldset>
+
+                  <button class="btn-submit-admin"
+                          type="submit"
+                          (click)="submitNewItemForm()">
+                    Créer
+                  </button>
+                </form>
+              }
+            `,
+  styles: [`
+    @import "../../../scss/admin-general.scss";
+
+    input {
+      max-width: 320px;
+    }
+  `]
 })
-export class SlugNameDtoPostComponent {
+export class SlugNameDtoPostComponent extends BaseComponent {
 
-  private formBuilder = inject(FormBuilder);
+  private formBuilder: FormBuilder = inject(FormBuilder);
+  private adminCollectionSignal: AdminCollectionSignalService = inject(AdminCollectionSignalService);
+  private adminCategorySignal: AdminCategorySignalService = inject(AdminCategorySignalService);
 
-  @Input() type! : string;
-  @Output() newItemName: EventEmitter<SlugNameDto['name']> = new EventEmitter();
+  @Input( { required : true }) type! : 'Catégorie' | 'Collection';
 
-  isFormVisible : boolean = false;
-  isFormSubmit : boolean = false;
+  isFormVisible: boolean = false;
+  isFormSubmit: boolean = false;
 
   newItemForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
   });
 
-  submitNewItemForm(): void{
-
+  submitNewItemForm(): void {
     this.isFormSubmit = true
-    
-    if(this.newItemForm.valid){
-      this.newItemName.emit(this.newItemForm.value.name!);
-      this.isFormSubmit = false;
-      this.newItemForm.reset()
+    if (this.newItemForm.valid) {
+      if (this.type === 'Catégorie') {
+        this.adminCategorySignal.postCategory(this.newItemForm.value.name!)
+      } else if (this.type === 'Collection') {
+        this.adminCollectionSignal.postCollection(this.newItemForm.value.name!)
+      }
+      this.resetAllValues();
     }
+  }
+
+  resetAllValues(): void {
+    this.isFormSubmit = false;
+    this.isFormVisible = false;
+    this.newItemForm.reset();
   }
 }

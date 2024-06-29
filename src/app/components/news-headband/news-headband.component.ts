@@ -1,47 +1,51 @@
-import { NgClass, NgFor, UpperCasePipe, NgIf } from '@angular/common';
-import { Component, ElementRef, HostListener, Input, ViewChild, inject, input } from '@angular/core';
+import { NgClass, UpperCasePipe, NgFor } from '@angular/common';
+import { Component, ElementRef, HostListener, Input, ViewChild, } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
-import { New } from 'src/app/shared/interfaces/New';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { NEWS } from 'src/app/shared/variables/News';
 
 @Component({
   standalone: true,
-  imports: [ NgFor, NgIf, NgClass, UpperCasePipe ],
+  imports: [ NgClass, UpperCasePipe, NgFor, RouterLink ],
   selector: 'app-news-headband',
-  template: ` <div class="news-headband flex" *ngIf="publicationsSpotlighted.length > 0">
+  template: ` 
+              <div class="news-headband flex">
                 <p class="fixed-text">Actus :</p>
                 <div class="rolling-news flex" #newsContainer>
-                  <div class="section-rolling-news flex space-around" *ngFor="let section of [0,1,2,3,4,5]">
-                    <div *ngFor="let news of publicationsSpotlighted">
-                     <p>{{ news.title }} <ng-template [innerHTML]="news.description"></ng-template> </p> 
+                  @for (section of [0,1,2,3,4,5]; track section) {
+                    <div class="section-rolling-news flex space-around">
+                      @for (news of publicationsSpotlighted; track news) {
+                        <p class="flex pointer" [routerLink]="'/actualites/' + news.slug">
+                          {{ news.title | uppercase }}
+                          <span [innerHTML]="news.description"></span>
+                        </p> 
+                      }
                     </div>
-                  </div>
+                  }
                 </div>
-              </div>`,
+              </div>
+`,
   styleUrls: ['./news-headband.component.scss']
 })
 export class NewsHeadbandComponent {
 
   @Input() publicationsSpotlighted! : PublicationDto[];
 
-  windowSize$ = new Subject<[number, number]>();
-  newsList : New[] = NEWS
+  private windowSize$ = new Subject<[number, number]>();
 
   @ViewChild('newsContainer') newsContainer! : ElementRef;
 
   @HostListener('window:resize', ['$event'])
-  onResize(event : Event) {
+  onResize(event : Event): void {
     this.windowSize$.next([window.innerWidth, window.innerHeight]);
     this.checkWidthNews();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit(): void {
     this.checkWidthNews();
   }
 
-  private checkWidthNews(){
+  private checkWidthNews(): void {
     document.documentElement.style.setProperty('--news-container-width',
     this.newsContainer.nativeElement.offsetWidth + 'px')
   }

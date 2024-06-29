@@ -1,8 +1,8 @@
-<app-news-headband [publicationsSpotlighted]="publicationsSpotlighted"/>
+@if (publicationsSpotlighted() && publicationsSpotlighted().length > 0) {
+  <app-news-headband [publicationsSpotlighted]="publicationsSpotlighted()"/>
+}
 
-<app-h1 [titleChild]="'Bienvenue'"
-        [backgroundImageChild]="backgroundImageParentHome">
-</app-h1>
+<app-h1 [titleChild]="'Bienvenue'" [backgroundImageChild]="backgroundImageParentHome"/>
 
 <section>
   <h2 class="pointer" routerLink="/carnets">Carnets Artisanaux</h2>
@@ -12,10 +12,10 @@
     votre prochain agenda, album photos, bullet journal, carnet d’aquarelle,
     de croquis, de notes, ou de partition.
   </p>
-  <app-images-preview [picturesArray]="handmadeNotebooksPictures" />
+  <app-images-preview [picturesArray]="handmadeNotebooksPictures"/>
 </section>
 
-<app-values></app-values>
+<app-values/>
 <section>
 
   <h2 class="pointer" routerLink="/ateliers">Ateliers</h2>
@@ -26,18 +26,13 @@
     artisans talentueux et plongez dans l'univers magique où naissent des
     œuvres uniques, empreintes d'authenticité et d'amour du métier.
   </p>
-  <app-images-preview [picturesArray]="workshopPictures" />
+  <app-images-preview [picturesArray]="workshopPictures"/>
 </section>
 
 <div class="image-and-filter-color image-biography"
       routerLink="/qui-suis-je">
-  <!-- <img  class="pointer"
-  [src]="backgroundImageBio" alt="Photo de l'artiste">
-  <h2 class="flex center">A Propos...</h2>
-  <div class="filter-color"></div> -->
 
-    <img class="pointer"
-          [src]="backgroundImageBio" alt="Photo de l'artiste"/>
+    <img class="pointer" [src]="backgroundImageBio" alt="Photo de l'artiste"/>
     <div class="filter-color"></div>
 
 </div>
@@ -52,12 +47,10 @@
     </p>
   </div>
   <div class="image-and-filter-color flex">
-    <img
-      src="../../../assets/images/figma/booktique.jpg"
-      alt="Image d'une boutique d'artiste"
-      #imgMonitored
-    />
+    <img src="../../../assets/images/figma/booktique.jpg"
+         alt="Image d'une boutique d'artiste"
+         #imgMonitored/>
     <div class="filter-color pointer" routerLink="/booktique"></div>
   </div>
 </section>
-<button class="btn-normal pointer" routerLink="/booktique">Accéder à la Booktique</button>
+<button class="btn-normal" routerLink="/booktique">Accéder à la Booktique</button>

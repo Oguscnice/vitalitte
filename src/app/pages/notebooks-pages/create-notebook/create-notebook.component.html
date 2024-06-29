@@ -1,13 +1,12 @@
 <div class="create-notebook-page flex column center">
 
-  <app-h1 [titleChild]="titleParentHome"
-          [backgroundImageChild]="backgroundImageParentHome">
-  </app-h1>
+  <app-h1 [titleChild]="'Imaginer mon carnet'" [backgroundImageChild]="backgroundImageParentHome"/>
 
   <form action="https://formsubmit.io/send/guillaume.cometto@gmail.com"
         method="POST"
         class="flex column"
         id="contactform">
+
     <fieldset>
       <mat-form-field>
         <mat-label>Type de couverture...</mat-label>
@@ -28,11 +27,14 @@
           >
         </mat-select>
       </mat-form-field>
-      <div class="errors" *ngIf="isFormClicked && hasErrors">
-        <small *ngIf="!titleValue">
-          Le thème est <strong>obligatoire</strong>.</small
-        >
-      </div>
+
+      @if (isFormClicked && hasErrors) {
+        <div class="errors">
+          @if (!coverValue) {
+            <small>Le thème est <strong>obligatoire</strong>.</small>
+          }
+        </div>
+      }
     </fieldset>
 
     <fieldset>
@@ -55,11 +57,13 @@
         </mat-select>
       </mat-form-field>
 
-      <div class="errors" *ngIf="isFormClicked && hasErrors">
-        <small *ngIf="!titleValue">
-          Le thème est <strong>obligatoire</strong>.</small
-        >
-      </div>
+      @if (isFormClicked && hasErrors) {
+        <div class="errors">
+          @if (!bookBindingValue) {
+            <small>La couverture est <strong>obligatoire</strong>.</small>
+          }
+        </div>
+      }
     </fieldset>
 
     <fieldset>
@@ -79,11 +83,13 @@
         </mat-select>
       </mat-form-field>
 
-      <div class="errors" *ngIf="isFormClicked && hasErrors">
-        <small *ngIf="!titleValue">
-          Le thème est <strong>obligatoire</strong>.</small
-        >
-      </div>
+      @if (isFormClicked && hasErrors) {
+        <div class="errors">
+          @if (!paperValue) {
+            <small>Le papier est <strong>obligatoire</strong>.</small>
+          }
+        </div>
+      }
     </fieldset>
     
     <fieldset>
@@ -97,20 +103,18 @@
           (keyup)="changeTitleValue($event)"
         />
       </mat-form-field>
-      <div class="errors" *ngIf="isFormClicked && hasErrors">
-        <small *ngIf="titleValue && titleValue.length > 255">
-          Le nom ne doit pas comporter plus de
-          <strong>255 caractères</strong>.
-        </small>
-        <small *ngIf="titleValue && titleValue.length <= 2">
-          Le nom doit comporter plus de
-          <strong>2 caractères</strong>.
-        </small>
-        <small *ngIf="!titleValue">
-          Le nom est
-          <strong>obligatoire</strong>.
-        </small>
-      </div>
+
+      @if (isFormClicked && hasErrors) {
+        <div class="errors">
+          @if (titleValue && titleValue.length > 255) {
+            <small>Le nom ne doit pas comporter plus de<strong>255 caractères</strong>.</small>
+          } @else if (titleValue && titleValue.length <= 2) {
+            <small>Le nom doit comporter plus de<strong>2 caractères</strong>.</small>
+          } @else if (!titleValue) {
+            <small>Le nom est<strong>obligatoire</strong>.</small>
+          }
+        </div>
+      }
     </fieldset>
   </form>
 

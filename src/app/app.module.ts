@@ -5,13 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { ModalComponent } from './components/modal/modal.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { Page404Component } from './pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { httpInterceptorProviders } from './shared/interceptors';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NotebooksComponent } from './pages/notebooks-pages/notebooks/notebooks.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
@@ -20,9 +19,7 @@ import { H1Component } from './components/h1/h1.component';
 import { ValuesComponent } from './components/values/values.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 
-import { NgIf } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoaderComponent } from './components/loader/loader.component';
 import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
 import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-prepared/notebooks-prepared.component';
 import { NotebookSelectedComponent } from './pages/notebooks-pages/notebook-selected/notebook-selected.component';
@@ -32,19 +29,24 @@ import { ImagesPreviewComponent } from './components/images-preview/images-previ
 import { NewsHeadbandComponent } from './components/news-headband/news-headband.component';
 import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
 import { PaypalComponent } from './components/paypal/paypal.component';
-import { NgxPayPalModule } from 'ngx-paypal';
-import { ShoppingCartService } from './shared/services/shopping-cart.service';
 import { ShoppingNotebooksListComponent } from './components/shopping-notebooks-list/shopping-notebooks-list.component';
 import { ChoicesPersonalizedCreationComponent } from './components/choices-personalized-creation/choices-personalized-creation.component';
-import { AnguilleComponent } from './shared/components/anguille/anguille.component';
-import { WorkshopComponent } from './pages/workshop/workshop.component';
+import { WorkshopsComponent } from './pages/workshops-pages/workshop/workshops.component';
 import { RouterLink } from '@angular/router';
 import { PublicationsComponent } from './pages/publications-pages/publications/publications.component';
 import { PublicationThumbnailComponent } from './components/publication-thumbnail/publication-thumbnail.component';
 import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
-import { PAGE_RESPONSE_PARSER_TOKEN } from './shared/services/pagination-api.service';
-import { jsonServerLinkParser } from './shared/services/json-server-link-parser';
-import { NgModel } from '@angular/forms';
+import { WorkshopThumbnailComponent } from './components/workshop-thumbnail/workshop-thumbnail.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { TitleCasePipe } from '@angular/common';
+import { AnguilleComponent } from './components/anguille/anguille.component';
+import {
+    ChangeSizePaginationAndValueSearchComponent
+} from "./components/change-size-pagination-and-value-search/change-size-pagination-and-value-search.component";
+import {
+  ChangePageButtonsPagination
+} from "./components/change-page-buttons-pagination/change-page-buttons-pagination.component";
+import {CheckoutComponent} from "./pages/checkout/checkout.component";
 
 
 @NgModule({
@@ -61,9 +63,10 @@ import { NgModel } from '@angular/forms';
     NotebooksPreparedComponent,
     NotebookSelectedComponent,
     CreateNotebookComponent,
-    WorkshopComponent,
+    WorkshopsComponent,
     PublicationsComponent,
-    PublicationSelectedComponent
+    PublicationSelectedComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,
@@ -71,6 +74,7 @@ import { NgModel } from '@angular/forms';
     HttpClientModule,
     BrowserAnimationsModule,
     RouterLink,
+    TitleCasePipe,
 
     HeaderComponent,
     NewsHeadbandComponent,
@@ -84,16 +88,19 @@ import { NgModel } from '@angular/forms';
     PaypalComponent,
     ContactFormComponent,
     NotebooksListComponent,
-    PublicationThumbnailComponent
+    PublicationThumbnailComponent,
+    WorkshopThumbnailComponent,
+    ModalComponent,
+    AnguilleComponent,
+    ChangeSizePaginationAndValueSearchComponent,
+    ChangePageButtonsPagination
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
     AuthGuard,
-    httpInterceptorProviders,
-    { provide : PAGE_RESPONSE_PARSER_TOKEN, useValue: jsonServerLinkParser},
-    provideHttpClient()
+    httpInterceptorProviders
   ],
   bootstrap: [AppComponent],
 })

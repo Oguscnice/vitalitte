@@ -1,49 +1,55 @@
 <div class="title-functionality flex center">
   <h4 class="flex center">Gérer les Carnets</h4>
-  <i class="fa-solid fa-arrow-down" (click)="isTableVisible = !isTableVisible" [ngClass]="{'rotated180': isTableVisible}"></i>
+  <i class="fa-solid fa-arrow-down"
+     (click)="isTableVisible = !isTableVisible"
+     [ngClass]="{'rotated180': isTableVisible}"></i>
 </div>
 
-<div *ngIf="!notebooks || notebooks.length <= 0">Aucun Carnets</div>
 
-<table *ngIf="notebooks && isTableVisible">
-  <thead>
-    <tr>
-      <td>
-        <p>Dispo</p>
-      </td>
-      <td>
-        <p>Nom</p>
-      </td>
-      <td>
-        <p>Modif.</p>
-      </td>
-      <td>
-        <p>Supp.</p>
-      </td>
-    </tr>
-  </thead>
+@if (notebooks() && notebooks().length > 0 && isTableVisible) {
+  <table>
+    <thead>
+      <tr>
+        <td>
+          <p>Dispo</p>
+        </td>
+        <td>
+          <p>Nom</p>
+        </td>
+        <td>
+          <p>Modif.</p>
+        </td>
+        <td>
+          <p>Supp.</p>
+        </td>
+      </tr>
+    </thead>
 
-  <tbody>
-    <tr *ngFor="let notebook of notebooks ; let index = index"
-        [ngClass]="index % 2 ? 'bg-dark' : ''">
-      <td>
-        <div class="toggle-switch" (click)="changeAvailability(notebook)">
-          <input class="toggle-input"
-                  type="checkbox"
-                  [checked]="notebook.available">
-          <label class="toggle-label" for="toggle"></label>
-        </div>
-      </td>
-      <td class="flex column">
-        <p class="text-left">{{ notebook.name }}</p>
-      </td>
-      <td>
-        <i class="fa-solid fa-pencil flex center"
-          [routerLink]="'/admin/editer-carnet/' + notebook.slug"></i>
-      </td>
-      <td>
-        <i class="fa-solid fa-trash-can flex center" (click)="delete(notebook)"></i>
-      </td>
-    </tr>
-  </tbody>
-</table>
+    <tbody>
+      @for (notebook of notebooks(); track notebook; let index = $index) {
+        <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+          <td>
+            <div class="toggle-switch" (click)="changeAvailability(notebook)">
+              <input class="toggle-input"
+                      type="checkbox"
+                      [checked]="notebook.available">
+              <label class="toggle-label"></label>
+            </div>
+          </td>
+          <td class="flex column">
+            <p class="text-left">{{ notebook.name }}</p>
+          </td>
+          <td>
+            <i class="fa-solid fa-pencil flex center"
+              [routerLink]="'/admin/editer-carnet/' + notebook.slug"></i>
+          </td>
+          <td>
+            <i class="fa-solid fa-trash-can flex center" (click)="onDeleteClick(notebook)"></i>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else if ((!notebooks || notebooks.length < 1) && isTableVisible) {
+  <h5>Aucun Carnet</h5>
+}

@@ -1,168 +1,167 @@
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {Component, Signal, inject, OnInit} from '@angular/core';
 import { CategoryDto } from 'src/app/shared/interfaces/Category';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FileUploadService } from '../../../services/file-upload.service';
-import { CreateNotebook } from '../../../interfaces/Notebook';
-import { priceValidator } from '../../../validators/priceValidators';
-import { urlValidator } from '../../../validators/urlValidators';
-import { FileInfo } from '../../../interfaces/FileInfo';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { FileUploadService } from '../../../shared/services/file-upload.service';
+import { CreateNotebook } from '../../../shared/interfaces/Notebook';
+import { priceValidator } from '../../../shared/validators/priceValidators';
+import { urlValidator } from '../../../shared/validators/urlValidators';
 import { CollectionDto } from 'src/app/shared/interfaces/Collection';
-import { DecimalPipe, NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
-import { TransformApiService } from '../../../services/transform-api.service';
-import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
+import { DataSignalService } from 'src/app/shared/services/data-signal.service';
+import { SecondaryPictureDto } from 'src/app/shared/interfaces/SecondaryPicture';
+import { AdminNotebookSignalService } from '../../../shared/services/admin-notebook-signal.service';
+import { FormHelperService } from '../../../shared/services/form-helper.service';
+import { FileInfo } from '../../../shared/interfaces/FileInfo';
 
 @Component({
   standalone: true,
-  imports: [NgClass, NgIf, NgFor, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty ],
+  imports: [ NgClass, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty ],
   selector: 'app-post-notebook',
   templateUrl: './post-notebook.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })
-export class PostNotebookComponent {
+export class PostNotebookComponent implements OnInit {
 
-  protected fileUploadService = inject(FileUploadService);
-  private formBuilder = inject(FormBuilder);
-  private transformApiService = inject(TransformApiService);
+  private formBuilder: FormBuilder = inject(FormBuilder);
+  private dataSignalService: DataSignalService = inject(DataSignalService);
+  private adminNotebookSignal: AdminNotebookSignalService = inject(AdminNotebookSignalService);
+  fileUploadService: FileUploadService = inject(FileUploadService);
+  formHelper: FormHelperService = inject(FormHelperService);
 
-  @Input() materialTypes! : string[];
-  @Input() materials! : MaterialDto[];
-  @Input() categories! : CategoryDto[];
-  @Input() collections! : CollectionDto[];
+  toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
-  @Output() newNotebook: EventEmitter<CreateNotebook> = new EventEmitter();
+  materials: Signal<MaterialDto[]> = this.dataSignalService.$materials;
+  categories: Signal<CategoryDto[]> = this.dataSignalService.$categories;
+  collections: Signal<CollectionDto[]> = this.dataSignalService.$collections;
+  currentMaterials: MaterialDto[] | null = [];
+  currentSecondaryPictures: SecondaryPictureDto[] | null = [];
 
-  isFormVisible : boolean = true;
-  isDropdownCategoryOpen : boolean = false;
-  isDropdownCollectionOpen : boolean = false;
-  isDropdownMaterialsOpen : boolean = false;
-  isFormSubmit : boolean = false;
+  isCategoryDropdownOpen: boolean = false;
+  isCollectionDropdownOpen: boolean = false;
+  isMaterialsDropdownOpen: boolean = false;
 
-  categoryDtoForNewNotebook : CategoryDto | null = null; 
-  collectionDtoForNewNotebook : CollectionDto | null = null; 
-  materialsDtoForNewNotebook : MaterialDto[] = [];
-  secondaryPicturesForNewNotebook : CreateNotebook['secondaryPictures'] = [];
-
-  fileSize!: number;
-
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  isFormVisible: boolean = false;
+  isFormSubmit: boolean = false;
 
   ngOnInit(): void {
-    this.newNotebookForm.get('mainPicture')!.setValue(this.fileUploadService.imageNotebookDefault);
+    this.dataSignalService.getAllCategories();
+    this.dataSignalService.getAllCollections();
+    this.dataSignalService.getAllMaterials();
+    this.dataSignalService.getAllMaterialsTypes();
+    this.fileUploadService.patchImage(this.newNotebookForm, this.fileUploadService.imageNotebookDefault, this.fileUploadService.imageNotebookDefaultThumbnail);
   }
-  
+
   newNotebookForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
-    mainPicture: ['', [Validators.required, urlValidator()]],
-    introduction: ['', [Validators.required, Validators.maxLength(500)]],
+    picture: ['', [Validators.required, urlValidator()]],
+    pictureThumbnail: ['', [Validators.required, urlValidator()]],
+    introduction: ['', [Validators.required, Validators.maxLength(65534)]],
     price: ['', [priceValidator()]],
-    description: ['', [Validators.required, Validators.maxLength(1000)]],
+    description: ['', [Validators.required, Validators.maxLength(65534)]],
+    categoryDto: ['', [Validators.required]],
+    collectionDto: ['', [Validators.required]],
+    materialsDto: ['', [Validators.required]],
+    secondaryPicturesDto: [''],
   });
 
-  toggleDropdown(dropdownClicked : 'collectionDropdown' | 'categoryDropdown' | 'materialsDropdown'): void{
-    if(dropdownClicked === 'categoryDropdown'){
-      this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen;
-      this.isDropdownMaterialsOpen = false;
-      this.isDropdownCollectionOpen = false;
-    }else if(dropdownClicked === 'materialsDropdown'){
-      this.isDropdownMaterialsOpen = !this.isDropdownMaterialsOpen;
-      this.isDropdownCategoryOpen = false;
-      this.isDropdownCollectionOpen = false;
-    }else if(dropdownClicked === 'collectionDropdown'){
-      this.isDropdownCollectionOpen = !this.isDropdownCollectionOpen;
-      this.isDropdownCategoryOpen = false;
-      this.isDropdownMaterialsOpen = false;
+  newSecondaryPictureForm = this.formBuilder.group({
+    picture: [''],
+    pictureThumbnail: [''],
+  });
+
+  toggleDropdown(dropdownClicked : 'Collection' | 'Category' | 'Materials'): void {
+    const ACTUAL_VALUE: boolean = this[`is${dropdownClicked}DropdownOpen`];
+    this.isCategoryDropdownOpen = false;
+    this.isCollectionDropdownOpen = false;
+    this.isMaterialsDropdownOpen = false;
+    this[`is${dropdownClicked}DropdownOpen`] = !ACTUAL_VALUE;
+  }
+
+  addOrDeleteMaterial(materialClicked : MaterialDto): void {
+
+    let currentMaterials: MaterialDto[] | null = this.formHelper.jsonParse<MaterialDto[]>(this.newNotebookForm.get('materialsDto')!.value);
+
+    if (!currentMaterials) {
+      currentMaterials = [];
     }
-  }
 
-  categoryClicked(categoryClicked : CategoryDto){
-    this.categoryDtoForNewNotebook = categoryClicked;
-  }
-
-  collectionClicked(collectionClicked : CollectionDto){
-    this.collectionDtoForNewNotebook = collectionClicked;
-  }
-
-  materialClicked(materialClicked : MaterialDto): void {
-    if(!this.materialsDtoForNewNotebook.includes(materialClicked)){
-      this.materialsDtoForNewNotebook.push(materialClicked)
+    if (!currentMaterials.some(item => item.slug === materialClicked.slug)) {
+      currentMaterials.push(materialClicked)
+    } else {
+      currentMaterials = currentMaterials.filter(item => item.slug !== materialClicked.slug);
     }
+
+    this.currentMaterials = currentMaterials.length < 1 ? null : currentMaterials;
+    this.newNotebookForm.get('materialsDto')!.setValue(this.formHelper.jsonStringify<MaterialDto[]>(currentMaterials));
   }
 
-  deleteMaterialFromList(materialClicked : MaterialDto): void {
-    this.materialsDtoForNewNotebook = this.materialsDtoForNewNotebook.filter(
-      material => material.slug !== materialClicked.slug
-    )
+  addOrDeleteSecondaryPicture(secondaryPicture: SecondaryPictureDto): void {
+
+    let currentSecondaryPictures: SecondaryPictureDto[] | null = this.formHelper.jsonParse<SecondaryPictureDto[]>(this.newNotebookForm.get('secondaryPicturesDto')!.value) as SecondaryPictureDto[];
+
+    if (!currentSecondaryPictures) {
+      currentSecondaryPictures = [];
+    }
+
+    if (!currentSecondaryPictures.some(url => url.picture === secondaryPicture.picture)) {
+      currentSecondaryPictures.push(secondaryPicture)
+    } else {
+      currentSecondaryPictures = currentSecondaryPictures.filter(item => item.picture !== secondaryPicture.picture);
+    }
+
+    this.currentSecondaryPictures = currentSecondaryPictures.length < 1 ? null : currentSecondaryPictures
+    this.newNotebookForm.get('secondaryPicturesDto')!.setValue(this.formHelper.jsonStringify(currentSecondaryPictures));
   }
 
-  deleteSecondaryPictureFromList(pictureUrl : string): void {
-    this.secondaryPicturesForNewNotebook = this.secondaryPicturesForNewNotebook.filter(
-      picture => picture !== pictureUrl
-    )
-  }
-
-  changeImageValue(event: KeyboardEvent, pictureChanged : 'mainPicture' | 'secondaryPicture'): void {
-    const inputElement = event.target as HTMLInputElement;
-    if(inputElement){
-      if (pictureChanged === 'mainPicture'){
-        this.newNotebookForm.get('mainPicture')!.setValue(inputElement.value);
-      } else if (pictureChanged === 'secondaryPicture'){
-        this.secondaryPicturesForNewNotebook.push(inputElement.value)
+  onFileSelected(event: Event, form: 'newNotebookForm' | 'newSecondaryPictureForm'): void {
+  const FORM_GROUP: FormGroup = this[form];
+  this.fileUploadService.onFileSelected(event, FORM_GROUP).subscribe({
+    next: (fileInfo: FileInfo | null) => {
+      if (form === 'newSecondaryPictureForm' && fileInfo) {
+        this.addOrDeleteSecondaryPicture(FORM_GROUP.value as SecondaryPictureDto);
+        FORM_GROUP.reset();
       }
-    }
+    },
+    error: (err) => (console.log(err.error.message))
+    });
   }
 
-  totalPriceMaterials(): number{
-    if(this.materialsDtoForNewNotebook.length > 0){
-      let sum = 0;
-      for(let material of this.materialsDtoForNewNotebook){
-        sum += material.price
+  onValueSelected(control: string, value: CategoryDto | CollectionDto): void {
+    this.formHelper.onValueSelected<CategoryDto | CollectionDto>(value, control, this.newNotebookForm);
+  }
+
+  totalPriceMaterials(): number {
+
+    const CURRENT_MATERIALS: MaterialDto[] | null = this.formHelper.jsonParse(this.newNotebookForm.get('materialsDto')!.value!) as MaterialDto[];
+
+    if (CURRENT_MATERIALS && CURRENT_MATERIALS.length > 0) {
+      let sum: number = 0;
+      for(const MATERIAL of CURRENT_MATERIALS){
+        sum += MATERIAL.price
       }
       return sum;
     }
     return 0;
   }
 
-  async onFileSelected(event: Event, pictureChanged : 'mainPicture' | 'secondaryPicture'): Promise<void> {
+  submitNewNotebookForm(): void {
 
-    const inputElement = event.target as HTMLInputElement;
-    const selectedFile = inputElement.files?.[0];
-    let fileInfo: FileInfo | null = null;
+    this.isFormSubmit = true
 
-    if (selectedFile) {
-
-      if (selectedFile.size < this.fileUploadService.SIZE_MAX) {
-        fileInfo = await this.fileUploadService.fileUpload(event);
-        if (pictureChanged === 'mainPicture'){
-          this.newNotebookForm.get('mainPicture')!.setValue(fileInfo.data.thumb.url);
-        } else if (pictureChanged === 'secondaryPicture'){
-          this.secondaryPicturesForNewNotebook.push(fileInfo.data.image.url)
-        }
-      };
+    if (this.newNotebookForm.valid) {
+      const CREATED_NOTEBOOK : CreateNotebook = this.formHelper.formatFormToNotebookDto<CreateNotebook>(this.newNotebookForm) as CreateNotebook;
+      this.adminNotebookSignal.postNotebook(CREATED_NOTEBOOK);
+      this.resetAllValues();
     }
   }
 
-  submitNewNotebookForm(): void{
-
-    this.isFormSubmit = true
-    
-    if(this.newNotebookForm.valid
-      && this.categoryDtoForNewNotebook
-      && this.collectionDtoForNewNotebook
-      && this.materialsDtoForNewNotebook.length > 0){
-
-      let createdNotebook : CreateNotebook = this.transformApiService.postNotebook(this.newNotebookForm, this.materialsDtoForNewNotebook, this.categoryDtoForNewNotebook, this.collectionDtoForNewNotebook, this.secondaryPicturesForNewNotebook)
-      this.newNotebook.emit(createdNotebook);
-      
-      // Après avoir envoyé, on remet les variables à zéro
-      this.isFormSubmit = false;
-      this.categoryDtoForNewNotebook = null;
-      this.materialsDtoForNewNotebook = [];
-      this.secondaryPicturesForNewNotebook = [];
-      this.newNotebookForm.reset();
-      this.newNotebookForm.get('mainPicture')!.setValue(this.fileUploadService.imageNotebookDefault);
-    }
+  resetAllValues(): void {
+    this.isFormSubmit = false;
+    this.newNotebookForm.reset();
+    this.fileUploadService.patchImage(this.newNotebookForm, this.fileUploadService.imageNotebookDefault, this.fileUploadService.imageNotebookDefaultThumbnail);
   }
 }

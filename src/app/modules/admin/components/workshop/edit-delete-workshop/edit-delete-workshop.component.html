@@ -1,3 +1,4 @@
+<script src="edit-delete-workshop.component.ts"></script>
 <div class="title-functionality flex center">
   <h4 class="flex center">Gérer les Ateliers</h4>
   <i class="fa-solid fa-arrow-down"
@@ -6,18 +7,100 @@
   </i>
 </div>
 
-<div *ngIf="!workshops || workshops.length <= 0">Aucun Atelier</div>
-<table *ngIf="workshops && isTableVisible">
-  <thead>
+@if (workshopsDateToCome() && workshopsDateToCome().length > 0 && isTableVisible) {
+  @if (workshopsDateToCome().length === 1) {
+    <h5>Atelier à venir</h5>
+  } @else {
+    <h5>Ateliers à venir</h5>
+  }
+  <table>
+    <thead>
+      <tr>
+        <td>
+          <p>Dispo</p>
+        </td>
+        <td>
+          <p>Libellé</p>
+        </td>
+        <td>
+          <p>Prix</p>
+        </td>
+        <td>
+          <p>Place(s) Restante(s)</p>
+        </td>
+        <td>
+          <p>Des.</p>
+        </td>
+        <td>
+          <p>Image</p>
+        </td>
+        <td>
+          <p>Modif.</p>
+        </td>
+        <td>
+          <p>Supp.</p>
+        </td>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (workshop of workshopsDateToCome(); track workshop; let index = $index) {
+        <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+          <td>
+            <div class="toggle-switch" (click)="changeAvailability(workshop)">
+              <input class="toggle-input"
+                     type="checkbox"
+                     [checked]="workshop.available">
+              <label class="toggle-label"></label>
+            </div>
+          </td>
+          <td>
+            <p class="flex text-left"> {{ workshop.title | titlecase }} </p>
+          </td>
+          <td>
+            <p> {{ workshop.price | addEuroCurrency }} </p>
+          </td>
+          <td>
+            @for (dispo of disponibilities(); track dispo) {
+              @if (dispo.workshopSlug === workshop.slug) {
+                <p> {{ workshop.registrations - dispo.disponibilities }} </p>
+              }
+            }
+          </td>
+          <td>
+            <i class="fa-solid fa-file-lines pointer flex center" (click)="openModalWithDescription(workshop.description)"></i>
+          </td>
+          <td class="flex center">
+            <img src="{{ workshop.pictureThumbnail }}" alt="Photo de l'atelier {{ workshop.title }}">
+          </td>
+          <td>
+            <i [routerLink]="'/admin/editer-atelier/' + workshop.slug" class="fa-solid fa-pencil pointer flex center"></i>
+          </td>
+          <td>
+            <i (click)="delete(workshop)" class="fa-solid fa-trash-can pointer flex center"></i>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else if ((!workshopsDateToCome() || workshopsDateToCome().length < 1) && isTableVisible) {
+  <h5>Aucun Atelier à venir</h5>
+}
+
+@if (workshopsPastDate() && workshopsPastDate().length > 0 && isTableVisible) {
+  @if (workshopsPastDate().length === 1) {
+    <h5>Atelier passé</h5>
+  } @else {
+    <h5>Ateliers passés</h5>
+  }
+
+  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+
+  <table>
+    <thead>
     <tr>
       <td>
-        <p>Dispo</p>
-      </td>
-      <td>
         <p>Libellé</p>
-      </td>
-      <td>
-        <p>Prix</p>
       </td>
       <td>
         <p>Des.</p>
@@ -27,51 +110,40 @@
       </td>
       <td>
         <p>Modif.</p>
-      </td>      
+      </td>
       <td>
         <p>Supp.</p>
       </td>
     </tr>
-  </thead>
+    </thead>
 
-  <tbody>
-    <tr *ngFor="let workshop of workshops ; let index = index"
-        [ngClass]="index % 2 ? 'bg-dark' : ''">
-        <td>
-          <div class="toggle-switch" (click)="changeAvailability(workshop)">
-            <input class="toggle-input"
-                   type="checkbox"
-                   [checked]="workshop.available">
-            <label class="toggle-label" for="toggle"></label>
-          </div>
-        </td>
-      <td>
-        <p class="flex text-left">{{ workshop.title | titlecase }}</p>
-      </td>
-      <td>
-        <p> {{ workshop.price | addEuroCurrency }} </p>
-      </td>
-      <td>
-        <i class="fa-solid fa-file-lines pointer flex center"
-           (click)="openModalWithDescription(workshop.description)">
-        </i>
-      </td>
-      <td class="flex center">
-        <img src="{{workshop.picture}}"
-             alt="Photo de l'atelier {{workshop.title}}">
-      </td>
-      <td>
-        <i [routerLink]="'/admin/editer-atelier/' + workshop.slug" class="fa-solid fa-pencil pointer flex center"></i>
-      </td>
-      <td>
-        <i (click)="delete(workshop)" class="fa-solid fa-trash-can pointer flex center"></i>
-      </td>
-    </tr>
-  </tbody>
-</table>
 
-<app-modal [modalVisible]="modalVisible"
-           [modalText]="modalText"
 
-           (responseForModal)="responseForModal($event)">
-</app-modal>
+    <tbody>
+      @for (workshop of workshopsPastDate(); track workshop; let index = $index) {
+        <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+          <td>
+            <p class="flex text-left">{{ workshop.title | titlecase }}</p>
+          </td>
+          <td>
+            <i class="fa-solid fa-file-lines pointer flex center" (click)="openModalWithDescription(workshop.description)"></i>
+          </td>
+          <td class="flex center">
+            <img src="{{ workshop.pictureThumbnail }}" alt="Photo de l'atelier {{ workshop.title }}">
+          </td>
+          <td>
+            <i [routerLink]="'/admin/editer-atelier/' + workshop.slug" class="fa-solid fa-pencil pointer flex center"></i>
+          </td>
+          <td>
+            <i (click)="delete(workshop)" class="fa-solid fa-trash-can pointer flex center"></i>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+
+} @else if ((!workshopsDateToCome() || workshopsDateToCome().length < 1) && isTableVisible) {
+  <h5>Aucun Atelier passé</h5>
+}

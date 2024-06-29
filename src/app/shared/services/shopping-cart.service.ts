@@ -1,124 +1,148 @@
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { Injectable } from '@angular/core';
-import { ShoppingCart } from '../interfaces/ShoppingCart';
+import {Injectable, Signal, signal} from '@angular/core';
+import {ShoppingCart, ShoppingCartItem} from '../interfaces/ShoppingCart';
 import { NotebookDto } from '../interfaces/Notebook';
+import {ShoppingCartSignalState} from "../interfaces/ShoppingCartSignalState";
+import {InscriptionDto} from "../../modules/admin/shared/interfaces/Inscription";
+
+type ShoppingCartItemUnion =
+  | { item: NotebookDto; quantity: number }
+  | { item: InscriptionDto; quantity: number };
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService {
 
-  constructor(
-    private apiRequestsService : ApiRequestsService
-  ){}
-
-  userShoppingCart : ShoppingCart[] = [];
-  counertQuantityUserShoppingCart : number = 0;
-  notebooks! : NotebookDto[];
-
-  haveCartInLocalStorage() : ShoppingCart[]{
-    return  localStorage.getItem('userCartVittalite') ? 
-        JSON.parse(localStorage.getItem('userCartVittalite')!) :
-        []
+  private readonly state: ShoppingCartSignalState = {
+    $privateUserShoppingCart: signal<ShoppingCart>({ notebooks: [], inscriptions: []}),
   }
 
-  includesInShoppingCart(itemSlug : string) : boolean{
-    this.userShoppingCart = this.haveCartInLocalStorage()
-    if(this.userShoppingCart !== null){
-      for(let item of this.userShoppingCart){
-        if(item.itemsSlug === itemSlug)
-          return true
+  public readonly $userShoppingCart: Signal<ShoppingCart> = this.state.$privateUserShoppingCart.asReadonly();
+
+  getValueLocalStorage(): ShoppingCart {
+    const VALUE_IN_LOCAL_STORAGE = localStorage.getItem('userCartVitalitte') ?
+      JSON.parse(localStorage.getItem('userCartVitalitte')!) :
+      {
+        notebooks: [],
+        inscriptions: [],
       }
-    }
-    return false;
+      return VALUE_IN_LOCAL_STORAGE;
   }
 
-  counterTotalShoppingCart() : number{
-    this.userShoppingCart = this.haveCartInLocalStorage()
-    this.counertQuantityUserShoppingCart = 0
-    for(let item of this.userShoppingCart){
-      this.counertQuantityUserShoppingCart += item.quantity
-    }
-    return this.counertQuantityUserShoppingCart;
+  setShoppingCart(): void {
+    this.state.$privateUserShoppingCart.set(this.getValueLocalStorage());
   }
 
-  totalPrice() : number{
-    this.userShoppingCart = this.haveCartInLocalStorage()
+  includesInShoppingCart(itemToVerify: InscriptionDto | NotebookDto, type: 'notebooks' | 'inscriptions'): boolean {
+    return this.$userShoppingCart()[type].some(item => item.item.slug === itemToVerify.slug);
+  }
+
+  counterTotalShoppingCart(): number {
+    const allItems: ShoppingCartItemUnion[] = [...this.$userShoppingCart().notebooks, ...this.$userShoppingCart().inscriptions];
+    return allItems.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  totalPrice(): number {
+
     let total : number = 0;
-    for(let item of this.userShoppingCart){
-      for(let notebook of this.notebooks){
-        if(item.itemsSlug === notebook.slug){
-          total += (notebook.price * item.quantity)
-        }
-      }
+
+    for (const NOTEBOOK of this.$userShoppingCart().notebooks) {
+      total += (NOTEBOOK.item.price * NOTEBOOK.quantity)
     }
+    for (const WORKSHOP of this.$userShoppingCart().inscriptions) {
+      total += (WORKSHOP.item.workshopDto.price * WORKSHOP.quantity)
+    }
+
     return parseFloat(total.toFixed(2));
   }
 
-  itemsForPaypal() : any{
-    this.userShoppingCart = this.haveCartInLocalStorage()
-    let itemsPaypal : any = []
-    for (let item of this.userShoppingCart){
-      for(let notebook of this.notebooks){
-        if(item.itemsSlug === notebook.slug){
-            itemsPaypal.push({
-              name: item.itemsSlug,
-              quantity: item.quantity.toString(),
-              unit_amount: {
-                  currency_code: 'EUR',
-                  value: notebook.price.toString(),
-              },
-          })
-        }
-      }
+  itemsForPaypal(): any {
+
+    this.setShoppingCart()
+    let itemsPaypal: any = []
+
+    for (const NOTEBOOK of this.$userShoppingCart().notebooks) {
+      itemsPaypal.push({
+        name: ("Carnet : " + NOTEBOOK.item.name),
+        quantity: NOTEBOOK.quantity.toString(),
+        unit_amount: {
+            currency_code: 'EUR',
+            value: NOTEBOOK.item.price.toString(),
+          },
+      })
+    }
+    for (const WORKSHOP of this.$userShoppingCart().inscriptions) {
+      itemsPaypal.push({
+        name: ("Atelier : " + WORKSHOP.item.workshopDto.title + " du " + + WORKSHOP.item.workshopDto.date),
+        quantity: WORKSHOP.quantity.toString(),
+        unit_amount: {
+          currency_code: 'EUR',
+          value: WORKSHOP.item.workshopDto.price.toString(),
+        },
+      })
     }
     return itemsPaypal;
   }
 
-  editCartInLocalStorage(shoppingCart : ShoppingCart[]): void{
-    localStorage.setItem('userCartVittalite', JSON.stringify(shoppingCart));
+  editCartInLocalStorage(shoppingCart : ShoppingCart): void {
+    localStorage.setItem('userCartVitalitte', JSON.stringify(shoppingCart));
+    this.setShoppingCart();
   }
 
-  counterQuantityBySlug(itemSlugParams : string) : number{
-    let shoppingCart : ShoppingCart[] = this.haveCartInLocalStorage();
-    for(let i = 0; i < shoppingCart.length; i++){
-      if(shoppingCart![i].itemsSlug === itemSlugParams)
-      return shoppingCart[i].quantity;
-    }
-    return 0;
+  counterQuantity(item: InscriptionDto | NotebookDto, type: 'notebooks' | 'inscriptions'): number {
+    const PRODUCT = this.$userShoppingCart()[type].find(ITEM => ITEM.item.slug === item.slug);
+    return PRODUCT ? PRODUCT.quantity : 0;
   }
 
-  addNotebook(itemSlugParams : string) : void{
-    let shoppingCart : ShoppingCart[] = this.haveCartInLocalStorage();
-    for(let i = 0; i < shoppingCart.length; i++){
-      if(shoppingCart![i].itemsSlug === itemSlugParams){
-        shoppingCart![i].quantity++
+  addItem(itemToAdd: NotebookDto | InscriptionDto, type: 'notebooks' | 'inscriptions'): void {
+
+    let cart = this.getValueLocalStorage();
+
+    for (const ITEM of cart[type]) {
+      if (ITEM.item.slug === itemToAdd.slug) {
+        ITEM.quantity++
       }
     }
 
-    if(!this.includesInShoppingCart(itemSlugParams)){
-      let newItem : ShoppingCart = { itemsSlug : itemSlugParams, quantity : 1 }
-      shoppingCart.push(newItem)
+    if (!this.includesInShoppingCart(itemToAdd, type)) {
+      const NEW_ITEM = { item : itemToAdd, quantity : 1 }
+      cart[type].push(NEW_ITEM as ShoppingCartItem<NotebookDto> & ShoppingCartItem<InscriptionDto>)
     }
-    this.editCartInLocalStorage(shoppingCart);
+
+    this.editCartInLocalStorage(cart);
   }
 
-  subtractNotebookToShoppingCart(itemSlugParams : string) : void{
-    let shoppingCart : ShoppingCart[] = this.haveCartInLocalStorage();
-    if(this.includesInShoppingCart(itemSlugParams)){
-      for(let item of shoppingCart){
-        if(item.itemsSlug === itemSlugParams && item.quantity > 0){
-            item.quantity--
-          if(item.quantity <= 0){
-            shoppingCart = shoppingCart.filter(item => item.itemsSlug !== itemSlugParams)
+  subtractItem(itemToSubtract: NotebookDto | InscriptionDto, type: 'notebooks' | 'inscriptions'): void {
+
+    let cart = this.getValueLocalStorage();
+
+    if (this.includesInShoppingCart(itemToSubtract, type)) {
+      for (const ITEM of cart[type]) {
+        if (ITEM.item.slug === itemToSubtract.slug) {
+          if (ITEM.quantity > 1) {
+            ITEM.quantity--
+            this.editCartInLocalStorage(cart);
+          } else {
+            this.deleteItemToShoppingCart(itemToSubtract, type);
           }
         }
       }
     }
-    this.editCartInLocalStorage(shoppingCart);
+  }
+
+  deleteItemToShoppingCart(itemToDelete: InscriptionDto | NotebookDto, type: 'notebooks' | 'inscriptions'): void {
+
+    let cart = this.getValueLocalStorage();
+
+    if (type === 'notebooks') {
+      cart.notebooks = cart.notebooks.filter(item => item.item.slug !== itemToDelete.slug) as ShoppingCartItem<NotebookDto>[];
+    } else if (type === 'inscriptions') {
+      cart.inscriptions = cart.inscriptions.filter(item => item.item.slug !== itemToDelete.slug) as ShoppingCartItem<InscriptionDto>[];
+    }
+    this.editCartInLocalStorage(cart);
   }
 
   cleanLocalStorage(): void{
-    localStorage.removeItem('userCartVittalite');
+    localStorage.removeItem('userCartVitalitte');
   }
 }

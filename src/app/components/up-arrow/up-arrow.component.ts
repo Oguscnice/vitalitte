@@ -6,7 +6,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
   imports: [ NgClass ],
   selector: 'app-up-arrow',
   template: `<i class="fa-regular fa-circle-up up-arrow"
-                (click)="scrollToTop()"
+                (click)="scrollToTop(400)"
                 [ngClass]="arrowVisible ? 'visible-linear' : 'invisible-linear'"></i>`,
   styles: [`
             @import "../../scss/variables.scss";
@@ -26,23 +26,22 @@ import { Component, HostListener, OnInit } from '@angular/core';
             }
           `]
 })
-export class UpArrowComponent implements OnInit{
+export class UpArrowComponent implements OnInit {
 
-  arrowVisible : boolean = false;
+  protected arrowVisible : boolean = false;
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     window.onload = () => {
       this.scrollToTop();
     };
   }
 
   @HostListener('window:scroll', [])
-  onWindowScroll(): void{
+  private onWindowScroll(): void {
     this.arrowVisible = window.scrollY !== 0 ? true : false
   }
 
-  scrollToTop(): void{
-    const duration = 400; // Durée de l'animation en millisecondes
+  protected scrollToTop(duration: number = 1): void {
     const scrollStep = -window.scrollY / (duration / 15); // Pas de défilement par étape
     const scrollInterval = setInterval(() => {
       if (window.scrollY !== 0) {

@@ -1,4 +1,4 @@
-import { CreateNotebook } from "src/app/modules/admin/interfaces/Notebook";
+import { CreateNotebook } from "../../modules/admin/shared/interfaces/Notebook";
 
 export interface NotebookDto extends CreateNotebook {
   slug : string,

@@ -5,16 +5,17 @@ import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 
 @Component({
+  standalone: false,
   selector: 'app-notebook-selected',
   templateUrl: './notebook-selected.component.html',
   styleUrls: ['./notebook-selected.component.scss']
 })
 export class NotebookSelectedComponent extends BaseComponent{
 
-  public route = inject(ActivatedRoute);
-  public apiRequestsService = inject(ApiRequestsService);
+  protected route = inject(ActivatedRoute);
+  protected apiRequestsService = inject(ApiRequestsService);
 
-  notebookSlug! : string
+  notebookSlug! : NotebookDto['slug']
   notebookSelected! : NotebookDto
 
   ngOnInit(){
@@ -27,10 +28,7 @@ export class NotebookSelectedComponent extends BaseComponent{
   findNotebook(): void {
     this.subscriptions.push(
       this.apiRequestsService.getNotebookBySlug(this.notebookSlug).subscribe({
-        next: (notebook) => {this.notebookSelected = notebook
-          console.log(notebook);
-          
-        },
+        next: (notebook) => this.notebookSelected = notebook,
         error: (err) => (this.changeMessage(err.error.message))
       })
     )

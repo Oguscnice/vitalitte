@@ -6,80 +6,94 @@
   </i>
 </div>
 
-<div *ngIf="!materials || materials.length <= 0">Aucun Article</div>
-<table *ngIf="materials && isTableVisible">
-  <thead>
-    <tr>
-      <td>
-        <p>Dispo</p>
-      </td>
-      <td>
-        <p>Libellé</p>
-      </td>
-      <td>
-        <p>Type</p>
-      </td>
-      <td>
-        <p>Prix</p>
-      </td>
-      <td>
-        <p>Des.</p>
-      </td>
-      <td>
-        <p>Image</p>
-      </td>
-      <td>
-        <p>Modif.</p>
-      </td>      
-      <td>
-        <p>Supp.</p>
-      </td>
-    </tr>
-  </thead>
+@if (materials() && isTableVisible) {
 
-  <tbody>
-    <tr *ngFor="let material of materials ; let index = index"
-        [ngClass]="index % 2 ? 'bg-dark' : ''">
-        <td>
-          <div class="toggle-switch" (click)="changeAvailability(material)">
-            <input class="toggle-input"
-                   type="checkbox"
-                   [checked]="material.available">
-            <label class="toggle-label" for="toggle"></label>
-          </div>
+  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+
+  <table>
+    <thead>
+      <tr>
+        <td class="table-width-icon">
+          <p>Dispo Prêt Emploi</p>
         </td>
-      <td>
-        <p class="flex text-left">{{ material.name | titlecase }}</p>
-      </td>
-      <td>
-        <p class="title">
-          {{ material.materialType | titlecase }}
-        </p>
-      </td>
-      <td>
-        <p> {{ material.price | addEuroCurrency }} </p>
-      </td>
-      <td>
-        <i class="fa-solid fa-file-lines pointer flex center"
-           (click)="openModalWithDescription(material.description)">
-        </i>
-      </td>
-      <td class="flex center">
-        <img src="{{material.picture}}"
-             alt="Photo de {{material.name}}">
-      </td>
-      <td>
-        <i [routerLink]="'/admin/editer-materiel/' + material.slug" class="fa-solid fa-pencil pointer flex center"></i>
-      </td>
-      <td>
-        <i (click)="delete(material)" class="fa-solid fa-trash-can pointer flex center"></i>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <td class="table-width-icon">
+          <p>Dispo Perso.</p>
+        </td>
+        <td>
+          <p>Libellé</p>
+        </td>
+        <td>
+          <p>Type</p>
+        </td>
+        <td>
+          <p>Prix</p>
+        </td>
+        <td class="table-width-icon">
+          <p>Des.</p>
+        </td>
+        <td>
+          <p>Image</p>
+        </td>
+        <td class="table-width-icon">
+          <p>Modif.</p>
+        </td>
+        <td class="table-width-icon">
+          <p>Supp.</p>
+        </td>
+      </tr>
+    </thead>
 
-<app-modal [modalVisible]="modalVisible"
-           [modalText]="modalText"
-        
-           (responseForModal)="responseForModal($event)">
-</app-modal>
+    <tbody>
+      @for (material of materials(); track material; let index = $index) {
+        <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+          <td class="table-width-icon">
+            <div class="toggle-switch" (click)="changeAvailability(material)">
+              <input class="toggle-input"
+                     type="checkbox"
+                     [checked]="material.available">
+              <label class="toggle-label"></label>
+            </div>
+          </td>
+          <td class="table-width-icon">
+            <div class="toggle-switch" (click)="changeAvailabilityForCustomization(material)">
+              <input class="toggle-input"
+                     type="checkbox"
+                     [checked]="material.availableForCustomization">
+              <label class="toggle-label"></label>
+            </div>
+          </td>
+          <td>
+            <p class="flex text-left material-name">{{ material.name | titlecase }}</p>
+          </td>
+          <td>
+            <p class="title">
+              {{ material.materialType | titlecase }}
+            </p>
+          </td>
+          <td>
+            <p> {{ material.price | addEuroCurrency }} </p>
+          </td>
+          <td class="table-width-icon">
+            <i class="fa-solid fa-file-lines pointer flex center" (click)="modalSignal.showModal(material.description, false)">
+            </i>
+          </td>
+          <td class="flex center">
+            <img src="{{ material.pictureThumbnail }}" alt="Photo de {{ material.name }}">
+          </td>
+          <td class="table-width-icon">
+            <i [routerLink]="'/admin/editer-materiel/' + material.slug" class="fa-solid fa-pencil pointer flex center"></i>
+          </td>
+          <td class="table-width-icon">
+            <i (click)="delete(material)" class="fa-solid fa-trash-can pointer flex center"></i>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  @if (materials() && materials().length > 0) {
+    <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+  }
+
+} @else if ((!materials() || materials().length < 1) && isTableVisible) {
+  <h5>Aucun Matériel</h5>
+}

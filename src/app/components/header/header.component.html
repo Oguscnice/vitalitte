@@ -5,9 +5,9 @@
   <h3 class="flex pointer"
       [routerLink]="'/'">VitaLitté</h3>
   <div class="shopping-cart-counter"
-      [ngClass]="shoppingCartService.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
+      [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
     <i class="fa-solid fa-cart-shopping"></i>
-    <p class="flex center">{{shoppingCartService.counterTotalShoppingCart()}}</p>
+    <p class="flex center"> {{ shoppingCart.counterTotalShoppingCart() }} </p>
   </div>
   <ul
     class="flex center space-around"
@@ -17,34 +17,38 @@
         : !isMenuBurgerChecked && !initialLoad
         ? 'menu-burger-hidden'
         : '' ">
-    <li
-      *ngFor="let item of navbarUser; let index = index"
-      [routerLink]="item.submenu ? null : item.routerLink"
-      class="flex center column pointer"
-      [ngClass]="{
-        'active': item.routerLink === activePageService.activePage,
-        'separator': index !== navbarUser.length - 1 }"
-      (click)="item.submenu ?
-                openSubmenu(item) :
-                closeMenuBurger(menuCheckbox, item.routerLink, $event) ">
-      <p class="flex center"
-         [ngClass]="{
-          'active': item.routerLink === activePageService.activePage,
-          'submenu-close' : item.submenu && item.submenu.isOpen }">
-         {{ item.name }}
-      </p> 
-      <div 
-        class="flex center space-around submenu"
-        *ngIf="item.submenu"
-        [ngClass]="item.submenu.isOpen ? '' : 'close' ">
-        <a class="flex center"
-          *ngFor="let subItem of item.submenu?.items"
-          [href]="item.routerLink + '#' + subItem.anchor"
-          (click)="closeMenuBurger(menuCheckbox, item.routerLink, $event)">
-          {{subItem.name}}
-        </a>
-      </div>
-    </li>
+    @for (item of navbarUser; track item; let index = $index) {
+      <li [routerLink]="item.submenu ? null : item.routerLink"
+          class="flex center column pointer"
+          [ngClass]="{
+            'active': item.routerLink === activePageService.activePage,
+            'separator': index !== navbarUser.length - 1 }"
+          (click)="item.submenu ?
+                    openSubmenu(item) :
+                    closeMenuBurger(menuCheckbox, item.routerLink, $event) ">
+        <p class="flex center"
+          [ngClass]="{
+            'active': item.routerLink === activePageService.activePage,
+            'submenu-close' : item.submenu && item.submenu.isOpen }">
+          {{ item.name }}
+        </p>
+        @if (item.submenu) {
+          <div class="flex center space-around submenu"
+              [ngClass]="item.submenu.isOpen ? '' : 'close' ">
+
+              @for (subItem of item.submenu.items; track subItem) {
+                <a class="flex center"
+                  [href]="item.routerLink + '#' + subItem.anchor"
+                  (click)="closeMenuBurger(menuCheckbox, item.routerLink, $event)">
+                  {{subItem.name}}
+                </a>
+              }
+          </div>
+        }
+
+      </li>
+    }
+
   </ul>
   <input type="checkbox" id="checkbox" #menuCheckbox (click)="changeMenuBurgerVisibility()" />
   <label for="checkbox" class="toggle">

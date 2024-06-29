@@ -1,80 +1,62 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { CreatePublication } from '../../../interfaces/Publication';
-import { FileUploadService } from '../../../services/file-upload.service';
+import {Component, inject, OnInit} from '@angular/core';
+import { CreatePublication } from '../../../shared/interfaces/Publication';
+import { FileUploadService } from '../../../shared/services/file-upload.service';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { TransformApiService } from '../../../services/transform-api.service';
-import { urlValidator } from '../../../validators/urlValidators';
-import { FileInfo } from '../../../interfaces/FileInfo';
-import { NgClass, NgIf } from '@angular/common';
+import { urlValidator } from '../../../shared/validators/urlValidators';
+import { NgClass } from '@angular/common';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
-import { TOOLS_BAR_CONFIG_EDITOR } from '../../../variables/Other';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
+import {FormHelperService} from "../../../shared/services/form-helper.service";
+import {AdminPublicationSignalService} from "../../../shared/services/admin-publication-signal.service";
 
 @Component({
-  selector: 'app-post-publication',
   standalone: true,
-  imports: [ NgClass, NgIf, ReactiveFormsModule, CounterZeroIfEmpty, EditorModule ],
+  imports: [ NgClass, ReactiveFormsModule, CounterZeroIfEmpty, EditorModule ],
+  selector: 'app-post-publication',
   templateUrl: './post-publication.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })
-export class PostPublicationComponent {
+export class PostPublicationComponent implements OnInit {
 
-  protected fileUploadService = inject(FileUploadService);
+  fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
-  private transformApiService = inject(TransformApiService);
-
-  @Output() newPublication: EventEmitter<CreatePublication> = new EventEmitter();
+  private formHelper = inject(FormHelperService);
+  private adminPublicationSignal = inject(AdminPublicationSignalService);
 
   isFormVisible : boolean = false;
   isFormSubmit : boolean = false;
 
-  fileSize!: number;
-
-  public toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+  toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
   newPublicationForm = this.formBuilder.group({
     title: ['', [Validators.required, Validators.maxLength(255)]],
     description: ['', [Validators.required, Validators.maxLength(2000)]],
-    picture: ['', [Validators.required, urlValidator()]]
+    picture: ['', [Validators.required, urlValidator()]],
+    pictureThumbnail: ['', [Validators.required, urlValidator()]]
   });
 
   ngOnInit(): void {
-    this.newPublicationForm.get('picture')!.setValue(this.fileUploadService.imagePublicationDefault);
+    this.fileUploadService.patchImage(this.newPublicationForm, this.fileUploadService.imagePublicationDefault, this.fileUploadService.imagePublicationDefaultThumbnail);
   }
 
-  async onFileSelected(event: Event): Promise<void> {
-
-    const inputElement = event.target as HTMLInputElement;
-    const selectedFile = inputElement.files?.[0];
-    let fileInfo: FileInfo | null = null;
-
-    if (selectedFile) {
-      if (selectedFile.size < this.fileUploadService.SIZE_MAX) {
-        fileInfo = await this.fileUploadService.fileUpload(event);
-        this.newPublicationForm.get('picture')!.setValue(fileInfo.data.thumb.url);
-      };
-    }
-  }
-
-  changeImageValue(event: KeyboardEvent): void {
-    const inputElement = event.target as HTMLInputElement;
-    if(inputElement){
-      this.newPublicationForm.get('picture')!.setValue(inputElement.value);
-    }
+  onFileSelected(event: Event): void {
+    this.fileUploadService.onFileSelected(event, this.newPublicationForm).subscribe();
   }
 
   submitNewPublicationForm(): void {
-
     this.isFormSubmit = true;
-
     if(this.newPublicationForm.valid){
-      let createdPublication : CreatePublication = this.transformApiService.postPublication(this.newPublicationForm)
-      this.newPublication.emit(createdPublication);
-      this.isFormVisible = false;
-      this.isFormSubmit = true;
-      this.newPublicationForm.get('title')!.setValue('');
-      this.newPublicationForm.get('description')!.setValue('');
-      this.newPublicationForm.get('picture')!.setValue(this.fileUploadService.imagePublicationDefault);
+      const CREATED_PUBLICATION: CreatePublication = this.formHelper.formatFormToDto<CreatePublication>(this.newPublicationForm);
+      this.adminPublicationSignal.post(CREATED_PUBLICATION);
+      this.resetAllValues();
     }
+  }
+
+  resetAllValues(): void {
+    this.isFormVisible = false;
+    this.isFormSubmit = true;
+    this.newPublicationForm.reset();
+    this.fileUploadService.patchImage(this.newPublicationForm, this.fileUploadService.imagePublicationDefault, this.fileUploadService.imagePublicationDefaultThumbnail);
   }
 }
