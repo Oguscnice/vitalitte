@@ -13,9 +13,7 @@ import { SlugNameDtoEditDeleteComponent } from '../../slug-name-dto/slug-name-dt
               <app-slug-name-dto-post [type]="'Collection'"/>
               <app-slug-name-dto-edit-delete [type]="'Collections'">
             `,
-  styles: [`
-            @import "../../../scss/admin-general.scss";
-          `]
+  styles: [`@import "../../../scss/admin-general.scss";`]
 })
 export class ManageCollectionsComponent {
 }

@@ -1,0 +1,47 @@
+<div class="shopping-cart-list-modal flex center">
+  <div class="shopping-cart-list flex column center space-around">
+    @if (shoppingCartValue().notebooks.length > 0) {
+      @if (shoppingCartValue().notebooks.length > 1) {
+        <h4> Carnets </h4>
+      } @else {
+        <h4> Carnet </h4>
+      }
+      <div class="shopping-cart-type-list">
+        @for (notebook of shoppingCartValue().notebooks; track notebook) {
+          <div class="shopping-cart-type-title-quantity-price flex">
+            <p class="shopping-cart-item-title"> {{ notebook.item.name }} </p>
+            <p class="shopping-cart-item-price"> {{ notebook.item.price | customCurrency }} </p>
+            <p class="shopping-cart-item-quantity">x {{ notebook.quantity }} =</p>
+            <p class="shopping-cart-item-per-quantity-price"> {{ notebook.quantity * notebook.item.price | customCurrency }} </p>
+          </div>
+        }
+      </div>
+      <h6> Total {{ shoppingCart.counterQuantityByType('notebooks') }} Carnet(s) : {{ shoppingCart.priceByType('notebooks') | customCurrency }} </h6>
+      <hr>
+    }
+    @if (shoppingCartValue().inscriptions.length > 0) {
+      @if (shoppingCartValue().inscriptions.length > 1) {
+        <h4> Ateliers </h4>
+      } @else {
+        <h4> Atelier </h4>
+      }
+      <div class="shopping-cart-type-list">
+        @for (inscription of shoppingCartValue().inscriptions; track inscription) {
+          <div class="shopping-cart-type-title-quantity-price flex">
+            <div class="shopping-cart-item-title">
+              <p> {{ inscription.item.workshopDto.title }} </p>
+              <p> du {{ inscription.item.workshopDto.date | date:'dd/MM/yy à hh:mm' }} </p>
+            </div>
+            <p class="shopping-cart-item-price"> {{ inscription.item.workshopDto.price | customCurrency }} </p>
+            <p class="shopping-cart-item-quantity">x {{ inscription.quantity }} =</p>
+            <p class="shopping-cart-item-per-quantity-price"> {{ inscription.quantity * inscription.item.workshopDto.price | customCurrency }} </p>
+          </div>
+        }
+      </div>
+      <h6> Total {{ shoppingCart.counterQuantityByType('inscriptions') }} inscription(s) : {{ shoppingCart.priceByType('inscriptions') | customCurrency }} </h6>
+      <hr>
+    }
+    <h5>Total : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) | customCurrency }} </h5>
+    <button class="btn-normal" routerLink="/panier">Confirmer le Panier</button>
+  </div>
+</div>

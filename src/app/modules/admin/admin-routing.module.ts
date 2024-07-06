@@ -13,6 +13,7 @@ import { ManageWorkshopsComponent } from './pages/manage-workshops/manage-worksh
 import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
 import { ManageGiftCardsComponent } from './pages/manage-giftcards/manage-giftcards.component';
 import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used/user-list-giftcards-used.component';
+import {ManageDeliveryOptionsComponent} from "./pages/manage-delivery-options/manage-delivery-options.component";
 
 const routes: Routes = [
   // { path: '', component: AdminHomeComponent, canActivate: [AdminGuard] },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'utilisateurs-carte-cadeaux/:giftcardCode', component: UserListGiftcardsUsedComponent },
   { path: 'gestion-des-publications', component: ManagePublicationsComponent },
   { path: 'gestion-des-contacts', component: ManageContactsComponent },
+  { path: 'gestion-des-options-de-livraison', component: ManageDeliveryOptionsComponent },
   { path: '', component: AdminHomeComponent },
 ];
 

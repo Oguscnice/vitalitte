@@ -285,58 +285,58 @@
 <form (ngSubmit)="(newSecondaryPictureForm.valid)"
       [formGroup]="newSecondaryPictureForm"
       #myForm="ngForm">
-<fieldset class="flex column">
-<label>Images secondaires ?</label>
-<input class="display-none"
-    type="file"
-    accept="image/png, image/jpeg, image/bmp, image/gif"
-    (change)="onFileSelected($event, 'newSecondaryPictureForm')"
-    #fileUploadSecondaryPicture/>
-<small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+  <fieldset class="flex column">
+  <label>Images secondaires ?</label>
+  <input class="display-none"
+      type="file"
+      accept="image/png, image/jpeg, image/bmp, image/gif"
+      (change)="onFileSelected($event, 'newSecondaryPictureForm')"
+      #fileUploadSecondaryPicture/>
+  <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
 
-<img class="pointer"
-  (click)="fileUploadSecondaryPicture.click()"
-  src="{{ fileUploadService.imageNotebookDefault }}"
-  alt="Photo à choisir pour le matériel"/>
-<table>
-<thead>
-  <tr>
-    <td>
-      <p>URL</p>
-    </td>
-    <td>
-      <p>Image</p>
-    </td>
-    <td>
-      <p>Supp.</p>
-    </td>
-  </tr>
-</thead>
-<tbody>
-  @if (currentSecondaryPictures) {
-    @for (secondaryPicture of currentSecondaryPictures; track secondaryPicture) {
-      <tr>
-        <td>
-          <p class="flex text-left"> {{ secondaryPicture.picture }} </p>
-        </td>
-        <td>
-          <img src="{{ secondaryPicture.pictureThumbnail }}" alt="image secondaire en cours de selection">
-        </td>
-        <td>
-          <i (click)="addOrDeleteSecondaryPicture(secondaryPicture)" class="fa-solid fa-trash-can pointer flex center"></i>
-        </td>
-      </tr>
-    }
-  } @else if (!currentSecondaryPictures) {
-    <tr>
-      <td>
-        <p>Aucune image secondaire ajoutée</p>
-      </td>
-    </tr>
-  }
-</tbody>
-</table>
-</fieldset>
+  <img class="pointer"
+    (click)="fileUploadSecondaryPicture.click()"
+    src="{{ fileUploadService.imageNotebookDefault }}"
+    alt="Photo à choisir pour le matériel"/>
+    <table>
+      <thead>
+        <tr>
+          <td>
+            <p>URL</p>
+          </td>
+          <td>
+            <p>Image</p>
+          </td>
+          <td>
+            <p>Supp.</p>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        @if (currentSecondaryPictures) {
+          @for (secondaryPicture of currentSecondaryPictures; track secondaryPicture) {
+            <tr>
+              <td>
+                <p class="flex text-left"> {{ secondaryPicture.picture }} </p>
+              </td>
+              <td>
+                <img src="{{ secondaryPicture.pictureThumbnail }}" alt="image secondaire en cours de selection">
+              </td>
+              <td>
+                <i (click)="addOrDeleteSecondaryPicture(secondaryPicture)" class="fa-solid fa-trash-can pointer flex center"></i>
+              </td>
+            </tr>
+          }
+        } @else if (!currentSecondaryPictures) {
+          <tr>
+            <td>
+              <p>Aucune image secondaire ajoutée</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </fieldset>
 </form>
 
 <button class="btn-submit-admin"

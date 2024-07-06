@@ -8,6 +8,9 @@
         <p class="workshop-resgistrations-free">Place disponible : {{ registrationsFree() }} </p>
       } @else {
         <p class="workshop-resgistrations-free">Places disponibles : {{ registrationsFree() }} </p>
+        @if (registrationsFree() > 5) {
+          <small> {{ maxInscriptions }} places maximum par réservation</small>
+        }
       }
       <button class="btn-normal" (click)="isFormVisible = !isFormVisible"> Formulaire d'inscription </button>
     } @else {
@@ -112,13 +115,13 @@
                formControlName="quantity"
                placeholder="0"
                min="0"
-               [max]="currentWorkshop.registrations === 0 || registrationsFree() > 5 ? 5 : registrationsFree()"/>
+               [max]="registrationsFree()"/>
         @if (isFormSubmit && newInscriptionForm.controls['quantity'].invalid) {
         <div>
           @if (newInscriptionForm.controls.quantity.errors?.['required']) {
             <small>La quantité est obligatoire.</small>
-          } @else if (newInscriptionForm.controls.quantity.errors?.['quantityError']) {
-            <small>La quantité doit être comprise entre 1 et 5.</small>
+          } @else if (newInscriptionForm.controls.quantity.errors?.['quantityError'] || (newInscriptionForm.get('quantity')!.value && newInscriptionForm.get('quantity')!.value! > (registrationsFree() > maxInscriptions ? maxInscriptions : registrationsFree()))) {
+            <small>La quantité doit être comprise entre 1 et {{ registrationsFree() > 5 ? maxInscriptions : registrationsFree() }}.</small>
           }
         </div>
         }

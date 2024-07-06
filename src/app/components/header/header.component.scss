@@ -10,6 +10,7 @@ nav {
   background-color: $white;
   z-index: 999;
   border-bottom: 2px solid $lilac;
+
   h3 {
     text-align: center;
     font-family: $font-family-title;
@@ -17,16 +18,19 @@ nav {
     letter-spacing: 0.2rem;
     padding-left: $double-padding;
   }
-  .shopping-cart-counter{
+
+  .shopping-cart-counter {
     position: relative;
     opacity: 0;
     z-index: $z-index - 1;
-    i{
+
+    i {
       color: $lilac;
       font-size: $fourth-font-size;
       margin-right: $normal-margin;
     }
-    p{
+
+    p {
       position:absolute;
       top: -32%;
       left: 32%;
@@ -39,6 +43,7 @@ nav {
       padding: 0 $normal-padding;
     }
   }
+
   img {
     width: 40px;
     height: 40px;
@@ -57,6 +62,7 @@ nav {
     z-index: -1;
     animation-duration: 0.4s;
     animation-fill-mode: forwards;
+
     li {
       width: 100vw;
       background-color: $white;
@@ -68,29 +74,29 @@ nav {
         font-size: $fourth-font-size;
         transition: height 0.5s;
       }
-      .submenu-close{
+      .submenu-close {
         height: 100%;
       }
-      .submenu{
+      .submenu {
         position: block;
         transition: 0.5s;
         width: 88vw;
         height: 50%;
         background-color: $white;
-        a{
+        a {
           color: $black;
           transition: 1s;
           font-size: $triple-font-size;
         }
       }
-      .close{
+      .close {
         transition: 0s;
         height: 0%;
-        a{
+        a {
           font-size : 0rem;
         }
       }
-    } 
+    }
     .separator {
         border-bottom: 4px solid $lilac;
     }
@@ -108,6 +114,7 @@ nav {
   //---------------------------------------
   //----for menu burger--------------------
   //---------------------------------------
+
   #checkbox {
     display: none;
   }

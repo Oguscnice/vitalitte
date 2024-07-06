@@ -25,8 +25,4 @@ export class ApiInscriptionAdminService {
     return this.http.get<InscriptionDto>(URLAPI + "/inscriptions/" + inscriptionSlug)
   }
 
-  deleteBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<ResponseEntity>{
-    return this.http.delete<ResponseEntity>(URLAPI + "/inscriptions/" + inscriptionSlug)
-  }
-
 }

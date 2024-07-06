@@ -1,6 +1,8 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import { IPayPalConfig, ICreateOrderRequest, NgxPayPalModule, IClientAuthorizeCallbackData } from 'ngx-paypal';
 import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
+import {ModalSignalService} from "../../shared/services/modal-signal.service";
+import {DecimalPipe} from "@angular/common";
 
 @Component({
   standalone: true,
@@ -9,19 +11,28 @@ import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
   template: '<ngx-paypal [config]="payPalConfig"></ngx-paypal>',
   styleUrls: ['./paypal.component.scss']
 })
-export class PaypalComponent {
+export class PaypalComponent implements OnInit {
 
-  // @Input() shoppingCart! : ShoppingCartNotebookService | ShoppingCartWorkshopService
-  @Output() responsePaypal: EventEmitter<'success' | 'cancel' | 'error'> = new EventEmitter();
 
   private shoppingCart = inject(ShoppingCartService);
-  public payPalConfig? : IPayPalConfig;
+  private modalSignal = inject(ModalSignalService);
+  private decimalPipe = inject(DecimalPipe);
+  protected payPalConfig? : IPayPalConfig;
 
   ngOnInit(): void {
       this.initConfig();
   }
 
+  convertPriceToFormatExpected(value: number): number {
+    return parseFloat(this.decimalPipe.transform(value, '1.2-2')!)
+  }
+
   private initConfig(): void {
+      console.log("pay : " + this.shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, true))
+    console.log(this.shoppingCart.itemsForPaypal())
+
+    const TOTAL_AMOUNT = this.shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, true);
+    const TOTAL_AMOUNT_WITHOUT_SHIPPING = this.shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false);
 
       this.payPalConfig = {
           currency: 'EUR',
@@ -29,17 +40,42 @@ export class PaypalComponent {
           createOrderOnClient: (data) => < ICreateOrderRequest > {
               intent: 'CAPTURE',
               purchase_units: [{
-                  amount: {
+                amount: {
+                  currency_code: 'EUR',
+                  value: (TOTAL_AMOUNT > 70 ? TOTAL_AMOUNT_WITHOUT_SHIPPING : TOTAL_AMOUNT).toString(),
+                  breakdown: {
+                    item_total: {
                       currency_code: 'EUR',
-                      value: this.shoppingCart.totalPrice().toString(),
-                      breakdown: {
+                      value: TOTAL_AMOUNT_WITHOUT_SHIPPING.toString()
+                    },
+                    ...(this.shoppingCart.$userDeliveryOption() && {
+                      shipping: {
+                        currency_code: 'EUR',
+                        value: this.shoppingCart.getDeliveryPrice().toString(),
+                        breakdown: {
                           item_total: {
-                              currency_code: 'EUR',
-                              value: this.shoppingCart.totalPrice().toString()
+                            currency_code: 'EUR',
+                            value: this.shoppingCart.getDeliveryPrice().toString()
                           }
+                        },
+                      },
+                    }),
+                    // Inclure la remise sur les frais de port la commande dépasse les 70euros
+                    ...(TOTAL_AMOUNT > 70 && {
+                      shipping_discount: {
+                        currency_code: 'EUR',
+                        value: this.shoppingCart.getDeliveryPrice().toString(),
+                        breakdown: {
+                          item_total: {
+                            currency_code: 'EUR',
+                            value: this.shoppingCart.getDeliveryPrice().toString()
+                          }
+                        }
                       }
+                    })
                   },
-                  items: this.shoppingCart.itemsForPaypal()
+                },
+                items: this.shoppingCart.itemsForPaypal()
               }]
           },
           advanced: {
@@ -58,20 +94,18 @@ export class PaypalComponent {
           },
           onClientAuthorization: (data) => {
               console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-              this.responsePaypal.emit('success')
-              this.shoppingCart.cleanLocalStorage()
+              this.shoppingCart.paymentSuccess();
           },
           onCancel: (data, actions) => {
               console.log('OnCancel', data, actions);
-              this.responsePaypal.emit('cancel')
+              this.modalSignal.showModal("Transaction Annulée par le client.", false);
           },
           onError: err => {
               console.log('OnError', err);
-              this.responsePaypal.emit('error')
+              this.modalSignal.showModal("Erreur Serveur chez Paypal, merci de recommencer.", false);
           },
           onClick: (data, actions) => {
               console.log('onClick', data, actions);
-              // this.resetStatus();
           }
       };
   }

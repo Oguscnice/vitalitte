@@ -4,7 +4,7 @@ table {
   margin: $normal-margin auto 0 auto;
   border-collapse: collapse;
   width: 88%;
-  background-color: transparent; 
+  background-color: transparent;
 }
 
 table {
@@ -15,7 +15,7 @@ table {
     tr {
       td {
         border-bottom: 1px solid $lilac-dark;
-        font-weight: bold; 
+        font-weight: bold;
         p {
           font-size: $normal-font-size;
           padding: $normal-padding;
@@ -49,9 +49,6 @@ table {
           color: $lilac-dark;
         }
       }
-    }
-    .bg-dark{
-      background-color: $lilac-light-opacity-low;
     }
   }
 }

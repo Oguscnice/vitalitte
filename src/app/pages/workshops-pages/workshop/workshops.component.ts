@@ -46,7 +46,7 @@ export class WorkshopsComponent extends BaseComponent implements OnInit {
   backgroundImageParent: string = "../../../assets/images/figma/atelier.jpg";
   workshopsWithDateToCome: Signal<WorkshopDto[]> = this.dataSignal.$workshopsDateToCome;
   workshopsWithPastDate: Signal<WorkshopDto[]> = this.dataSignal.$workshopsPastDate;
-  disponibilities: Signal<WorkshopDisponibilities[]> = this.dataSignal.$workshopsDisponibilities;
+  disponibilities: Signal<WorkshopDisponibilities[]> = this.dataSignal.$workshopsRegistrationsReserved;
 
   ngOnInit(): void {
     this.dataSignal.getWorkshopsByDateToCome();
@@ -67,7 +67,7 @@ export class WorkshopsComponent extends BaseComponent implements OnInit {
   inscriptionsReservedByWorkshopSlug(workshopSlug: WorkshopDto['slug']): number {
     for (let item of this.disponibilities()) {
       if (item.workshopSlug === workshopSlug) {
-        return item.disponibilities;
+        return item.registrationsReserved;
       }
     }
     return 0;

@@ -63,7 +63,7 @@
           <td>
             @for (dispo of disponibilities(); track dispo) {
               @if (dispo.workshopSlug === workshop.slug) {
-                <p> {{ workshop.registrations - dispo.disponibilities }} </p>
+                <p> {{ workshop.registrations - dispo.registrationsReserved }} </p>
               }
             }
           </td>

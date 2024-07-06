@@ -18,7 +18,7 @@ export class EditDeleteGiftCardComponent implements OnInit {
 
   giftCards: Signal<GiftCardDto[]> = this.adminGiftCardsSignal.$giftCards;
 
-  isTableVisible: boolean = false;
+  isTableVisible: boolean = true;
 
   ngOnInit(): void {
     this.adminGiftCardsSignal.getAllGiftCards();

@@ -36,6 +36,8 @@ export class ModalSignalService {
     this.setVisibility(true);
     this.setMessage(message);
     this.setMultipleChoice(hasMultipleChoice);
+    // Ajouter la classe 'no-scroll' au body quand la modale est ouverte
+    document.body.classList.add('no-scroll');
 
     return this.responseSubject.asObservable();
   }
@@ -46,6 +48,9 @@ export class ModalSignalService {
 
     this.responseSubject.next(response || false);
     this.responseSubject.complete();
+
+    // Retirer la classe 'no-scroll' du body quand la modale est fermée
+    document.body.classList.remove('no-scroll');
 
     // Reset the subject for the next usage
     this.responseSubject = new ReplaySubject<boolean>(1);

@@ -33,7 +33,7 @@ export class EditDeleteWorkshopComponent extends BaseComponent implements OnInit
 
   workshopsDateToCome: Signal<WorkshopDto[]> = this.dataSignal.$workshopsDateToCome;
   workshopsPastDate: Signal<WorkshopDto[]> = this.dataSignal.$workshopsPastDate;
-  disponibilities: Signal<WorkshopDisponibilities[]> = this.dataSignal.$workshopsDisponibilities;
+  disponibilities: Signal<WorkshopDisponibilities[]> = this.dataSignal.$workshopsRegistrationsReserved;
 
   isTableVisible: boolean = true;
 

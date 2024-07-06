@@ -58,7 +58,7 @@ export class UserListGiftcardsUsedComponent extends BaseComponent {
     const inputElement = event.target as HTMLInputElement;
     const filterValue = inputElement.value.toLowerCase();
 
-    if(inputElement.value){
+    if (inputElement.value) {
      this.usersToDisplay = this.users.filter(user =>
         user.firstname.toLowerCase().includes(filterValue) ||
         user.lastname.toLowerCase().includes(filterValue) ||

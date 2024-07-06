@@ -8,17 +8,17 @@ import { PublicationDto } from 'src/app/shared/interfaces/Publication';
   standalone: true,
   imports: [ NgClass, UpperCasePipe, NgFor, RouterLink ],
   selector: 'app-news-headband',
-  template: ` 
+  template: `
               <div class="news-headband flex">
                 <p class="fixed-text">Actus :</p>
-                <div class="rolling-news flex" #newsContainer>
+                <div class="rolling-news line-nowrap flex" #newsContainer>
                   @for (section of [0,1,2,3,4,5]; track section) {
                     <div class="section-rolling-news flex space-around">
                       @for (news of publicationsSpotlighted; track news) {
                         <p class="flex pointer" [routerLink]="'/actualites/' + news.slug">
                           {{ news.title | uppercase }}
                           <span [innerHTML]="news.description"></span>
-                        </p> 
+                        </p>
                       }
                     </div>
                   }

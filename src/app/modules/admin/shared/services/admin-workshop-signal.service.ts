@@ -8,7 +8,6 @@ import {ApiWorkshopAdminService} from "./api/api-workshop-admin.service";
 import {CreateWorkshop} from "../interfaces/Workshop";
 import { Router } from '@angular/router';
 import {DataSignalService} from "../../../../shared/services/data-signal.service";
-import {Pagination} from "../../../../shared/interfaces/Pagination";
 import {PaginationSignalService} from "../../../../shared/services/pagination-signal.service";
 
 @Injectable({
@@ -57,7 +56,7 @@ export class AdminWorkshopSignalService extends BaseComponent {
             })
           )
         },
-        error: (err) => (this.changeMessage(err.error.message))
+        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }

@@ -12,6 +12,8 @@ import { CreateInscription, InscriptionDto } from '../interfaces/Inscription';
 import { ResponseEntity } from '../interfaces/ResponseEntity';
 import { PublicationDto } from '../interfaces/Publication';
 import {PaginationWithSearchValue} from '../interfaces/Pagination';
+import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
+import {GiftCardDto} from "../interfaces/GiftCard";
 
 @Injectable({
   providedIn: 'root',
@@ -107,12 +109,20 @@ export class ApiRequestsService {
     return this.http.post<InscriptionDto>(URLAPI + "/inscriptions", inscription)
   }
 
+  changeQuantityInscription(addOrRemove: 'add-participant' | 'remove-participant',inscription : InscriptionDto): Observable<ResponseEntity> {
+    return this.http.put<ResponseEntity>(URLAPI + "/inscriptions/" + addOrRemove, inscription)
+  }
+
   confirmInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<ResponseEntity> {
     return this.http.put<ResponseEntity>(URLAPI + "/inscriptions/confirm", inscriptionSlug)
   }
 
   getInscriptionsCounterByWorkshop(workshopDtoSlug : WorkshopDto['slug']): Observable<number> {
     return this.http.get<number>(URLAPI + "/inscriptions/count-by-workshop/" + workshopDtoSlug)
+  }
+
+  deleteInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<ResponseEntity>{
+    return this.http.delete<ResponseEntity>(URLAPI + "/inscriptions/" + inscriptionSlug)
   }
 
   //-------------------
@@ -139,8 +149,15 @@ export class ApiRequestsService {
   //-----GiftCards-----
   //-------------------
 
-  isExpiredGiftCard(code : string): Observable<boolean> {
-    return this.http.get<boolean>(URLAPI + "/giftCards/is-expired/" + code)
+  checkGiftCard(code : string): Observable<GiftCardDto> {
+    return this.http.get<GiftCardDto>(URLAPI + "/giftCards/" + code)
+  }
+
+  //-------------------
+  //-----Matériels-----
+  //-------------------
+  getDeliveryOptionAvailable(): Observable<DeliveryOptionDto[]> {
+    return this.http.get<DeliveryOptionDto[]>(URLAPI + "/delivery-option/is-available")
   }
 
   //-------------------

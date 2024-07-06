@@ -29,8 +29,8 @@ export class EditNotebookComponent extends BaseComponent implements OnInit {
   private dataSignal = inject(DataSignalService);
   private route = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
-  fileUploadService = inject(FileUploadService);
   formHelper = inject(FormHelperService);
+  fileUploadService = inject(FileUploadService);
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR;
 
