@@ -1,5 +1,11 @@
 import { WritableSignal } from "@angular/core";
 
+export type AnguilleMessage = {
+  index: number,
+  message: string,
+  isMessageVisible: boolean
+}
+
 export interface AnguilleSignalState {
-  $privateMessage: WritableSignal<string>
+  $privateMessages: WritableSignal<AnguilleMessage[]>
 }

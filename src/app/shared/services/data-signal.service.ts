@@ -6,15 +6,17 @@ import { BaseComponent } from 'src/app/base.component';
 import { CollectionDto } from '../interfaces/Collection';
 import { NotebookDto } from '../interfaces/Notebook';
 import { MaterialDto } from '../interfaces/Material';
-import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
+import {BehaviorSubject, catchError, map, Observable, of} from 'rxjs';
 import { AnguilleSignalService } from './anguille-signal.service';
 import {WorkshopDto} from "../interfaces/Workshop";
 import {WorkshopDisponibilities} from "../../modules/admin/shared/interfaces/Workshop";
 import {PaginationSignalService} from "./pagination-signal.service";
 import {PublicationDto} from "../interfaces/Publication";
-import {GiftCardDto} from "../interfaces/GiftCard";
-import {CreateInscription} from "../interfaces/Inscription";
+import {CreateInscription, InscriptionDto} from "../interfaces/Inscription";
 import {ShoppingCartService} from "./shopping-cart.service";
+import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
+import {ModalSignalService} from "./modal-signal.service";
+import {ObjectUtilsService} from "./object-utils.service";
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +25,10 @@ export class DataSignalService extends BaseComponent {
 
   private apiRequests = inject(ApiRequestsService);
   private anguilleSignal = inject(AnguilleSignalService);
+  private modalSignal = inject(ModalSignalService);
   private paginationSignal = inject(PaginationSignalService);
   private shoppingCart = inject(ShoppingCartService);
+  private objectUtils = inject(ObjectUtilsService);
 
   private readonly state: DataSignalState = {
     $privateCategoryList: signal<CategoryDto[]>([]),
@@ -35,7 +39,7 @@ export class DataSignalService extends BaseComponent {
     $privateWorkshopsDateToCome: signal<WorkshopDto[]>([]),
     $privateWorkshopsPastDate: signal<WorkshopDto[]>([]),
     $privateCounterWorkshopsPastDate: new BehaviorSubject<number>(0),
-    $privateDisponibilitiesWorkshops: signal<WorkshopDisponibilities[]>([]),
+    $privateCounterRegistrationsReservedWorkshops: signal<WorkshopDisponibilities[]>([]),
     $privatePublications: signal<PublicationDto[]>([]),
     $privatePublicationsSpotlighted: signal<PublicationDto[]>([]),
     $privateCounterPublications: new BehaviorSubject<number>(0),
@@ -44,10 +48,8 @@ export class DataSignalService extends BaseComponent {
     $privateMaterialBySlug: new BehaviorSubject<MaterialDto | null>(null),
     $privatePublicationBySlug: new BehaviorSubject<PublicationDto | null>(null),
     $privateIsExpiredGiftCard: signal<boolean>(true),
-    $privateGiftCardBySlug: new BehaviorSubject<GiftCardDto | null>(null),
+    $privateDeliveryOptions: signal<DeliveryOptionDto[]>([]),
   } as const;
-
-  private responseIsExpiredGiftCard = new ReplaySubject<boolean>(1);
 
   public readonly $categories: Signal<CategoryDto[]> = this.state.$privateCategoryList.asReadonly();
   public readonly $collections: Signal<CollectionDto[]> = this.state.$privateCollectionList.asReadonly();
@@ -61,11 +63,11 @@ export class DataSignalService extends BaseComponent {
   public readonly $workshopsDateToCome: Signal<WorkshopDto[]> = this.state.$privateWorkshopsDateToCome.asReadonly();
   public readonly $workshopsPastDate: Signal<WorkshopDto[]> = this.state.$privateWorkshopsPastDate.asReadonly();
   public readonly $workshopsCounterPastDate: Observable<number> = this.state.$privateCounterWorkshopsPastDate.asObservable();
-  public readonly $workshopsDisponibilities: Signal<WorkshopDisponibilities[]> = this.state.$privateDisponibilitiesWorkshops.asReadonly();
+  public readonly $workshopsRegistrationsReserved: Signal<WorkshopDisponibilities[]> = this.state.$privateCounterRegistrationsReservedWorkshops.asReadonly();
   public readonly $publications: Signal<PublicationDto[]> = this.state.$privatePublications.asReadonly();
   public readonly $publicationsSpotlighted: Signal<PublicationDto[]> = this.state.$privatePublicationsSpotlighted.asReadonly();
   public readonly $publicationsCounter: Observable<number> = this.state.$privateCounterPublications.asObservable();
-  public readonly $giftCardBySlug: Observable<GiftCardDto | null> = this.state.$privateGiftCardBySlug.asObservable();
+  public readonly $deliveryOptionAvailable: Signal<DeliveryOptionDto[]> = this.state.$privateDeliveryOptions.asReadonly();
 
   //-------------------
   //-----CATEGORY------
@@ -200,7 +202,7 @@ export class DataSignalService extends BaseComponent {
   }
 
   setWorkshopDisponibilities(workshopDisponibilities: WorkshopDisponibilities[]): void {
-    this.state.$privateDisponibilitiesWorkshops.set(workshopDisponibilities);
+    this.state.$privateCounterRegistrationsReservedWorkshops.set(workshopDisponibilities);
   }
 
   getWorkshopBySlug(workshopSlug: WorkshopDto['slug']): void {
@@ -209,7 +211,7 @@ export class DataSignalService extends BaseComponent {
         next: (workshop: WorkshopDto) => {
           this.setWorkshopBySlug(null);
           this.setWorkshopBySlug(workshop);
-          this.getCounterWorkshopDisponibilities(workshopSlug);
+          this.getCounterWorkshopRegistrationsReserved(workshopSlug);
         },
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
@@ -221,7 +223,7 @@ export class DataSignalService extends BaseComponent {
       this.apiRequests.getWorkshopsByDateToCome().subscribe({
         next: (workshops: WorkshopDto[]): void => {
           this.setWorkshopsDateToCome(workshops);
-          workshops.forEach(workshop =>  this.getCounterWorkshopDisponibilities(workshop.slug))
+          workshops.forEach(workshop =>  this.getCounterWorkshopRegistrationsReserved(workshop.slug))
         },
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
@@ -233,7 +235,7 @@ export class DataSignalService extends BaseComponent {
       this.apiRequests.getWorkshopsByPastDate(this.paginationSignal.transformToPaginationWithSearchValue()).subscribe({
         next: (workshops: WorkshopDto[]): void => {
           this.setWorkshopsPastDate(workshops);
-          workshops.forEach(workshop =>  this.getCounterWorkshopDisponibilities(workshop.slug))
+          workshops.forEach(workshop =>  this.getCounterWorkshopRegistrationsReserved(workshop.slug))
         },
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
@@ -249,12 +251,12 @@ export class DataSignalService extends BaseComponent {
     )
   }
 
-  private getCounterWorkshopDisponibilities(workshopSlugToFind: WorkshopDto['slug']): void {
-    let DISPONIBILITIES = this.state.$privateDisponibilitiesWorkshops();
+  getCounterWorkshopRegistrationsReserved(workshopSlugToFind: WorkshopDto['slug']): void {
+    let DISPONIBILITIES = this.state.$privateCounterRegistrationsReservedWorkshops();
       this.subscriptions.push(
         this.apiRequests.getCounterWorkshopInscriptions(workshopSlugToFind).subscribe({
           next: (counter: number): void => {
-            const NEW_DISPONIBILITY: WorkshopDisponibilities = {workshopSlug: workshopSlugToFind, disponibilities: counter};
+            const NEW_DISPONIBILITY: WorkshopDisponibilities = {workshopSlug: workshopSlugToFind, registrationsReserved: counter};
             if (DISPONIBILITIES.some(item => item.workshopSlug === workshopSlugToFind)) {
               DISPONIBILITIES = DISPONIBILITIES.filter(item => item.workshopSlug !== workshopSlugToFind)
             }
@@ -264,7 +266,6 @@ export class DataSignalService extends BaseComponent {
           error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
         })
       );
-
   }
 
   //-------------------
@@ -328,25 +329,20 @@ export class DataSignalService extends BaseComponent {
   //-----GIFT-CARD-----
   //-------------------
 
-  setGiftCardBySlyg(giftCard: GiftCardDto): void {
-    this.state.$privateGiftCardBySlug.next(giftCard);
-  }
-
-  isExpiredGiftCard(code: string): void {
+  checkGiftCard(code: string): void {
     this.subscriptions.push(
-      this.apiRequests.isExpiredGiftCard(code).subscribe({
-        next: (response) => {
-          this.responseIsExpiredGiftCard.next(response || false);
-          this.responseIsExpiredGiftCard.complete();
-
-          // Reset the subject for the next usage
-          this.responseIsExpiredGiftCard = new ReplaySubject<boolean>(1);
+      this.apiRequests.checkGiftCard(code).subscribe({
+        next: (giftCard) => {
+          this.shoppingCart.setGiftCardActive(giftCard)
+          this.anguilleSignal.changeMessage("Carte cadeau appliquée avec succès.")
         },
-        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+        error: (err) => {
+          this.anguilleSignal.changeMessage(err.error.message);
+          this.shoppingCart.setGiftCardActive(null);
+        }
       })
     )
   }
-
 
   private truncateString(value : string, length : number): string {
     return value.length > length ? value.slice(0, length) + "..." : value
@@ -369,27 +365,87 @@ export class DataSignalService extends BaseComponent {
     )
   }
 
-  confirmNewInscription(): void {
-    // this.subscriptions.push(
-    //   this.apiRequests.confirmInscriptionBySlug(this.inscriptionSlugNotConfirmed).subscribe({
-    //     next: (res) => {
-    //       this.modalText = res.message;
-    //       this.findWorkshopBySlug();
-    //       this.findInscriptionsByWorkshopBySlug();
-    //     },
-    //     error: (err) => this.anguilleSignal.changeMessage(err.error.message)
-    //   })
-    // )
+  changeQuantityInscription(addOrRemove: 'add-participant' | 'remove-participant', inscription: InscriptionDto): Observable<boolean> {
+    return this.apiRequests.changeQuantityInscription(addOrRemove, inscription).pipe(
+      map(res => {
+        return true;
+      }),
+      catchError(err => {
+        this.anguilleSignal.changeMessage(err.error.message);
+        return of(false);
+      })
+    );
   }
 
-  // responsePaypal(event: 'success' | 'cancel' | 'error'): void {
-  //   // this.modalVisible = true;
-  //   // if(event === 'success'){
-  //   //   this.confirmNewInscription();
-  //   // } else if(event === 'cancel'){
-  //   //   this.modalText = 'Annulation de la transaction Paypal.'
-  //   // } else if(event === 'error'){
-  //   //   this.modalText = 'Erreur Paypal.'
-  //   // }
-  // }
+  deleteInscriptionBySlug(slug: InscriptionDto['slug']): void {
+    this.subscriptions.push(
+      this.apiRequests.deleteInscriptionBySlug(slug).subscribe({
+        next: (res) => {
+          this.anguilleSignal.changeMessage(res.message);
+          this.shoppingCart.setShoppingCart();
+        },
+        error: (err) => this.anguilleSignal.changeMessage(err.error.message)
+      })
+    )
+  }
+
+  //-------------------
+  //--DELIVERY-OPTION--
+  //-------------------
+
+  private setDeliveryOptions(deliveryOptions: DeliveryOptionDto[]): void {
+    this.state.$privateDeliveryOptions.set(deliveryOptions);
+  }
+
+  getDeliveryOptionsAvailable(): void {
+    this.subscriptions.push(
+      this.apiRequests.getDeliveryOptionAvailable().subscribe({
+        next: (deliveryOptions) => this.setDeliveryOptions(deliveryOptions),
+        error: (err) => this.anguilleSignal.changeMessage(err.error.message)
+      })
+    )
+  }
+
+  //-------------------
+  //---SHOPPING-CART---
+  //-------------------
+
+  verifyShoppingCartValidity(): void {
+    let cart = this.shoppingCart.$userShoppingCart();
+    const MESSAGE_ITEM_CHANGE = "Quelque chose a changé dans votre panier !";
+
+    // on va rechercher via les slugs en BDD et on écrase systématiquement l'objet, pour être sûr de l'avoir à jour.
+    for (let notebook of cart.notebooks) {
+      this.subscriptions.push(
+        this.apiRequests.getNotebookBySlug(notebook.item.slug).subscribe({
+          next: (notebookDto: NotebookDto): void => {
+            if (!this.objectUtils.compareNotebook(notebookDto, notebook.item)) {
+              notebook.item = notebookDto;
+              this.shoppingCart.editCartInLocalStorage(cart);
+              this.modalSignal.showModal(MESSAGE_ITEM_CHANGE, false).subscribe();
+            }
+          },
+          error: (err): void => this.anguilleSignal.changeMessage(err.error.message)
+        })
+      )
+    }
+
+    for (let inscription of cart.inscriptions) {
+      this.subscriptions.push(
+        this.apiRequests.getInscriptionBySlug(inscription.item.slug).subscribe({
+          next: (inscriptionDto: InscriptionDto): void => {
+            if (!this.objectUtils.compareInscription(inscriptionDto, inscription.item)) {
+              inscription.item = inscriptionDto;
+              this.shoppingCart.editCartInLocalStorage(cart);
+              this.modalSignal.showModal(MESSAGE_ITEM_CHANGE, false);
+            }
+          },
+          error: (err): void => {
+            this.shoppingCart.deleteItemToShoppingCart(inscription.item, 'inscriptions');
+            this.anguilleSignal.changeMessage(err.error.message);
+          }
+        })
+      )
+    }
+  }
 }

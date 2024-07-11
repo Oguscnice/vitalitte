@@ -1,0 +1,206 @@
+<div class="title-functionality flex center">
+  <h4 class="flex center">Gérer les Cartes Cadeaux</h4>
+  <i class="fa-solid fa-arrow-down"
+     (click)="isTableVisible = !isTableVisible"
+     [ngClass]="{'rotated180': isTableVisible}">
+  </i>
+</div>
+
+@if (deliveryOptions() && deliveryOptions().length > 0 && isTableVisible) {
+  <table>
+    <thead>
+    <tr>
+      <td>
+        <p>Dispo</p>
+      </td>
+      <td>
+        <p>Nom & Transporteur</p>
+      </td>
+      <td>
+        <p>Prix</p>
+      </td>
+      <td>
+        <p>Express</p>
+      </td>
+      <td>
+        <p>Délai</p>
+      </td>
+      <td>
+        <p>Descr.</p>
+      </td>
+      <td>
+        <p>Modif.</p>
+      </td>
+      <td>
+        <p>Supp.</p>
+      </td>
+    </tr>
+    </thead>
+
+    <tbody>
+      @for (deliveryOption of deliveryOptions(); track deliveryOption; let index = $index) {
+        <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+          <td class="table-width-icon">
+            <div class="toggle-switch" (click)="adminDeliveryOptionSignal.changeAvailability(deliveryOption)">
+              <input class="toggle-input"
+                     type="checkbox"
+                     [checked]="deliveryOption.isAvailable">
+              <label class="toggle-label"></label>
+            </div>
+          </td>
+          <td>
+            <p class="title line-nowrap"> {{ deliveryOption.name }} <br>
+              ( {{ deliveryOption.carrier }} )
+            </p>
+          </td>
+          <td>
+            <p class="price line-nowrap">
+              {{ deliveryOption.price | customCurrency }}
+            </p>
+          </td>
+          <td class="table-width-icon">
+            <div class="toggle-switch" (click)="adminDeliveryOptionSignal.changeExpress(deliveryOption)">
+              <input class="toggle-input"
+                     type="checkbox"
+                     [checked]="deliveryOption.isExpress">
+              <label class="toggle-label"></label>
+            </div>
+          </td>
+          <td>
+            <p>
+              {{ deliveryOption.estimatedDeliveryTime }}
+            </p>
+          </td>
+          <td class="table-width-icon">
+            @if (deliveryOption.description) {
+              <i class="fa-solid fa-file-lines pointer flex center" (click)="modalSignal.showModal(deliveryOption.description, false)"></i>
+            }
+          </td>
+          <td class="table-width-icon">
+            @if (editDeliveryOptionForm.get('slug')!.value !== deliveryOption.slug) {
+              <i class="fa-solid fa-pencil pointer flex center" (click)="edit(deliveryOption)"></i>
+            } @else {
+              <i class="fa-solid fa-circle-xmark pointer flex center"  (click)="resetAllValues()"></i>
+            }
+          </td>
+          <td>
+            <i class="fa-solid fa-trash-can pointer flex center" (click)="adminDeliveryOptionSignal.confirmationModalForDeleteDeliveryOption(deliveryOption)"></i>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else if ((!deliveryOptions() || deliveryOptions().length < 1) && isTableVisible) {
+  <h5>Aucune Option de Livraison existante</h5>
+}
+
+@if (editDeliveryOptionForm.get('slug')!.value) {
+  <button id="editDeliveryOption"
+          class="btn-normal"
+          (click)="resetAllValues()">
+    Annuler l'édition
+  </button>
+  <form (ngSubmit)="(editDeliveryOptionForm.valid)"
+        [formGroup]="editDeliveryOptionForm"
+        #myForm="ngForm">
+    <fieldset class="flex column">
+      <label for="name">Libellé :</label>
+      <input type="text"
+             id="name"
+             placeholder="Libellé..."
+             formControlName="name"
+             autocomplete="off"/>
+
+      @if (isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['name'].invalid) {
+        <div>
+          @if (editDeliveryOptionForm.controls.name.errors?.['required']) {
+            <small>Le libellé est obligatoire.</small>
+          } @else if (editDeliveryOptionForm.controls.name.errors?.['maxlength']) {
+            <small>Le libellé ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="price">Prix :</label>
+      <input type="number"
+             id="price"
+             formControlName="price"
+             placeholder="0"/>
+      @if (isFormSubmit && editDeliveryOptionForm.controls['price'].invalid) {
+        <div>
+          @if (editDeliveryOptionForm.controls.price.errors?.['required']) {
+            <small>Le prix est obligatoire.</small>
+          } @else if (editDeliveryOptionForm.controls.price.errors?.['invalidPriceFormat']) {
+            <small>Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
+          } @else if (editDeliveryOptionForm.controls.price.errors?.['invalidPrice']) {
+            <small>Le prix ne peut pas être inférieur à 0€.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="estimatedDeliveryTime">Temps de livraison estimé :</label>
+      <input type="text"
+             id="estimatedDeliveryTime"
+             placeholder="2 - 4 jours..."
+             formControlName="estimatedDeliveryTime"
+             autocomplete="off"/>
+
+      @if (isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['estimatedDeliveryTime'].invalid) {
+        <div>
+          @if (editDeliveryOptionForm.controls.estimatedDeliveryTime.errors?.['required']) {
+            <small>Le temps de livraison estimé est obligatoire.</small>
+          } @else if (editDeliveryOptionForm.controls.estimatedDeliveryTime.errors?.['maxlength']) {
+            <small>Le temps de livraison estimé ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="carrier">Livreur :</label>
+      <input type="text"
+             id="carrier"
+             placeholder="La poste / UPS..."
+             formControlName="carrier"
+             autocomplete="off"/>
+
+      @if (isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['carrier'].invalid) {
+        <div>
+          @if (editDeliveryOptionForm.controls.carrier.errors?.['required']) {
+            <small>Le livreur est obligatoire.</small>
+          } @else if (editDeliveryOptionForm.controls.carrier.errors?.['maxlength']) {
+            <small>Le livreur ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="description">Description :</label>
+      <small>(optionnelle)</small>
+      <input type="text"
+             id="description"
+             placeholder="Infos..."
+             formControlName="description"
+             autocomplete="off"/>
+
+      @if (isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['description'].invalid) {
+        <div>
+          @if (editDeliveryOptionForm.controls.description.errors?.['maxlength']) {
+            <small>La description ne doit pas dépasser 500 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <button class="btn-submit-admin"
+            type="submit"
+            (click)="submitEditDeliveryOptionForm()">
+      Modifier
+    </button>
+  </form>
+}

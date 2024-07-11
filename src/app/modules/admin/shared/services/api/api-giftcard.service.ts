@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { CreateGiftCard } from '../../interfaces/GiftCard';
 import { Observable } from 'rxjs';
 import { ResponseEntity } from '../../../../../shared/interfaces/ResponseEntity';
-import { URLAPI } from '../../../../../shared/variables/Others';
+import { VITALITTE_PROJECT } from '../../../../../shared/variables/AppConfig';
 import { GiftCardDto } from '../../../../../shared/interfaces/GiftCard';
 
 @Injectable({
@@ -14,19 +14,19 @@ export class ApiGiftcardService {
   private http = inject(HttpClient);
 
   post(giftCard : CreateGiftCard): Observable<ResponseEntity>{
-    return this.http.post<ResponseEntity>(URLAPI + "/giftCards", giftCard)
+    return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/giftCards", giftCard)
   }
 
   getAll(): Observable<GiftCardDto[]>{
-    return this.http.get<GiftCardDto[]>(URLAPI + "/giftCards")
+    return this.http.get<GiftCardDto[]>(VITALITTE_PROJECT.back.url + "/giftCards")
   }
 
   getByCode(code : string): Observable<GiftCardDto>{
-    return this.http.get<GiftCardDto>(URLAPI + "/giftCards/" + code)
+    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + "/giftCards/" + code)
   }
 
   delete(giftCardSlug : GiftCardDto['slug']): Observable<ResponseEntity>{
-    return this.http.delete<ResponseEntity>(URLAPI + "/giftCards/" + giftCardSlug)
+    return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/giftCards/" + giftCardSlug)
   }
 
 }

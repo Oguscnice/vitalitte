@@ -59,7 +59,7 @@ export class ShoppingNotebooksListComponent implements OnInit {
     this.quantityIncreased = true;
     this.quantityDecreased = false;
     this.cartToAnimate = notebook.slug;
-    this.shoppingCart.subtractItem(notebook, 'notebooks')
+    this.shoppingCart.addItem(notebook, 'notebooks');
     setTimeout(() => {
       this.quantityIncreased = false;
     }, 200);
@@ -69,7 +69,7 @@ export class ShoppingNotebooksListComponent implements OnInit {
     this.quantityIncreased = false;
     this.quantityDecreased = true;
     this.cartToAnimate = notebook.slug;
-    this.shoppingCart.addItem(notebook, 'notebooks');
+    this.shoppingCart.subtractItem(notebook, 'notebooks')
     setTimeout(() => {
       this.quantityDecreased = false;
     }, 200);

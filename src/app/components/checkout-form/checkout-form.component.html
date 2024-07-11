@@ -1,0 +1,279 @@
+<form class="flex"
+      (ngSubmit)="(newOrder.valid)"
+      [formGroup]="newOrder"
+      #myForm="ngForm">
+  <fieldset class="gift-card-container flex column">
+    <label>Code promo (non cumulable) :</label>
+    <div class="gift-card-input-and-button flex space-between">
+      <input type="text"
+             autocomplete="off"
+             class="pointer"
+             [value]="inputValueGiftCard"
+             (keyup)="onKeyUpGiftCard($event)"/>
+      <button type="button"
+              class="btn-normal"
+              (click)="checkGiftCard()">
+        Appliquer
+      </button>
+    </div>
+    @if (giftCardActive$()) {
+      <div class="flex">
+        <p class="discount-details"> Code promo activé : {{ giftCardActive$()!.code }}</p>
+        <i class="fa-solid fa-trash-can pointer" (click)="shoppingCart.setGiftCardActive(null)"></i>
+      </div>
+      @if (giftCardActive$()!.percentage) {
+        <p class="discount-details"> Réduction de {{ giftCardActive$()!.rising }}% soit : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) - shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) | customCurrency }} de réduction !</p>
+      } @else {
+        <p class="discount-details"> Réduction de {{ giftCardActive$()!.rising | customCurrency }}</p>
+      }
+    }
+  </fieldset>
+  @if (shoppingCart.$userShoppingCart().notebooks.length > 0) {
+    <fieldset class="delivery-options flex column">
+      <label>Livraison</label>
+      <small>Frais de port offert pour toute commande supérieur à {{ VITALITTE_PROJECT.front.shipping.free | customCurrency }}</small>
+      <div class="flex center space-between">
+        <div class="dropdown-container">
+          <div class="input-and-arrow flex">
+            <input type="text"
+                   autocomplete="off"
+                   class="pointer"
+                   placeholder="Option de livraison"
+                   [value]="getDeliveryOptionValueForm()"
+                   (click)="toggleDropdown(!isDeliveryDropdownOpen, 'Delivery')"
+                   readonly/>
+            <div class="arrow-icone flex center">
+              @if (isDeliveryDropdownOpen) {
+                <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false, 'Delivery')"></i>
+              } @else {
+                <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true, 'Delivery')"></i>
+              }
+            </div>
+          </div>
+
+          <ul class="items-list" [ngClass]="{'dropdown-visible': isDeliveryDropdownOpen}">
+            @for (deliveryOption of deliveryOptions(); track deliveryOption) {
+              <li (click)="shoppingCart.setDeliveryOption(deliveryOption); toggleDropdown(false, 'Delivery') ">
+                {{ deliveryOption.name }} ({{ deliveryOption.carrier }})
+                délai de {{ deliveryOption.estimatedDeliveryTime }},
+                {{ shoppingCart.isDeliveryFree() ? 'Frais offert' : (deliveryOption.price | customCurrency) }}
+              </li>
+            }
+          </ul>
+        </div>
+        @if (deliveryOptionSelected$() && !shoppingCart.isDeliveryFree()) {
+          <p> {{ deliveryOptionSelected$()!.price | customCurrency }} </p>
+        }
+      </div>
+      @if (deliveryOptionSelected$() && shoppingCart.isDeliveryFree()) {
+        <small> Frais de port offert </small>
+      }
+      @if (isFormSubmit) {
+        <div>
+          @if (!deliveryOptionSelected$()) {
+            <small>Le type de livraison est obligatoire.</small>
+          }
+        </div>
+      }
+    </fieldset>
+  }
+
+  <fieldset class="flex column" formGroupName="name">
+    <label for="surname">Nom :</label>
+    <input type="text"
+           id="surname"
+           placeholder="Nom..."
+           formControlName="surname"
+           autocomplete="off"/>
+
+    @if (isFormSubmit && myForm.submitted && newOrder.controls.name.controls.surname.invalid) {
+      <div>
+        @if (newOrder.controls.name.controls.surname.errors?.['required']) {
+          <small>Le nom est obligatoire.</small>
+        } @else if (newOrder.controls.name.controls.surname.errors?.['maxlength']) {
+          <small>Le nom ne doit pas dépasser 255 charactères.</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="flex column" formGroupName="name">
+    <label for="given_name">Prénom :</label>
+    <input type="text"
+           id="given_name"
+           placeholder="Prénom..."
+           formControlName="given_name"
+           autocomplete="off"/>
+
+    @if (isFormSubmit && myForm.submitted && newOrder.controls.name.controls.given_name.invalid) {
+      <div>
+        @if (newOrder.controls.name.controls.given_name.errors?.['required']) {
+          <small>Le prénom est obligatoire.</small>
+        } @else if (newOrder.controls.name.controls.given_name.errors?.['maxlength']) {
+          <small>Le prénom ne doit pas dépasser 255 charactères.</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="email_address">Email :</label>
+    <input type="text"
+           id="email_address"
+           placeholder="Adresse email..."
+           formControlName="email_address"
+           autocomplete="off"/>
+
+    @if (isFormSubmit && myForm.submitted && newOrder.controls.email_address.invalid) {
+      <div>
+        @if (newOrder.controls.email_address.errors?.['required']) {
+          <small>L'adresse email est obligatoire.</small>
+        } @else if (newOrder.controls.email_address.errors?.['maxlength']) {
+          <small>L'adresse email ne doit pas dépasser 255 charactères.</small>
+        } @else if (newOrder.controls.email_address.errors?.['email']) {
+          <small>L'adresse email ne respecte pas le format d'un email.</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="flex column" formGroupName="address">
+    <label for="address_line_1">Adresse :</label>
+    <small>(Tapez au moins 3 caractères)</small>
+    <div class="dropdown-container">
+      <div class="input-and-arrow flex">
+        <input type="text"
+               id="address_line_1"
+               placeholder="Choississez votre adresse..."
+               autocomplete="off"
+               class="pointer"
+               (keyup)="apiBanService.searchAddress($event)"
+               (focus)="apiBanService.toggleDropdown(true)"
+               [value]="userAddress"/>
+        <div class="arrow-icone flex center">
+          @if (apiBanService.isDropdownBanOpen) {
+            <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
+          } @else {
+            <i class="fa-solid fa-circle-chevron-up pointer" (click)="apiBanService.toggleDropdown(false)"></i>
+          }
+        </div>
+      </div>
+      <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.addressList && apiBanService.addressList.length > 0}">
+        @for (address of apiBanService.addressList; track address) {
+          <li (click)="onAddressClicked(address); apiBanService.toggleDropdown(false) ">
+            {{ address.properties.label | titlecase }}
+          </li>
+        }
+      </ul>
+    </div>
+    @if (isFormSubmit && myForm.submitted && newOrder.controls.address.controls.address_line_1.invalid) {
+      <div>
+        @if (newOrder.controls.address.controls.address_line_1.errors?.['required']) {
+          <small>L'adresse est obligatoire.</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="flex column" formGroupName="address">
+    <label for="address_line_2">Complément d'information pour l'adresse :</label>
+    <input type="text"
+           id="address_line_2"
+           placeholder="Infos supplémentaire adresse..."
+           formControlName="address_line_2"
+           autocomplete="off"/>
+    @if (isFormSubmit && myForm.submitted && newOrder.controls.address.controls.address_line_2.invalid) {
+      <div>
+        @if (newOrder.controls.address.controls.address_line_2.errors?.['maxlength']) {
+          <small>Le complément d'information pour l'adresse ne doit pas dépasser 255 charactères.</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label for="national_number">Téléphone :</label>
+    <input
+      type="tel"
+      placeholder="06 11 22 33 44"
+      name="phone"
+      id="national_number"
+      formControlName="national_number"
+    />
+    @if (isFormSubmit && myForm.submitted && newOrder.controls['national_number'].invalid) {
+      <div>
+        @if (newOrder.controls.national_number.errors?.['required']) {
+          <small>Le téléphone est obligatoire.</small>
+        } @else if (newOrder.controls.national_number.errors?.['invalidPhone']) {
+          <small>Le téléphone doit être composé de 10 chiffres commençant par '0' (ex : 06 12 34 56 78) ou 12 charactères commençant par '+' (ex : +33 6 12 34 56 78).</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="flex column" formGroupName="address">
+    <label for="country_code">Pays :</label>
+    <div class="dropdown-container">
+      <div class="input-and-arrow flex">
+        <input type="text"
+               id="country_code"
+               placeholder="Choississez votre pays..."
+               autocomplete="off"
+               class="pointer"
+               [value]="countrySelected.name"
+               (click)="toggleDropdown(!isCountryCodeDropdownOpen,'CountryCode')"
+               readonly/>
+        <div class="arrow-icone flex center">
+          @if (isCountryCodeDropdownOpen) {
+            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(true, 'CountryCode')"></i>
+          } @else {
+            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(false, 'CountryCode')"></i>
+          }
+        </div>
+      </div>
+      <ul class="items-list" [ngClass]="{'dropdown-visible': isCountryCodeDropdownOpen}">
+        @for (country of COUNTRIES; track country) {
+          <li (click)="onCountryClicked(country); toggleDropdown(false, 'CountryCode') ">
+            {{ country.name }}
+          </li>
+        }
+      </ul>
+    </div>
+    @if (isFormSubmit && myForm.submitted && newOrder.controls.address.controls.country_code.invalid) {
+      <div>
+        @if (newOrder.controls.address.controls.country_code.errors?.['required']) {
+          <small>Le pays est obligatoire.</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <button type="submit"
+          class="display-none"
+          (click)="submitCheckoutForm()"
+          #submitForm>
+  </button>
+</form>
+
+<p class="total-resume"> Prix du (des) produit(s) sélectionné(s) : {{ shoppingCart.priceByTypeWithDiscount('notebooks', false) + shoppingCart.priceByTypeWithDiscount('inscriptions', false) | customCurrency }}</p>
+@if (giftCardActive$()) {
+  @if (giftCardActive$()!.percentage) {
+    <p class="total-resume"> Prix après réduction de {{ giftCardActive$()!.rising }}% (soit {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) - shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) | customCurrency }}): {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) | customCurrency }}</p>
+  } @else {
+    <p class="total-resume"> Réduction de {{ giftCardActive$()!.rising | customCurrency }}.</p>
+  }
+}
+@if (deliveryOptionSelected$()) {
+  @if (shoppingCart.isDeliveryFree()) {
+    <p class="total-resume"> Livraison offerte !</p>
+  } @else {
+    <p class="total-resume"> Livraison : {{ deliveryOptionSelected$()!.price | customCurrency }}</p>
+  }
+}
+<p class="total-price">Total : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, !shoppingCart.isDeliveryFree()) - (giftCardActive$() ? (giftCardActive$()!.percentage ? 0 : giftCardActive$()!.rising) : 0) | customCurrency }} </p>
+
+@if (isPaypalVisible()) {
+  <app-paypal
+    [userInfo]="getFormConvertToUserCheckoutInfo(newOrder)"
+    (click)="submitForm.click()"></app-paypal>
+}

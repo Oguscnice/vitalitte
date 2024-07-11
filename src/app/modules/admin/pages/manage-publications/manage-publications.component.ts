@@ -5,9 +5,7 @@ import { Component } from '@angular/core';
   selector: 'app-manage-publications',
   template: `
               <app-return-admin-home/>
-
               <h2>Gestion des Publications</h2>
-
               <app-post-publication/>
               <app-edit-delete-publication/>
   `,

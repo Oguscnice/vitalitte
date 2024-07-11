@@ -13,5 +13,5 @@ export interface CreateWorkshop {
 
 export interface WorkshopDisponibilities {
   workshopSlug: WorkshopDto['slug'],
-  disponibilities: number
+  registrationsReserved: number
 }

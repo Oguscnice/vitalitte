@@ -43,7 +43,7 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
 
   publications: Signal<PublicationDto[]> = this.dataSignal.$publications;
 
-  isTableVisible: boolean = false;
+  isTableVisible: boolean = true;
   isFormSubmit : boolean = false;
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR

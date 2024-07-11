@@ -59,7 +59,7 @@
             @if (publication.slug !== editPublicationForm.get('slug')!.value) {
               <i class="fa-solid fa-pencil pointer flex center" (click)="patchFormValue(publication)"></i>
             } @else {
-              <i class="fa-solid fa-circle-xmark flex center" (click)="patchFormValue(null)"></i>
+              <i class="fa-solid fa-circle-xmark pointer flex center" (click)="patchFormValue(null)"></i>
             }
           </td>
           <td>

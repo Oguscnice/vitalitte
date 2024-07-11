@@ -38,7 +38,7 @@ import { PublicationThumbnailComponent } from './components/publication-thumbnai
 import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
 import { WorkshopThumbnailComponent } from './components/workshop-thumbnail/workshop-thumbnail.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { TitleCasePipe } from '@angular/common';
+import {CurrencyPipe, DecimalPipe, TitleCasePipe} from '@angular/common';
 import { AnguilleComponent } from './components/anguille/anguille.component';
 import {
     ChangeSizePaginationAndValueSearchComponent
@@ -47,6 +47,9 @@ import {
   ChangePageButtonsPagination
 } from "./components/change-page-buttons-pagination/change-page-buttons-pagination.component";
 import {CheckoutComponent} from "./pages/checkout/checkout.component";
+import {CustomCurrencyPipe} from "./shared/services/pipes/custom-currency.pipe";
+import {ReactiveFormsModule} from "@angular/forms";
+import {CheckoutFormComponent} from "./components/checkout-form/checkout-form.component";
 
 
 @NgModule({
@@ -68,37 +71,42 @@ import {CheckoutComponent} from "./pages/checkout/checkout.component";
     PublicationSelectedComponent,
     CheckoutComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    RouterLink,
-    TitleCasePipe,
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        RouterLink,
+        TitleCasePipe,
 
-    HeaderComponent,
-    NewsHeadbandComponent,
-    H1Component,
-    FooterComponent,
-    UpArrowComponent,
-    ImagesPreviewComponent,
-    ValuesComponent,
-    ShoppingNotebooksListComponent,
-    ChoicesPersonalizedCreationComponent,
-    PaypalComponent,
-    ContactFormComponent,
-    NotebooksListComponent,
-    PublicationThumbnailComponent,
-    WorkshopThumbnailComponent,
-    ModalComponent,
-    AnguilleComponent,
-    ChangeSizePaginationAndValueSearchComponent,
-    ChangePageButtonsPagination
-  ],
+        HeaderComponent,
+        NewsHeadbandComponent,
+        H1Component,
+        FooterComponent,
+        UpArrowComponent,
+        ImagesPreviewComponent,
+        ValuesComponent,
+        ShoppingNotebooksListComponent,
+        ChoicesPersonalizedCreationComponent,
+        PaypalComponent,
+        ContactFormComponent,
+        NotebooksListComponent,
+        PublicationThumbnailComponent,
+        WorkshopThumbnailComponent,
+        ModalComponent,
+        AnguilleComponent,
+        ChangeSizePaginationAndValueSearchComponent,
+        ChangePageButtonsPagination,
+        CustomCurrencyPipe,
+        ReactiveFormsModule,
+        CheckoutFormComponent
+    ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
+    CurrencyPipe,
+    DecimalPipe,
     AuthGuard,
     httpInterceptorProviders
   ],
