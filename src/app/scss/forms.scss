@@ -5,6 +5,7 @@ input {
   border-radius: 4px;
   padding: .15rem .5rem;
   height: 40px;
+  font-size: $double-font-size;
 }
 
 input:focus {
@@ -58,7 +59,7 @@ form {
 
     select,
     input {
-      margin-top : $normal-margin;
+      margin-top : $half-margin;
       width: 100%;
     }
 

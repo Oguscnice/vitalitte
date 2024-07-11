@@ -11,7 +11,6 @@ import { CollectionDto } from 'src/app/shared/interfaces/Collection';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../shared/variables/Other';
 import { FormHelperService } from '../../shared/services/form-helper.service';
 import { DataSignalService } from 'src/app/shared/services/data-signal.service';
-import { Subscription } from 'rxjs';
 import { SecondaryPictureDto } from 'src/app/shared/interfaces/SecondaryPicture';
 import { AdminNotebookSignalService } from '../../shared/services/admin-notebook-signal.service';
 import { FileInfo } from '../../shared/interfaces/FileInfo';

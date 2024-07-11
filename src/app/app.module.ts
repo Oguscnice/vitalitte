@@ -49,6 +49,7 @@ import {
 import {CheckoutComponent} from "./pages/checkout/checkout.component";
 import {CustomCurrencyPipe} from "./shared/services/pipes/custom-currency.pipe";
 import {ReactiveFormsModule} from "@angular/forms";
+import {CheckoutFormComponent} from "./components/checkout-form/checkout-form.component";
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import {ReactiveFormsModule} from "@angular/forms";
         ChangeSizePaginationAndValueSearchComponent,
         ChangePageButtonsPagination,
         CustomCurrencyPipe,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CheckoutFormComponent
     ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

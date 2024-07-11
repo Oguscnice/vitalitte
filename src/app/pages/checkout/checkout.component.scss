@@ -53,45 +53,14 @@ table {
   }
 }
 
-.gift-card-and-delivery {
-  flex-direction: column;
+app-checkout-form {
   width: 100%;
-
-  .gift-card-container {
-    .gift-card-input-and-button {
-      input {
-        width: 80%;
-      }
-      button {
-        //margin: 0;
-        margin-top : $normal-margin;
-        height: 40px;
-        padding: 0 $normal-padding;
-        font-size: $normal-font-size;
-      }
-    }
-    .discount-details {
-      width: 100%;
-      text-align: left;
-    }
-  }
-}
-
-.total-price {
-  width: 100%;
-  text-align: right;
-  font-weight: bolder;
-  font-size: $triple-font-size;
-  padding-top: $triple-padding ;
 }
 
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   table {
-    max-width: $max-width-768px;
-  }
-  .total-price {
     max-width: $max-width-768px;
   }
 }

@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { FormGroup } from '@angular/forms';
-import { URLAPI } from '../variables/Others';
 import { Observable } from 'rxjs';
+import {VITALITTE_PROJECT} from "../variables/AppConfig";
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +15,11 @@ export class AuthService {
   private router = inject(Router);
 
   public signup(form: FormGroup): Observable<any> {
-    return this.http.post(URLAPI + 'auth/signup', form.value);
+    return this.http.post(VITALITTE_PROJECT.back.url + 'auth/signup', form.value);
   }
 
   public signin(email: string, password: string): Observable<any> {
-    return this.http.post(URLAPI + 'auth/signin', {
+    return this.http.post(VITALITTE_PROJECT.back.url + 'auth/signin', {
       email: email,
       password: password,
     });

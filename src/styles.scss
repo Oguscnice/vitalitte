@@ -302,6 +302,10 @@ hr {
   white-space: nowrap;
 }
 
+.strike-through {
+  text-decoration: line-through;
+}
+
 @keyframes appearLinear {
   0% {
     z-index: $z-index + 10;

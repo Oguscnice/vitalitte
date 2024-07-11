@@ -30,6 +30,7 @@ import { AnguilleSignalService } from '../../shared/services/anguille-signal.ser
                 padding : $fourth-padding;
                 margin-bottom: $half-margin;
                 transition: right 1s linear;
+                word-break: normal;
                 overflow-y: hidden;
                 @include outline-picture;
               }

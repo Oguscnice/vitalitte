@@ -8,6 +8,9 @@ import {AnguilleSignalService} from "./anguille-signal.service";
 import {GiftCardDto} from "../interfaces/GiftCard";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {InscriptionDto} from "../interfaces/Inscription";
+import {VITALITTE_PROJECT} from "../variables/AppConfig";
+import {BehaviorSubject, Observable} from "rxjs";
+import {ModalSignalService} from "./modal-signal.service";
 
 type ShoppingCartItemUnion =
   | { item: NotebookDto; quantity: number }
@@ -20,16 +23,19 @@ export class ShoppingCartService extends BaseComponent {
 
   private apiRequests = inject(ApiRequestsService);
   private anguilleSignal = inject(AnguilleSignalService);
+  private modalSignal = inject(ModalSignalService);
 
   private readonly state: ShoppingCartSignalState = {
     $privateUserShoppingCart: signal<ShoppingCart>({ notebooks: [], inscriptions: []}),
     $privateDeliveryOption: signal<DeliveryOptionDto | null>(null),
     $privateGiftCardActive: signal<GiftCardDto | null>(null),
+    $privateShoppingCartSignalChanges: new BehaviorSubject<number>(0),
   }
 
   public readonly $userShoppingCart: Signal<ShoppingCart> = this.state.$privateUserShoppingCart.asReadonly();
   public readonly $userDeliveryOption: Signal<DeliveryOptionDto | null> = this.state.$privateDeliveryOption.asReadonly();
   public readonly $userGiftCardActive: Signal<GiftCardDto | null> = this.state.$privateGiftCardActive.asReadonly();
+  public readonly $shoppingCartSignalChanges: Observable<number> = this.state.$privateShoppingCartSignalChanges.asObservable();
 
   private getValueLocalStorage(): ShoppingCart {
     return localStorage.getItem('userCartVitalitte') ?
@@ -40,16 +46,22 @@ export class ShoppingCartService extends BaseComponent {
       };
   }
 
+  setShoppingCartChanges(): void {
+    this.state.$privateShoppingCartSignalChanges.next(1);
+  }
+
   setShoppingCart(): void {
     this.state.$privateUserShoppingCart.set(this.getValueLocalStorage());
   }
 
   setDeliveryOption(value: DeliveryOptionDto | null): void {
     this.state.$privateDeliveryOption.set(value);
+    this.setShoppingCartChanges();
   }
 
   setGiftCardActive(value: GiftCardDto | null): void {
     this.state.$privateGiftCardActive.set(value);
+    this.setShoppingCartChanges();
   }
 
   includesInShoppingCart(itemToVerify: InscriptionDto | NotebookDto, type: 'notebooks' | 'inscriptions'): boolean {
@@ -65,10 +77,8 @@ export class ShoppingCartService extends BaseComponent {
 
     this.setShoppingCart();
     let itemsPaypal: any = [];
-    let totalPrice = 0;
 
     for (const NOTEBOOK of this.$userShoppingCart().notebooks) {
-      totalPrice += NOTEBOOK.quantity * this.applyDiscount(NOTEBOOK.item.price)
       itemsPaypal.push({
         name: ("Carnet : " + NOTEBOOK.item.name),
         quantity: NOTEBOOK.quantity.toString(),
@@ -79,7 +89,6 @@ export class ShoppingCartService extends BaseComponent {
       })
     }
     for (const INSCRIPTION of this.$userShoppingCart().inscriptions) {
-      totalPrice += INSCRIPTION.quantity * this.applyDiscount(INSCRIPTION.item.workshopDto.price)
 
       itemsPaypal.push({
         name: ("Atelier : " + INSCRIPTION.item.workshopDto.title + " du " + INSCRIPTION.item.workshopDto.date),
@@ -90,36 +99,12 @@ export class ShoppingCartService extends BaseComponent {
         },
       })
     }
-    console.log("priceItems no delivery : " + this.convertPriceToFormatExpected(totalPrice));
-
-    totalPrice += this.convertPriceToFormatExpected(this.$userDeliveryOption()!.price)
-
-    console.log("priceItems delivery : " + this.convertPriceToFormatExpected(totalPrice));
-
-    // itemsPaypal.push({
-    //   name: ("Livraison : " + this.$userDeliveryOption()!.name + " par " + this.$userDeliveryOption()!.carrier + " délai estimé à " + this.$userDeliveryOption()!.estimatedDeliveryTime),
-    //   quantity: 1,
-    //   unit_amount: {
-    //     currency_code: 'EUR',
-    //     value: this.convertPriceToFormatExpected(this.$userDeliveryOption()!.price).toString(),
-    //   },
-    // })
-
-    if (this.$userGiftCardActive() && !this.$userGiftCardActive()?.percentage) {
-      itemsPaypal.push({
-        name: ("Réduction"),
-        quantity: 1,
-        unit_amount: {
-          currency_code: 'EUR',
-          value: (-this.$userGiftCardActive()!.rising).toString(),
-        },
-      })
-    }
-
     return itemsPaypal;
   }
 
-  editCartInLocalStorage(shoppingCart : ShoppingCart): void {
+  editCartInLocalStorage(shoppingCart: ShoppingCart): void {
+    console.log("shoppingCart")
+    console.log(shoppingCart)
     localStorage.setItem('userCartVitalitte', JSON.stringify(shoppingCart));
     this.setShoppingCart();
   }
@@ -142,18 +127,20 @@ export class ShoppingCartService extends BaseComponent {
     return totalQuantity;
   }
 
-  priceByType(type: 'notebooks' | 'inscriptions'): number {
+  priceByTypeWithDiscount(type: 'notebooks' | 'inscriptions', applyDiscount: boolean): number {
 
     let totalPriceByType = 0;
 
     if (this.$userShoppingCart()[type].length > 0) {
       if (type === 'notebooks') {
         this.$userShoppingCart()[type].forEach(item => {
-          totalPriceByType += item.quantity * item.item.price;
+          const itemPrice = applyDiscount ? this.applyDiscount(item.item.price) : item.item.price;
+          totalPriceByType += item.quantity * itemPrice;
         });
       } else if (type === 'inscriptions') {
         this.$userShoppingCart()[type].forEach(item => {
-          totalPriceByType += item.item.quantity * item.item.workshopDto.price;
+          const itemPrice = applyDiscount ? this.applyDiscount(item.item.workshopDto.price) : item.item.workshopDto.price;
+          totalPriceByType += item.item.quantity * itemPrice;
         });
       }
     }
@@ -166,10 +153,12 @@ export class ShoppingCartService extends BaseComponent {
   }
 
   getDeliveryPrice(): number {
-    if (this.$userDeliveryOption()) {
-      return this.$userDeliveryOption()!.price;
-    }
-    return 0
+    return this.$userDeliveryOption() ? this.$userDeliveryOption()!.price : 0;
+  }
+
+  isDeliveryFree(): boolean {
+    const TOTAL_PRICE = this.getTotalPriceWithGiftCardAndDelivery(true,false);
+    return TOTAL_PRICE > VITALITTE_PROJECT.front.shipping.free;
   }
 
   applyDiscount(originalPrice: number): number {
@@ -177,8 +166,6 @@ export class ShoppingCartService extends BaseComponent {
       if (this.$userGiftCardActive()!.percentage) {
         const DISCOUNT = this.convertPriceToFormatExpected(originalPrice * (this.$userGiftCardActive()!.rising / 100));
         return originalPrice - DISCOUNT;
-      } else if (!this.$userGiftCardActive()!.percentage) {
-        return this.convertPriceToFormatExpected(originalPrice - this.$userGiftCardActive()!.rising);
       }
     }
     return this.convertPriceToFormatExpected(originalPrice);
@@ -197,13 +184,17 @@ export class ShoppingCartService extends BaseComponent {
 
     for (const INSCRIPTION of this.$userShoppingCart().inscriptions) {
       let itemPrice = INSCRIPTION.item.workshopDto.price
-      if (this.$userGiftCardActive() && this.$userGiftCardActive()!.percentage && applyGiftCard) {
+      if (this.$userGiftCardActive() && applyGiftCard) {
         itemPrice = this.applyDiscount(INSCRIPTION.item.workshopDto.price);
       }
       totalPrice += itemPrice * INSCRIPTION.item.quantity;
     }
 
-    if (this.$userDeliveryOption() && applyDeliveryPrice) {
+    // if (applyGiftCard && this.$userGiftCardActive() && !this.$userGiftCardActive()?.percentage) {
+    //   totalPrice -= this.$userGiftCardActive()!.rising;
+    // }
+
+    if (applyDeliveryPrice && this.$userDeliveryOption()) {
       totalPrice += this.getDeliveryPrice();
     }
 
@@ -230,6 +221,7 @@ export class ShoppingCartService extends BaseComponent {
     }
 
     this.editCartInLocalStorage(cart);
+    this.setShoppingCartChanges();
   }
 
   subtractItem(itemToSubtract: NotebookDto | InscriptionDto, type: 'notebooks' | 'inscriptions'): void {
@@ -251,6 +243,7 @@ export class ShoppingCartService extends BaseComponent {
         }
       }
     }
+    this.setShoppingCartChanges();
   }
 
   deleteItemToShoppingCart(itemToDelete: InscriptionDto | NotebookDto, type: 'notebooks' | 'inscriptions'): void {
@@ -263,11 +256,17 @@ export class ShoppingCartService extends BaseComponent {
       cart.inscriptions = cart.inscriptions.filter(item => item.item.slug !== itemToDelete.slug) as ShoppingCartItem<InscriptionDto>[];
     }
     this.editCartInLocalStorage(cart);
+    this.setShoppingCartChanges();
   }
 
   paymentSuccess(): void {
+    const USER_MESSAGE_SUCCESS = "Commande réalisée avec succès !"
     this.confirmNewInscription();
     this.cleanLocalStorage();
+    this.modalSignal.showModal(USER_MESSAGE_SUCCESS, false).subscribe({
+      next: () => true,
+      error: (err) => this.anguilleSignal.changeMessage(err.error.message)
+    });
   }
 
   confirmNewInscription(): void {
@@ -286,5 +285,6 @@ export class ShoppingCartService extends BaseComponent {
 
   cleanLocalStorage(): void{
     localStorage.removeItem('userCartVitalitte');
+    this.setShoppingCart();
   }
 }

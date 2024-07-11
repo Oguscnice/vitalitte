@@ -1,11 +1,12 @@
 <app-h1 [titleChild]="'Panier'" [backgroundImageChild]="backgroundImageParentCreations"/>
 
-@if (cart().notebooks.length < 1 && cart().inscriptions.length < 1) {
+@if (shoppingCart$().notebooks.length < 1 && shoppingCart$().inscriptions.length < 1) {
+
   <h3>Votre panier est vide...</h3>
   <img src="../../../assets/images/figma/caddie-vide.jpg" alt="Un caddie miniature devant un ordinateur">
 } @else {
   <h2>Actuellement dans le panier</h2>
-  @if (cart().notebooks.length > 0) {
+  @if (shoppingCart$().notebooks.length > 0) {
     <table>
       <thead>
         <tr>
@@ -17,10 +18,15 @@
         </tr>
       </thead>
       <tbody>
-        @for (notebook of cart().notebooks; track notebook; let index = $index) {
+        @for (notebook of shoppingCart$().notebooks; track notebook; let index = $index) {
           <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
             <td class="label-column"> {{ notebook.item.name }} </td>
-            <td class="price-column line-nowrap"> {{ notebook.item.price | customCurrency }} </td>
+            <td class="price-column line-nowrap flex column">
+              <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ notebook.item.price | customCurrency }} </p>
+              @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
+                <p> {{ shoppingCart.applyDiscount(notebook.item.price) | customCurrency }} </p>
+              }
+            </td>
             <td class="quantity-column">
               <div class="flex center space-around">
                 <i class="fa-solid fa-circle-minus manage-icon pointer"
@@ -35,7 +41,12 @@
                    [ngClass]="{'pulse-add': quantityIncreased && itemSlug === notebook.item.slug }"></i>
               </div>
             </td>
-            <td class="price-column line-nowrap"> {{ notebook.quantity * notebook.item.price | customCurrency }} </td>
+            <td class="price-column line-nowrap flex column">
+              <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ notebook.quantity * notebook.item.price | customCurrency }} </p>
+              @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
+                <p> {{ notebook.quantity * shoppingCart.applyDiscount(notebook.item.price) | customCurrency }} </p>
+              }
+            </td>
             <td class="quantity-column"> <i class="fa-solid fa-trash-can pointer" (click)="shoppingCart.deleteItemToShoppingCart(notebook.item, 'notebooks')"></i> </td>
           </tr>
         }
@@ -43,12 +54,17 @@
       <tfoot>
         <tr>
           <th class="label-column  line-nowrap total-by-type-column" scope="row" colspan="4"> Total {{ shoppingCart.counterQuantityByType('notebooks') }} carnet(s) : </th>
-          <td class="price-column line-nowrap total-by-type-column"> {{ shoppingCart.priceByType('notebooks') | customCurrency }} </td>
+          <td class="price-column line-nowrap total-by-type-column flex column">
+            <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ shoppingCart.priceByTypeWithDiscount('notebooks', false) | customCurrency }} </p>
+            @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
+              <p> {{ shoppingCart.priceByTypeWithDiscount('notebooks', true) | customCurrency }} </p>
+            }
+          </td>
         </tr>
       </tfoot>
     </table>
   }
-  @if (cart().inscriptions.length > 0) {
+  @if (shoppingCart$().inscriptions.length > 0) {
     <table>
       <thead>
         <tr>
@@ -60,10 +76,15 @@
         </tr>
       </thead>
       <tbody>
-      @for (inscription of cart().inscriptions; track inscription; let index = $index) {
+      @for (inscription of shoppingCart$().inscriptions; track inscription; let index = $index) {
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
           <td class="label-column"> {{ inscription.item.workshopDto.title }} ({{ inscription.item.workshopDto.date | date:'dd/MM/yy à hh:mm' }}) </td>
-          <td class="price-column line-nowrap"> {{ inscription.item.workshopDto.price | customCurrency }} </td>
+          <td class="price-column line-nowrap">
+            <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ inscription.item.workshopDto.price | customCurrency }} </p>
+            @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
+              <p> {{ shoppingCart.applyDiscount(inscription.item.workshopDto.price) | customCurrency }} </p>
+            }
+          </td>
           <td class="quantity-column">
             <div class="flex center space-around">
               <i class="fa-solid fa-circle-minus manage-icon pointer"
@@ -75,14 +96,21 @@
               </i>
               <p> {{ inscription.quantity }} </p>
               <i class="fa-solid fa-circle-plus manage-icon pointer"
-                 (click)="getAvailableRegistrations(inscription.item) > 0 ? increase(inscription.item, 'inscriptions') : false"
+                 (click)="getAvailableRegistrations(inscription.item) > 0 && inscription.item.quantity < 5 ? increase(inscription.item, 'inscriptions') : false"
                  [ngClass]="{
                  'pulse-add': quantityIncreased && itemSlug === inscription.item.slug,
                  'disabled': inscription.quantity > 4  || getAvailableRegistrations(inscription.item) < 1
                  }"></i>
             </div>
           </td>
-          <td class="price-column line-nowrap"> {{ inscription.quantity * inscription.item.workshopDto.price | customCurrency }} </td>
+          <td class="price-column line-nowrap flex column">
+            <p  [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}">
+              {{ inscription.quantity * inscription.item.workshopDto.price | customCurrency }}
+            </p>
+            @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
+              <p> {{ inscription.quantity * shoppingCart.applyDiscount(inscription.item.workshopDto.price) | customCurrency }} </p>
+            }
+          </td>
           <td class="quantity-column">
             <i class="fa-solid fa-trash-can pointer" (click)="deleteInscription(inscription)"></i> </td>
         </tr>
@@ -91,95 +119,16 @@
         <tfoot>
           <tr>
             <th class="label-column total-by-type-column" scope="row" colspan="4"> Total {{ shoppingCart.counterQuantityByType('inscriptions') }} inscription(s) d'atelier(s) : </th>
-            <th class="price-column line-nowrap total-by-type-column"> {{ shoppingCart.priceByType('inscriptions') | customCurrency }} </th>
+            <th class="price-column line-nowrap total-by-type-column">
+              <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ shoppingCart.priceByTypeWithDiscount('inscriptions', false) | customCurrency }} </p>
+              @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
+                <p> {{ shoppingCart.priceByTypeWithDiscount('inscriptions', true) | customCurrency }} </p>
+              }
+            </th>
           </tr>
       </tfoot>
     </table>
   }
 
-  <form class="gift-card-and-delivery flex">
-    <fieldset class="gift-card-container flex column">
-      <label>Code promo (non cumulable) :</label>
-      <div class="gift-card-input-and-button flex space-between">
-        <input type="text"
-               autocomplete="off"
-               class="pointer"
-               [value]="inputValueGiftCard"
-               (keyup)="onKeyUpGiftCard($event)"/>
-        <button type="button"
-                class="btn-normal"
-                (click)="checkGiftCard()">
-          Appliquer
-        </button>
-      </div>
-      @if (giftCardActive()) {
-        <div class="flex">
-          <p class="discount-details"> Code promo activé : {{ giftCardActive()!.code }}</p>
-          <i class="fa-solid fa-trash-can pointer" (click)="shoppingCart.setGiftCardActive(null)"></i>
-        </div>
-        <p class="discount-details"> Total avant réduction (sans livraison) : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) | customCurrency }}</p>
-        @if (giftCardActive()!.percentage) {
-          <p class="discount-details"> Réduction de {{ giftCardActive()!.rising }}% soit : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) - shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) | customCurrency }} de réduction !</p>
-        } @else {
-          <p class="discount-details"> Réduction de {{ giftCardActive()!.rising | customCurrency }}</p>
-        }
-        <p class="discount-details"> Total après réduction : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) }}</p>
-
-      }
-    </fieldset>
-    @if (shoppingCart.$userShoppingCart().notebooks.length > 0) {
-      <fieldset class="delivery-options flex column">
-        <label>Livraison</label>
-        <div class="flex center space-between">
-          <div class="dropdown-container">
-            <div class="input-and-arrow flex">
-              <input type="text"
-                     autocomplete="off"
-                     class="pointer"
-                     placeholder="Option de livraison"
-                     [value]="getDeliveryOptionValueForm()"
-                     (click)="toggleDropdown(!isDeliveryDropdownOpen)"
-                     readonly/>
-              <div class="arrow-icone flex center">
-                @if (isDeliveryDropdownOpen) {
-                  <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false)"></i>
-                } @else {
-                  <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true)"></i>
-                }
-              </div>
-            </div>
-
-            <ul class="items-list" [ngClass]="{'dropdown-visible': isDeliveryDropdownOpen}">
-              @for (deliveryOption of deliveryOptions(); track deliveryOption) {
-                <li (click)="shoppingCart.setDeliveryOption(deliveryOption); toggleDropdown(false) ">
-                  {{ deliveryOption.name }} ({{ deliveryOption.carrier }}) {{ deliveryOption.price | customCurrency }}, délai de {{ deliveryOption.estimatedDeliveryTime }}
-                </li>
-              }
-            </ul>
-          </div>
-          @if (deliveryOptionSelected()) {
-            <p> {{ deliveryOptionSelected()!.price | customCurrency }} </p>
-          }
-        </div>
-        @if (isFormSubmit) {
-          <div>
-            @if (!deliveryOptionSelected()) {
-              <small>Le type de livraison est obligatoire.</small>
-            }
-          </div>
-        }
-      </fieldset>
-    }
-    <button type="button"
-            class="display-none"
-            (click)="submitCheckoutForm()"
-            #submitForm>
-    </button>
-  </form>
-
-  <p class="total-price">Total : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, true) | customCurrency }} </p>
-
-  @if ((deliveryOptionSelected() && shoppingCart.$userShoppingCart().notebooks.length > 0) || shoppingCart.$userShoppingCart().notebooks.length === 0) {
-    <app-paypal (click)="submitForm.click()"></app-paypal>
-  }
+  <app-checkout-form></app-checkout-form>
 }

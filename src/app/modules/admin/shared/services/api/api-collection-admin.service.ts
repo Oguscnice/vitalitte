@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CollectionDto } from '../../../../../shared/interfaces/Collection';
 import { ResponseEntity } from '../../../../../shared/interfaces/ResponseEntity';
-import { URLAPI } from '../../../../../shared/variables/Others';
+import { VITALITTE_PROJECT } from '../../../../../shared/variables/AppConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +13,14 @@ export class ApiCollectionAdminService {
   private http = inject(HttpClient)
 
   post(collectionName : CollectionDto['name']): Observable<ResponseEntity>{
-    return this.http.post<ResponseEntity>(URLAPI + "/collections", collectionName)
+    return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/collections", collectionName)
   }
 
   put(collection : CollectionDto): Observable<ResponseEntity>{
-    return this.http.put<ResponseEntity>(URLAPI + "/collections/" + collection.slug, collection)
+    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/collections/" + collection.slug, collection)
   }
 
   delete(collectionSlug : CollectionDto['slug']): Observable<ResponseEntity>{
-    return this.http.delete<ResponseEntity>(URLAPI + "/collections/" + collectionSlug)
+    return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/collections/" + collectionSlug)
   }
 }

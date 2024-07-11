@@ -51,18 +51,6 @@ export class PostWorkshopComponent extends BaseComponent implements OnInit {
     this.fileUploadService.patchImage(this.newWorkshopForm, this.fileUploadService.imageActivityDefault, this.fileUploadService.imageActivityDefaultThumbnail)
   }
 
-  searchAddress(event: KeyboardEvent): void {
-    const INPUT_ELEMENT: HTMLInputElement = event.target as HTMLInputElement;
-    if (INPUT_ELEMENT.value.length > 3) {
-      this.subscriptions.push(
-        this.apiBanService.getAddress(INPUT_ELEMENT.value).subscribe({
-          next: (address): void => this.apiBanService.addressList = address.features,
-          error: (err): void => this.anguilleSignal.changeMessage(err.error.message)
-        })
-      )
-    }
-  }
-
   onFileSelected(event: Event, form: FormGroup): void {
     this.fileUploadService.onFileSelected(event, form).subscribe();
   }

@@ -3,7 +3,6 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MaterialDto } from '../interfaces/Material';
-import { URLAPI } from '../variables/Others';
 import { NotebookDto } from '../interfaces/Notebook';
 import { CategoryDto } from '../interfaces/Category';
 import { CollectionDto } from '../interfaces/Collection';
@@ -14,6 +13,7 @@ import { PublicationDto } from '../interfaces/Publication';
 import {PaginationWithSearchValue} from '../interfaces/Pagination';
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../interfaces/GiftCard";
+import {VITALITTE_PROJECT} from "../variables/AppConfig";
 
 @Injectable({
   providedIn: 'root',
@@ -26,15 +26,15 @@ export class ApiRequestsService {
   //-----Matériels-----
   //-------------------
   getAllMaterials(): Observable<MaterialDto[]> {
-    return this.http.get<MaterialDto[]>(URLAPI + "/materials")
+    return this.http.get<MaterialDto[]>(VITALITTE_PROJECT.back.url + "/materials")
   }
 
   getMaterialBySlug(materialSlug: MaterialDto['slug']): Observable<MaterialDto> {
-    return this.http.get<MaterialDto>(URLAPI + "/materials/" + materialSlug)
+    return this.http.get<MaterialDto>(VITALITTE_PROJECT.back.url + "/materials/" + materialSlug)
   }
 
   getAllMaterialsTypes(): Observable<string[]>{
-    return this.http.get<string[]>(URLAPI + "/materials/types")
+    return this.http.get<string[]>(VITALITTE_PROJECT.back.url + "/materials/types")
   }
 
   //-------------------
@@ -42,19 +42,19 @@ export class ApiRequestsService {
   //-------------------
 
   getAllNotebooks(): Observable<NotebookDto[]> {
-    return this.http.get<NotebookDto[]>(URLAPI + "/notebooks")
+    return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks")
   }
 
   getNotebookBySlug(notebookSlug : NotebookDto['slug']): Observable<NotebookDto> {
-    return this.http.get<NotebookDto>(URLAPI + "/notebooks/" + notebookSlug)
+    return this.http.get<NotebookDto>(VITALITTE_PROJECT.back.url + "/notebooks/" + notebookSlug)
   }
 
   getNotebooksByCategorySlug(categorySlug : CategoryDto['slug']): Observable<NotebookDto[]> {
-    return this.http.get<NotebookDto[]>(URLAPI + "/notebooks/category/" + categorySlug)
+    return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/category/" + categorySlug)
   }
 
   getNotebooksByCollectionSlug(collectionSlug : CollectionDto['slug']): Observable<NotebookDto[]> {
-    return this.http.get<NotebookDto[]>(URLAPI + "/notebooks/collection/" + collectionSlug)
+    return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/collection/" + collectionSlug)
   }
 
   //-------------------
@@ -62,7 +62,7 @@ export class ApiRequestsService {
   //-------------------
 
   getAllCategories(): Observable<CategoryDto[]> {
-    return this.http.get<CategoryDto[]>(URLAPI + "/categories")
+    return this.http.get<CategoryDto[]>(VITALITTE_PROJECT.back.url + "/categories")
   }
 
   //-------------------
@@ -70,7 +70,7 @@ export class ApiRequestsService {
   //-------------------
 
   getAllCollections(): Observable<CollectionDto[]> {
-    return this.http.get<CollectionDto[]>(URLAPI + "/collections")
+    return this.http.get<CollectionDto[]>(VITALITTE_PROJECT.back.url + "/collections")
   }
 
   //-------------------
@@ -78,27 +78,27 @@ export class ApiRequestsService {
   //-------------------
 
   getWorkshopsIsAvailable(value : boolean): Observable<WorkshopDto[]> {
-    return this.http.get<WorkshopDto[]>(URLAPI + "/workshops/isAvailable/" + value.toString())
+    return this.http.get<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/isAvailable/" + value.toString())
   }
 
   getWorkshopsByDateToCome(): Observable<WorkshopDto[]> {
-    return this.http.get<WorkshopDto[]>(URLAPI + "/workshops/date-to-come")
+    return this.http.get<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/date-to-come")
   }
 
   getWorkshopsByPastDate(pagination : PaginationWithSearchValue): Observable<WorkshopDto[]> {
-    return this.http.post<WorkshopDto[]>(URLAPI + "/workshops/past-date/paginated", pagination)
+    return this.http.post<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/past-date/paginated", pagination)
   }
 
   getCounterWorkshopsByPastDate(): Observable<number> {
-    return this.http.get<number>(URLAPI + "/workshops/past-date/counter")
+    return this.http.get<number>(VITALITTE_PROJECT.back.url + "/workshops/past-date/counter")
   }
 
   getCounterWorkshopInscriptions(workshopSlug : WorkshopDto['slug']): Observable<number> {
-    return this.http.get<number>(URLAPI + "/inscriptions/count-by-workshop/" + workshopSlug)
+    return this.http.get<number>(VITALITTE_PROJECT.back.url + "/inscriptions/count-by-workshop/" + workshopSlug)
   }
 
   getWorkshopBySlug(workshopSlug : WorkshopDto['slug']): Observable<WorkshopDto> {
-    return this.http.get<WorkshopDto>(URLAPI + "/workshops/" + workshopSlug)
+    return this.http.get<WorkshopDto>(VITALITTE_PROJECT.back.url + "/workshops/" + workshopSlug)
   }
 
   //-------------------
@@ -106,23 +106,23 @@ export class ApiRequestsService {
   //-------------------
 
   postInscription(inscription : CreateInscription): Observable<InscriptionDto> {
-    return this.http.post<InscriptionDto>(URLAPI + "/inscriptions", inscription)
+    return this.http.post<InscriptionDto>(VITALITTE_PROJECT.back.url + "/inscriptions", inscription)
   }
 
   changeQuantityInscription(addOrRemove: 'add-participant' | 'remove-participant',inscription : InscriptionDto): Observable<ResponseEntity> {
-    return this.http.put<ResponseEntity>(URLAPI + "/inscriptions/" + addOrRemove, inscription)
+    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/inscriptions/" + addOrRemove, inscription)
   }
 
   confirmInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<ResponseEntity> {
-    return this.http.put<ResponseEntity>(URLAPI + "/inscriptions/confirm", inscriptionSlug)
+    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/inscriptions/confirm", inscriptionSlug)
   }
 
-  getInscriptionsCounterByWorkshop(workshopDtoSlug : WorkshopDto['slug']): Observable<number> {
-    return this.http.get<number>(URLAPI + "/inscriptions/count-by-workshop/" + workshopDtoSlug)
+  getInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<InscriptionDto> {
+    return this.http.get<InscriptionDto>(VITALITTE_PROJECT.back.url + "/inscriptions/" + inscriptionSlug)
   }
 
   deleteInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<ResponseEntity>{
-    return this.http.delete<ResponseEntity>(URLAPI + "/inscriptions/" + inscriptionSlug)
+    return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/inscriptions/" + inscriptionSlug)
   }
 
   //-------------------
@@ -130,19 +130,19 @@ export class ApiRequestsService {
   //-------------------
 
   getCounterPublications(paginationWithSearchValue: PaginationWithSearchValue): Observable<number> {
-    return this.http.post<number>(URLAPI + "/publications/counter", paginationWithSearchValue)
+    return this.http.post<number>(VITALITTE_PROJECT.back.url + "/publications/counter", paginationWithSearchValue)
   }
 
   getPublicationsSpotlighted(value : string): Observable<PublicationDto[]> {
-    return this.http.get<PublicationDto[]>(URLAPI + "/publications/isSpotlighted/" + value)
+    return this.http.get<PublicationDto[]>(VITALITTE_PROJECT.back.url + "/publications/isSpotlighted/" + value)
   }
 
   getPublicationBySlug(publicationSlug : PublicationDto['slug']): Observable<PublicationDto> {
-    return this.http.get<PublicationDto>(URLAPI + "/publications/" + publicationSlug)
+    return this.http.get<PublicationDto>(VITALITTE_PROJECT.back.url + "/publications/" + publicationSlug)
   }
 
   getPublicationPaginated(paginationWithSearchValue: PaginationWithSearchValue): Observable<PublicationDto[]> {
-    return this.http.post<PublicationDto[]>(URLAPI + "/publications/paginated", paginationWithSearchValue)
+    return this.http.post<PublicationDto[]>(VITALITTE_PROJECT.back.url + "/publications/paginated", paginationWithSearchValue)
   }
 
   //-------------------
@@ -150,14 +150,14 @@ export class ApiRequestsService {
   //-------------------
 
   checkGiftCard(code : string): Observable<GiftCardDto> {
-    return this.http.get<GiftCardDto>(URLAPI + "/giftCards/" + code)
+    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + "/giftCards/" + code)
   }
 
   //-------------------
   //-----Matériels-----
   //-------------------
   getDeliveryOptionAvailable(): Observable<DeliveryOptionDto[]> {
-    return this.http.get<DeliveryOptionDto[]>(URLAPI + "/delivery-option/is-available")
+    return this.http.get<DeliveryOptionDto[]>(VITALITTE_PROJECT.back.url + "/delivery-option/is-available")
   }
 
   //-------------------

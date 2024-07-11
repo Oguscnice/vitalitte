@@ -16,7 +16,7 @@
           </div>
         }
       </div>
-      <h6> Total {{ shoppingCart.counterQuantityByType('notebooks') }} Carnet(s) : {{ shoppingCart.priceByType('notebooks') | customCurrency }} </h6>
+      <h6> Total {{ shoppingCart.counterQuantityByType('notebooks') }} Carnet(s) : {{ shoppingCart.priceByTypeWithDiscount('notebooks', false) | customCurrency }} </h6>
       <hr>
     }
     @if (shoppingCartValue().inscriptions.length > 0) {
@@ -38,7 +38,7 @@
           </div>
         }
       </div>
-      <h6> Total {{ shoppingCart.counterQuantityByType('inscriptions') }} inscription(s) : {{ shoppingCart.priceByType('inscriptions') | customCurrency }} </h6>
+      <h6> Total {{ shoppingCart.counterQuantityByType('inscriptions') }} inscription(s) : {{ shoppingCart.priceByTypeWithDiscount('inscriptions', false) | customCurrency }} </h6>
       <hr>
     }
     <h5>Total : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) | customCurrency }} </h5>

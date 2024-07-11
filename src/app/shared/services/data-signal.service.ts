@@ -12,10 +12,11 @@ import {WorkshopDto} from "../interfaces/Workshop";
 import {WorkshopDisponibilities} from "../../modules/admin/shared/interfaces/Workshop";
 import {PaginationSignalService} from "./pagination-signal.service";
 import {PublicationDto} from "../interfaces/Publication";
-import {GiftCardDto} from "../interfaces/GiftCard";
 import {CreateInscription, InscriptionDto} from "../interfaces/Inscription";
 import {ShoppingCartService} from "./shopping-cart.service";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
+import {ModalSignalService} from "./modal-signal.service";
+import {ObjectUtilsService} from "./object-utils.service";
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +25,10 @@ export class DataSignalService extends BaseComponent {
 
   private apiRequests = inject(ApiRequestsService);
   private anguilleSignal = inject(AnguilleSignalService);
+  private modalSignal = inject(ModalSignalService);
   private paginationSignal = inject(PaginationSignalService);
   private shoppingCart = inject(ShoppingCartService);
+  private objectUtils = inject(ObjectUtilsService);
 
   private readonly state: DataSignalState = {
     $privateCategoryList: signal<CategoryDto[]>([]),
@@ -341,7 +344,6 @@ export class DataSignalService extends BaseComponent {
     )
   }
 
-
   private truncateString(value : string, length : number): string {
     return value.length > length ? value.slice(0, length) + "..." : value
   }
@@ -366,7 +368,6 @@ export class DataSignalService extends BaseComponent {
   changeQuantityInscription(addOrRemove: 'add-participant' | 'remove-participant', inscription: InscriptionDto): Observable<boolean> {
     return this.apiRequests.changeQuantityInscription(addOrRemove, inscription).pipe(
       map(res => {
-        this.anguilleSignal.changeMessage(res.message);
         return true;
       }),
       catchError(err => {
@@ -403,5 +404,48 @@ export class DataSignalService extends BaseComponent {
         error: (err) => this.anguilleSignal.changeMessage(err.error.message)
       })
     )
+  }
+
+  //-------------------
+  //---SHOPPING-CART---
+  //-------------------
+
+  verifyShoppingCartValidity(): void {
+    let cart = this.shoppingCart.$userShoppingCart();
+    const MESSAGE_ITEM_CHANGE = "Quelque chose a changé dans votre panier !";
+
+    // on va rechercher via les slugs en BDD et on écrase systématiquement l'objet, pour être sûr de l'avoir à jour.
+    for (let notebook of cart.notebooks) {
+      this.subscriptions.push(
+        this.apiRequests.getNotebookBySlug(notebook.item.slug).subscribe({
+          next: (notebookDto: NotebookDto): void => {
+            if (!this.objectUtils.compareNotebook(notebookDto, notebook.item)) {
+              notebook.item = notebookDto;
+              this.shoppingCart.editCartInLocalStorage(cart);
+              this.modalSignal.showModal(MESSAGE_ITEM_CHANGE, false).subscribe();
+            }
+          },
+          error: (err): void => this.anguilleSignal.changeMessage(err.error.message)
+        })
+      )
+    }
+
+    for (let inscription of cart.inscriptions) {
+      this.subscriptions.push(
+        this.apiRequests.getInscriptionBySlug(inscription.item.slug).subscribe({
+          next: (inscriptionDto: InscriptionDto): void => {
+            if (!this.objectUtils.compareInscription(inscriptionDto, inscription.item)) {
+              inscription.item = inscriptionDto;
+              this.shoppingCart.editCartInLocalStorage(cart);
+              this.modalSignal.showModal(MESSAGE_ITEM_CHANGE, false);
+            }
+          },
+          error: (err): void => {
+            this.shoppingCart.deleteItemToShoppingCart(inscription.item, 'inscriptions');
+            this.anguilleSignal.changeMessage(err.error.message);
+          }
+        })
+      )
+    }
   }
 }

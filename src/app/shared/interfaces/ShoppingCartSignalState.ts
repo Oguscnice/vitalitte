@@ -8,4 +8,5 @@ export interface ShoppingCartSignalState {
   $privateUserShoppingCart: WritableSignal<ShoppingCart>;
   $privateDeliveryOption: WritableSignal<DeliveryOptionDto | null>;
   $privateGiftCardActive: WritableSignal<GiftCardDto | null>;
+  $privateShoppingCartSignalChanges: BehaviorSubject<number>;
 }
