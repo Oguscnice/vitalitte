@@ -6,29 +6,66 @@ import { AnguilleSignalService } from '../../shared/services/anguille-signal.ser
   standalone : true,
   imports : [ NgClass ],
   selector: 'anguille',
-  template: ` <p class="anguille"
-                 [ngClass]="message() ? 'hors-roche' : 'sous-roche' ">
-                {{ message() }}
-              </p> `,
+  template: ` <div class="messages-anguille">
+              @for (message of messages(); track message) {
+                <p class="anguille" [ngClass]="{'hors-roche': message.isMessageVisible, 'sous-roche': !message.isMessageVisible}">
+                  {{ message.message }}
+                </p>
+              }
+              </div>`,
   styles: [`@import "../../scss/variables.scss";
             @import "../../scss/buttons.scss";
 
-            .anguille {
+            .messages-anguille {
               position: fixed;
               top : calc($normal-margin + var(--height-header));
-              background-color: $lilac-light;
-              padding : $fourth-padding;
-              max-width: 80vw;
-              transition: right linear 1s;
+              right: -80vw;
+              width: 160vw;
               z-index : 999;
+
+              p {
+                position: relative;
+                max-width: 80vw;
+                background-color: $lilac-light;
+                padding : $fourth-padding;
+                margin-bottom: $half-margin;
+                transition: right 1s linear;
+                word-break: normal;
+                overflow-y: hidden;
+                @include outline-picture;
+              }
+              .hors-roche {
+                animation: slideInFromRight 1s ease-out forwards;
+              }
+              .sous-roche {
+                animation: slideOutToRight 0.4s ease-out forwards;
+              }
             }
 
-            .hors-roche {
-              right : 0vw;
+            @keyframes slideInFromRight {
+              0% {
+                right : -80vw;
+                height: max-content;
+              }
+              100% {
+                right : 0vw;
+                height: max-content;
+              }
             }
 
-            .sous-roche {
-              right : -80vw;
+            @keyframes slideOutToRight {
+              0% {
+                height: max-content;
+                right : 0vw;
+                padding : $fourth-padding;
+                margin-bottom: $half-margin;
+              }
+              100% {
+                height: 0px;
+                right : -80vw;
+                padding : 0px;
+                margin-bottom: 0px;
+              }
             }
           `]
 })
@@ -36,6 +73,5 @@ export class AnguilleComponent {
 
   private anguilleSignal = inject(AnguilleSignalService);
 
-  message: Signal<string> = this.anguilleSignal.$message;
-  
+  messages = this.anguilleSignal.$messages;
 }

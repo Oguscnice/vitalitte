@@ -72,7 +72,7 @@
                  placeholder="Choississez l'adresse de l'atelier..."
                  autocomplete="off"
                  class="pointer"
-                 (keyup)="searchAddress($event)"
+                 (keyup)="apiBanService.searchAddress($event)"
                  (focus)="apiBanService.toggleDropdown(true)"
                  [value]="this.newWorkshopForm.get('address')!.value ? this.newWorkshopForm.get('address')!.value : ''"/>
           <div class="arrow-icone flex center">

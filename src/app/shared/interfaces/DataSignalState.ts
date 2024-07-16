@@ -8,6 +8,7 @@ import {WorkshopDto} from "./Workshop";
 import {WorkshopDisponibilities} from "../../modules/admin/shared/interfaces/Workshop";
 import {PublicationDto} from "./Publication";
 import {GiftCardDto} from "./GiftCard";
+import {DeliveryOptionDto} from "./DeliveryOptionDto";
 
 export interface DataSignalState {
   $privateCategoryList: WritableSignal<CategoryDto[]>;
@@ -22,10 +23,10 @@ export interface DataSignalState {
   $privateWorkshopsDateToCome: WritableSignal<WorkshopDto[]>;
   $privateWorkshopsPastDate: WritableSignal<WorkshopDto[]>;
   $privateCounterWorkshopsPastDate: BehaviorSubject<number>;
-  $privateDisponibilitiesWorkshops: WritableSignal<WorkshopDisponibilities[]>;
+  $privateCounterRegistrationsReservedWorkshops: WritableSignal<WorkshopDisponibilities[]>;
   $privatePublications: WritableSignal<PublicationDto[]>;
   $privatePublicationsSpotlighted: WritableSignal<PublicationDto[]>;
   $privateCounterPublications: BehaviorSubject<number>;
   $privateIsExpiredGiftCard: WritableSignal<boolean>;
-  $privateGiftCardBySlug: BehaviorSubject<GiftCardDto | null>;
+  $privateDeliveryOptions: WritableSignal<DeliveryOptionDto[]>;
 }

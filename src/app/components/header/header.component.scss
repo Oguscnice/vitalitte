@@ -1,6 +1,9 @@
 @import "../../scss/variables.scss";
 @import "../../../styles.scss";
 
+$height-logo-mobile: 80px;
+$height-logo-desktop: 120px;
+
 nav {
   position: fixed;
   top: 0;
@@ -9,24 +12,47 @@ nav {
   padding: $normal-padding $double-padding;
   background-color: $white;
   z-index: 999;
-  border-bottom: 2px solid $lilac;
+  border-bottom: 2px solid $lilac-dark;
+
+  p {
+    em {
+      color: $red;
+      font-size: $triple-font-size;
+      font-weight: bolder;
+    }
+  }
+
   h3 {
     text-align: center;
     font-family: $font-family-title;
     font-size: $fourth-font-size;
     letter-spacing: 0.2rem;
     padding-left: $double-padding;
+
+    .lilac,
+    .orange {
+      //@include text-shadow(0.1px, $black);
+    }
+    .lilac {
+      color: $lilac-dark;
+    }
+    .orange {
+      color: $orange-dark;
+    }
   }
-  .shopping-cart-counter{
+
+  .shopping-cart-counter {
     position: relative;
     opacity: 0;
     z-index: $z-index - 1;
-    i{
+
+    i {
       color: $lilac;
       font-size: $fourth-font-size;
       margin-right: $normal-margin;
     }
-    p{
+
+    p {
       position:absolute;
       top: -32%;
       left: 32%;
@@ -39,9 +65,10 @@ nav {
       padding: 0 $normal-padding;
     }
   }
+
   img {
-    width: 40px;
-    height: 40px;
+    max-width: $height-logo-mobile;
+    max-height: $height-logo-mobile;
   }
 
   ul {
@@ -57,6 +84,7 @@ nav {
     z-index: -1;
     animation-duration: 0.4s;
     animation-fill-mode: forwards;
+
     li {
       width: 100vw;
       background-color: $white;
@@ -68,29 +96,29 @@ nav {
         font-size: $fourth-font-size;
         transition: height 0.5s;
       }
-      .submenu-close{
+      .submenu-close {
         height: 100%;
       }
-      .submenu{
+      .submenu {
         position: block;
         transition: 0.5s;
         width: 88vw;
         height: 50%;
         background-color: $white;
-        a{
+        a {
           color: $black;
           transition: 1s;
           font-size: $triple-font-size;
         }
       }
-      .close{
+      .close {
         transition: 0s;
-        height: 0%;
-        a{
-          font-size : 0rem;
+        height: 0;
+        a {
+          font-size : 0;
         }
       }
-    } 
+    }
     .separator {
         border-bottom: 4px solid $lilac;
     }
@@ -108,14 +136,15 @@ nav {
   //---------------------------------------
   //----for menu burger--------------------
   //---------------------------------------
+
   #checkbox {
     display: none;
   }
 
   .toggle {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: $height-logo-mobile;
+    height: $height-logo-mobile;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -175,11 +204,8 @@ nav {
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   nav {
-    .img-and-name {
-      width: 20vw;
-      h3 {
-        padding-left: $double-padding;
-      }
+    h3 {
+      padding-left: $double-padding;
     }
   }
 }
@@ -187,6 +213,10 @@ nav {
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   nav {
+    img {
+      max-width: $height-logo-desktop;
+      max-height: $height-logo-desktop;
+    }
     .toggle {
       display: none;
     }
@@ -256,7 +286,7 @@ nav {
         }
         .close{
           display: none;
-          height: 0%;
+          height: 0;
         }
       }
       .separator {
@@ -267,10 +297,6 @@ nav {
   }
 }
 
-// Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1400px) {
-}
-
 //Animation Menu Burger
 @keyframes fadeInMenu {
   0% {
@@ -279,11 +305,11 @@ nav {
     left: -100vw;
   }
   1% {
-    left: 0vw;
+    left: 0;
     z-index: 999;
   }
   100% {
-    left: 0vw;
+    left: 0;
     z-index: 999;
     opacity: 1;
   }
@@ -292,10 +318,10 @@ nav {
   0% {
     opacity: 1;
     z-index: 999;
-    left: 0vw;
+    left: 0;
   }
   99% {
-    left: 0vw;
+    left: 0;
     opacity: 0;
   }
   100% {

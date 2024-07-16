@@ -1,9 +1,9 @@
-<div class="creations-page flex column center">
-
   <app-h1 [titleChild]="'Carnets...'" [backgroundImageChild]="backgroundImageParentCreations"/>
 
-  <section class="user-choice flex column center">
+  <section class="flex column center">
+
     <h2>Carnets</h2>
+
     <p>Pour vous organiser, vous détendre, égayer votre quotidien,
       ou simplement garder une trace de vos moments inoubliables,
       vous trouverez à l'atelier votre prochain agenda, album photos,
@@ -11,6 +11,7 @@
       ou de partition.</p>
 
     <h3>Artisanat Responsable</h3>
+
     <p> Chaque carnet que nous fabriquons à la main est un hommage
       à l'artisanat authentique. Avec un engagement profond envers
       l'éco-responsabilité, chaque page est méticuleusement
@@ -19,7 +20,7 @@
 
     <h4>Modèles :</h4>
 
-    <app-notebooks-list [notebooksListChild]="notebooks()"/>
+    <app-notebooks-list [notebooksListChild]="notebooks$()"/>
 
     <h4>Encore plus de modèle içi...</h4>
     <button class="btn-normal" routerLink="/carnets-pret-a-emploi">
@@ -103,4 +104,3 @@
 
   </section>
 
-</div>

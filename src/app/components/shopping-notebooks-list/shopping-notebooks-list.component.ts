@@ -47,6 +47,18 @@ export class ShoppingNotebooksListComponent implements OnInit {
     this.collectionSelected = this.collectionSelected === collection ? null : collection;
   }
 
+  isCategoryOrCollectionPresent(object: CategoryDto | CollectionDto): boolean {
+    let notebookFiltered = this.notebooks();
+    if (this.categorySelected && this.collectionSelected) {
+      notebookFiltered = this.notebooks().filter(notebook => (notebook.categoryDto.slug === this.categorySelected!.slug) && (notebook.collectionDto.slug === this.collectionSelected!.slug));
+    } else if (this.categorySelected) {
+      notebookFiltered = this.notebooks().filter(notebook => notebook.categoryDto.slug === this.categorySelected!.slug);
+    } else if (this.collectionSelected) {
+      notebookFiltered = this.notebooks().filter(notebook => notebook.collectionDto.slug === this.collectionSelected!.slug);
+    }
+    return notebookFiltered.some(notebook => notebook.categoryDto.slug === object.slug || notebook.collectionDto.slug === object.slug);
+  }
+
   toggleDropdown(dropdownClicked : 'Collection' | 'Category' | 'Materials'): void {
     const actualValue = this[`is${dropdownClicked}DropdownOpen`];
     this.isCategoryDropdownOpen = false;
@@ -59,7 +71,7 @@ export class ShoppingNotebooksListComponent implements OnInit {
     this.quantityIncreased = true;
     this.quantityDecreased = false;
     this.cartToAnimate = notebook.slug;
-    this.shoppingCart.subtractItem(notebook, 'notebooks')
+    this.shoppingCart.addItem(notebook, 'notebooks');
     setTimeout(() => {
       this.quantityIncreased = false;
     }, 200);
@@ -69,7 +81,7 @@ export class ShoppingNotebooksListComponent implements OnInit {
     this.quantityIncreased = false;
     this.quantityDecreased = true;
     this.cartToAnimate = notebook.slug;
-    this.shoppingCart.addItem(notebook, 'notebooks');
+    this.shoppingCart.subtractItem(notebook, 'notebooks')
     setTimeout(() => {
       this.quantityDecreased = false;
     }, 200);

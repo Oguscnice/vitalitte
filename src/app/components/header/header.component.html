@@ -1,14 +1,28 @@
 <nav class="flex space-between center" #navBar>
-  <img src="../../../assets/images/figma/icone.png"
+  <img src="../../../assets/images/logo.png"
        alt="Logo du site VitaLitté"
-       class="pointer"/>
-  <h3 class="flex pointer"
-      [routerLink]="'/'">VitaLitté</h3>
-  <div class="shopping-cart-counter"
-      [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
+       class="pointer desktop-only"
+       [routerLink]="'/'"/>
+  <img src="../../../assets/images/icon-thumbnail.png"
+       alt="Logo du site VitaLitté"
+       class="pointer mobile-only"
+       [routerLink]="'/'"/>
+  <h3 class="flex pointer" [routerLink]="'/'"> <span class="lilac">V</span>ita<span class="orange">L</span>itté</h3>
+
+  @if (!env.production) {
+    <p> <em>Env. Front : {{ environment | titlecase }}</em></p>
+  }
+
+  <div class="shopping-cart-counter pointer"
+       [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'"
+       (click)="changeModalShoppingCartVisibility(!isShoppingCartListOpen)">
     <i class="fa-solid fa-cart-shopping"></i>
     <p class="flex center"> {{ shoppingCart.counterTotalShoppingCart() }} </p>
   </div>
+  @if (isShoppingCartListOpen) {
+    <app-modal-shopping-cart-list (click)="isShoppingCartListOpen = !isShoppingCartListOpen"/>
+  }
+
   <ul
     class="flex center space-around"
     [ngClass]="
@@ -25,7 +39,7 @@
             'separator': index !== navbarUser.length - 1 }"
           (click)="item.submenu ?
                     openSubmenu(item) :
-                    closeMenuBurger(menuCheckbox, item.routerLink, $event) ">
+                    closeMenuBurger(item.routerLink, $event) ">
         <p class="flex center"
           [ngClass]="{
             'active': item.routerLink === activePageService.activePage,
@@ -36,11 +50,11 @@
           <div class="flex center space-around submenu"
               [ngClass]="item.submenu.isOpen ? '' : 'close' ">
 
-              @for (subItem of item.submenu.items; track subItem) {
+              @for (subItem of item.submenu!.items; track subItem) {
                 <a class="flex center"
                   [href]="item.routerLink + '#' + subItem.anchor"
-                  (click)="closeMenuBurger(menuCheckbox, item.routerLink, $event)">
-                  {{subItem.name}}
+                  (click)="closeMenuBurger(item.routerLink, $event)">
+                  {{ subItem.name }}
                 </a>
               }
           </div>

@@ -1,8 +1,10 @@
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
-import { Component, inject } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
+import {ShoppingCartService} from "../../../shared/services/shopping-cart.service";
+import {DataSignalService} from "../../../shared/services/data-signal.service";
+import {MaterialDto} from "../../../shared/interfaces/Material";
 
 @Component({
   standalone: false,
@@ -10,27 +12,48 @@ import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
   templateUrl: './notebook-selected.component.html',
   styleUrls: ['./notebook-selected.component.scss']
 })
-export class NotebookSelectedComponent extends BaseComponent{
+export class NotebookSelectedComponent extends BaseComponent implements OnInit {
 
-  protected route = inject(ActivatedRoute);
-  protected apiRequestsService = inject(ApiRequestsService);
+  private route = inject(ActivatedRoute);
+  private dataSignal = inject(DataSignalService)
+  shoppingCart = inject(ShoppingCartService);
 
-  notebookSlug! : NotebookDto['slug']
-  notebookSelected! : NotebookDto
+  notebookSelected: NotebookDto | null = null;
+  materialSelected: MaterialDto | null = null;
+  quantityIncreased: boolean = false;
+  quantityDecreased: boolean = false;
 
   ngOnInit(){
-    this.route.params.subscribe((params) => {
-      this.notebookSlug = params['notebookSlug'];
-      this.findNotebook()
-    });
+    this.route.params.subscribe((params) => this.dataSignal.getNotebookBySlug(params['notebookSlug']));
+    this.subscribeToNotebookBySlugSignal();
   }
 
-  findNotebook(): void {
+  subscribeToNotebookBySlugSignal(): void {
     this.subscriptions.push(
-      this.apiRequestsService.getNotebookBySlug(this.notebookSlug).subscribe({
-        next: (notebook) => this.notebookSelected = notebook,
-        error: (err) => (this.changeMessage(err.error.message))
-      })
+      this.dataSignal.$notebookBySlug.subscribe(
+        (notebook) => this.notebookSelected = notebook)
     )
+  }
+
+  increase(notebook: NotebookDto): void {
+    this.quantityIncreased = true;
+    this.quantityDecreased = false;
+    this.shoppingCart.addItem(notebook, 'notebooks');
+    setTimeout(() => {
+      this.quantityIncreased = false;
+    }, 200);
+  }
+
+  decrease(notebook: NotebookDto): void {
+    this.quantityIncreased = false;
+    this.quantityDecreased = true;
+    this.shoppingCart.subtractItem(notebook, 'notebooks')
+    setTimeout(() => {
+      this.quantityDecreased = false;
+    }, 200);
+  }
+
+  onClickMaterial(material: MaterialDto): void {
+    this.materialSelected = this.materialSelected === material ? null : material;
   }
 }

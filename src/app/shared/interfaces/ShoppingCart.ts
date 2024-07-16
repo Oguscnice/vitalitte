@@ -1,5 +1,5 @@
 import {NotebookDto} from "./Notebook";
-import {InscriptionDto} from "../../modules/admin/shared/interfaces/Inscription";
+import {InscriptionDto} from "./Inscription";
 
 export interface ShoppingCartItem<T> {
   item: T;

@@ -14,11 +14,18 @@
     <p class="workshop-address"> {{ workshop.address }} </p>
 
     @if(workshop.available && isFutureDate(workshop.date)) {
-      @if(workshop.registrations - disponibility === 1) {
-        <p class="registration flex center"> {{ workshop.registrations - disponibility }} place dispo.</p>
-      } @else if (workshop.registrations - disponibility > 1) {
-        <p class="registration flex center"> {{ workshop.registrations - disponibility }} places dispo.</p>
-      }
+      <div class="flex space-between width80">
+        @if(workshop.registrations - disponibility === 1) {
+          <p class="registration flex center line-nowrap"> {{ workshop.registrations - disponibility }} place dispo.</p>
+        } @else if (workshop.registrations - disponibility > 1) {
+          <p class="registration flex center line-nowrap"> {{ workshop.registrations - disponibility }} places dispo.</p>
+        }
+        @if (workshop.price > 0) {
+          <p> {{ workshop.price | customCurrency }} </p>
+        } @else {
+          <p>GRATUIT</p>
+        }
+      </div>
 
       @if (workshop.registrations - disponibility > 0) {
         <button class="btn-normal">

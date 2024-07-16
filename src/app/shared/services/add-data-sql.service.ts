@@ -16,6 +16,8 @@ import { ApiPublicationAdminService } from '../../modules/admin/shared/services/
 import { SecondaryPictureDto } from '../interfaces/SecondaryPicture';
 import {CreateGiftCard} from "../../modules/admin/shared/interfaces/GiftCard";
 import {ApiGiftcardService} from "../../modules/admin/shared/services/api/api-giftcard.service";
+import {CreateDeliveryOption} from "../../modules/admin/shared/interfaces/DeliveryOption";
+import {ApiDeliveryOptionAdminService} from "../../modules/admin/shared/services/api/api-delivery-option-admin.service";
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +32,8 @@ export class AddDataSqlService {
   private apiWorkshopAdminService = inject(ApiWorkshopAdminService);
   private apiPublicationAdminService = inject(ApiPublicationAdminService);
   private apiGiftCardAdminService = inject(ApiGiftcardService);
+  private apiDeliveryOptionAdminService = inject(ApiDeliveryOptionAdminService);
+
 
   createAll(){
     // ils s'enchainent avec les autres
@@ -208,8 +212,20 @@ export class AddDataSqlService {
   }
 
   createGiftCards(): void {
-    for(let giftCard of this.giftCardsToCreate){
+    for(let giftCard of this.giftCardsToCreate) {
       this.apiGiftCardAdminService.post(giftCard).subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (err) => console.log(err),
+      })
+    }
+    this.createDeliveryOptions();
+  }
+
+  createDeliveryOptions(): void {
+    for(const deliveryOption of this.deliveryOptionsToCreate) {
+      this.apiDeliveryOptionAdminService.post(deliveryOption).subscribe({
         next: (response) => {
           console.log(response);
         },
@@ -371,7 +387,7 @@ export class AddDataSqlService {
     "été",
     "printemps",
     "hiver",
-    "automone"
+    "automne"
   ];
 
   materialsToCreate : CreateMaterial[] = [
@@ -556,6 +572,33 @@ export class AddDataSqlService {
       rising: 5,
       percentage: false,
       expiryDate: new Date(new Date().getFullYear(), 6, 10)
+    },
+  ]
+
+  deliveryOptionsToCreate: CreateDeliveryOption[] = [
+    {
+      name: `classique`,
+      price: 1.05,
+      estimatedDeliveryTime: `2 - 4 jours`,
+      isExpress: false,
+      carrier: `la poste`,
+      description: `une livraison classique par la poste`
+    },
+    {
+      name: `recommandé`,
+      price: 3,
+      estimatedDeliveryTime: `1 - 2 jours`,
+      isExpress: true,
+      carrier: `la poste`,
+      description: `une livraison recommandée par la poste`
+    },
+    {
+      name: `méga rapide`,
+      price: 5,
+      estimatedDeliveryTime: `1 jour`,
+      isExpress: true,
+      carrier: `ups`,
+      description: ``
     },
   ]
 }

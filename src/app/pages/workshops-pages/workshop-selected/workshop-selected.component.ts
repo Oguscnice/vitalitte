@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common';
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, Signal} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
@@ -13,10 +13,12 @@ import { phoneValidator } from 'src/app/shared/validators/PhoneValidator';
 import { quantityValidator } from 'src/app/shared/validators/QuantityValidator';
 import {FormHelperService} from "../../../modules/admin/shared/services/form-helper.service";
 import {DataSignalService} from "../../../shared/services/data-signal.service";
+import {WorkshopDisponibilities} from "../../../modules/admin/shared/interfaces/Workshop";
+import {CustomCurrencyPipe} from "../../../shared/services/pipes/custom-currency.pipe";
 
 @Component({
   standalone: true,
-  imports: [ H1Component, ReactiveFormsModule, AnguilleComponent, ModalComponent, PaypalComponent, DecimalPipe ],
+  imports: [H1Component, ReactiveFormsModule, AnguilleComponent, ModalComponent, PaypalComponent, DecimalPipe, CustomCurrencyPipe],
   selector: 'app-workshop-selected',
   templateUrl: './workshop-selected.component.html',
   styles: [`
@@ -47,10 +49,11 @@ export class WorkshopSelectedComponent extends BaseComponent implements OnInit {
   private dataSignal = inject(DataSignalService);
   private formBuilder = inject(FormBuilder);
   private formHelper = inject(FormHelperService);
-  route = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
+  readonly maxInscriptions = 5;
 
-  workshopSlug! : WorkshopDto['slug'];
   currentWorkshop!: WorkshopDto | null;
+  private workshopReservations: Signal<WorkshopDisponibilities[]> = this.dataSignal.$workshopsRegistrationsReserved;
 
   isFormVisible: boolean = false;
   isFormSubmit: boolean = false;
@@ -60,22 +63,23 @@ export class WorkshopSelectedComponent extends BaseComponent implements OnInit {
     firstname : ['', [Validators.required, Validators.maxLength(255)]],
     phone: ['', [Validators.required, phoneValidator()]],
     email: ['', [Validators.required, Validators.email]],
-    quantity: [0, [Validators.required, quantityValidator()]],
+    quantity: [0, [Validators.required, quantityValidator(this.registrationsFree())]],
     workshopDto: ['', [Validators.required]]
   });
 
   ngOnInit(): void {
     this.findWorkshopByUrlSlug();
-    this.subscribeToWorkShopByslugSignal();
+    this.subscribeToWorkShopBySlugSignal();
   }
 
   private findWorkshopByUrlSlug(): void {
     this.route.params.subscribe((params) => this.dataSignal.getWorkshopBySlug(params['workshopSlug']));
   }
 
-  private subscribeToWorkShopByslugSignal(): void {
+  private subscribeToWorkShopBySlugSignal(): void {
     this.dataSignal.$workshopBySlug.subscribe((workshop) => {
       this.currentWorkshop = workshop;
+      this.registrationsFree();
       this.newInscriptionForm.get('workshopDto')!.setValue(this.formHelper.jsonStringify(this.currentWorkshop));
     })
   }
@@ -87,10 +91,11 @@ export class WorkshopSelectedComponent extends BaseComponent implements OnInit {
   }
 
   registrationsFree(): number {
-    if (this.dataSignal.$workshopsDisponibilities().length > 0) {
-      const WORKSHOP_DISPO = this.dataSignal.$workshopsDisponibilities().find(item => item.workshopSlug === this.currentWorkshop?.slug)
+    if (this.workshopReservations().length > 0) {
+      const WORKSHOP_COUNTER_REGISTRATION_RESERVED = this.workshopReservations().find(item => item.workshopSlug === this.currentWorkshop?.slug)
       if (this.currentWorkshop) {
-        return this.currentWorkshop.registrations - WORKSHOP_DISPO!.disponibilities;
+        const MAX_VALUE = this.currentWorkshop.registrations - WORKSHOP_COUNTER_REGISTRATION_RESERVED!.registrationsReserved;
+        return MAX_VALUE ? MAX_VALUE : this.maxInscriptions;
       }
     }
     return 0;

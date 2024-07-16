@@ -1,4 +1,4 @@
-import { Component, Signal, inject } from '@angular/core';
+import {Component, Signal, inject} from '@angular/core';
 import { ModalSignalService } from 'src/app/shared/services/modal-signal.service';
 
 @Component({
@@ -48,8 +48,4 @@ export class ModalComponent {
   modalVisible: Signal<boolean> = this.modalSignal.$isModalVisible;
   modalText: Signal<string> = this.modalSignal.$message;
   multipleChoice: Signal<boolean> = this.modalSignal.$multipleChoice;
-
-  closeModal(response: boolean): void {
-    this.modalSignal.closeModalAndSendResponseIfExist(response);
-  }
 }

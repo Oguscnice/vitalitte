@@ -32,6 +32,11 @@ export const NAVBAR_ADMIN: Menu[] = [
     submenu : null
   },
   {
+    name: 'Option de livraison',
+    routerLink: '/admin/gestion-des-options-de-livraison',
+    submenu : null
+  },
+  {
     name: 'Contact',
     routerLink: '/admin/gestion-des-contacts',
     submenu : null
