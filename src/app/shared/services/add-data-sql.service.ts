@@ -387,7 +387,7 @@ export class AddDataSqlService {
     "été",
     "printemps",
     "hiver",
-    "automone"
+    "automne"
   ];
 
   materialsToCreate : CreateMaterial[] = [

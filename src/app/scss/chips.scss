@@ -1,0 +1,23 @@
+@import "../scss/variables.scss";
+
+.chips,
+.chips-selected {
+  border-radius: 16px;
+  border: 1px solid $lilac-dark;
+  padding: $normal-padding $double-padding;
+  text-align: center;
+  cursor: pointer;
+  font-size: $double-font-size;
+  transition: all 0.2s linear;
+}
+
+.chips {
+  background-color: $lilac-light-opacity-low;
+  color: $black;
+}
+
+.chips-selected {
+  background-color: $lilac-light;
+  color: $white;
+  box-shadow: 0px 0px 5px $orange-dark;
+}

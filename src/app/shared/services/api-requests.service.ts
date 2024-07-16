@@ -14,6 +14,7 @@ import {PaginationWithSearchValue} from '../interfaces/Pagination';
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../interfaces/GiftCard";
 import {VITALITTE_PROJECT} from "../variables/AppConfig";
+import {CategoryAndCollection} from "../interfaces/CategoryAndCollection";
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class ApiRequestsService {
   //-------------------
   //-----Matériels-----
   //-------------------
+
   getAllMaterials(): Observable<MaterialDto[]> {
     return this.http.get<MaterialDto[]>(VITALITTE_PROJECT.back.url + "/materials")
   }
@@ -34,7 +36,7 @@ export class ApiRequestsService {
   }
 
   getAllMaterialsTypes(): Observable<string[]>{
-    return this.http.get<string[]>(VITALITTE_PROJECT.back.url + "/materials/types")
+    return this.http.get<string[]>(VITALITTE_PROJECT.back.url + "/materialTypes")
   }
 
   //-------------------
@@ -49,12 +51,8 @@ export class ApiRequestsService {
     return this.http.get<NotebookDto>(VITALITTE_PROJECT.back.url + "/notebooks/" + notebookSlug)
   }
 
-  getNotebooksByCategorySlug(categorySlug : CategoryDto['slug']): Observable<NotebookDto[]> {
-    return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/category/" + categorySlug)
-  }
-
-  getNotebooksByCollectionSlug(collectionSlug : CollectionDto['slug']): Observable<NotebookDto[]> {
-    return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/collection/" + collectionSlug)
+  getNotebooksByCategoryAndCollection(categoryAndCollection: CategoryAndCollection): Observable<NotebookDto[]> {
+    return this.http.post<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/filtered-by-category-collection", categoryAndCollection)
   }
 
   //-------------------
@@ -150,7 +148,7 @@ export class ApiRequestsService {
   //-------------------
 
   checkGiftCard(code : string): Observable<GiftCardDto> {
-    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + "/giftCards/" + code)
+    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + "/giftCards/user/" + code)
   }
 
   //-------------------

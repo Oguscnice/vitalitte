@@ -17,6 +17,7 @@ import {ShoppingCartService} from "./shopping-cart.service";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {ModalSignalService} from "./modal-signal.service";
 import {ObjectUtilsService} from "./object-utils.service";
+import {CategoryAndCollection} from "../interfaces/CategoryAndCollection";
 
 @Injectable({
   providedIn: 'root'
@@ -162,6 +163,15 @@ export class DataSignalService extends BaseComponent {
     this.subscriptions.push(
       this.apiRequests.getAllNotebooks().subscribe({
         next: (notebooks: NotebookDto[]) => this.setNotebookList(filter ? this.filterNotebooksList(notebooks) : notebooks),
+        error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  getAllNotebooksByCategoryAndCollection(categoryAndCollection: CategoryAndCollection): void {
+    this.subscriptions.push(
+      this.apiRequests.getNotebooksByCategoryAndCollection(categoryAndCollection).subscribe({
+        next: (notebooks: NotebookDto[]) => this.setNotebookList(notebooks),
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )

@@ -28,8 +28,10 @@
       p {
         border-left: 1px solid $lilac;
         padding: 0 $normal-padding;
+        font-weight: bold;
         span {
           padding-left: $normal-padding;
+          font-weight: normal;
         }
       }
     }

@@ -23,9 +23,12 @@ $lilac-light: rgb(217, 117, 250);
 $lilac-dark: rgb(140, 76, 161);
 $lilac-dark-transparent: rgba($lilac-dark, 0.5);
 $lilac-light-opacity-low: #f67cfa42;
-$orange : orange;
+$orange : rgba(255, 165, 0);
+$orange-light : rgb(255, 186, 84);
+$orange-dark : rgb(211, 140, 0);
+$orange-dark-transparent : rgba($orange-dark, 0.5);
+$orange-light-opacity-low : rgba($orange-light, 0.5);
 $brown : brown;
-$yellow : yellow;
 $red : red;
 
 // ----- padding -----

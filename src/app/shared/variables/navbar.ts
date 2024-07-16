@@ -22,21 +22,21 @@ export const NAVBAR_USER: Menu[] = [
     submenu : null
   },
   {
-    name: 'Booktique',
-    routerLink: '/booktique',
-    submenu : null
-  },
-  {
     name: 'A Propos',
     routerLink: '/qui-suis-je',
     submenu : {
       isOpen : false,
-      items : [    
-            { name : "Ma démarche", anchor : "myApproach" },
-            { name : "Qui suis-je ?", anchor : "who-am-i" }
-             ]
-              },
+      items : [
+        { name : "Ma démarche", anchor : "myApproach" },
+        { name : "Qui suis-je ?", anchor : "who-am-i" }
+      ]
+    },
   },
+  // {
+  //   name: 'Booktique',
+  //   routerLink: '/booktique',
+  //   submenu : null
+  // },
   {
     name: 'Contact',
     routerLink: '/contact',

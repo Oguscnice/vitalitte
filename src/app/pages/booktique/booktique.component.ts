@@ -1,4 +1,4 @@
-import {AfterViewChecked, AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {Subject} from "rxjs";
 
 @Component({
