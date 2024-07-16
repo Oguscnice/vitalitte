@@ -46,7 +46,12 @@
             ]
           },
           "configurations": {
-            "production": {
+            "prod":{
+            "fileReplacements": [{
+              "replace" : "src/environments/environment.ts",
+              "with" : "src/environments/environment.prod.ts"
+            }],
+
               "budgets": [
                 {
                   "type": "initial",
@@ -61,28 +66,41 @@
               ],
               "outputHashing": "all"
             },
-            "development": {
-              "buildOptimizer": false,
-              "optimization": false,
+            "staging" : {
+              "fileReplacements": [{
+                "replace" : "src/environments/environment.ts",
+                "with" : "src/environments/environment.staging.ts"
+              }]
+            },
+            "dev" : {
+              "fileReplacements": [{
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.dev.ts"
+              }],
+              "buildOptimizer": true,
+              "optimization": true,
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "dev"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {
-              "buildTarget": "Starter-front:build:production"
+            "prod": {
+              "buildTarget": "Starter-front:build:prod"
             },
-            "development": {
-              "buildTarget": "Starter-front:build:development"
+            "staging" : {
+              "buildTarget": "Starter-front:build:staging"
+            },
+            "dev": {
+              "buildTarget": "Starter-front:build:dev"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "dev"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

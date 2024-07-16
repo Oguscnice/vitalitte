@@ -14,10 +14,11 @@ import { quantityValidator } from 'src/app/shared/validators/QuantityValidator';
 import {FormHelperService} from "../../../modules/admin/shared/services/form-helper.service";
 import {DataSignalService} from "../../../shared/services/data-signal.service";
 import {WorkshopDisponibilities} from "../../../modules/admin/shared/interfaces/Workshop";
+import {CustomCurrencyPipe} from "../../../shared/services/pipes/custom-currency.pipe";
 
 @Component({
   standalone: true,
-  imports: [ H1Component, ReactiveFormsModule, AnguilleComponent, ModalComponent, PaypalComponent, DecimalPipe ],
+  imports: [H1Component, ReactiveFormsModule, AnguilleComponent, ModalComponent, PaypalComponent, DecimalPipe, CustomCurrencyPipe],
   selector: 'app-workshop-selected',
   templateUrl: './workshop-selected.component.html',
   styles: [`

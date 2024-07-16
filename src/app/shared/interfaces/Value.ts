@@ -1,5 +1,5 @@
 export interface Value {
   name: string;
-  icone: string;
+  icon: string;
   source:string
 }

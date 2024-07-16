@@ -4,16 +4,15 @@
   width: 90vw;
   justify-content: space-around;
 
-  .value-icone-and-name {
-
-
+  .value-icon-and-name {
     i,
     span {
       height: 84px;
       width: 84px;
-      border: 2px solid $lilac;
+      border: 2px solid $orange-dark;
       border-radius: 50%;
       color: $lilac;
+      box-shadow: 0 4px 6px $lilac-dark;
     }
     span {
       font-size: calc($fourth-font-size * 1.4);
@@ -36,7 +35,7 @@
     justify-content: space-between;
     width: 100vw;
     max-width: $max-width-768px;
-    .value-icone-and-name {
+    .value-icon-and-name {
       i,
       span {
         height: 96px;
@@ -53,7 +52,7 @@
 @media screen and (min-width: 992px) {
   .values-container {
     max-width: $max-width-992px;
-    .value-icone-and-name {
+    .value-icon-and-name {
       i,
       span {
         height: 96px;
@@ -65,7 +64,7 @@
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   .values-container {
-    .value-icone-and-name {
+    .value-icon-and-name {
       i,
       span {
         height: 96px;

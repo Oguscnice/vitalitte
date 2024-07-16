@@ -2,11 +2,12 @@ import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { WorkshopDto } from '../../shared/interfaces/Workshop';
+import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pipe";
 
 @Component({
   selector: 'app-workshop-thumbnail',
   standalone: true,
-  imports: [ DatePipe, NgClass, RouterLink ],
+  imports: [DatePipe, NgClass, RouterLink, CustomCurrencyPipe],
   templateUrl: './workshop-thumbnail.component.html',
   styles: [`
             @import "../../scss/variables.scss";
@@ -44,6 +45,7 @@ import { WorkshopDto } from '../../shared/interfaces/Workshop';
 
                 .registration {
                   font-size: $normal-font-size;
+                  max-width: max-content;
                 }
                 .btn-normal {
                   font-size: $normal-font-size;
@@ -51,7 +53,7 @@ import { WorkshopDto } from '../../shared/interfaces/Workshop';
                   margin: calc($half-margin / 2);
                 }
               }
-              
+
               .workshop-overlay {
                 position: absolute;
                 top: 0;
@@ -74,7 +76,7 @@ import { WorkshopDto } from '../../shared/interfaces/Workshop';
             .unavailable {
               border: 2px solid $grey;
               box-shadow: 4px 4px 4px rgba($black, 0.8);
-              
+
               .workshop-description {
                 p {
                   color: $grey;

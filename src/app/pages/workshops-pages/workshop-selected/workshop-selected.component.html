@@ -109,7 +109,7 @@
 
       <fieldset class="flex column">
         <label for="quantity">Combien de places ?</label>
-        <small class="price-per-person"> {{ currentWorkshop.price | number:'0.2' }}€ /personne </small>
+        <small class="price-per-person"> {{ currentWorkshop.price === 0 ? 'GRATUIT' : (currentWorkshop.price | customCurrency) }} /personne </small>
         <input type="number"
                id="quantity"
                formControlName="quantity"
@@ -127,7 +127,7 @@
         }
       </fieldset>
 
-      <p class="total-price">Montant total : {{ totalPrice() | number: '0.2'}} €</p>
+      <p class="total-price">Montant total : {{ totalPrice() === 0 ? 'GRATUIT' : (totalPrice() | customCurrency) }}</p>
 
       <button class="btn-submit-admin"
               type="submit"

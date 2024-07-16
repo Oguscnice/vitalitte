@@ -2,28 +2,36 @@
 @import "../../../scss/buttons.scss";
 @import "../../../../styles.scss";
 
-.notebook-selected-page{
-  padding: 0 $fourth-padding;
-  div{
-    h2{
-      width: 100%;
+h2 {
+  width: 100%;
+}
+p {
+  font-size: $triple-font-size;
+}
+.components-list-and-component-description {
+  width: 100%;
+  flex-direction: column;
+  .components-list,
+  .component-description {
+    width: 100%;
+  }
+  .components-list {
+    flex-direction: row;
+    h3 {
+      margin: 0;
     }
-    p{
-      font-size: $triple-font-size;
-    }
-    // .descriptions-list{
-    //   margin: $normal-margin 0;
-    //   .description{
-    //     font-size: $double-font-size;
-    //     text-align: left;
-    //   }
-    // }
-    .components-list{
-      width: 100%;
-      font-size: calc($normal-font-size * 1.2);
-      span{
-        margin-right: 4px;
+    div {
+      flex-direction: row;
+      p {
+        margin-left: 4px;
       }
+    }
+  }
+  .component-description {
+    .material-img {
+      max-width: 100%;
+      height: 400px;
+      object-fit: contain;
     }
   }
 }
@@ -31,12 +39,8 @@
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
-  .notebook-selected-page{
-    div{
-      max-width: $max-width-768px;
-    }
-  }
 }
+
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
 }
