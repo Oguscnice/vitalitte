@@ -1,6 +1,7 @@
-import {Injectable, Signal, signal} from '@angular/core';
+import {Injectable, Signal, signal, WritableSignal} from '@angular/core';
 import {PaginationSignalState} from "../interfaces/PaginationSignalState";
-import {Pagination, PaginationWithSearchValue} from "../interfaces/Pagination";
+import {Page, PageableValues, PaginationReviewsFiltered, PaginationWithSearchValue} from "../interfaces/Page";
+import {ProductCommonValuesDto} from "../interfaces/Product";
 
 @Injectable({
   providedIn: 'root'
@@ -9,45 +10,55 @@ export class PaginationSignalService {
 
   private readonly state: PaginationSignalState = {
     $privateSearchValue: signal<string>(""),
-    $privatePageSizeValue: signal<number>(10),
-    $privateCurrentPageNumber: signal<number>(0),
+    $privatePageSize: signal<number>(10),
+    $privatePageNumber: signal<number>(0),
     $privateCounterItems: signal<number>(0),
     $privateLastPage: signal<number>(0),
+    $privateReviewStatus: signal<string>(""),
+    $privateReviewRating: signal<number>(0),
+    $privateReviewProductCommonValuesDto: signal<ProductCommonValuesDto | null>(null),
   } as const;
 
-  public readonly $searchValue: Signal<string> = this.state.$privateSearchValue.asReadonly();
-  public readonly $pageSize: Signal<number> = this.state.$privatePageSizeValue.asReadonly();
-  public readonly $currentPageNumber: Signal<number> = this.state.$privateCurrentPageNumber.asReadonly();
+  public readonly $pageSize: Signal<number> = this.state.$privatePageSize.asReadonly();
+  public readonly $pageNumber: Signal<number> = this.state.$privatePageNumber.asReadonly();
   public readonly $counterItem: Signal<number> = this.state.$privateCounterItems.asReadonly();
   public readonly $lastPage: Signal<number> = this.state.$privateLastPage.asReadonly();
+  public readonly $reviewStatus: Signal<string> = this.state.$privateReviewStatus.asReadonly();
+  public readonly $reviewRating: Signal<number> = this.state.$privateReviewRating.asReadonly();
+  public readonly $reviewProductCommonValuesDto: Signal<ProductCommonValuesDto | null> = this.state.$privateReviewProductCommonValuesDto.asReadonly();
 
-  setSearchValue(value: string): void {
-    this.state.$privateSearchValue.set(value);
-    this.calcLastPage();
-    this.changeCurrentPage('first');
-  }
 
-  setPageSize(value: number): void {
-    this.state.$privatePageSizeValue.set(value);
-    this.calcLastPage();
-    this.changeCurrentPage('first');
-  }
-
-  setCurrentPageNumber(value: number): void {
-    this.state.$privateCurrentPageNumber.set(value);
-  }
-
-  setCounterItem(value: number): void {
+  private setCounterItem(value: number): void {
     this.state.$privateCounterItems.set(value);
-    this.calcLastPage();
   }
 
-  setLastPage(value: number): void {
+  private setLastPage(value: number): void {
     this.state.$privateLastPage.set(value);
   }
 
+  private setCurrentPageNumber(value: number): void {
+    this.state.$privatePageNumber.set(value);
+  }
+
+  setSearchValue(value: string): void {
+    this.state.$privateSearchValue.set(value);
+    this.setCurrentPageNumber(0);
+  }
+
+  setPageSize(value: number): void {
+    this.state.$privatePageSize.set(value);
+    this.setCurrentPageNumber(0);
+  }
+
+  setPageInfo(page: Page<any>): void {
+    this.setCounterItem(page.totalElements);
+    this.setPageSize(page.pageable.pageSize);
+    this.setLastPage(page.totalPages);
+    this.setCurrentPageNumber(page.pageable.pageNumber);
+  }
+
   changeCurrentPage(choice : 'first' | 'prev' | 'next' | 'last'): void {
-    const CURRENT_PAGE = this.state.$privateCurrentPageNumber();
+    const CURRENT_PAGE = this.state.$privatePageNumber();
     if (choice === 'first') {
       this.setCurrentPageNumber(0);
     } else if (choice === 'last') {
@@ -59,24 +70,42 @@ export class PaginationSignalService {
     }
   }
 
-  calcLastPage(): void {
-    const COUNTER_ITEM = this.state.$privateCounterItems();
-    const PAGE_SIZE = this.state.$privatePageSizeValue();
-    const LAST_PAGE = Math.floor(COUNTER_ITEM / PAGE_SIZE) + (COUNTER_ITEM % PAGE_SIZE === 0 ? 0 : 1);
-    this.setLastPage(LAST_PAGE);
-  }
-
-  transformToPagination(): Pagination {
+  transformToPageableValues(): PageableValues {
     return {
-      page: this.state.$privateCurrentPageNumber(),
-      size: this.state.$privatePageSizeValue()
+      pageNumber: this.state.$privatePageNumber(),
+      pageSize: this.state.$privatePageSize(),
     }
   }
 
-  transformToPaginationWithSearchValue(): PaginationWithSearchValue {
+  transformToPaginationWithSearchValue(overrideValue? : string): PaginationWithSearchValue {
     return {
-      searchValue : this.state.$privateSearchValue(),
-      pagination : this.transformToPagination()
+      searchValue : overrideValue ?? this.state.$privateSearchValue(),
+      pageableValues : this.transformToPageableValues()
+    }
+  }
+
+  //-------------------
+  //------REVIEWS------
+  //-------------------
+
+  setReviewStatus(status: string): void {
+    this.state.$privateReviewStatus.set(status);
+  }
+
+  setReviewRating(rating: number): void {
+    this.state.$privateReviewRating.set(rating);
+  }
+
+  setReviewProductCommonValuesDto(productCommonValuesDto: ProductCommonValuesDto | null): void {
+    this.state.$privateReviewProductCommonValuesDto.set(productCommonValuesDto);
+  }
+
+  transformToPaginationReviewsFiltered(overrideValue? : string): PaginationReviewsFiltered {
+    return {
+      ...this.transformToPaginationWithSearchValue(overrideValue),
+      status: this.$reviewStatus(),
+      productCommonValuesDto: this.$reviewProductCommonValuesDto()!,
+      rating: this.$reviewRating()
     }
   }
 }

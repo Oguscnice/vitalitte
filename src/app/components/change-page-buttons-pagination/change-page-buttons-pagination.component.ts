@@ -10,27 +10,27 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
               <div class="btns-change-page flex center space-around">
                 <i
                   class="btn pointer fa-solid fa-backward-fast"
-                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() === 0 }"
+                  [ngClass]="{'disabled': pageNumber$() === 0 }"
                   (click)="this.onChangePage('first')">
                 </i>
 
                 <i
                   class="btn pointer fa-solid fa-chevron-left"
-                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() === 0 }"
+                  [ngClass]="{'disabled': pageNumber$() === 0 }"
                   (click)="this.onChangePage('prev')">
                 </i>
 
-                <p>Page {{ paginationSignal.$currentPageNumber() + 1 }} / {{ paginationSignal.$lastPage() }}</p>
+                <p>Page {{ pageNumber$() + 1 }} / {{ lastPageNumber$() }}</p>
 
                 <i
                   class="btn pointer fa-solid fa-chevron-right"
-                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() + 1 === paginationSignal.$lastPage() }"
+                  [ngClass]="{'disabled': pageNumber$() + 1 === lastPageNumber$() }"
                   (click)="this.onChangePage('next')">
                 </i>
 
                 <i
                   class="btn pointer fa-solid fa-forward-fast"
-                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() + 1 === paginationSignal.$lastPage() }"
+                  [ngClass]="{'disabled': pageNumber$() + 1 === lastPageNumber$() }"
                   (click)="this.onChangePage('last')">
                 </i>
               </div>
@@ -50,7 +50,9 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
 })
 export class ChangePageButtonsPagination {
 
-  paginationSignal: PaginationSignalService = inject(PaginationSignalService);
+  private paginationSignal = inject(PaginationSignalService);
+  pageNumber$ = this.paginationSignal.$pageNumber;
+  lastPageNumber$ = this.paginationSignal.$lastPage;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
 

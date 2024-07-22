@@ -6,9 +6,9 @@
   </i>
 </div>
 
-@if (materials() && isTableVisible) {
+<app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
 
-  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+@if (materials$() && isTableVisible) {
 
   <table>
     <thead>
@@ -44,7 +44,7 @@
     </thead>
 
     <tbody>
-      @for (material of materials(); track material; let index = $index) {
+      @for (material of materials$(); track material; let index = $index) {
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
           <td class="table-width-icon">
             <div class="toggle-switch" (click)="changeAvailability(material)">
@@ -90,10 +90,10 @@
       }
     </tbody>
   </table>
-  @if (materials() && materials().length > 0) {
+  @if (materials$() && materials$().length > 0) {
     <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
   }
 
-} @else if ((!materials() || materials().length < 1) && isTableVisible) {
+} @else if ((!materials$() || materials$().length < 1) && isTableVisible) {
   <h5>Aucun Matériel</h5>
 }

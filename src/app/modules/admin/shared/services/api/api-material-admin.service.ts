@@ -5,7 +5,7 @@ import { MaterialDto } from '../../../../../shared/interfaces/Material';
 import { ResponseEntity } from '../../../../../shared/interfaces/ResponseEntity';
 import { VITALITTE_PROJECT } from '../../../../../shared/variables/AppConfig';
 import { CreateMaterial } from '../../interfaces/Material';
-import {PaginationWithSearchValue} from "../../../../../shared/interfaces/Pagination";
+import {Page, PaginationWithSearchValue} from "../../../../../shared/interfaces/Page";
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +14,8 @@ export class ApiMaterialAdminService {
 
   private http = inject(HttpClient)
 
-  getBySlug(materialSlug : MaterialDto['slug']): Observable<MaterialDto>{
-    return this.http.get<MaterialDto>(VITALITTE_PROJECT.back.url + "/materials/" + materialSlug)
-  }
-
-  getCounterMaterialsBySearchValue(paginationWithSearchValue: PaginationWithSearchValue): Observable<number>{
-    return this.http.post<number>(VITALITTE_PROJECT.back.url + "/materials/counter", paginationWithSearchValue)
-  }
-
-  getMaterialsPaginatedBySearchValue(paginationWithSearchValue: PaginationWithSearchValue): Observable<MaterialDto[]>{
-    return this.http.post<MaterialDto[]>(VITALITTE_PROJECT.back.url + "/materials/paginated", paginationWithSearchValue)
+  getMaterialsPaginatedBySearchValue(paginationWithSearchValue: PaginationWithSearchValue): Observable<Page<MaterialDto>>{
+    return this.http.post<Page<MaterialDto>>(VITALITTE_PROJECT.back.url + "/materials/paginated", paginationWithSearchValue)
   }
 
   post(material : CreateMaterial): Observable<ResponseEntity>{

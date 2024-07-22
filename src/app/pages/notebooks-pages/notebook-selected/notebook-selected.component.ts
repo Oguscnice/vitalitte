@@ -1,10 +1,17 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, HostListener, inject, OnInit, Signal, ViewChild} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
 import {ShoppingCartService} from "../../../shared/services/shopping-cart.service";
 import {DataSignalService} from "../../../shared/services/data-signal.service";
 import {MaterialDto} from "../../../shared/interfaces/Material";
+import {Subject} from "rxjs";
+import {CreateReview, ReviewDto} from "../../../shared/interfaces/Review";
+import {FormBuilder, Validators} from "@angular/forms";
+import {ratingValidator} from "../../../modules/admin/shared/validators/ratingValidator";
+import {FormHelperService} from "../../../modules/admin/shared/services/form-helper.service";
+import {VITALITTE_PROJECT} from "../../../shared/variables/AppConfig";
+import {PaginationSignalService} from "../../../shared/services/pagination-signal.service";
 
 @Component({
   standalone: false,
@@ -12,48 +19,134 @@ import {MaterialDto} from "../../../shared/interfaces/Material";
   templateUrl: './notebook-selected.component.html',
   styleUrls: ['./notebook-selected.component.scss']
 })
-export class NotebookSelectedComponent extends BaseComponent implements OnInit {
+export class NotebookSelectedComponent extends BaseComponent implements OnInit, AfterViewChecked {
 
   private route = inject(ActivatedRoute);
   private dataSignal = inject(DataSignalService)
+  private formBuilder = inject(FormBuilder);
+  private formHelper = inject(FormHelperService);
+  private paginationSignal = inject(PaginationSignalService);
+  protected readonly VITALITTE_PROJECT = VITALITTE_PROJECT;
   shoppingCart = inject(ShoppingCartService);
 
-  notebookSelected: NotebookDto | null = null;
+  notebook: NotebookDto | null = null;
+  reviews: Signal<ReviewDto[]> = this.dataSignal.$reviews;
   materialSelected: MaterialDto | null = null;
-  quantityIncreased: boolean = false;
-  quantityDecreased: boolean = false;
+  ratingSelected: number | null = null;
+  hoveredRating: number = 0;
+  userChoice: 'presentation' | 'reviews' = 'presentation';
 
-  ngOnInit(){
-    this.route.params.subscribe((params) => this.dataSignal.getNotebookBySlug(params['notebookSlug']));
-    this.subscribeToNotebookBySlugSignal();
+  isFormSubmit: boolean = false;
+  isFormVisible: boolean = false;
+
+  windowSize$ = new Subject<[number, number]>();
+
+  @ViewChild('presentation') presentation!: ElementRef;
+  @ViewChild('reviewsSection') reviewsSection!: ElementRef;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event : Event) {
+    this.windowSize$.next([window.innerWidth, window.innerHeight]);
+    this.adaptSectionHeight();
   }
 
-  subscribeToNotebookBySlugSignal(): void {
+  postReviewForm = this.formBuilder.group({
+    lastname: ['', [Validators.required, Validators.maxLength(255)]],
+    firstname: ['', [Validators.required, Validators.maxLength(255)]],
+    content: ['', [Validators.required, Validators.maxLength(5000)]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+    rating: [0, [Validators.required, ratingValidator()]],
+    productCommonValuesDto: ['', [Validators.required]]
+  });
+
+  ngOnInit(){
+    this.findNotebookBySlug();
+    this.subscribeToNotebookBySlugSignal();
+    this.paginationSignal.setReviewStatus('Accepté');
+    this.paginationSignal.setReviewRating(0);
+    this.dataSignal.getAllReviewsByStatus();
+  }
+
+  ngAfterViewChecked(): void {
+    this.adaptSectionHeight();
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.paginationSignal.setReviewStatus("");
+    this.paginationSignal.setReviewProductCommonValuesDto(null);
+    this.paginationSignal.setReviewRating(0);
+  }
+
+  private findNotebookBySlug(): void {
+    this.route.params.subscribe((params) => this.dataSignal.getNotebookBySlug(params['notebookSlug']));
+  }
+
+  private subscribeToNotebookBySlugSignal(): void {
     this.subscriptions.push(
       this.dataSignal.$notebookBySlug.subscribe(
-        (notebook) => this.notebookSelected = notebook)
+        (notebook) => {
+          this.notebook = notebook;
+          if (notebook) {
+            this.dataSignal.getAllReviewsByStatus();
+            this.addProductToForm();
+          }
+        })
     )
   }
 
-  increase(notebook: NotebookDto): void {
-    this.quantityIncreased = true;
-    this.quantityDecreased = false;
-    this.shoppingCart.addItem(notebook, 'notebooks');
-    setTimeout(() => {
-      this.quantityIncreased = false;
-    }, 200);
+  private adaptSectionHeight(): void {
+    if (this.presentation && this.reviewsSection) {
+      const MAX_VALUE = this.presentation.nativeElement.offsetHeight > this.reviewsSection.nativeElement.offsetHeight ? this.presentation.nativeElement.offsetHeight : this.reviewsSection.nativeElement.offsetHeight;
+      document.documentElement.style.setProperty(
+        '--height-actual-page-two-choices',
+        MAX_VALUE + 'px'
+      );
+    }
   }
 
-  decrease(notebook: NotebookDto): void {
-    this.quantityIncreased = false;
-    this.quantityDecreased = true;
-    this.shoppingCart.subtractItem(notebook, 'notebooks')
-    setTimeout(() => {
-      this.quantityDecreased = false;
-    }, 200);
+  private addProductToForm(): void {
+    const PRODUCT = this.dataSignal.convertToProductDto(this.notebook!)
+    this.formHelper.onValueSelected(PRODUCT, 'productCommonValuesDto', this.postReviewForm);
+  }
+
+  onHoverStar(starNumber: number): void {
+    this.hoveredRating = starNumber;
+  }
+
+  isStarHovered(starNumber: number): boolean {
+    return starNumber <= this.hoveredRating;
+  }
+
+  onRate(rating: number): void {
+    this.postReviewForm.get('rating')!.setValue(rating);
+  }
+
+  onValuePageChange(event: string): void {
+    this.dataSignal.getAllReviewsByStatus();
   }
 
   onClickMaterial(material: MaterialDto): void {
     this.materialSelected = this.materialSelected === material ? null : material;
+  }
+
+  filterReviewsByRating(number: number): void {
+    this.ratingSelected = number === this.ratingSelected ? null : number;
+  }
+
+  submitReview(): void {
+    this.isFormSubmit = true;
+    if (this.postReviewForm.valid) {
+      const REVIEW = this.formHelper.formatFormAddValue<CreateReview>(this.postReviewForm, 'productCommonValuesDto');
+      this.dataSignal.postReview(REVIEW);
+      this.resetAll();
+    }
+  }
+
+  private resetAll(): void {
+    this.isFormVisible = false;
+    this.isFormSubmit = false;
+    this.postReviewForm.reset();
+    this.addProductToForm();
   }
 }

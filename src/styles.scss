@@ -244,10 +244,12 @@ img {
   object-fit: cover;
   object-position: center;
 }
+
 .filter-color,
 h1 {
   position: relative;
 }
+
 .filter-color {
   background-color: rgba($brown, 0.2);
 }
@@ -306,6 +308,41 @@ hr {
   text-decoration: line-through;
 }
 
+.two-choices-pages {
+  position: relative;
+  width: 100%;
+  height: var(--height-actual-page-two-choices);
+  transition: left 0.4s ease-in-out;
+
+  &.first-choice-visible {
+    left: 0;
+  }
+
+  &.second-choice-visible {
+    left: -100%;
+  }
+
+  .first-choice,
+  .second-choice {
+    position: absolute;
+    width: 100%;
+    height: max-content;
+    transition: left 0.4s ease;
+  }
+
+  .first-choice {
+    left: 0;
+  }
+
+  .second-choice {
+    left: 100%;
+  }
+}
+
+.symmetry-vertical {
+  transform: scaleX(-1);
+}
+
 @keyframes appearLinear {
   0% {
     z-index: $z-index + 10;
@@ -361,7 +398,7 @@ router-outlet + * {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: $max-width-mobile;
+  width: $max-width-mobile;
   //hauteur minimum de toute la page, moins celle du header et footer, auquelle on ajoute leurs bordures de 1px
   min-height: calc(100vh - (var(--height-header) + (var(--height-footer) + $normal-margin)));
   margin : var(--height-header) auto 0 auto;
@@ -371,14 +408,14 @@ router-outlet + * {
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   router-outlet + * {
-    max-width: $max-width-768px;
+    width: $max-width-768px;
   }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   router-outlet + * {
-    max-width: $max-width-992px;
+    width: $max-width-992px;
   }
 
   .desktop-only {
@@ -404,7 +441,7 @@ router-outlet + * {
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   router-outlet + * {
-    max-width: $max-width-1400px;
+    width: $max-width-1400px;
   }
 }
 
@@ -439,4 +476,7 @@ body {
 }
 .width90 {
   width: 90%;
+}
+.width100 {
+  width: 100%;
 }

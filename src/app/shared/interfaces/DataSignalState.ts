@@ -7,8 +7,8 @@ import { BehaviorSubject } from "rxjs";
 import {WorkshopDto} from "./Workshop";
 import {WorkshopDisponibilities} from "../../modules/admin/shared/interfaces/Workshop";
 import {PublicationDto} from "./Publication";
-import {GiftCardDto} from "./GiftCard";
 import {DeliveryOptionDto} from "./DeliveryOptionDto";
+import {ReviewDto} from "./Review";
 
 export interface DataSignalState {
   $privateCategoryList: WritableSignal<CategoryDto[]>;
@@ -26,7 +26,7 @@ export interface DataSignalState {
   $privateCounterRegistrationsReservedWorkshops: WritableSignal<WorkshopDisponibilities[]>;
   $privatePublications: WritableSignal<PublicationDto[]>;
   $privatePublicationsSpotlighted: WritableSignal<PublicationDto[]>;
-  $privateCounterPublications: BehaviorSubject<number>;
   $privateIsExpiredGiftCard: WritableSignal<boolean>;
   $privateDeliveryOptions: WritableSignal<DeliveryOptionDto[]>;
+  $privateReviews: WritableSignal<ReviewDto[]>
 }

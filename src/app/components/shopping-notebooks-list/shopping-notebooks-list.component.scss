@@ -42,34 +42,6 @@
           width: 100%;
           text-align: center;
         }
-
-        .shopping-cart-manager {
-          width: 60%;
-          p {
-            display: inline-block;
-          }
-          .manage-icon {
-            color: $lilac;
-            background-color: $white;
-            font-size: $triple-font-size;
-            border-radius: 100%;
-          }
-          div {
-            .fa-cart-shopping {
-              transition: transform 0.2s;
-              font-size: $fourth-font-size;
-              @include text-shadow(2px, $lilac-light-opacity-low)
-            }
-          }
-        }
-
-        .shopping-cart-manager.pulse-add .fa-cart-shopping {
-          animation: enterCart 0.2s ease-in-out;
-        }
-
-        .shopping-cart-manager.pulse-remove .fa-cart-shopping {
-          animation: exitCart 0.2s ease-in-out;
-        }
       }
     }
   }
@@ -94,16 +66,6 @@
           color: transparent;
           max-height: 60%;
           line-height: normal;
-        }
-        .shopping-cart-manager {
-          .manage-icon {
-            font-size: $double-font-size;
-          }
-          div {
-            .fa-cart-shopping {
-              font-size: $triple-font-size;
-            }
-          }
         }
       }
     }
@@ -134,17 +96,6 @@
 
         .notebook-description {
           width: 100%;
-          .shopping-cart-manager {
-            width: 80%;
-            .manage-icon {
-              font-size: $double-font-size;
-            }
-            div {
-              .fa-cart-shopping {
-                font-size: $double-font-size;
-              }
-            }
-          }
         }
       }
     }

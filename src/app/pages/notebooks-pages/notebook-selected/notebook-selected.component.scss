@@ -2,39 +2,91 @@
 @import "../../../scss/buttons.scss";
 @import "../../../../styles.scss";
 
-h2 {
-  width: 100%;
-}
-p {
-  font-size: $triple-font-size;
-}
-.components-list-and-component-description {
-  width: 100%;
-  flex-direction: column;
-  .components-list,
-  .component-description {
-    width: 100%;
-  }
-  .components-list {
-    flex-direction: row;
-    h3 {
-      margin: 0;
+.notebook-btns-choices {
+  .btn-filter-active {
+    i {
+      color: $orange-light;
     }
-    div {
-      flex-direction: row;
-      p {
-        margin-left: 4px;
+  }
+}
+
+.two-choices-pages {
+  .first-choice {
+    .components-list-and-component-description {
+      flex-direction: column;
+      .components-list,
+      .component-description {
+      }
+      .components-list {
+        flex-direction: row;
+        h3 {
+          margin: 0;
+        }
+        p {
+          margin-left: 4px;
+        }
+      }
+      .component-description {
+        .material-img {
+          max-width: 100%;
+          height: 400px;
+          object-fit: contain;
+        }
       }
     }
   }
-  .component-description {
-    .material-img {
-      max-width: 100%;
-      height: 400px;
-      object-fit: contain;
+  .second-choice {
+    .stars-filter {
+      p {
+        i {
+          margin-left: 8px;
+        }
+        .star-active {
+          color: $orange;
+        }
+      }
+    }
+    app-change-size-pagination-and-value-search {
+      .input-search {
+        display: none;
+      }
+    }
+
+    .fa-circle-xmark {
+      font-size: $max-font-size;
+    }
+
+  }
+}
+
+.stars-rating {
+  .star-container {
+    position: relative;
+    width: 20px;
+
+    .fa-star {
+      color: grey;
+      cursor: pointer;
+    }
+
+    .half-star {
+      position: absolute;
+      width: 10px;
+      overflow-x: hidden;
+      z-index: $z-index + 1;
+    }
+
+    .full-star {
+      position: absolute;
+      z-index: $z-index;
+    }
+
+    .star-colored {
+      color: $orange;
     }
   }
 }
+
 
 // Breackpoint list
 // Mobiles vers Tablettes :

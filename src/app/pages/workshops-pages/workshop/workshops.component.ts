@@ -1,9 +1,8 @@
-import {Component, inject, OnInit, Signal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { BaseComponent } from '../../../base.component';
 import { WorkshopDto } from '../../../shared/interfaces/Workshop';
 import {PaginationSignalService} from "../../../shared/services/pagination-signal.service";
 import {DataSignalService} from "../../../shared/services/data-signal.service";
-import {WorkshopDisponibilities} from "../../../modules/admin/shared/interfaces/Workshop";
 
 @Component({
   standalone: false,
@@ -44,28 +43,21 @@ export class WorkshopsComponent extends BaseComponent implements OnInit {
   private paginationSignal = inject(PaginationSignalService);
 
   backgroundImageParent: string = "../../../assets/images/figma/atelier.jpg";
-  workshopsWithDateToCome: Signal<WorkshopDto[]> = this.dataSignal.$workshopsDateToCome;
-  workshopsWithPastDate: Signal<WorkshopDto[]> = this.dataSignal.$workshopsPastDate;
-  disponibilities: Signal<WorkshopDisponibilities[]> = this.dataSignal.$workshopsRegistrationsReserved;
+  private disponibilities$ = this.dataSignal.$workshopsRegistrationsReserved;
+  workshopsWithDateToCome$ = this.dataSignal.$workshopsDateToCome;
+  workshopsWithPastDate$ = this.dataSignal.$workshopsPastDate;
 
   ngOnInit(): void {
     this.dataSignal.getWorkshopsByDateToCome();
-    this.getWorkshopsByPastDateAndCounter();
-    this.subscribeToWorkshopCounterSignal();
-  }
-
-  subscribeToWorkshopCounterSignal(): void {
-    this.subscriptions.push(
-      this.dataSignal.$workshopsCounterPastDate.subscribe((counter:number): void => this.paginationSignal.setCounterItem(counter))
-    )
+    this.dataSignal.getWorkshopsByPastDate();
   }
 
   onValuePageChange(event : string): void {
-    this.getWorkshopsByPastDateAndCounter();
+    this.dataSignal.getWorkshopsByPastDate();
   }
 
   inscriptionsReservedByWorkshopSlug(workshopSlug: WorkshopDto['slug']): number {
-    for (let item of this.disponibilities()) {
+    for (let item of this.disponibilities$()) {
       if (item.workshopSlug === workshopSlug) {
         return item.registrationsReserved;
       }
@@ -73,8 +65,4 @@ export class WorkshopsComponent extends BaseComponent implements OnInit {
     return 0;
   }
 
-  private getWorkshopsByPastDateAndCounter(): void {
-    this.dataSignal.getWorkshopsByPastDate();
-    this.dataSignal.getCounterWorkshopsByPastDate();
-  }
 }

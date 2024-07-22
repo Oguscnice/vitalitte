@@ -1,26 +1,26 @@
 import {Component, Signal, inject, OnInit, OnDestroy} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { FileUploadService } from '../../shared/services/file-upload.service';
-import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
-import { MaterialDto } from 'src/app/shared/interfaces/Material';
-import { urlValidator } from '../../shared/validators/urlValidators';
-import { priceValidator } from '../../shared/validators/priceValidators';
-import { CategoryDto } from 'src/app/shared/interfaces/Category';
-import { CollectionDto } from 'src/app/shared/interfaces/Collection';
-import { TOOLS_BAR_CONFIG_EDITOR } from '../../shared/variables/Other';
-import { FormHelperService } from '../../shared/services/form-helper.service';
-import { DataSignalService } from 'src/app/shared/services/data-signal.service';
-import { SecondaryPictureDto } from 'src/app/shared/interfaces/SecondaryPicture';
-import { AdminNotebookSignalService } from '../../shared/services/admin-notebook-signal.service';
-import { FileInfo } from '../../shared/interfaces/FileInfo';
-import {BaseComponent} from "../../../../base.component";
+import { FileUploadService } from '../../../shared/services/file-upload.service';
+import { NotebookDto } from '../../../../../shared/interfaces/Notebook';
+import { MaterialDto } from '../../../../../shared/interfaces/Material';
+import { urlValidator } from '../../../shared/validators/urlValidators';
+import { priceValidator } from '../../../shared/validators/priceValidators';
+import { CategoryDto } from '../../../../../shared/interfaces/Category';
+import { CollectionDto } from '../../../../../shared/interfaces/Collection';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
+import { FormHelperService } from '../../../shared/services/form-helper.service';
+import { DataSignalService } from '../../../../../shared/services/data-signal.service';
+import { SecondaryPictureDto } from '../../../../../shared/interfaces/SecondaryPicture';
+import { AdminNotebookSignalService } from '../../../shared/services/admin-notebook-signal.service';
+import { FileInfo } from '../../../shared/interfaces/FileInfo';
+import {BaseComponent} from "../../../../../base.component";
 
 @Component({
   standalone: false,
   selector: 'app-edit-notebook',
   templateUrl: './edit-notebook.component.html',
-  styles: [` @import "../../scss/admin-general.scss"; `]
+  styles: [` @import "../../../scss/admin-general"; `]
 })
 export class EditNotebookComponent extends BaseComponent implements OnInit {
 
@@ -89,7 +89,7 @@ export class EditNotebookComponent extends BaseComponent implements OnInit {
 
   patchFormValue(notebook : NotebookDto): void {
     this.editNotebookForm.get('name')!.setValue(notebook.name);
-    this.editNotebookForm.get('slug')!.setValue(notebook.slug);
+    this.editNotebookForm.get('slug')!.setValue(notebook.slug!);
     this.editNotebookForm.get('price')!.setValue(notebook.price.toString());
     this.editNotebookForm.get('introduction')!.setValue(notebook.introduction);
     this.editNotebookForm.get('description')!.setValue(notebook.description);

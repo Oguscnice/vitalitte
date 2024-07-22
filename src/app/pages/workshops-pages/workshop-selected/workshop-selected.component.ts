@@ -14,10 +14,7 @@ import { quantityValidator } from 'src/app/shared/validators/QuantityValidator';
 import {FormHelperService} from "../../../modules/admin/shared/services/form-helper.service";
 import {DataSignalService} from "../../../shared/services/data-signal.service";
 import {WorkshopDisponibilities} from "../../../modules/admin/shared/interfaces/Workshop";
-<<<<<<< HEAD
-=======
 import {CustomCurrencyPipe} from "../../../shared/services/pipes/custom-currency.pipe";
->>>>>>> 81198db936d308cd74d8ee97d95fa45e3fa9568c
 
 @Component({
   standalone: true,

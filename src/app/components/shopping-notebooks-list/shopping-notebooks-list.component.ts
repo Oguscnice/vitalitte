@@ -8,10 +8,11 @@ import {CategoryDto} from "../../shared/interfaces/Category";
 import {CollectionDto} from "../../shared/interfaces/Collection";
 import {ReactiveFormsModule} from "@angular/forms";
 import {FilterNotebooksPipe} from "../../shared/services/pipes/filter-notebooks.pipe";
+import {CartItemQuantityManagerComponent} from "../cart-item-quantity-manager/cart-item-quantity-manager.component";
 
 @Component({
   standalone: true,
-  imports: [TitleCasePipe, DecimalPipe, NgClass, RouterLink, ReactiveFormsModule, FilterNotebooksPipe],
+  imports: [TitleCasePipe, DecimalPipe, NgClass, RouterLink, ReactiveFormsModule, FilterNotebooksPipe, CartItemQuantityManagerComponent],
   selector: 'app-shopping-notebooks-list',
   templateUrl: './shopping-notebooks-list.component.html',
   styleUrls: ['./shopping-notebooks-list.component.scss']
@@ -65,25 +66,5 @@ export class ShoppingNotebooksListComponent implements OnInit {
     this.isCollectionDropdownOpen = false;
     this.isMaterialsDropdownOpen = false;
     this[`is${dropdownClicked}DropdownOpen`] = !actualValue;
-  }
-
-  increase(notebook: NotebookDto): void {
-    this.quantityIncreased = true;
-    this.quantityDecreased = false;
-    this.cartToAnimate = notebook.slug;
-    this.shoppingCart.addItem(notebook, 'notebooks');
-    setTimeout(() => {
-      this.quantityIncreased = false;
-    }, 200);
-  }
-
-  decrease(notebook: NotebookDto): void {
-    this.quantityIncreased = false;
-    this.quantityDecreased = true;
-    this.cartToAnimate = notebook.slug;
-    this.shoppingCart.subtractItem(notebook, 'notebooks')
-    setTimeout(() => {
-      this.quantityDecreased = false;
-    }, 200);
   }
 }

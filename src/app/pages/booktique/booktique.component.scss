@@ -10,41 +10,12 @@
 
   }
 
-  .two-choices {
-    position: relative;
-    width: 100%;
-    height: var(--height-booktique-page);
-    transition: left 0.4s ease-in-out;
-
+  .two-choices-pages {
     div {
       h3 {
         margin-top: 0px;
         margin-bottom: $triple-padding;
       }
-    }
-
-    &.models-visible {
-      left: 0;
-    }
-
-    &.handmades-visible {
-      left: -100%;
-    }
-
-    .models,
-    .handmades {
-      position: absolute;
-      width: 100%;
-      height: max-content;
-      transition: left 0.4s ease;
-    }
-
-    .models {
-      left: 0;
-    }
-
-    .handmades {
-      left: 100%;
     }
   }
 }

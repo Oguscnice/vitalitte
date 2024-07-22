@@ -92,14 +92,7 @@
           <h4> {{ notebook.name | titlecase }} </h4>
           <p> {{ notebook.price | number: '0.2' }} €</p>
           <p class="desktop-only notebook-introduction" [innerHTML]="notebook.introduction"></p>
-          <div class="shopping-cart-manager flex center space-around" [ngClass]="{'pulse-add': quantityIncreased && cartToAnimate === notebook.slug, 'pulse-remove': quantityDecreased && cartToAnimate === notebook.slug}">
-            <i class="fa-solid fa-circle-minus manage-icon pointer" (click)="decrease(notebook)"></i>
-            <div class="flex column center">
-              <p> {{ shoppingCart.counterQuantity(notebook, 'notebooks') }} </p>
-              <i class="fa-solid fa-cart-shopping"></i>
-            </div>
-            <i class="fa-solid fa-circle-plus manage-icon pointer" (click)="increase(notebook)"></i>
-          </div>
+          <app-cart-item-quantity-manager [product]="{item:notebook, quantity:shoppingCart.counterQuantity(notebook, 'notebooks')}"/>
         </div>
       </div>
       @if (index + 1 < notebooks().length) {

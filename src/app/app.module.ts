@@ -50,6 +50,9 @@ import {CheckoutComponent} from "./pages/checkout/checkout.component";
 import {CustomCurrencyPipe} from "./shared/services/pipes/custom-currency.pipe";
 import {ReactiveFormsModule} from "@angular/forms";
 import {CheckoutFormComponent} from "./components/checkout-form/checkout-form.component";
+import {
+    CartItemQuantityManagerComponent
+} from "./components/cart-item-quantity-manager/cart-item-quantity-manager.component";
 
 
 @NgModule({
@@ -99,7 +102,8 @@ import {CheckoutFormComponent} from "./components/checkout-form/checkout-form.co
         ChangePageButtonsPagination,
         CustomCurrencyPipe,
         ReactiveFormsModule,
-        CheckoutFormComponent
+        CheckoutFormComponent,
+        CartItemQuantityManagerComponent
     ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

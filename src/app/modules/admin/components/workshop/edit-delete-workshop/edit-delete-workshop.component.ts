@@ -31,23 +31,15 @@ export class EditDeleteWorkshopComponent extends BaseComponent implements OnInit
   private modalSignal: ModalSignalService = inject(ModalSignalService);
   private paginationSignal: PaginationSignalService = inject(PaginationSignalService);
 
-  workshopsDateToCome: Signal<WorkshopDto[]> = this.dataSignal.$workshopsDateToCome;
-  workshopsPastDate: Signal<WorkshopDto[]> = this.dataSignal.$workshopsPastDate;
-  disponibilities: Signal<WorkshopDisponibilities[]> = this.dataSignal.$workshopsRegistrationsReserved;
+  workshopsDateToCome$= this.dataSignal.$workshopsDateToCome;
+  workshopsPastDate$= this.dataSignal.$workshopsPastDate;
+  disponibilities$ = this.dataSignal.$workshopsRegistrationsReserved;
 
   isTableVisible: boolean = true;
 
   ngOnInit(): void {
     this.dataSignal.getWorkshopsByDateToCome();
     this.dataSignal.getWorkshopsByPastDate();
-    this.dataSignal.getCounterWorkshopsByPastDate();
-    this.subscribeToWorkshopCounterSignal();
-  }
-
-  subscribeToWorkshopCounterSignal(): void {
-    this.subscriptions.push(
-      this.dataSignal.$workshopsCounterPastDate.subscribe((counter:number): void => this.paginationSignal.setCounterItem(counter))
-    )
   }
 
   onValuePageChange(event : string): void {
