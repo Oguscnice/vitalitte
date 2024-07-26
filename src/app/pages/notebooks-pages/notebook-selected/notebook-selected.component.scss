@@ -1,42 +1,65 @@
-@import "../../../scss/variables.scss";
-@import "../../../scss/buttons.scss";
-@import "../../../../styles.scss";
+@import "src/app/scss/variables.scss";
+@import "src/app/scss/buttons.scss";
 
-.notebook-selected-page{
-  padding: 0 $fourth-padding;
-  div{
-    h2{
-      width: 100%;
+.notebook-btns-choices {
+  .btn-filter-active {
+    i {
+      color: $orange-light;
     }
-    p{
-      font-size: $triple-font-size;
+  }
+}
+
+.two-choices-pages {
+  .first-choice-container {
+    .first-choice-content {
+      .materials-list-and-description {
+        flex-direction: column;
+        .materials-list {
+          flex-direction: row;
+          width: 100%;
+          h3 {
+            margin: 0;
+          }
+          p {
+            margin-left: 4px;
+          }
+        }
+        .material-description {
+          width: 100%;
+          img {
+            max-width: 100%;
+            height: 400px;
+            object-fit: contain;
+          }
+        }
+      }
     }
-    // .descriptions-list{
-    //   margin: $normal-margin 0;
-    //   .description{
-    //     font-size: $double-font-size;
-    //     text-align: left;
-    //   }
-    // }
-    .components-list{
-      width: 100%;
-      font-size: calc($normal-font-size * 1.2);
-      span{
-        margin-right: 4px;
+  }
+  .second-choice-container {
+    .second-choice-content {
+      .stars-filter {
+        p {
+          i {
+            margin-left: 8px;
+          }
+          .star-active {
+            color: $orange;
+          }
+        }
       }
     }
   }
 }
 
+.text-left {
+  text-align: left;
+}
+
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
-  .notebook-selected-page{
-    div{
-      max-width: $max-width-768px;
-    }
-  }
 }
+
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
 }

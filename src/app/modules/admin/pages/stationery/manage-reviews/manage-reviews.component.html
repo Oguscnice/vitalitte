@@ -1,0 +1,100 @@
+<h1>Gérer des Avis Utilisateurs</h1>
+
+@if (reviewStatusList$()) {
+  <div class="flex width100 wrap space-around">
+    @for (status of reviewStatusList$(); track status) {
+      <button class="chips"
+              [ngClass]="{'chips-selected': status === reviewStatusSelectedFilter}"
+              (click)="onReviewStatusClicked(status)">
+        {{ status }}
+      </button>
+    }
+  </div>
+}
+
+<button class="btn-filter"
+        [ngClass]="{'btn-filter-active': seeRating}"
+        (click)="seeRating = !seeRating">
+  Voir les notes
+</button>
+
+<app-change-size-pagination-and-value-search [isInputSearchHidden]="true" (onValueSearchChange)="onValuePageChange($event)"/>
+
+@if (reviews$() && reviews$().length > 0) {
+
+  <table>
+    <thead>
+    <tr>
+      <td>
+        <p> Posté le : </p>
+      </td>
+      <td>
+        <p> Par </p>
+      </td>
+      @if (seeRating) {
+        <td>
+          <p> Note </p>
+        </td>
+      }
+      <td>
+        <p> Avis </p>
+      </td>
+      <td>
+        <p> Produit </p>
+      </td>
+      <td>
+        <p> Statut </p>
+      </td>
+    </tr>
+
+    <tbody>
+    @for (review of reviews$(); track review; let index = $index) {
+      <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+        <td>
+          <p> {{ review.createdAt | date:'dd/MM/YY à HH:mm' }} </p>
+        </td>
+        <td>
+          <div class="flex column">
+            <p class="flex line-nowrap"> {{ review.firstname | titlecase }} {{ review.lastname | slice:0:1 | uppercase }}. </p>
+            <p class="flex line-nowrap"> {{ review.email }} </p>
+          </div>
+        </td>
+        @if (seeRating) {
+          <td>
+            <p class="flex"> {{ review.rating }} <i class="fa-solid fa-star"></i> </p>
+          </td>
+        }
+        <td>
+          <i class="fa-solid fa-file-lines pointer flex center" (click)="openModalWithReviewContent(review.content)"></i>
+        </td>
+        <td>
+          <p> {{ review.productCommonValuesDto.name | titlecase }} </p>
+        </td>
+        <td class="table-width-icon">
+          <div class="flex center">
+            @for (status of ['Accepté', 'Refusé']; track status) {
+              <div class="flex column center">
+                <input type="checkbox"
+                       (click)="changeStatusReview(status, review)"
+                       [checked]="isChecked(status, review)"
+                       [disabled]="isChecked(status, review)">
+                @if (status === 'Accepté') {
+                  <i class="fa-solid fa-circle-check" (click)="changeStatusReview(status, review)"></i>
+                } @else {
+                  <i class="fa-solid fa-circle-xmark" (click)="changeStatusReview(status, review)"></i>
+                }
+              </div>
+            }
+          </div>
+        </td>
+      </tr>
+    }
+    </tbody>
+  </table>
+
+  <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+} @else {
+  <h2> Pas de commentaires avec ces critères de recherche</h2>
+}
+
+

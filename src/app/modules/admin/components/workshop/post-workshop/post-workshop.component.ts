@@ -12,7 +12,6 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
 import {AdminWorkshopSignalService} from "../../../shared/services/admin-workshop-signal.service";
 import {FormHelperService} from "../../../shared/services/form-helper.service";
 import {BaseComponent} from "../../../../../base.component";
-import {AnguilleSignalService} from "../../../../../shared/services/anguille-signal.service";
 
 @Component({
   selector: 'app-post-workshop',
@@ -27,7 +26,6 @@ export class PostWorkshopComponent extends BaseComponent implements OnInit {
   private formBuilder: FormBuilder = inject(FormBuilder);
   private formHelper: FormHelperService = inject(FormHelperService);
   private adminWorkshopSignal: AdminWorkshopSignalService = inject(AdminWorkshopSignalService);
-  private anguilleSignal: AnguilleSignalService = inject(AnguilleSignalService);
   apiBanService: ApiBanService = inject(ApiBanService);
   fileUploadService: FileUploadService = inject(FileUploadService);
 

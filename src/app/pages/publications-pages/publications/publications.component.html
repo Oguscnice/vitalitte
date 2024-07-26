@@ -2,10 +2,10 @@
         [backgroundImageChild]="backgroundImageParentHome"></app-h1>
 
 <h3 class="flex center">Actus du moment</h3>
-@if (publicationsSpotlighted().length > 0) {
+@if (publicationsSpotlighted$() && publicationsSpotlighted$().length > 0) {
   <div class="publications flex column center">
     <div class="flex wrap space-between publications-section">
-      @for (publication of publicationsSpotlighted(); track publication) {
+      @for (publication of publicationsSpotlighted$(); track publication) {
         <app-publication-thumbnail [publication]="publication"/>
       }
     </div>
@@ -15,19 +15,21 @@
 }
 
 <h3 class="flex center">Toutes nos actualités</h3>
-@if (publications().length > 0) {
 
-  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+<app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+
+@if (publications$() && publications$().length > 0) {
 
   <div class="publications flex column center">
     <div class="flex wrap space-between publications-section">
-      @for (publication of publications(); track publication) {
+      @for (publication of publications$(); track publication) {
         <app-publication-thumbnail [publication]="publication"/>
       }
     </div>
   </div>
 
   <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+
 } @else {
   <h4 class="flex center">Pas d'actualité.</h4>
 }

@@ -1,9 +1,23 @@
 <nav class="flex space-between center" #navBar>
-  <img src="../../../assets/images/figma/icone.png"
+  <img src="../../../assets/images/logo.png"
        alt="Logo du site VitaLitté"
        class="pointer"/>
   <h3 class="flex pointer"
       [routerLink]="'/'">VitaLitté</h3>
+       class="pointer desktop-only"
+  <img src="../../../assets/images/icon-thumbnail.png"
+       alt="Logo du site VitaLitté"
+       class="pointer mobile-only"
+       [routerLink]="'/'"/>
+  <h3 class="flex pointer" [routerLink]="'/'">
+    <span class="lilac">V</span>ita<span class="orange">L</span>itté
+  </h3>
+
+  @if (!env.production) {
+    <p> <em>Env. Front : {{ environment | titlecase }}</em></p>
+  }
+
+>>>>>>> 81198db936d308cd74d8ee97d95fa45e3fa9568c
   <div class="shopping-cart-counter pointer"
        [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'"
        (click)="changeModalShoppingCartVisibility(!isShoppingCartListOpen)">
@@ -41,7 +55,7 @@
           <div class="flex center space-around submenu"
               [ngClass]="item.submenu.isOpen ? '' : 'close' ">
 
-              @for (subItem of item.submenu.items; track subItem) {
+              @for (subItem of item.submenu!.items; track subItem) {
                 <a class="flex center"
                   [href]="item.routerLink + '#' + subItem.anchor"
                   (click)="closeMenuBurger(item.routerLink, $event)">

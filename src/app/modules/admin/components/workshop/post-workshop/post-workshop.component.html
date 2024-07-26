@@ -75,7 +75,7 @@
                  (keyup)="apiBanService.searchAddress($event)"
                  (focus)="apiBanService.toggleDropdown(true)"
                  [value]="this.newWorkshopForm.get('address')!.value ? this.newWorkshopForm.get('address')!.value : ''"/>
-          <div class="arrow-icone flex center">
+          <div class="arrow-icon flex center">
             @if (apiBanService.isDropdownBanOpen) {
               <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
             } @else {

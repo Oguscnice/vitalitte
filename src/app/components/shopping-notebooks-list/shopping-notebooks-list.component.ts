@@ -8,10 +8,11 @@ import {CategoryDto} from "../../shared/interfaces/Category";
 import {CollectionDto} from "../../shared/interfaces/Collection";
 import {ReactiveFormsModule} from "@angular/forms";
 import {FilterNotebooksPipe} from "../../shared/services/pipes/filter-notebooks.pipe";
+import {CartItemQuantityManagerComponent} from "../cart-item-quantity-manager/cart-item-quantity-manager.component";
 
 @Component({
   standalone: true,
-  imports: [TitleCasePipe, DecimalPipe, NgClass, RouterLink, ReactiveFormsModule, FilterNotebooksPipe],
+  imports: [TitleCasePipe, DecimalPipe, NgClass, RouterLink, ReactiveFormsModule, FilterNotebooksPipe, CartItemQuantityManagerComponent],
   selector: 'app-shopping-notebooks-list',
   templateUrl: './shopping-notebooks-list.component.html',
   styleUrls: ['./shopping-notebooks-list.component.scss']
@@ -47,31 +48,23 @@ export class ShoppingNotebooksListComponent implements OnInit {
     this.collectionSelected = this.collectionSelected === collection ? null : collection;
   }
 
+  isCategoryOrCollectionPresent(object: CategoryDto | CollectionDto): boolean {
+    let notebookFiltered = this.notebooks();
+    if (this.categorySelected && this.collectionSelected) {
+      notebookFiltered = this.notebooks().filter(notebook => (notebook.categoryDto.slug === this.categorySelected!.slug) && (notebook.collectionDto.slug === this.collectionSelected!.slug));
+    } else if (this.categorySelected) {
+      notebookFiltered = this.notebooks().filter(notebook => notebook.categoryDto.slug === this.categorySelected!.slug);
+    } else if (this.collectionSelected) {
+      notebookFiltered = this.notebooks().filter(notebook => notebook.collectionDto.slug === this.collectionSelected!.slug);
+    }
+    return notebookFiltered.some(notebook => notebook.categoryDto.slug === object.slug || notebook.collectionDto.slug === object.slug);
+  }
+
   toggleDropdown(dropdownClicked : 'Collection' | 'Category' | 'Materials'): void {
     const actualValue = this[`is${dropdownClicked}DropdownOpen`];
     this.isCategoryDropdownOpen = false;
     this.isCollectionDropdownOpen = false;
     this.isMaterialsDropdownOpen = false;
     this[`is${dropdownClicked}DropdownOpen`] = !actualValue;
-  }
-
-  increase(notebook: NotebookDto): void {
-    this.quantityIncreased = true;
-    this.quantityDecreased = false;
-    this.cartToAnimate = notebook.slug;
-    this.shoppingCart.addItem(notebook, 'notebooks');
-    setTimeout(() => {
-      this.quantityIncreased = false;
-    }, 200);
-  }
-
-  decrease(notebook: NotebookDto): void {
-    this.quantityIncreased = false;
-    this.quantityDecreased = true;
-    this.cartToAnimate = notebook.slug;
-    this.shoppingCart.subtractItem(notebook, 'notebooks')
-    setTimeout(() => {
-      this.quantityDecreased = false;
-    }, 200);
   }
 }

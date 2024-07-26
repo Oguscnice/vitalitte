@@ -1,4 +1,4 @@
-import {AfterViewChecked, AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {Subject} from "rxjs";
 
 @Component({
@@ -30,7 +30,7 @@ export class BooktiqueComponent implements AfterViewChecked {
   adaptSectionHeight(): void {
     const MAX_VALUE = this.models.nativeElement.offsetHeight > this.handmades.nativeElement.offsetHeight ? this.models.nativeElement.offsetHeight : this.handmades.nativeElement.offsetHeight;
     document.documentElement.style.setProperty(
-      '--height-booktique-page',
+      '--height-actual-page-two-choices',
       MAX_VALUE + 'px'
     );
   }

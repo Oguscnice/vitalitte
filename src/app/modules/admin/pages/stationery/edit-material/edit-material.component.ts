@@ -1,22 +1,22 @@
 import {Component, inject, OnInit, Signal} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import { MaterialDto } from 'src/app/shared/interfaces/Material';
-import { FileUploadService } from '../../shared/services/file-upload.service';
+import { MaterialDto } from '../../../../../shared/interfaces/Material';
+import { FileUploadService } from '../../../shared/services/file-upload.service';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { urlValidator } from '../../shared/validators/urlValidators';
-import { priceValidator } from '../../shared/validators/priceValidators';
-import { TOOLS_BAR_CONFIG_EDITOR } from '../../shared/variables/Other';
-import {FormHelperService} from "../../shared/services/form-helper.service";
-import {DataSignalService} from "../../../../shared/services/data-signal.service";
-import {AdminMaterialSignalService} from "../../shared/services/admin-material-signal.service";
+import { urlValidator } from '../../../shared/validators/urlValidators';
+import { priceValidator } from '../../../shared/validators/priceValidators';
+import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
+import {FormHelperService} from "../../../shared/services/form-helper.service";
+import {DataSignalService} from "../../../../../shared/services/data-signal.service";
+import {AdminMaterialSignalService} from "../../../shared/services/admin-material-signal.service";
 import {Subscription} from "rxjs";
-import {BaseComponent} from "../../../../base.component";
+import {BaseComponent} from "../../../../../base.component";
 
 @Component({
   standalone: false,
   selector: 'app-edit-material',
   templateUrl: './edit-material.component.html',
-  styles: [` @import "../../scss/admin-general.scss"; `]
+  styles: [` @import "../../../scss/admin-general"; `]
 })
 export class EditMaterialComponent extends BaseComponent implements OnInit {
 

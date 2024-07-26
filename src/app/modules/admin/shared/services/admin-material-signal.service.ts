@@ -8,9 +8,10 @@ import {AdminMaterialSignalState} from "../interfaces/AdminMaterialSignalState";
 import {MaterialDto} from "../../../../shared/interfaces/Material";
 import {BaseComponent} from "../../../../base.component";
 import {CreateMaterial} from "../interfaces/Material";
-import {PaginationWithSearchValue} from "../../../../shared/interfaces/Pagination";
+import {PaginationWithSearchValue} from "../../../../shared/interfaces/Page";
 import {BehaviorSubject, Observable} from "rxjs";
 import {ResponseEntity} from "../../../../shared/interfaces/ResponseEntity";
+import {PaginationSignalService} from "../../../../shared/services/pagination-signal.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class AdminMaterialSignalService extends  BaseComponent {
   private apiMaterialAdmin: ApiMaterialAdminService = inject(ApiMaterialAdminService);
   private anguilleSignal: AnguilleSignalService = inject(AnguilleSignalService);
   private modalSignal: ModalSignalService = inject(ModalSignalService);
+  private paginationSignal = inject(PaginationSignalService);
   private router: Router = inject(Router);
 
   private readonly state: AdminMaterialSignalState = {
@@ -51,19 +53,13 @@ export class AdminMaterialSignalService extends  BaseComponent {
     )
   }
 
-  getCounterWithSearchValue(paginationWithSearchValue: PaginationWithSearchValue): void {
+  getPaginatedWithSearchValue(): void {
     this.subscriptions.push(
-      this.apiMaterialAdmin.getCounterMaterialsBySearchValue(paginationWithSearchValue).subscribe({
-        next: (counter: number) => this.setCounterMaterials(counter),
-        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getPaginatedWithSearchValue(paginationWithSearchValue: PaginationWithSearchValue): void {
-    this.subscriptions.push(
-      this.apiMaterialAdmin.getMaterialsPaginatedBySearchValue(paginationWithSearchValue).subscribe({
-        next: (materials: MaterialDto[]) => this.dataSignal.setMaterialList(materials),
+      this.apiMaterialAdmin.getMaterialsPaginatedBySearchValue(this.paginationSignal.transformToPaginationWithSearchValue()).subscribe({
+        next: (page) => {
+          this.paginationSignal.setPageInfo(page);
+          this.dataSignal.setMaterialList(page.content);
+        },
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )

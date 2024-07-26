@@ -7,14 +7,14 @@ import { Value } from 'src/app/shared/interfaces/Value';
   selector: 'app-values',
   template: `<div class="values-container flex">
               @for (value of valuesList; track value) {
-                <div class="value-icone-and-name flex column center">
+                <div class="value-icon-and-name flex column center">
                   @if (value.source === 'fonts.google') {
                     <span class="material-symbols-outlined flex center">
-                        {{ value.icone }}
+                        {{ value.icon }}
                     </span>
                   }
                   @if (value.source === 'fontawesome') {
-                    <i class="{{ value.icone }} flex center"></i>
+                    <i class="{{ value.icon }} flex center"></i>
                   }
                   <p>{{ value.name }}</p>
                 </div>
@@ -25,20 +25,22 @@ import { Value } from 'src/app/shared/interfaces/Value';
 })
 export class ValuesComponent {
   valuesList: Value[] = [
-    { name: 'Ecofriendly', icone: 'compost', source: 'fonts.google' },
+    { name: 'Ecofriendly',
+      icon: 'compost',
+      source: 'fonts.google' },
     {
       name: 'Handmade',
-      icone: 'fa-solid fa-hand-sparkles',
+      icon: 'fa-solid fa-hand-sparkles',
       source: 'fontawesome',
     },
     {
       name: 'Bienveillance',
-      icone: 'fa-solid fa-hand-holding-heart',
+      icon: 'fa-solid fa-hand-holding-heart',
       source: 'fontawesome',
     },
     {
       name: 'FourthValue',
-      icone: 'psychology_alt',
+      icon: 'psychology_alt',
       source: 'fonts.google',
     },
   ];

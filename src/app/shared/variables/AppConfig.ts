@@ -5,7 +5,8 @@ export const VITALITTE_PROJECT = {
     },
     shipping: {
       free: 70
-    }
+    },
+    rating: [1, 2, 3, 4, 5]
   },
   back: {
     url:'http://localhost:8080/api'

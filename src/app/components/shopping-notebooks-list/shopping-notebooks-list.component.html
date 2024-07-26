@@ -15,7 +15,7 @@
                    (click)="toggleDropdown('Category')"
                    [value]="categorySelected ? categorySelected.name : 'Toutes'"
                    readonly/>
-            <div class="arrow-icone flex center">
+            <div class="arrow-icon flex center">
               @if (isCategoryDropdownOpen) {
                 <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Category')"></i>
               } @else {
@@ -29,9 +29,11 @@
               Toutes
             </li>
             @for (category of categories(); track category) {
-              <li (click)="onCategorySelected(category); toggleDropdown('Category') ">
-                {{ category.name | titlecase }}
-              </li>
+              @if (isCategoryOrCollectionPresent(category)) {
+                <li (click)="onCategorySelected(category); toggleDropdown('Category') ">
+                  {{ category.name | titlecase }}
+                </li>
+              }
             }
           </ul>
         </div>
@@ -52,7 +54,7 @@
                    (click)="toggleDropdown('Collection')"
                    [value]="collectionSelected ? collectionSelected.name : 'Toutes'"
                    readonly/>
-            <div class="arrow-icone flex center">
+            <div class="arrow-icon flex center">
               @if (isCollectionDropdownOpen) {
                 <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Collection')"></i>
               } @else {
@@ -66,9 +68,11 @@
               Toutes
             </li>
             @for (collection of collections(); track collection) {
-              <li (click)="onCollectionSelected(collection); toggleDropdown('Collection') ">
-                {{ collection.name | titlecase }}
-              </li>
+              @if (isCategoryOrCollectionPresent(collection)) {
+                <li (click)="onCollectionSelected(collection); toggleDropdown('Collection') ">
+                  {{ collection.name | titlecase }}
+                </li>
+              }
             }
           </ul>
         </div>
@@ -88,14 +92,7 @@
           <h4> {{ notebook.name | titlecase }} </h4>
           <p> {{ notebook.price | number: '0.2' }} €</p>
           <p class="desktop-only notebook-introduction" [innerHTML]="notebook.introduction"></p>
-          <div class="shopping-cart-manager flex center space-around" [ngClass]="{'pulse-add': quantityIncreased && cartToAnimate === notebook.slug, 'pulse-remove': quantityDecreased && cartToAnimate === notebook.slug}">
-            <i class="fa-solid fa-circle-minus manage-icon pointer" (click)="decrease(notebook)"></i>
-            <div class="flex column center">
-              <p> {{ shoppingCart.counterQuantity(notebook, 'notebooks') }} </p>
-              <i class="fa-solid fa-cart-shopping"></i>
-            </div>
-            <i class="fa-solid fa-circle-plus manage-icon pointer" (click)="increase(notebook)"></i>
-          </div>
+          <app-cart-item-quantity-manager [product]="{item:notebook, quantity:shoppingCart.counterQuantity(notebook, 'notebooks')}"/>
         </div>
       </div>
       @if (index + 1 < notebooks().length) {
