@@ -1,6 +1,6 @@
 import { NgClass, TitleCasePipe } from '@angular/common';
-import {Component, inject, OnInit, Signal} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
@@ -18,11 +18,9 @@ import {
 } from "../../../../../components/change-page-buttons-pagination/change-page-buttons-pagination.component";
 import {DataSignalService} from "../../../../../shared/services/data-signal.service";
 import {FormHelperService} from "../../../shared/services/form-helper.service";
-import {Observable} from "rxjs";
 import {BaseComponent} from "../../../../../base.component";
 import {ModalSignalService} from "../../../../../shared/services/modal-signal.service";
 import {AdminPublicationSignalService} from "../../../shared/services/admin-publication-signal.service";
-import {PaginationSignalService} from "../../../../../shared/services/pagination-signal.service";
 
 @Component({
   standalone: true,
@@ -39,9 +37,8 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
   private modalSignal = inject(ModalSignalService);
   private adminPublicationSignal = inject(AdminPublicationSignalService);
   private dataSignal = inject(DataSignalService);
-  private paginationSignal = inject(PaginationSignalService);
 
-  publications: Signal<PublicationDto[]> = this.dataSignal.$publications;
+  publications$ = this.dataSignal.$publications;
 
   isTableVisible: boolean = true;
   isFormSubmit : boolean = false;
@@ -59,19 +56,8 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
   });
 
   ngOnInit(): void {
-    this.reloadPaginationValueAndCounter();
-    this.subscribeAll();
-  }
-
-  private subscribeAll(): void {
+    this.dataSignal.getPublicationsPaginated();
     this.subscribeToPublicationBySlugSignal();
-    this.subscribeCounterPublicationValueChange();
-  }
-
-  private subscribeCounterPublicationValueChange(): void {
-    this.subscriptions.push(
-      this.dataSignal.$publicationsCounter.subscribe((counter: number) => this.paginationSignal.setCounterItem(counter))
-    )
   }
 
   private subscribeToPublicationBySlugSignal(): void {
@@ -86,12 +72,7 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
   }
 
   onValuePageChange(event : string): void {
-    this.reloadPaginationValueAndCounter();
-  }
-
-  private reloadPaginationValueAndCounter(): void {
     this.dataSignal.getPublicationsPaginated();
-    this.dataSignal.getCounterPublications();
   }
 
   openModalWithDescription(publicationDescription : PublicationDto['description']): void{

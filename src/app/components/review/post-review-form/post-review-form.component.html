@@ -1,0 +1,149 @@
+@if (!isFormVisible) {
+  <button class="btn-normal" (click)="isFormVisible = !isFormVisible">
+    Laisser un commentaire
+  </button>
+} @else {
+  <i class="fa-solid fa-circle-xmark" (click)="isFormVisible = !isFormVisible"></i>
+  <form (ngSubmit)="(postReviewForm.valid)"
+        [formGroup]="postReviewForm"
+        #myForm="ngForm">
+
+    <fieldset class="flex column">
+      <label for="lastname">Nom :</label>
+      <small>Votre nom de sera pas affiché (uniquement la 1ère lettre).</small>
+      <input type="text"
+             id="lastname"
+             placeholder="Nom de famille..."
+             formControlName="lastname"
+             autocomplete="off"/>
+
+      @if (isFormSubmit && myForm.submitted && postReviewForm.controls['lastname'].invalid) {
+        <div>
+          @if (postReviewForm.controls.lastname.errors?.['required']) {
+            <small>Le nom de famille est obligatoire.</small>
+          } @else if (postReviewForm.controls.lastname.errors?.['maxlength']) {
+            <small>Le nom de famille ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="firstname">Prénom :</label>
+      <input type="text"
+             id="firstname"
+             placeholder="Prénom..."
+             formControlName="firstname"
+             autocomplete="off"/>
+
+      @if (isFormSubmit && myForm.submitted && postReviewForm.controls['firstname'].invalid) {
+        <div>
+          @if (postReviewForm.controls.firstname.errors?.['required']) {
+            <small>Le prénom est obligatoire.</small>
+          } @else if (postReviewForm.controls.firstname.errors?.['maxlength']) {
+            <small>Le prénom ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="email">Email :</label>
+      <input type="email"
+             id="email"
+             placeholder="Adresse email..."
+             formControlName="email"
+             autocomplete="off"/>
+
+      @if (isFormSubmit && myForm.submitted && postReviewForm.controls['email'].invalid) {
+        <div>
+          @if (postReviewForm.controls.email.errors?.['required']) {
+            <small>L'email est obligatoire.</small>
+          } @else if (postReviewForm.controls.email.errors?.['maxlength']) {
+            <small>L'email ne doit pas dépasser 255 charactères.</small>
+          } @else if (postReviewForm.controls.email.errors?.['email']) {
+            <small>L'email doit respecter le format d'une adresse email ( XXXXX &#64; XXXXX . com/fr ).</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset>
+      <label for="rating">Note :</label>
+      <div class="stars-rating flex center">
+        @for (star of VITALITTE_PROJECT.front.rating; track star) {
+          <div class="star-container">
+            <i class="fa fa-star half-star"
+               (mouseenter)="onHoverStar(star - 0.5)"
+               (mouseleave)="onHoverStar(0)"
+               (click)="onRate(star - 0.5)"
+               [ngClass]="{'star-colored': isStarHovered(star- 0.5) || postReviewForm.get('rating')!.value! >= (star - 0.5)}"></i>
+            <i class="fa fa-star full-star"
+               (mouseenter)="onHoverStar(star)"
+               (mouseleave)="onHoverStar(0)"
+               (click)="onRate(star)"
+               [ngClass]="{'star-colored': isStarHovered(star) || postReviewForm.get('rating')!.value! >= star}"></i>
+          </div>
+        }
+      </div>
+      <input id="rating"
+             type="number"
+             formControlName="rating"
+             class="display-none">
+      @if (isFormSubmit && myForm.submitted && postReviewForm.controls['rating'].invalid) {
+        <div>
+          @if (postReviewForm.controls.rating.errors?.['required']) {
+            <small>La note est obligatoire (0,5 minimum).</small>
+          } @else if (postReviewForm.controls.rating.errors?.['invalidRating']) {
+            <small>La note doit être un chiffre.</small>
+          } @else if (postReviewForm.controls.rating.errors?.['invalidRatingRange']) {
+            <small>La note doit être entre 0,5 <i class="fa-solid fa-star"></i> et 5<i class="fa-solid fa-star"></i> </small>
+          } @else if (postReviewForm.controls.rating.errors?.['invalidRatingStep']) {
+            <small>La note doit être un multiple de 0.5 ( 0.5 - 1 - 1.5 - 2 - 2.5 etc ...)</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="email">Titre :</label>
+      <input type="email"
+             id="title"
+             placeholder="Titre..."
+             formControlName="title"
+             autocomplete="off"/>
+
+      @if (isFormSubmit && myForm.submitted && postReviewForm.controls['title'].invalid) {
+        <div>
+          @if (postReviewForm.controls.title.errors?.['required']) {
+            <small>Le titre est obligatoire.</small>
+          } @else if (postReviewForm.controls.title.errors?.['maxlength']) {
+            <small>Le titre ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="content">Commentaire :</label>
+      <textarea id="content"
+                placeholder="Décrivez votre expérience..."
+                formControlName="content"></textarea>
+      <small>Nombre maximum de charactères : {{ postReviewForm.get('content')!.value ? postReviewForm.get('content')!.value!.length : 0 }} / 5000</small>
+
+      @if (isFormSubmit && myForm.submitted && postReviewForm.controls['content'].invalid) {
+        <div>
+          @if (postReviewForm.controls.content.errors?.['required']) {
+            <small>Le commentaire est obligatoire.</small>
+          } @else if (postReviewForm.controls.content.errors?.['maxlength']) {
+            <small>Le commentaire ne doit pas dépasser 5.000 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+  </form>
+  <button class="btn-submit-admin"
+          (click)="submitReview()">
+    Envoyer le commentaire !
+  </button>
+}

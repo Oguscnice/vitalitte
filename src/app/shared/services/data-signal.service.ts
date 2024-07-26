@@ -18,6 +18,8 @@ import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {ModalSignalService} from "./modal-signal.service";
 import {ObjectUtilsService} from "./object-utils.service";
 import {CategoryAndCollection} from "../interfaces/CategoryAndCollection";
+import {CreateReview, ReviewDto} from "../interfaces/Review";
+import {ProductCommonValuesDto} from "../interfaces/Product";
 
 @Injectable({
   providedIn: 'root'
@@ -43,13 +45,13 @@ export class DataSignalService extends BaseComponent {
     $privateCounterRegistrationsReservedWorkshops: signal<WorkshopDisponibilities[]>([]),
     $privatePublications: signal<PublicationDto[]>([]),
     $privatePublicationsSpotlighted: signal<PublicationDto[]>([]),
-    $privateCounterPublications: new BehaviorSubject<number>(0),
     $privateNotebookBySlug: new BehaviorSubject<NotebookDto | null>(null),
     $privateWorkshopBySlug: new BehaviorSubject<WorkshopDto | null>(null),
     $privateMaterialBySlug: new BehaviorSubject<MaterialDto | null>(null),
     $privatePublicationBySlug: new BehaviorSubject<PublicationDto | null>(null),
     $privateIsExpiredGiftCard: signal<boolean>(true),
     $privateDeliveryOptions: signal<DeliveryOptionDto[]>([]),
+    $privateReviews: signal<ReviewDto[]>([]),
   } as const;
 
   public readonly $categories: Signal<CategoryDto[]> = this.state.$privateCategoryList.asReadonly();
@@ -63,12 +65,11 @@ export class DataSignalService extends BaseComponent {
   public readonly $publicationBySlug: Observable<PublicationDto | null> = this.state.$privatePublicationBySlug.asObservable();
   public readonly $workshopsDateToCome: Signal<WorkshopDto[]> = this.state.$privateWorkshopsDateToCome.asReadonly();
   public readonly $workshopsPastDate: Signal<WorkshopDto[]> = this.state.$privateWorkshopsPastDate.asReadonly();
-  public readonly $workshopsCounterPastDate: Observable<number> = this.state.$privateCounterWorkshopsPastDate.asObservable();
   public readonly $workshopsRegistrationsReserved: Signal<WorkshopDisponibilities[]> = this.state.$privateCounterRegistrationsReservedWorkshops.asReadonly();
   public readonly $publications: Signal<PublicationDto[]> = this.state.$privatePublications.asReadonly();
   public readonly $publicationsSpotlighted: Signal<PublicationDto[]> = this.state.$privatePublicationsSpotlighted.asReadonly();
-  public readonly $publicationsCounter: Observable<number> = this.state.$privateCounterPublications.asObservable();
   public readonly $deliveryOptionAvailable: Signal<DeliveryOptionDto[]> = this.state.$privateDeliveryOptions.asReadonly();
+  public readonly $reviews: Signal<ReviewDto[]> = this.state.$privateReviews.asReadonly();
 
   //-------------------
   //-----CATEGORY------
@@ -185,7 +186,7 @@ export class DataSignalService extends BaseComponent {
   getNotebookBySlug(notebookSlug: NotebookDto['slug']): void {
     this.subscriptions.push(
       this.apiRequests.getNotebookBySlug(notebookSlug).subscribe({
-        next: (notebook: NotebookDto): void => this.setNotebookBySlug(notebook),
+        next: (notebook: NotebookDto) => this.setNotebookBySlug(notebook),
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
@@ -231,7 +232,7 @@ export class DataSignalService extends BaseComponent {
   getWorkshopsByDateToCome(): void {
     this.subscriptions.push(
       this.apiRequests.getWorkshopsByDateToCome().subscribe({
-        next: (workshops: WorkshopDto[]): void => {
+        next: (workshops): void => {
           this.setWorkshopsDateToCome(workshops);
           workshops.forEach(workshop =>  this.getCounterWorkshopRegistrationsReserved(workshop.slug))
         },
@@ -243,19 +244,12 @@ export class DataSignalService extends BaseComponent {
   getWorkshopsByPastDate(): void {
     this.subscriptions.push(
       this.apiRequests.getWorkshopsByPastDate(this.paginationSignal.transformToPaginationWithSearchValue()).subscribe({
-        next: (workshops: WorkshopDto[]): void => {
-          this.setWorkshopsPastDate(workshops);
-          workshops.forEach(workshop =>  this.getCounterWorkshopRegistrationsReserved(workshop.slug))
+        next: (page): void => {
+          this.paginationSignal.setPageInfo(page);
+          const WORKSHOPS = page.content;
+          this.setWorkshopsPastDate(WORKSHOPS);
+          WORKSHOPS.forEach(workshop =>  this.getCounterWorkshopRegistrationsReserved(workshop.slug))
         },
-        error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getCounterWorkshopsByPastDate(): void {
-    this.subscriptions.push(
-      this.apiRequests.getCounterWorkshopsByPastDate().subscribe({
-        next: (counter: number): void => this.setWorkshopsCounterPastDate(counter),
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
@@ -294,14 +288,13 @@ export class DataSignalService extends BaseComponent {
     this.state.$privatePublicationsSpotlighted.set(publications);
   }
 
-  setCounterPublications(value: number): void {
-    this.state.$privateCounterPublications.next(value);
-  }
-
   getPublicationsPaginated(): void {
     this.subscriptions.push(
       this.apiRequests.getPublicationPaginated(this.paginationSignal.transformToPaginationWithSearchValue()).subscribe({
-        next: (publications) => this.setPublications(publications),
+        next: (page) => {
+          this.setPublications(page.content);
+          this.paginationSignal.setPageInfo(page)
+        },
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
@@ -322,15 +315,6 @@ export class DataSignalService extends BaseComponent {
           this.setPublicationsSpotligthed(publicationsSpotlighted);
         },
         error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getCounterPublications(): void {
-    this.subscriptions.push(
-      this.apiRequests.getCounterPublications(this.paginationSignal.transformToPaginationWithSearchValue()).subscribe({
-        next: (counter) => this.setCounterPublications(counter),
-        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }
@@ -456,6 +440,47 @@ export class DataSignalService extends BaseComponent {
           }
         })
       )
+    }
+  }
+
+  //-------------------
+  //------REVIEWS------
+  //-------------------
+
+  private setReviews(reviews: ReviewDto[]): void {
+    this.state.$privateReviews.set(reviews);
+  }
+
+  postReview(review: CreateReview): void {
+    this.subscriptions.push(
+      this.apiRequests.postReview(review).subscribe({
+        next: (res) => this.anguilleSignal.changeMessage(res.message),
+        error: (err) => this.anguilleSignal.changeMessage(err.error.message)
+      })
+    )
+  }
+
+  getAllReviewsByStatus(): void {
+    this.subscriptions.push(
+      this.apiRequests.getReviewsByStatus(this.paginationSignal.transformToPaginationReviewsFiltered()).subscribe({
+        next: (page) => {
+          this.paginationSignal.setPageInfo(page);
+          this.setReviews(page.content);
+        },
+        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  convertToProductDto(item: NotebookDto): ProductCommonValuesDto {
+    return {
+      name: item.name,
+      picture: item.picture,
+      pictureThumbnail: item.pictureThumbnail,
+      price: item.price,
+      description: item.description,
+      slug: item.slug,
+      isAvailable: item.isAvailable
     }
   }
 }

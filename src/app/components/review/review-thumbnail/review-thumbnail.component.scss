@@ -1,0 +1,56 @@
+@import "src/app/scss/variables.scss";
+
+.review-container {
+  @include outline-picture;
+  width: 100%;
+  height: max-content;
+  margin-bottom: $half-margin;
+
+  .review-user-stars {
+    border: 1px solid $lilac-light;
+    border-radius: 8px 8px 0 0;
+    width: 100%;
+    background-color: $lilac-light-opacity-low;
+
+    .review-customer,
+    .stars-rating {
+      margin: calc($half-margin/2) $half-margin;
+      .star-container {
+        i {
+          cursor: auto;
+        }
+      }
+    }
+  }
+
+  .review-content {
+    margin: calc($half-margin/2) $half-margin;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    //max-height: 200px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Le nombre de lignes que vous souhaitez afficher */
+    -webkit-box-orient: vertical;
+  }
+
+  .full-content {
+    display: block;
+    max-height: max-content;
+  }
+}
+
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+  .review-container {
+    @include outline-picture;
+    width: 40%;
+  }
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+  .review-container {
+    @include outline-picture;
+    width: 28%;
+  }
+}

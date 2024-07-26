@@ -1,50 +1,88 @@
-<app-h1 [titleChild]="(notebookSelected ? notebookSelected.name : '').toUpperCase()" [backgroundImageChild]="notebookSelected ? notebookSelected.picture : 'https://i.ibb.co/PtWCfpG/carnet01.jpg'"/>
+<app-h1 [titleChild]="(notebook ? notebook.name : '').toUpperCase()"
+        [backgroundImageChild]="notebook ? notebook.picture : 'https://i.ibb.co/PtWCfpG/carnet01.jpg'"
+        xmlns="http://www.w3.org/1999/html"/>
 
-@if (notebookSelected) {
-  @if (notebookSelected.name) {
-    <h2 class="flex center">Carnet : {{ notebookSelected.name | titlecase }}</h2>
+@if (notebook) {
+  @if (notebook.name) {
+    <h2 class="flex center">Carnet : {{ notebook.name | titlecase }}</h2>
   }
 
-  @if (notebookSelected.introduction) {
-    <div [innerHTML]="notebookSelected.introduction"></div>
-  }
+  <app-cart-item-quantity-manager [product]="{item:notebook, quantity:shoppingCart.counterQuantity(notebook, 'notebooks')}"/>
 
-  @if (notebookSelected.description) {
-    <div [innerHTML]="notebookSelected.description"></div>
-  }
-
-  <div class="shopping-cart-manager flex center space-around" [ngClass]="{'pulse-add': quantityIncreased, 'pulse-remove': quantityDecreased}">
-    <i class="fa-solid fa-circle-minus manage-icon pointer" (click)="decrease(notebookSelected)"></i>
-    <div class="flex column center">
-      <p> {{ shoppingCart.counterQuantity(notebookSelected, 'notebooks') }} </p>
-      <i class="fa-solid fa-cart-shopping"></i>
-    </div>
-    <i class="fa-solid fa-circle-plus manage-icon pointer" (click)="increase(notebookSelected)"></i>
+  <div class="notebook-btns-choices flex row width100 space-around">
+    <button class="btn-filter"
+            [ngClass]="{'btn-filter-active': userChoice === 'presentation'}"
+            (click)="userChoice = 'presentation'"> Présentation </button>
+    <button class="btn-filter"
+            [ngClass]="{'btn-filter-active': userChoice === 'reviews'}"
+            (click)="userChoice = 'reviews'">
+      Avis <i class="fa-solid fa-star"></i>
+    </button>
   </div>
 
-  @if (notebookSelected.materialsDto.length > 0) {
-    <div class="components-list-and-component-description flex">
-      <div class="components-list flex">
-        <h3 class="flex text-left line-nowrap">Composants : </h3>
-        <div class="flex wrap">
-          @for (material of notebookSelected.materialsDto; track material; let last = $last) {
-            <p class="flex center text-left line-nowrap pointer"
-               (click)="onClickMaterial(material)">
-              {{ material.name | titlecase}} ({{ material.materialType | titlecase }})
-              <span class="mobile-only">{{ !last ? ', ' : '.' }}</span>
+  <section class="flex two-choices-pages"
+           [ngClass]="{'first-choice-visible': userChoice === 'presentation',
+                       'second-choice-visible': userChoice === 'reviews'}">
+
+    <div class="first-choice-container flex center column" #presentation>
+      <div class="first-choice-content">
+        @if (notebook.introduction) {
+          <div [innerHTML]="notebook.introduction"></div>
+        }
+
+        @if (notebook.description) {
+          <div [innerHTML]="notebook.description"></div>
+        }
+        @if (notebook.materialsDto.length > 0) {
+          <div class="materials-list-and-description flex width100">
+            <div class="materials-list flex wrap">
+              <h3 class="flex text-left line-nowrap">Composants : </h3>
+              @for (material of notebook.materialsDto; track material; let last = $last) {
+                <p class="flex text-left line-nowrap pointer"
+                   (click)="onClickMaterial(material)">
+                  {{ material.name | titlecase}} ({{ material.materialType | titlecase }})
+                  <span class="mobile-only">{{ !last ? ',&nbsp;' : '.' }}</span>
+                </p>
+              }
+            </div>
+            @if (materialSelected) {
+              <div class="material-description flex column">
+                <h4> {{ materialSelected.name | titlecase }} </h4>
+                <img src="{{materialSelected.pictureThumbnail}}"
+                     alt="image du matériel {{materialSelected.name}} pour la composition du carnet {{notebook.name}}">
+                <div class="flex column width100 text-left" [innerHTML]="materialSelected.description"></div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="second-choice-container flex column center" #reviewsSection>
+      <div class="second-choice-content">
+        <p>Filtrer par :</p>
+        <div class="stars-filter flex width100 space-around">
+          @for (number of VITALITTE_PROJECT.front.rating; track number) {
+            <p class="flex center" (click)="filterReviewsByRating(number)">
+              {{ number }} <i class="fa-solid fa-star" [ngClass]="{'star-active' : ratingSelected() && ratingSelected() >= number}"></i>
             </p>
           }
         </div>
+
+        @if (reviews().length < 1) {
+          <p> Il n'y a pas encore d'avis pour ce Carnet, soyez le (la) premier(ère) à en laisser un !</p>
+        } @else {
+
+          <app-change-size-pagination-and-value-search [isInputSearchHidden]="true" (onValueSearchChange)="onValuePageChange($event)"/>
+
+
+          <app-review-thumbnail/>
+
+          <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+        }
+
+        <app-post-review-form/>
       </div>
-      @if (materialSelected) {
-        <div class="component-description flex column">
-          <h4> {{ materialSelected.name | titlecase }} </h4>
-          <img class="material-img"
-               src="{{materialSelected.pictureThumbnail}}"
-               alt="image du matériel {{materialSelected.name}} pour la composition du carnet {{notebookSelected.name}}">
-          <div [innerHTML]="materialSelected.description"></div>
-        </div>
-      }
     </div>
-  }
+  </section>
 }

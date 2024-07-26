@@ -1,4 +1,3 @@
-<script src="edit-delete-workshop.component.ts"></script>
 <div class="title-functionality flex center">
   <h4 class="flex center">Gérer les Ateliers</h4>
   <i class="fa-solid fa-arrow-down"
@@ -7,8 +6,8 @@
   </i>
 </div>
 
-@if (workshopsDateToCome() && workshopsDateToCome().length > 0 && isTableVisible) {
-  @if (workshopsDateToCome().length === 1) {
+@if (workshopsDateToCome$() && workshopsDateToCome$().length > 0 && isTableVisible) {
+  @if (workshopsDateToCome$().length === 1) {
     <h5>Atelier à venir</h5>
   } @else {
     <h5>Ateliers à venir</h5>
@@ -44,7 +43,7 @@
     </thead>
 
     <tbody>
-      @for (workshop of workshopsDateToCome(); track workshop; let index = $index) {
+      @for (workshop of workshopsDateToCome$(); track workshop; let index = $index) {
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
           <td>
             <div class="toggle-switch" (click)="changeAvailability(workshop)">
@@ -61,7 +60,7 @@
             <p> {{ workshop.price | addEuroCurrency }} </p>
           </td>
           <td>
-            @for (dispo of disponibilities(); track dispo) {
+            @for (dispo of disponibilities$(); track dispo) {
               @if (dispo.workshopSlug === workshop.slug) {
                 <p> {{ workshop.registrations - dispo.registrationsReserved }} </p>
               }
@@ -83,12 +82,12 @@
       }
     </tbody>
   </table>
-} @else if ((!workshopsDateToCome() || workshopsDateToCome().length < 1) && isTableVisible) {
+} @else if ((!workshopsDateToCome$() || workshopsDateToCome$().length < 1) && isTableVisible) {
   <h5>Aucun Atelier à venir</h5>
 }
 
-@if (workshopsPastDate() && workshopsPastDate().length > 0 && isTableVisible) {
-  @if (workshopsPastDate().length === 1) {
+@if (workshopsPastDate$() && workshopsPastDate$().length > 0 && isTableVisible) {
+  @if (workshopsPastDate$().length === 1) {
     <h5>Atelier passé</h5>
   } @else {
     <h5>Ateliers passés</h5>
@@ -120,7 +119,7 @@
 
 
     <tbody>
-      @for (workshop of workshopsPastDate(); track workshop; let index = $index) {
+      @for (workshop of workshopsPastDate$(); track workshop; let index = $index) {
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
           <td>
             <p class="flex text-left">{{ workshop.title | titlecase }}</p>
@@ -144,6 +143,6 @@
 
   <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
 
-} @else if ((!workshopsDateToCome() || workshopsDateToCome().length < 1) && isTableVisible) {
+} @else if ((!workshopsDateToCome$() || workshopsDateToCome$().length < 1) && isTableVisible) {
   <h5>Aucun Atelier passé</h5>
 }

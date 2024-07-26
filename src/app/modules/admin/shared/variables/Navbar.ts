@@ -2,18 +2,13 @@ import { Menu } from "../../../../shared/interfaces/Menu";
 
 export const NAVBAR_ADMIN: Menu[] = [
   {
-    name: 'Matériaux',
-    routerLink: '/admin/gestion-des-materiaux',
+    name: 'Papeterie',
+    routerLink: '/admin/gestion-papeterie',
     submenu : null
   },
   {
-    name: 'Catégories et Collections',
-    routerLink: '/admin/gestion-des-categories-et-collections',
-    submenu : null
-  },
-  {
-    name: 'Carnets',
-    routerLink: '/admin/gestion-des-carnets',
+    name: 'Commentaires',
+    routerLink: '/admin/gestion-des-commentaires',
     submenu : null
   },
   {
@@ -42,3 +37,21 @@ export const NAVBAR_ADMIN: Menu[] = [
     submenu : null
   },
 ];
+
+export const NAVBAR_ADMIN_STATIONERY: Menu[] = [
+  {
+    name: 'Catégories et Collections',
+    routerLink: '/admin/gestion-des-categories-et-collections',
+    submenu : null
+  },
+  {
+    name: 'Matériaux',
+      routerLink: '/admin/gestion-des-materiaux',
+    submenu : null
+  },
+  {
+    name: 'Carnets',
+      routerLink: '/admin/gestion-des-carnets',
+    submenu : null
+  },
+  ]

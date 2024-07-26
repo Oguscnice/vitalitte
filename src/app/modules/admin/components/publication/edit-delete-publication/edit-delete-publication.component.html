@@ -6,9 +6,9 @@
   </i>
 </div>
 
-@if (publications() && isTableVisible) {
+<app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
 
-  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
+@if (publications$() && publications$().length > 0 && isTableVisible) {
 
   <table>
     <thead>
@@ -35,7 +35,7 @@
     </thead>
 
     <tbody>
-      @for (publication of publications(); track publication; let index = $index) {
+      @for (publication of publications$(); track publication; let index = $index) {
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
             <td>
               <div class="toggle-switch" (click)="changeSpotlight(publication)">
@@ -71,11 +71,11 @@
     </tbody>
   </table>
 
-  @if (publications() && publications().length > 0) {
+  @if (publications$() && publications$().length > 0) {
     <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
   }
 
-} @else if ((!publications || publications.length <= 0) && isTableVisible) {
+} @else if ((!publications$() || publications$().length < 1) && isTableVisible) {
   <h5>Aucune publication</h5>
 }
 
