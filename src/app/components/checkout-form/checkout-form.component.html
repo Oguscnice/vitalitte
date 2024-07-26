@@ -42,7 +42,7 @@
                    [value]="getDeliveryOptionValueForm()"
                    (click)="toggleDropdown(!isDeliveryDropdownOpen, 'Delivery')"
                    readonly/>
-            <div class="arrow-icone flex center">
+            <div class="arrow-icon flex center">
               @if (isDeliveryDropdownOpen) {
                 <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false, 'Delivery')"></i>
               } @else {
@@ -150,7 +150,7 @@
                (keyup)="apiBanService.searchAddress($event)"
                (focus)="apiBanService.toggleDropdown(true)"
                [value]="userAddress"/>
-        <div class="arrow-icone flex center">
+        <div class="arrow-icon flex center">
           @if (apiBanService.isDropdownBanOpen) {
             <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
           } @else {
@@ -223,7 +223,7 @@
                [value]="countrySelected.name"
                (click)="toggleDropdown(!isCountryCodeDropdownOpen,'CountryCode')"
                readonly/>
-        <div class="arrow-icone flex center">
+        <div class="arrow-icon flex center">
           @if (isCountryCodeDropdownOpen) {
             <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(true, 'CountryCode')"></i>
           } @else {

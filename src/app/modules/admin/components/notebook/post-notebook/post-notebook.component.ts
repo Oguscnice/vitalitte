@@ -161,6 +161,8 @@ export class PostNotebookComponent implements OnInit {
 
   resetAllValues(): void {
     this.isFormSubmit = false;
+    this.isFormVisible = false;
+    this.currentSecondaryPictures = [];
     this.newNotebookForm.reset();
     this.fileUploadService.patchImage(this.newNotebookForm, this.fileUploadService.imageNotebookDefault, this.fileUploadService.imageNotebookDefaultThumbnail);
   }

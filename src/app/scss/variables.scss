@@ -2,7 +2,7 @@
 :root {
   --height-footer: 0px;
   --height-header: 0px;
-  --height-booktique-page: 0px;
+  --height-actual-page-two-choices: 0px;
   --height-booktique-section-monitored: 0px;
   --height-img-monitored: 0px;
   --width-img-monitored: 0px;
@@ -30,6 +30,7 @@ $orange-dark-transparent : rgba($orange-dark, 0.5);
 $orange-light-opacity-low : rgba($orange-light, 0.5);
 $brown : brown;
 $red : red;
+$green : green;
 
 // ----- padding -----
 $normal-padding: 8px;

@@ -7,33 +7,36 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
   standalone: true,
   imports: [NgClass, AsyncPipe],
   template: `
-              <div class="btns-change-page flex center space-around">
-                <i
-                  class="btn pointer fa-solid fa-backward-fast"
-                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() === 0 }"
-                  (click)="this.onChangePage('first')">
-                </i>
+              @if (lastPageNumber$() > 1) {
+                <div class="btns-change-page flex center space-around">
+                  <i
+                    class="btn pointer fa-solid fa-backward-fast flex center"
+                    [ngClass]="{'disabled': pageNumber$() === 0 }"
+                    (click)="this.onChangePage('first')">
+                  </i>
 
-                <i
-                  class="btn pointer fa-solid fa-chevron-left"
-                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() === 0 }"
-                  (click)="this.onChangePage('prev')">
-                </i>
+                  <i
+                    class="btn pointer fa-solid fa-chevron-left flex center"
+                    [ngClass]="{'disabled': pageNumber$() === 0 }"
+                    (click)="this.onChangePage('prev')">
+                  </i>
 
-                <p>Page {{ paginationSignal.$currentPageNumber() + 1 }} / {{ paginationSignal.$lastPage() }}</p>
+                  <p class="line-nowrap">Page {{ pageNumber$() + 1 }} / {{ lastPageNumber$() }}</p>
 
-                <i
-                  class="btn pointer fa-solid fa-chevron-right"
-                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() + 1 === paginationSignal.$lastPage() }"
-                  (click)="this.onChangePage('next')">
-                </i>
+                  <i
+                    class="btn pointer fa-solid fa-chevron-right flex center"
+                    [ngClass]="{'disabled': pageNumber$() + 1 === lastPageNumber$() }"
+                    (click)="this.onChangePage('next')">
+                  </i>
 
-                <i
-                  class="btn pointer fa-solid fa-forward-fast"
-                  [ngClass]="{'disabled': paginationSignal.$currentPageNumber() + 1 === paginationSignal.$lastPage() }"
-                  (click)="this.onChangePage('last')">
-                </i>
-              </div>
+                  <i
+                    class="btn pointer fa-solid fa-forward-fast flex center"
+                    [ngClass]="{'disabled': pageNumber$() + 1 === lastPageNumber$() }"
+                    (click)="this.onChangePage('last')">
+                  </i>
+                </div>
+              }
+
             `,
   styles: [`
     @import "../../scss/variables.scss";
@@ -50,7 +53,9 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
 })
 export class ChangePageButtonsPagination {
 
-  paginationSignal: PaginationSignalService = inject(PaginationSignalService);
+  private paginationSignal = inject(PaginationSignalService);
+  pageNumber$ = this.paginationSignal.$pageNumber;
+  lastPageNumber$ = this.paginationSignal.$lastPage;
 
   @Output() onPageChange: EventEmitter<string> = new EventEmitter();
 

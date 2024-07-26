@@ -1,13 +1,14 @@
 <nav class="flex space-between center" #navBar>
   <img src="../../../assets/images/logo.png"
        alt="Logo du site VitaLitté"
-       class="pointer desktop-only"
-       [routerLink]="'/'"/>
+       class="pointer desktop-only"/>
   <img src="../../../assets/images/icon-thumbnail.png"
        alt="Logo du site VitaLitté"
        class="pointer mobile-only"
        [routerLink]="'/'"/>
-  <h3 class="flex pointer" [routerLink]="'/'"> <span class="lilac">V</span>ita<span class="orange">L</span>itté</h3>
+  <h3 class="flex pointer" [routerLink]="'/'">
+    <span class="lilac">V</span>ita<span class="orange">L</span>itté
+  </h3>
 
   @if (!env.production) {
     <p> <em>Env. Front : {{ environment | titlecase }}</em></p>

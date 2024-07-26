@@ -28,18 +28,7 @@
               }
             </td>
             <td class="quantity-column">
-              <div class="flex center space-around">
-                <i class="fa-solid fa-circle-minus manage-icon pointer"
-                   (click)="notebook.quantity > 1 ? decrease(notebook.item, 'notebooks') : false"
-                   [ngClass]="{
-                    'pulse-remove': quantityDecreased && itemSlug === notebook.item.slug,
-                    'disabled': notebook.quantity < 2
-                    }"></i>
-                <p> {{ notebook.quantity }} </p>
-                <i class="fa-solid fa-circle-plus manage-icon pointer"
-                   (click)="increase(notebook.item, 'notebooks')"
-                   [ngClass]="{'pulse-add': quantityIncreased && itemSlug === notebook.item.slug }"></i>
-              </div>
+              <app-cart-item-quantity-manager [product]="notebook"/>
             </td>
             <td class="price-column line-nowrap flex column">
               <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ notebook.quantity * notebook.item.price | customCurrency }} </p>
@@ -86,22 +75,7 @@
             }
           </td>
           <td class="quantity-column">
-            <div class="flex center space-around">
-              <i class="fa-solid fa-circle-minus manage-icon pointer"
-                 (click)="inscription.quantity > 1 ? decrease(inscription.item, 'inscriptions') : false"
-                 [ngClass]="{
-                 'pulse-remove': quantityDecreased && itemSlug === inscription.item.slug,
-                 'disabled': inscription.quantity < 2
-                 }">
-              </i>
-              <p> {{ inscription.quantity }} </p>
-              <i class="fa-solid fa-circle-plus manage-icon pointer"
-                 (click)="getAvailableRegistrations(inscription.item) > 0 && inscription.item.quantity < 5 ? increase(inscription.item, 'inscriptions') : false"
-                 [ngClass]="{
-                 'pulse-add': quantityIncreased && itemSlug === inscription.item.slug,
-                 'disabled': inscription.quantity > 4  || getAvailableRegistrations(inscription.item) < 1
-                 }"></i>
-            </div>
+            <app-cart-item-quantity-manager [product]="inscription"/>
           </td>
           <td class="price-column line-nowrap flex column">
             <p  [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}">

@@ -103,8 +103,6 @@ export class ShoppingCartService extends BaseComponent {
   }
 
   editCartInLocalStorage(shoppingCart: ShoppingCart): void {
-    console.log("shoppingCart")
-    console.log(shoppingCart)
     localStorage.setItem('userCartVitalitte', JSON.stringify(shoppingCart));
     this.setShoppingCart();
   }
@@ -213,7 +211,6 @@ export class ShoppingCartService extends BaseComponent {
         ITEM.quantity++
       }
     }
-
     if (!this.includesInShoppingCart(itemToAdd, type)) {
       const QUANTITY_ADAPTED = type === 'inscriptions' ? (itemToAdd as InscriptionDto).quantity : 1;
       const NEW_ITEM = { item : itemToAdd, quantity : QUANTITY_ADAPTED }

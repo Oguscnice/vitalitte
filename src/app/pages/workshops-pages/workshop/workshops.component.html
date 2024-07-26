@@ -2,9 +2,9 @@
         [backgroundImageChild]="backgroundImageParent"></app-h1>
 
 <h3>A venir</h3>
-@if(workshopsWithDateToCome() && workshopsWithDateToCome().length > 0) {
+@if(workshopsWithDateToCome$() && workshopsWithDateToCome$().length > 0) {
   <div class="workshops flex wrap space-around">
-    @for(workshop of workshopsWithDateToCome(); track workshop) {
+    @for(workshop of workshopsWithDateToCome$(); track workshop) {
         <app-workshop-thumbnail [workshop]="workshop"
                                 [disponibility]="inscriptionsReservedByWorkshopSlug(workshop.slug)"/>
     }
@@ -17,9 +17,9 @@
 
 <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
 
-@if(workshopsWithPastDate() && workshopsWithPastDate().length > 0) {
+@if(workshopsWithPastDate$() && workshopsWithPastDate$().length > 0) {
   <div class="workshops flex wrap space-around">
-    @for(workshop of workshopsWithPastDate(); track workshop) {
+    @for(workshop of workshopsWithPastDate$(); track workshop) {
       <app-workshop-thumbnail [workshop]="workshop"
                              [disponibility]="inscriptionsReservedByWorkshopSlug(workshop.slug)"/>
     }

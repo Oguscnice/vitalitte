@@ -1,0 +1,17 @@
+<div class="cart-manager flex center space-around">
+  <i class="fa-solid fa-circle-minus manage-icon pointer"
+     (click)="shoppingCart.counterQuantity(product.item, type) > (0 + (isInscription() ? 1 : 0)) ? decrease() : false"
+     [ngClass]="{
+                 'pulse-remove': quantityDecreased && quantityItemTargetSlug === product.item.slug,
+                 'disabled': shoppingCart.counterQuantity(product.item, type) < (1 + (isInscription() ? 1 : 0))
+                 }">
+  </i>
+  <div class="flex column">
+    <p> {{ shoppingCart.counterQuantity(product.item, type) }} </p>
+    <i class="fa-solid fa-cart-shopping"></i>
+  </div>
+  <i class="fa-solid fa-circle-plus manage-icon pointer"
+     (click)="!isInscription() ? increase() : (getAvailableRegistrations() > 0 && shoppingCart.counterQuantity(product.item, type) < 5 ? increase() : false)"
+     [ngClass]="{ 'pulse-add': quantityIncreased && quantityItemTargetSlug === product.item.slug,
+                  'disabled': isInscription() && (shoppingCart.counterQuantity(product.item, type) > 4  || getAvailableRegistrations() < 1)}"></i>
+</div>

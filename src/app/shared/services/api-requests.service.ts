@@ -10,11 +10,12 @@ import { WorkshopDto } from '../interfaces/Workshop';
 import { CreateInscription, InscriptionDto } from '../interfaces/Inscription';
 import { ResponseEntity } from '../interfaces/ResponseEntity';
 import { PublicationDto } from '../interfaces/Publication';
-import {PaginationWithSearchValue} from '../interfaces/Pagination';
+import {Page, PaginationReviewsFiltered, PaginationWithSearchValue} from '../interfaces/Page';
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../interfaces/GiftCard";
 import {VITALITTE_PROJECT} from "../variables/AppConfig";
 import {CategoryAndCollection} from "../interfaces/CategoryAndCollection";
+import {CreateReview, ReviewDto} from "../interfaces/Review";
 
 @Injectable({
   providedIn: 'root',
@@ -51,11 +52,11 @@ export class ApiRequestsService {
     return this.http.get<NotebookDto>(VITALITTE_PROJECT.back.url + "/notebooks/" + notebookSlug)
   }
 
-  getNotebooksByCategorySlug(categorySlug : CategoryDto['slug']): Observable<NotebookDto[]> {
+  getNotebooksByCategorySlug(categorySlug: CategoryDto['slug']): Observable<NotebookDto[]> {
     return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/category/" + categorySlug)
   }
 
-  getNotebooksByCollectionSlug(collectionSlug : CollectionDto['slug']): Observable<NotebookDto[]> {
+  getNotebooksByCollectionSlug(collectionSlug: CollectionDto['slug']): Observable<NotebookDto[]> {
     return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/collection/" + collectionSlug)
   }
 
@@ -84,19 +85,15 @@ export class ApiRequestsService {
   //-------------------
 
   getWorkshopsIsAvailable(value : boolean): Observable<WorkshopDto[]> {
-    return this.http.get<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/isAvailable/" + value.toString())
+    return this.http.get<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/is-available/" + value.toString())
   }
 
   getWorkshopsByDateToCome(): Observable<WorkshopDto[]> {
     return this.http.get<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/date-to-come")
   }
 
-  getWorkshopsByPastDate(pagination : PaginationWithSearchValue): Observable<WorkshopDto[]> {
-    return this.http.post<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/past-date/paginated", pagination)
-  }
-
-  getCounterWorkshopsByPastDate(): Observable<number> {
-    return this.http.get<number>(VITALITTE_PROJECT.back.url + "/workshops/past-date/counter")
+  getWorkshopsByPastDate(pagination : PaginationWithSearchValue): Observable<Page<WorkshopDto>> {
+    return this.http.post<Page<WorkshopDto>>(VITALITTE_PROJECT.back.url + "/workshops/past-date/paginated", pagination)
   }
 
   getCounterWorkshopInscriptions(workshopSlug : WorkshopDto['slug']): Observable<number> {
@@ -135,10 +132,6 @@ export class ApiRequestsService {
   //----Publications---
   //-------------------
 
-  getCounterPublications(paginationWithSearchValue: PaginationWithSearchValue): Observable<number> {
-    return this.http.post<number>(VITALITTE_PROJECT.back.url + "/publications/counter", paginationWithSearchValue)
-  }
-
   getPublicationsSpotlighted(value : string): Observable<PublicationDto[]> {
     return this.http.get<PublicationDto[]>(VITALITTE_PROJECT.back.url + "/publications/isSpotlighted/" + value)
   }
@@ -147,8 +140,8 @@ export class ApiRequestsService {
     return this.http.get<PublicationDto>(VITALITTE_PROJECT.back.url + "/publications/" + publicationSlug)
   }
 
-  getPublicationPaginated(paginationWithSearchValue: PaginationWithSearchValue): Observable<PublicationDto[]> {
-    return this.http.post<PublicationDto[]>(VITALITTE_PROJECT.back.url + "/publications/paginated", paginationWithSearchValue)
+  getPublicationPaginated(paginationWithSearchValue: PaginationWithSearchValue): Observable<Page<PublicationDto>> {
+    return this.http.post<Page<PublicationDto>>(VITALITTE_PROJECT.back.url + "/publications/paginated", paginationWithSearchValue)
   }
 
   //-------------------
@@ -162,24 +155,37 @@ export class ApiRequestsService {
   //-------------------
   //-----Matériels-----
   //-------------------
+
   getDeliveryOptionAvailable(): Observable<DeliveryOptionDto[]> {
     return this.http.get<DeliveryOptionDto[]>(VITALITTE_PROJECT.back.url + "/delivery-option/is-available")
   }
 
   //-------------------
-  //--Google-Reviews---
+  //------Reviews------
   //-------------------
 
-  private googleAccountId : string = "";
-  private googleLocationId : string = "";
-
-  // getGoogleReviews(): Observable<any> {
-  getGoogleReviews(): Observable<GoogleReviews[]> {
-    return this.http.get<GoogleReviews[]>(`https://mybusiness.googleapis.com/v4/accounts/${this.googleAccountId}/locations/${this.googleLocationId}/reviews`)
+  postReview(review: CreateReview): Observable<ResponseEntity> {
+    return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/reviews", review)
   }
 
-  getOneReview(reviewId : number): Observable<any> {
-  // getOneReview(reviewId : number): Observable<Review> {
-    return this.http.get<Review>(`https://mybusiness.googleapis.com/v4/accounts/${this.googleAccountId}/locations/${this.googleLocationId}/reviews/` + reviewId)
+  getReviewsByStatus(paginationReviewsFiltered: PaginationReviewsFiltered): Observable<Page<ReviewDto>> {
+    return this.http.post<Page<ReviewDto>>(VITALITTE_PROJECT.back.url + "/reviews/paginated", paginationReviewsFiltered)
   }
+
+  // //-------------------
+  // //--Google-Reviews---
+  // //-------------------
+  //
+  // private googleAccountId : string = "";
+  // private googleLocationId : string = "";
+  //
+  // // getGoogleReviews(): Observable<any> {
+  // getGoogleReviews(): Observable<GoogleReviews[]> {
+  //   return this.http.get<GoogleReviews[]>(`https://mybusiness.googleapis.com/v4/accounts/${this.googleAccountId}/locations/${this.googleLocationId}/reviews`)
+  // }
+  //
+  // getOneReview(reviewId : number): Observable<any> {
+  // // getOneReview(reviewId : number): Observable<Review> {
+  //   return this.http.get<Review>(`https://mybusiness.googleapis.com/v4/accounts/${this.googleAccountId}/locations/${this.googleLocationId}/reviews/` + reviewId)
+  // }
 }

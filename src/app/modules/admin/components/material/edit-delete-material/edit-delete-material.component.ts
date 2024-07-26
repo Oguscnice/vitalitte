@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, Signal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { MaterialDto } from 'src/app/shared/interfaces/Material';
 import { NgClass, TitleCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -9,7 +9,6 @@ import {AdminMaterialSignalService} from "../../../shared/services/admin-materia
 import {
   ChangePageButtonsPagination
 } from "../../../../../components/change-page-buttons-pagination/change-page-buttons-pagination.component";
-import {PaginationWithSearchValue} from "../../../../../shared/interfaces/Pagination";
 import {BaseComponent} from "../../../../../base.component";
 import {ModalSignalService} from "../../../../../shared/services/modal-signal.service";
 import {
@@ -35,41 +34,18 @@ export class EditDeleteMaterialComponent extends BaseComponent implements OnInit
 
   private dataSignal = inject(DataSignalService);
   private adminMaterialSignal = inject(AdminMaterialSignalService);
-  private paginationSignal = inject(PaginationSignalService);
   modalSignal : ModalSignalService = inject(ModalSignalService);
 
-  materials: Signal<MaterialDto[]> = this.dataSignal.$materials;
+  materials$ = this.dataSignal.$materials;
 
   isTableVisible: boolean = true;
 
   ngOnInit(): void {
-    this.subscribeCounterMaterialValueChange();
-    this.reloadPaginationValueAndCounter();
+    this.adminMaterialSignal.getPaginatedWithSearchValue();
   }
 
   onValuePageChange(event : string): void {
-    this.reloadPaginationValueAndCounter();
-  }
-
-  subscribeCounterMaterialValueChange(): void {
-    this.subscriptions.push(
-      this.adminMaterialSignal.$counter.subscribe((counter: number) => this.paginationSignal.setCounterItem(counter))
-    )
-  }
-
-  private getNewMaterialsPaginated(): void {
-    const PAGINATION_WITH_SEARCH_VALUE: PaginationWithSearchValue = this.paginationSignal.transformToPaginationWithSearchValue();
-    this.adminMaterialSignal.getPaginatedWithSearchValue(PAGINATION_WITH_SEARCH_VALUE);
-  }
-
-  private getNewCounterMaterialsPaginated(): void {
-    const PAGINATION_WITH_SEARCH_VALUE = this.paginationSignal.transformToPaginationWithSearchValue();
-    this.adminMaterialSignal.getCounterWithSearchValue(PAGINATION_WITH_SEARCH_VALUE);
-  }
-
-  reloadPaginationValueAndCounter(): void {
-    this.getNewMaterialsPaginated();
-    this.getNewCounterMaterialsPaginated();
+    this.adminMaterialSignal.getPaginatedWithSearchValue();
   }
 
   changeAvailability = (material : MaterialDto) => this.adminMaterialSignal.changeAvailabilityMaterial(material);

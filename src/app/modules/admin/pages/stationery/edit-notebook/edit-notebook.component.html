@@ -64,7 +64,7 @@
                (focus)="toggleDropdown('Category')"
                [value]="formHelper.getDtoNameByFormControlValue(editNotebookForm.get('categoryDto')!.value!)"
                readonly/>
-        <div class="arrow-icone flex center">
+        <div class="arrow-icon flex center">
           @if (isCategoryDropdownOpen) {
             <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Category')"></i>
           } @else {
@@ -103,7 +103,7 @@
                (focus)="toggleDropdown('Collection')"
                [value]="formHelper.getDtoNameByFormControlValue(editNotebookForm.get('collectionDto')!.value!)"
                readonly/>
-        <div class="arrow-icone flex center">
+        <div class="arrow-icon flex center">
           @if (isCollectionDropdownOpen) {
             <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Collection')"></i>
           } @else {
@@ -141,7 +141,7 @@
                class="pointer"
                (click)="toggleDropdown('Materials')"
                readonly/>
-        <div class="arrow-icone flex center">
+        <div class="arrow-icon flex center">
           @if (isMaterialsDropdownOpen) {
             <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Materials')"></i>
           } @else {

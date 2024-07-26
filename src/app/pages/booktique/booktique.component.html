@@ -16,12 +16,14 @@
     </div>
   </section>
 
-  <section class="flex two-choices" [ngClass]="{'models-visible': userChoice === 'models', 'handmades-visible': userChoice === 'handmades'}">
-    <div class="models flex center" #models>
+  <section class="flex two-choices-pages"
+           [ngClass]="{'first-choice-visible': userChoice === 'models',
+                      'second-choice-visible': userChoice === 'handmades'}">
+    <div class="first-choice flex center" #models>
       <app-shopping-notebooks-list/>
     </div>
 
-    <div class="handmades" #handmades>
+    <div class="second-choice" #handmades>
       <h3>Créer mon Carnet</h3>
       <app-choices-personalized-creation/>
     </div>
