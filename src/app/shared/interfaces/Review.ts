@@ -2,6 +2,7 @@ import {ProductCommonValuesDto} from "./Product";
 
 export interface CreateReview {
   content: string,
+  title: string,
   lastname: string,
   firstname: string,
   email: string,

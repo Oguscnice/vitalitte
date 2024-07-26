@@ -7,33 +7,36 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
   standalone: true,
   imports: [NgClass, AsyncPipe],
   template: `
-              <div class="btns-change-page flex center space-around">
-                <i
-                  class="btn pointer fa-solid fa-backward-fast"
-                  [ngClass]="{'disabled': pageNumber$() === 0 }"
-                  (click)="this.onChangePage('first')">
-                </i>
+              @if (lastPageNumber$() > 1) {
+                <div class="btns-change-page flex center space-around">
+                  <i
+                    class="btn pointer fa-solid fa-backward-fast flex center"
+                    [ngClass]="{'disabled': pageNumber$() === 0 }"
+                    (click)="this.onChangePage('first')">
+                  </i>
 
-                <i
-                  class="btn pointer fa-solid fa-chevron-left"
-                  [ngClass]="{'disabled': pageNumber$() === 0 }"
-                  (click)="this.onChangePage('prev')">
-                </i>
+                  <i
+                    class="btn pointer fa-solid fa-chevron-left flex center"
+                    [ngClass]="{'disabled': pageNumber$() === 0 }"
+                    (click)="this.onChangePage('prev')">
+                  </i>
 
-                <p>Page {{ pageNumber$() + 1 }} / {{ lastPageNumber$() }}</p>
+                  <p class="line-nowrap">Page {{ pageNumber$() + 1 }} / {{ lastPageNumber$() }}</p>
 
-                <i
-                  class="btn pointer fa-solid fa-chevron-right"
-                  [ngClass]="{'disabled': pageNumber$() + 1 === lastPageNumber$() }"
-                  (click)="this.onChangePage('next')">
-                </i>
+                  <i
+                    class="btn pointer fa-solid fa-chevron-right flex center"
+                    [ngClass]="{'disabled': pageNumber$() + 1 === lastPageNumber$() }"
+                    (click)="this.onChangePage('next')">
+                  </i>
 
-                <i
-                  class="btn pointer fa-solid fa-forward-fast"
-                  [ngClass]="{'disabled': pageNumber$() + 1 === lastPageNumber$() }"
-                  (click)="this.onChangePage('last')">
-                </i>
-              </div>
+                  <i
+                    class="btn pointer fa-solid fa-forward-fast flex center"
+                    [ngClass]="{'disabled': pageNumber$() + 1 === lastPageNumber$() }"
+                    (click)="this.onChangePage('last')">
+                  </i>
+                </div>
+              }
+
             `,
   styles: [`
     @import "../../scss/variables.scss";

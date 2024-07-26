@@ -69,7 +69,7 @@ export class DataSignalService extends BaseComponent {
   public readonly $publications: Signal<PublicationDto[]> = this.state.$privatePublications.asReadonly();
   public readonly $publicationsSpotlighted: Signal<PublicationDto[]> = this.state.$privatePublicationsSpotlighted.asReadonly();
   public readonly $deliveryOptionAvailable: Signal<DeliveryOptionDto[]> = this.state.$privateDeliveryOptions.asReadonly();
-  public  readonly $reviews: Signal<ReviewDto[]> = this.state.$privateReviews.asReadonly();
+  public readonly $reviews: Signal<ReviewDto[]> = this.state.$privateReviews.asReadonly();
 
   //-------------------
   //-----CATEGORY------

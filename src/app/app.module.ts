@@ -53,6 +53,8 @@ import {CheckoutFormComponent} from "./components/checkout-form/checkout-form.co
 import {
     CartItemQuantityManagerComponent
 } from "./components/cart-item-quantity-manager/cart-item-quantity-manager.component";
+import {ReviewThumbnailComponent} from "./components/review/review-thumbnail/review-thumbnail.component";
+import {PostReviewFormComponent} from "./components/review/post-review-form/post-review-form.component";
 
 
 @NgModule({
@@ -74,37 +76,39 @@ import {
     PublicationSelectedComponent,
     CheckoutComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        RouterLink,
-        TitleCasePipe,
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    RouterLink,
+    TitleCasePipe,
 
-        HeaderComponent,
-        NewsHeadbandComponent,
-        H1Component,
-        FooterComponent,
-        UpArrowComponent,
-        ImagesPreviewComponent,
-        ValuesComponent,
-        ShoppingNotebooksListComponent,
-        ChoicesPersonalizedCreationComponent,
-        PaypalComponent,
-        ContactFormComponent,
-        NotebooksListComponent,
-        PublicationThumbnailComponent,
-        WorkshopThumbnailComponent,
-        ModalComponent,
-        AnguilleComponent,
-        ChangeSizePaginationAndValueSearchComponent,
-        ChangePageButtonsPagination,
-        CustomCurrencyPipe,
-        ReactiveFormsModule,
-        CheckoutFormComponent,
-        CartItemQuantityManagerComponent
-    ],
+    HeaderComponent,
+    NewsHeadbandComponent,
+    H1Component,
+    FooterComponent,
+    UpArrowComponent,
+    ImagesPreviewComponent,
+    ValuesComponent,
+    ShoppingNotebooksListComponent,
+    ChoicesPersonalizedCreationComponent,
+    PaypalComponent,
+    ContactFormComponent,
+    NotebooksListComponent,
+    PublicationThumbnailComponent,
+    WorkshopThumbnailComponent,
+    ModalComponent,
+    AnguilleComponent,
+    ChangeSizePaginationAndValueSearchComponent,
+    ChangePageButtonsPagination,
+    CustomCurrencyPipe,
+    ReactiveFormsModule,
+    CheckoutFormComponent,
+    CartItemQuantityManagerComponent,
+    ReviewThumbnailComponent,
+    PostReviewFormComponent
+  ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],

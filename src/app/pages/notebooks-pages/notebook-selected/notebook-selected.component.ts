@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, ElementRef, HostListener, inject, OnInit, Signal, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, HostListener, inject, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { NotebookDto } from 'src/app/shared/interfaces/Notebook';
@@ -6,9 +6,6 @@ import {ShoppingCartService} from "../../../shared/services/shopping-cart.servic
 import {DataSignalService} from "../../../shared/services/data-signal.service";
 import {MaterialDto} from "../../../shared/interfaces/Material";
 import {Subject} from "rxjs";
-import {CreateReview, ReviewDto} from "../../../shared/interfaces/Review";
-import {FormBuilder, Validators} from "@angular/forms";
-import {ratingValidator} from "../../../modules/admin/shared/validators/ratingValidator";
 import {FormHelperService} from "../../../modules/admin/shared/services/form-helper.service";
 import {VITALITTE_PROJECT} from "../../../shared/variables/AppConfig";
 import {PaginationSignalService} from "../../../shared/services/pagination-signal.service";
@@ -23,21 +20,15 @@ export class NotebookSelectedComponent extends BaseComponent implements OnInit, 
 
   private route = inject(ActivatedRoute);
   private dataSignal = inject(DataSignalService)
-  private formBuilder = inject(FormBuilder);
-  private formHelper = inject(FormHelperService);
   private paginationSignal = inject(PaginationSignalService);
   protected readonly VITALITTE_PROJECT = VITALITTE_PROJECT;
   shoppingCart = inject(ShoppingCartService);
 
   notebook: NotebookDto | null = null;
-  reviews: Signal<ReviewDto[]> = this.dataSignal.$reviews;
+  reviews= this.dataSignal.$reviews;
   materialSelected: MaterialDto | null = null;
-  ratingSelected: number | null = null;
-  hoveredRating: number = 0;
+  ratingSelected = this.paginationSignal.$reviewRating;
   userChoice: 'presentation' | 'reviews' = 'presentation';
-
-  isFormSubmit: boolean = false;
-  isFormVisible: boolean = false;
 
   windowSize$ = new Subject<[number, number]>();
 
@@ -49,15 +40,6 @@ export class NotebookSelectedComponent extends BaseComponent implements OnInit, 
     this.windowSize$.next([window.innerWidth, window.innerHeight]);
     this.adaptSectionHeight();
   }
-
-  postReviewForm = this.formBuilder.group({
-    lastname: ['', [Validators.required, Validators.maxLength(255)]],
-    firstname: ['', [Validators.required, Validators.maxLength(255)]],
-    content: ['', [Validators.required, Validators.maxLength(5000)]],
-    email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-    rating: [0, [Validators.required, ratingValidator()]],
-    productCommonValuesDto: ['', [Validators.required]]
-  });
 
   ngOnInit(){
     this.findNotebookBySlug();
@@ -89,7 +71,6 @@ export class NotebookSelectedComponent extends BaseComponent implements OnInit, 
           this.notebook = notebook;
           if (notebook) {
             this.dataSignal.getAllReviewsByStatus();
-            this.addProductToForm();
           }
         })
     )
@@ -105,23 +86,6 @@ export class NotebookSelectedComponent extends BaseComponent implements OnInit, 
     }
   }
 
-  private addProductToForm(): void {
-    const PRODUCT = this.dataSignal.convertToProductDto(this.notebook!)
-    this.formHelper.onValueSelected(PRODUCT, 'productCommonValuesDto', this.postReviewForm);
-  }
-
-  onHoverStar(starNumber: number): void {
-    this.hoveredRating = starNumber;
-  }
-
-  isStarHovered(starNumber: number): boolean {
-    return starNumber <= this.hoveredRating;
-  }
-
-  onRate(rating: number): void {
-    this.postReviewForm.get('rating')!.setValue(rating);
-  }
-
   onValuePageChange(event: string): void {
     this.dataSignal.getAllReviewsByStatus();
   }
@@ -131,22 +95,8 @@ export class NotebookSelectedComponent extends BaseComponent implements OnInit, 
   }
 
   filterReviewsByRating(number: number): void {
-    this.ratingSelected = number === this.ratingSelected ? null : number;
-  }
-
-  submitReview(): void {
-    this.isFormSubmit = true;
-    if (this.postReviewForm.valid) {
-      const REVIEW = this.formHelper.formatFormAddValue<CreateReview>(this.postReviewForm, 'productCommonValuesDto');
-      this.dataSignal.postReview(REVIEW);
-      this.resetAll();
-    }
-  }
-
-  private resetAll(): void {
-    this.isFormVisible = false;
-    this.isFormSubmit = false;
-    this.postReviewForm.reset();
-    this.addProductToForm();
+    const VALUE = number === this.paginationSignal.$reviewRating() ? 0 : number
+    this.paginationSignal.setReviewRating(VALUE);
+    this.dataSignal.getAllReviewsByStatus();
   }
 }

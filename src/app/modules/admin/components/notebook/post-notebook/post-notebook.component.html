@@ -68,7 +68,7 @@
                 (click)="toggleDropdown('Category')"
                 [value]="formHelper.getDtoNameByFormControlValue(newNotebookForm.get('categoryDto')!.value!)"
                 readonly/>
-          <div class="arrow-icone flex center">
+          <div class="arrow-icon flex center">
             @if (isCategoryDropdownOpen) {
               <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Category')"></i>
             } @else {
@@ -106,7 +106,7 @@
                 (click)="toggleDropdown('Collection')"
                 [value]="formHelper.getDtoNameByFormControlValue(newNotebookForm.get('collectionDto')!.value!)"
                 readonly/>
-          <div class="arrow-icone flex center">
+          <div class="arrow-icon flex center">
             @if (isCollectionDropdownOpen) {
               <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Collection')"></i>
             } @else {
@@ -143,7 +143,7 @@
                 [value]="'Selectionnez un (des) matériel(aux)'"
                 (click)="toggleDropdown('Materials')"
                 readonly/>
-          <div class="arrow-icone flex center">
+          <div class="arrow-icon flex center">
             @if (isMaterialsDropdownOpen) {
               <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Materials')"></i>
             } @else {

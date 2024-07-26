@@ -310,37 +310,76 @@ hr {
 
 .two-choices-pages {
   position: relative;
-  width: 100%;
+  width: 200vw;
   height: var(--height-actual-page-two-choices);
   transition: left 0.4s ease-in-out;
 
   &.first-choice-visible {
-    left: 0;
+    left: 50vw;
   }
 
   &.second-choice-visible {
-    left: -100%;
+    left: -50vw;
   }
 
-  .first-choice,
-  .second-choice {
-    position: absolute;
-    width: 100%;
+  .first-choice-container,
+  .second-choice-container {
+    width: 100vw;
     height: max-content;
     transition: left 0.4s ease;
+
+    // div à l'interieur pour respecter les dimensions max
+    .first-choice-content,
+    .second-choice-content {
+      width: $max-width-mobile;
+    }
   }
 
+  //.first-choice + *,
+  //.second-choice + * {
+  //  width: $max-width-mobile;
+  //}
+
   .first-choice {
-    left: 0;
+    left: 0vw;
   }
 
   .second-choice {
-    left: 100%;
+    left: 100vw;
   }
 }
 
 .symmetry-vertical {
   transform: scaleX(-1);
+}
+
+.stars-rating {
+  .star-container {
+    position: relative;
+    width: 20px;
+    height: 20px;
+
+    .fa-star {
+      color: grey;
+      cursor: pointer;
+    }
+
+    .half-star {
+      position: absolute;
+      width: 10px;
+      overflow-x: hidden;
+      z-index: $z-index + 1;
+    }
+
+    .full-star {
+      position: absolute;
+      z-index: $z-index;
+    }
+
+    .star-colored {
+      color: $orange;
+    }
+  }
 }
 
 @keyframes appearLinear {
@@ -446,7 +485,7 @@ router-outlet + * {
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  //font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 /* --------- Width % --------- */

@@ -11,14 +11,10 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
   styles: [`
             @import "../../../scss/variables.scss";
 
-            .workshops {
-              flex-direction: column;
-            }
-
             .dropdown-container {
               margin-bottom: $half-margin;
               .input-and-arrow {
-                .arrow-icone {
+                .arrow-icon {
                   margin-top : 0px;
                 }
               }

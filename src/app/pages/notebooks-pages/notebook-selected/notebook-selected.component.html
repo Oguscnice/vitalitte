@@ -24,211 +24,65 @@
            [ngClass]="{'first-choice-visible': userChoice === 'presentation',
                        'second-choice-visible': userChoice === 'reviews'}">
 
-    <div class="first-choice flex center column" #presentation>
-      @if (notebook.introduction) {
-        <div [innerHTML]="notebook.introduction"></div>
-      }
+    <div class="first-choice-container flex center column" #presentation>
+      <div class="first-choice-content">
+        @if (notebook.introduction) {
+          <div [innerHTML]="notebook.introduction"></div>
+        }
 
-      @if (notebook.description) {
-        <div [innerHTML]="notebook.description"></div>
-      }
-      @if (notebook.materialsDto.length > 0) {
-        <div class="components-list-and-component-description flex width100">
-          <div class="components-list flex wrap">
-            <h3 class="flex text-left line-nowrap">Composants : </h3>
-            @for (material of notebook.materialsDto; track material; let last = $last) {
-              <p class="flex center text-left line-nowrap pointer"
-                 (click)="onClickMaterial(material)">
-                {{ material.name | titlecase}} ({{ material.materialType | titlecase }})
-                <span class="mobile-only">{{ !last ? ', ' : '.' }}</span>
-              </p>
+        @if (notebook.description) {
+          <div [innerHTML]="notebook.description"></div>
+        }
+        @if (notebook.materialsDto.length > 0) {
+          <div class="materials-list-and-description flex width100">
+            <div class="materials-list flex wrap">
+              <h3 class="flex text-left line-nowrap">Composants : </h3>
+              @for (material of notebook.materialsDto; track material; let last = $last) {
+                <p class="flex text-left line-nowrap pointer"
+                   (click)="onClickMaterial(material)">
+                  {{ material.name | titlecase}} ({{ material.materialType | titlecase }})
+                  <span class="mobile-only">{{ !last ? ',&nbsp;' : '.' }}</span>
+                </p>
+              }
+            </div>
+            @if (materialSelected) {
+              <div class="material-description flex column">
+                <h4> {{ materialSelected.name | titlecase }} </h4>
+                <img src="{{materialSelected.pictureThumbnail}}"
+                     alt="image du matériel {{materialSelected.name}} pour la composition du carnet {{notebook.name}}">
+                <div class="flex column width100 text-left" [innerHTML]="materialSelected.description"></div>
+              </div>
             }
           </div>
-          @if (materialSelected) {
-            <div class="component-description flex column width100">
-              <h4> {{ materialSelected.name | titlecase }} </h4>
-              <img class="material-img"
-                   src="{{materialSelected.pictureThumbnail}}"
-                   alt="image du matériel {{materialSelected.name}} pour la composition du carnet {{notebook.name}}">
-              <div [innerHTML]="materialSelected.description"></div>
-            </div>
-          }
-        </div>
-      }
+        }
+      </div>
     </div>
 
-    <div class="second-choice flex column center" #reviewsSection>
-      @if (reviews().length < 1) {
-        <p> Il n'y a pas encore d'avis pour ce Carnet, soyez le (la) premier(ère) à en laisser un !</p>
-      } @else {
+    <div class="second-choice-container flex column center" #reviewsSection>
+      <div class="second-choice-content">
         <p>Filtrer par :</p>
         <div class="stars-filter flex width100 space-around">
-          @for (number of [1,2,3,4,5]; track number) {
+          @for (number of VITALITTE_PROJECT.front.rating; track number) {
             <p class="flex center" (click)="filterReviewsByRating(number)">
-              {{ number }} <i class="fa-solid fa-star" [ngClass]="{'star-active' : ratingSelected && ratingSelected >= number}"></i>
+              {{ number }} <i class="fa-solid fa-star" [ngClass]="{'star-active' : ratingSelected() && ratingSelected() >= number}"></i>
             </p>
           }
         </div>
 
-        <app-change-size-pagination-and-value-search [isInputSearchHidden]="true" (onValueSearchChange)="onValuePageChange($event)"/>
+        @if (reviews().length < 1) {
+          <p> Il n'y a pas encore d'avis pour ce Carnet, soyez le (la) premier(ère) à en laisser un !</p>
+        } @else {
 
-        @for (review of reviews(); track review) {
-          <div class="review-container flex column">
-            <div class="flex">
-              <p class="review-customer"> {{ review.firstname | titlecase }} {{ review.lastname | slice:0:1 | uppercase }}. </p>
-              <div class="stars-rating flex center">
-                @for (star of VITALITTE_PROJECT.front.rating; track star) {
-                  <div class="star-container">
-                    <i class="fa fa-star half-star"
-                       [ngClass]="{'star-colored': review.rating >= (star - 0.5) }"></i>
-                    <i class="fa fa-star full-star"
-                       (mouseenter)="onHoverStar(star)"
-                       (mouseleave)="onHoverStar(0)"
-                       (click)="onRate(star)"
-                       [ngClass]="{'star-colored': review.rating >= (star) }"></i>
-                  </div>
-                }
-              </div>
-            </div>
-            <p class="review-content"></p>
-          </div>
-          <p> {{ review.content }} </p>
+          <app-change-size-pagination-and-value-search [isInputSearchHidden]="true" (onValueSearchChange)="onValuePageChange($event)"/>
+
+
+          <app-review-thumbnail/>
+
+          <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
         }
-        <app-change-page-buttons-pagination/>
-      }
 
-      @if (!isFormVisible) {
-        <button class="btn-normal" (click)="isFormVisible = !isFormVisible">
-          Laisser un commentaire
-        </button>
-      }
-
-      @if (isFormVisible) {
-        <i class="fa-solid fa-circle-xmark" (click)="isFormVisible = !isFormVisible"></i>
-        <form (ngSubmit)="(postReviewForm.valid)"
-              [formGroup]="postReviewForm"
-              #myForm="ngForm">
-
-          <fieldset class="flex column">
-            <label for="lastname">Nom :</label>
-            <small>Votre nom de sera pas affiché (uniquement la 1ère lettre).</small>
-            <input type="text"
-                   id="lastname"
-                   placeholder="Nom de famille..."
-                   formControlName="lastname"
-                   autocomplete="off"/>
-
-            @if (isFormSubmit && myForm.submitted && postReviewForm.controls['lastname'].invalid) {
-              <div>
-                @if (postReviewForm.controls.lastname.errors?.['required']) {
-                  <small>Le nom de famille est obligatoire.</small>
-                } @else if (postReviewForm.controls.lastname.errors?.['maxlength']) {
-                  <small>Le nom de famille ne doit pas dépasser 255 charactères.</small>
-                }
-              </div>
-            }
-          </fieldset>
-
-          <fieldset class="flex column">
-            <label for="firstname">Prénom :</label>
-            <input type="text"
-                   id="firstname"
-                   placeholder="Prénom..."
-                   formControlName="firstname"
-                   autocomplete="off"/>
-
-            @if (isFormSubmit && myForm.submitted && postReviewForm.controls['firstname'].invalid) {
-              <div>
-                @if (postReviewForm.controls.firstname.errors?.['required']) {
-                  <small>Le prénom est obligatoire.</small>
-                } @else if (postReviewForm.controls.firstname.errors?.['maxlength']) {
-                  <small>Le prénom ne doit pas dépasser 255 charactères.</small>
-                }
-              </div>
-            }
-          </fieldset>
-
-          <fieldset class="flex column">
-            <label for="email">Email :</label>
-            <input type="email"
-                   id="email"
-                   placeholder="Adresse email..."
-                   formControlName="email"
-                   autocomplete="off"/>
-
-            @if (isFormSubmit && myForm.submitted && postReviewForm.controls['email'].invalid) {
-              <div>
-                @if (postReviewForm.controls.email.errors?.['required']) {
-                  <small>L'email est obligatoire.</small>
-                } @else if (postReviewForm.controls.email.errors?.['maxlength']) {
-                  <small>L'email ne doit pas dépasser 255 charactères.</small>
-                } @else if (postReviewForm.controls.email.errors?.['email']) {
-                  <small>L'email doit respecter le format d'une adresse email ( XXXXX &#64; XXXXX . com/fr ).</small>
-                }
-              </div>
-            }
-          </fieldset>
-          <fieldset>
-          <label for="rating">Note :</label>
-          <div class="stars-rating flex center">
-            @for (star of VITALITTE_PROJECT.front.rating; track star) {
-              <div class="star-container">
-                <i class="fa fa-star half-star"
-                   (mouseenter)="onHoverStar(star - 0.5)"
-                   (mouseleave)="onHoverStar(0)"
-                   (click)="onRate(star - 0.5)"
-                   [ngClass]="{'star-colored': isStarHovered(star- 0.5) || postReviewForm.get('rating')!.value! >= (star - 0.5)}"></i>
-                <i class="fa fa-star full-star"
-                   (mouseenter)="onHoverStar(star)"
-                   (mouseleave)="onHoverStar(0)"
-                   (click)="onRate(star)"
-                   [ngClass]="{'star-colored': isStarHovered(star) || postReviewForm.get('rating')!.value! >= star}"></i>
-              </div>
-            }
-          </div>
-          <input id="rating"
-                 type="number"
-                 formControlName="rating"
-                 class="display-none">
-          @if (isFormSubmit && myForm.submitted && postReviewForm.controls['rating'].invalid) {
-            <div>
-              @if (postReviewForm.controls.rating.errors?.['required']) {
-                <small>La note est obligatoire (0,5 minimum).</small>
-              } @else if (postReviewForm.controls.rating.errors?.['invalidRating']) {
-                <small>La note doit être un chiffre.</small>
-              } @else if (postReviewForm.controls.rating.errors?.['invalidRatingRange']) {
-                <small>La note doit être entre 0,5 <i class="fa-solid fa-star"></i> et 5<i class="fa-solid fa-star"></i> </small>
-              } @else if (postReviewForm.controls.rating.errors?.['invalidRatingStep']) {
-                <small>La note doit être un multiple de 0.5 ( 0.5 - 1 - 1.5 - 2 - 2.5 etc ...)</small>
-              }
-            </div>
-          }
-          </fieldset>
-
-          <fieldset class="flex column">
-            <label for="content">Commentaire :</label>
-            <textarea id="content"
-                      placeholder="Décrivez votre expérience..."
-                      formControlName="content"></textarea>
-            <small>Nombre maximum de charactères : {{ postReviewForm.get('content')!.value ? postReviewForm.get('content')!.value!.length : 0 }} / 5000</small>
-
-            @if (isFormSubmit && myForm.submitted && postReviewForm.controls['content'].invalid) {
-              <div>
-                @if (postReviewForm.controls.content.errors?.['required']) {
-                  <small>Le commentaire est obligatoire.</small>
-                } @else if (postReviewForm.controls.content.errors?.['maxlength']) {
-                  <small>Le commentaire ne doit pas dépasser 5.000 charactères.</small>
-                }
-              </div>
-            }
-          </fieldset>
-        </form>
-        <button class="btn-submit-admin"
-                (click)="submitReview()">
-          Envoyer le commentaire !
-        </button>
-      }
+        <app-post-review-form/>
+      </div>
     </div>
-
   </section>
 }
