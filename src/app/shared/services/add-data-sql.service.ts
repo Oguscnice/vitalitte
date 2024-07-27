@@ -21,9 +21,11 @@ import {ApiDeliveryOptionAdminService} from "../../modules/admin/shared/services
 import {ApiReviewAdminService} from "../../modules/admin/shared/services/api/api-review-admin.service";
 import {CreateReview, ReviewDto} from "../interfaces/Review";
 import {NotebookDto} from "../interfaces/Notebook";
-import {ProductCommonValuesDto} from "../interfaces/Product";
 import {DataSignalService} from "./data-signal.service";
 import {PaginationSignalService} from "./pagination-signal.service";
+import {PublicationDto} from "../interfaces/Publication";
+import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
+import {GiftCardDto} from "../interfaces/GiftCard";
 
 @Injectable({
   providedIn: 'root'
@@ -44,31 +46,43 @@ export class AddDataSqlService {
   private paginationSignal = inject(PaginationSignalService);
 
   createAll(){
-    // ils s'enchainent avec les autres
-    this.createCategories();
+    this.createCategories(); // il s'enchaine avec collection, Carnets et Reviews
+    this.createWorkshop();
+    this.createPublications();
+    this.createGiftCards();
+    this.createDeliveryOptions();
   }
 
   categories!: CategoryDto[];
   materials!: MaterialDto[];
   collections!: CollectionDto[];
   notebooks!: NotebookDto[];
+  publications!: PublicationDto[];
+  deliveryOptions!: DeliveryOptionDto[];
+  giftCards!: GiftCardDto[];
+  reviews!: ReviewDto[];
 
-  createCategories(): void{
+  createCategories(): void {
     for (let category of this.categoriesToCreate) {
       this.apiCategoryAdminService.post(category).subscribe({
         next: (response) => console.log(response),
-        error: (err) => console.log(err),
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+        },
       })
     }
     this.getAllCategories();
+    this.createCollections();
   }
 
   getAllCategories(){
     this.apiRequestsService.getAllCategories().subscribe({
         next: (categories) => {
           this.categories = categories;
+          console.log("Catégories : ")
           console.log(this.categories)
-          this.createCollections();
         },
         error: (err) => console.log(err),
       })
@@ -78,18 +92,23 @@ export class AddDataSqlService {
     for (let collection of this.collectionsToCreate) {
       this.apiCollectionAdminService.post(collection).subscribe({
         next: (response) => console.log(response),
-        error: (err) => console.log(err),
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+        }
       })
     }
     this.getAllCollections();
+    this.createMaterials();
   }
 
   getAllCollections(){
     this.apiRequestsService.getAllCollections().subscribe({
         next: (collections) => {
-            this.collections = collections
+            this.collections = collections;
+            console.log("Collections :");
             console.log(this.collections);
-            this.createMaterials();
         },
         error: (err) => console.log(err),}
     )
@@ -99,7 +118,11 @@ export class AddDataSqlService {
     for (let material of this.materialsToCreate) {
         this.apiMaterialAdminService.post(material).subscribe({
           next: (response) => console.log(response),
-          error: (err) => console.log(err),
+          error: (err) => {
+            if (err.status !== 409) {
+              console.log(err)
+            }
+          }
         })
     }
     this.getAllMaterials();
@@ -108,126 +131,38 @@ export class AddDataSqlService {
   getAllMaterials(): void {
     this.apiRequestsService.getAllMaterials().subscribe({
         next: (materials) => {
-            this.materials = materials
-            console.log(this.materials);
-            this.createNotebooks();
+          this.materials = materials
+          console.log("Matériels :")
+          console.log(this.materials);
+          this.createNotebooks();
         },
         error: (err) => console.log(err),
       })
   }
 
-  selectRandomCategory(): CategoryDto{
-    let randomIndex = Math.floor(Math.random() * this.categories.length);
-    return this.categories[randomIndex];
-  }
-
-  selectRandomCollection(): CategoryDto{
-    let randomIndex = Math.floor(Math.random() * this.collections.length);
-    return this.collections[randomIndex];
-  }
-
-
-  selectRandomMaterials(): MaterialDto[]{
-
-    let materialsRandom : MaterialDto[] = [];
-    let randomMaterialNumber = Math.floor(Math.random() * 6);
-
-    for(let i =0; i < randomMaterialNumber; i++){
-        let randomIndex = Math.floor(Math.random() * this.materials.length);
-        if(!materialsRandom.includes(this.materials[randomIndex])){
-            materialsRandom.push(this.materials[randomIndex])
-        }
-    }
-
-    return materialsRandom;
-  }
-
-  selectRandomSecondaryPictures(): SecondaryPictureDto[]{
-
-    let secondaryPictures : SecondaryPictureDto[] = [];
-    let randomPicturesNumber = Math.floor(Math.random() * 5);
-
-    for(let i = 0; i < randomPicturesNumber; i++){
-        const RANDOM_INDEX = this.randomIndex(this.secondaryPictures.length);
-        if(!secondaryPictures.some(item => item.picture === this.secondaryPictures[RANDOM_INDEX])) {
-          const secPic = {
-            picture : this.secondaryPictures[RANDOM_INDEX],
-            pictureThumbnail : this.secondaryPictures[RANDOM_INDEX]
-          }
-            secondaryPictures.push(secPic)
-        }
-    }
-
-    return secondaryPictures;
-  }
-
-  selectOneRandomSecondaryPictures(): string{
-
-        let randomIndex = Math.floor(Math.random() * this.secondaryPictures.length);
-           return (this.secondaryPictures[randomIndex])
-
-    }
-
-
   createNotebooks(): void {
     for (const notebook of this.notebooksToCreate) {
-      const picture = this.selectOneRandomSecondaryPictures();
+      const picture = this.secondaryPictures[this.randomIndex(this.secondaryPictures.length)];
       const newNotebook: CreateNotebook = {
-            name : notebook.name,
-            picture : picture,
-            pictureThumbnail : picture,
-            introduction : notebook.introduction,
-            price : notebook.price,
-            description : notebook.description,
-            materialsDto : this.selectRandomMaterials(),
-            categoryDto : this.selectRandomCategory(),
-            collectionDto : this.selectRandomCollection(),
-            secondaryPicturesDto : this.selectRandomSecondaryPictures()
+        name : notebook.name,
+        picture : picture,
+        pictureThumbnail : picture,
+        introduction : notebook.introduction,
+        price : notebook.price,
+        description : notebook.description,
+        materialsDto : this.selectRandomMaterials(),
+        categoryDto : this.categories[this.randomIndex(this.categories.length)],
+        collectionDto : this.collections[this.randomIndex(this.collections.length)],
+        secondaryPicturesDto : this.selectRandomSecondaryPictures(),
+      }
+
+      this.apiNotebookAdminService.post(newNotebook).subscribe({
+        next: (response) => console.log(response),
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
         }
-
-        this.apiNotebookAdminService.post(newNotebook).subscribe({
-            next: (response) => console.log(response),
-            error: (err) => console.log(err),
-          })
-    }
-    this.createWorkshop();
-  }
-
-  createWorkshop(): void {
-    for (let workshop of this.workshopsToCreate) {
-      this.apiWorkshopAdminService.post(workshop).subscribe({
-          next: (response) => console.log(response),
-          error: (err) => console.log(err),
-        })
-    }
-    this.createPublications();
-  }
-
-  createPublications(): void {
-    for (let publication of this.publicationsToCreate) {
-      this.apiPublicationAdminService.post(publication).subscribe({
-          next: (response) => console.log(response),
-          error: (err) => console.log(err),
-        })
-    }
-    this.createGiftCards();
-  }
-
-  createGiftCards(): void {
-    for (let giftCard of this.giftCardsToCreate) {
-      this.apiGiftCardAdminService.post(giftCard).subscribe({
-        next: (response) => console.log(response),
-        error: (err) => console.log(err),
-      })
-    }
-    this.createDeliveryOptions();
-  }
-
-  createDeliveryOptions(): void {
-    for (const DELIVERY_OPTION of this.deliveryOptionsToCreate) {
-      this.apiDeliveryOptionAdminService.post(DELIVERY_OPTION).subscribe({
-        next: (response) => console.log(response),
-        error: (err) => console.log(err),
       })
     }
     this.getAllNotebooks();
@@ -236,7 +171,7 @@ export class AddDataSqlService {
   getAllNotebooks(): void {
     this.apiRequestsService.getAllNotebooks().subscribe({
       next: (notebooks) => {
-        console.log(notebooks);
+        console.log("Carnets :");
         this.notebooks = notebooks;
         this.createReviewsNotebook();
       },
@@ -285,7 +220,6 @@ export class AddDataSqlService {
 
     this.apiRequestsService.getReviewsByStatus(this.paginationSignal.transformToPaginationReviewsFiltered()).subscribe({
       next: (page) => {
-        console.log(page.content);
         REVIEWS = page.content;
 
         this.apiReviewAdminService.getAllReviewStatus().subscribe({
@@ -309,6 +243,125 @@ export class AddDataSqlService {
       },
       error: (err) => console.log(err),
     })
+  }
+
+  createWorkshop(): void {
+    for (let workshop of this.workshopsToCreate) {
+      this.apiWorkshopAdminService.post(workshop).subscribe({
+        next: (response) => console.log(response),
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+        }
+      })
+    }
+  }
+
+  createPublications(): void {
+    for (let publication of this.publicationsToCreate) {
+      this.apiPublicationAdminService.post(publication).subscribe({
+        next: (response) => console.log(response),
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+        }
+      })
+    }
+  }
+
+  createGiftCards(): void {
+    for (let giftCard of this.giftCardsToCreate) {
+      this.apiGiftCardAdminService.post(giftCard).subscribe({
+        next: (response) => console.log(response),
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+        }
+      })
+    }
+    this.getAllGiftCards();
+  }
+
+  getAllGiftCards(): void {
+      this.apiGiftCardAdminService.getAll().subscribe({
+        next: (giftCards) => {
+          this.giftCards = giftCards;
+          console.log("Carte Cdeau :");
+          console.log(this.giftCards);
+        },
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+        }
+      })
+  }
+
+  createDeliveryOptions(): void {
+    for (const DELIVERY_OPTION of this.deliveryOptionsToCreate) {
+      this.apiDeliveryOptionAdminService.post(DELIVERY_OPTION).subscribe({
+        next: (response) => console.log(response),
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+        }
+      })
+    }
+    this.getAllDeliveryOptions();
+  }
+
+  getAllDeliveryOptions(): void {
+    this.apiDeliveryOptionAdminService.getAll().subscribe({
+      next: (deliveryOption) => {
+        this.deliveryOptions = deliveryOption;
+        console.log("Option de Livraison :");
+        console.log(this.deliveryOptions);
+      },
+      error: (err) => {
+        if (err.status !== 409) {
+          console.log(err)
+        }
+      }
+    })
+  }
+
+
+  selectRandomMaterials(): MaterialDto[] {
+
+    let materialsRandom : MaterialDto[] = [];
+    let randomMaterialNumber = this.randomIndex(6);
+
+    for(let i =0; i < randomMaterialNumber; i++){
+        let randomIndex = this.randomIndex(this.materials.length);
+        if (!materialsRandom.includes(this.materials[randomIndex])) {
+            materialsRandom.push(this.materials[randomIndex])
+        }
+    }
+
+    return materialsRandom;
+  }
+
+  selectRandomSecondaryPictures(): SecondaryPictureDto[] {
+
+    let secondaryPictures : SecondaryPictureDto[] = [];
+    let randomPicturesNumber = this.randomIndex(5);
+
+    for(let i = 0; i < randomPicturesNumber; i++){
+        const RANDOM_INDEX = this.randomIndex(this.secondaryPictures.length);
+        if(!secondaryPictures.some(item => item.picture === this.secondaryPictures[RANDOM_INDEX])) {
+          const secPic = {
+            picture : this.secondaryPictures[RANDOM_INDEX],
+            pictureThumbnail : this.secondaryPictures[RANDOM_INDEX]
+          }
+            secondaryPictures.push(secPic)
+        }
+    }
+
+    return secondaryPictures;
   }
 
   private randomIndex(length: number): number {
