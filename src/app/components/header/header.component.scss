@@ -12,10 +12,7 @@ nav {
   padding: $normal-padding $double-padding;
   background-color: $white;
   z-index: 999;
-<<<<<<< HEAD
   border-bottom: 2px solid $lilac;
-=======
-  border-bottom: 2px solid $lilac-dark;
 
   p {
     em {
@@ -24,7 +21,6 @@ nav {
       font-weight: bolder;
     }
   }
->>>>>>> 81198db936d308cd74d8ee97d95fa45e3fa9568c
 
   h3 {
     text-align: center;
@@ -117,15 +113,9 @@ nav {
       }
       .close {
         transition: 0s;
-<<<<<<< HEAD
-        height: 0%;
-        a {
-          font-size : 0rem;
-=======
         height: 0;
         a {
           font-size : 0;
->>>>>>> 81198db936d308cd74d8ee97d95fa45e3fa9568c
         }
       }
     }

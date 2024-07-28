@@ -1,10 +1,9 @@
 <nav class="flex space-between center" #navBar>
   <img src="../../../assets/images/logo.png"
        alt="Logo du site VitaLitté"
-       class="pointer"/>
+       class="pointer desktop-only"/>
   <h3 class="flex pointer"
       [routerLink]="'/'">VitaLitté</h3>
-       class="pointer desktop-only"
   <img src="../../../assets/images/icon-thumbnail.png"
        alt="Logo du site VitaLitté"
        class="pointer mobile-only"
@@ -17,7 +16,6 @@
     <p> <em>Env. Front : {{ environment | titlecase }}</em></p>
   }
 
->>>>>>> 81198db936d308cd74d8ee97d95fa45e3fa9568c
   <div class="shopping-cart-counter pointer"
        [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'"
        (click)="changeModalShoppingCartVisibility(!isShoppingCartListOpen)">
