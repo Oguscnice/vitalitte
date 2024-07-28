@@ -83,6 +83,7 @@ export class AddDataSqlService {
           this.categories = categories;
           console.log("Catégories : ")
           console.log(this.categories)
+          this.createCollections();
         },
         error: (err) => console.log(err),
       })
@@ -138,6 +139,16 @@ export class AddDataSqlService {
         },
         error: (err) => console.log(err),
       })
+  }
+
+  selectRandomCategory(): CategoryDto{
+    let randomIndex = Math.floor(Math.random() * this.categories.length);
+    return this.categories[randomIndex];
+  }
+
+  selectRandomCollection(): CategoryDto{
+    let randomIndex = Math.floor(Math.random() * this.collections.length);
+    return this.collections[randomIndex];
   }
 
   createNotebooks(): void {
@@ -256,6 +267,7 @@ export class AddDataSqlService {
         }
       })
     }
+    this.createPublications();
   }
 
   createPublications(): void {
@@ -341,7 +353,6 @@ export class AddDataSqlService {
             materialsRandom.push(this.materials[randomIndex])
         }
     }
-
     return materialsRandom;
   }
 
