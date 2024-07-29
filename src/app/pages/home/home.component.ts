@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataSignal.getPublicationsSpotlighted();
-    // this.addData.createAll();
+    this.addData.createAll();
   }
 
   ngAfterViewInit(): void {

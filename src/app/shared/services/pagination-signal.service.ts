@@ -77,9 +77,9 @@ export class PaginationSignalService {
     }
   }
 
-  transformToPaginationWithSearchValue(overrideValue? : string): PaginationWithSearchValue {
+  transformToPaginationWithSearchValue(): PaginationWithSearchValue {
     return {
-      searchValue : overrideValue ?? this.state.$privateSearchValue(),
+      searchValue : this.state.$privateSearchValue(),
       pageableValues : this.transformToPageableValues()
     }
   }
@@ -100,9 +100,9 @@ export class PaginationSignalService {
     this.state.$privateReviewProductCommonValuesDto.set(productCommonValuesDto);
   }
 
-  transformToPaginationReviewsFiltered(overrideValue? : string): PaginationReviewsFiltered {
+  transformToPaginationReviewsFiltered(): PaginationReviewsFiltered {
     return {
-      ...this.transformToPaginationWithSearchValue(overrideValue),
+      ...this.transformToPaginationWithSearchValue(),
       status: this.$reviewStatus(),
       productCommonValuesDto: this.$reviewProductCommonValuesDto()!,
       rating: this.$reviewRating()

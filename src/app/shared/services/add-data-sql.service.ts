@@ -83,7 +83,6 @@ export class AddDataSqlService {
           this.categories = categories;
           console.log("Catégories : ")
           console.log(this.categories)
-          this.createCollections();
         },
         error: (err) => console.log(err),
       })
@@ -182,8 +181,9 @@ export class AddDataSqlService {
   getAllNotebooks(): void {
     this.apiRequestsService.getAllNotebooks().subscribe({
       next: (notebooks) => {
-        console.log("Carnets :");
         this.notebooks = notebooks;
+        console.log("Carnets :");
+        console.log(this.notebooks);
         this.createReviewsNotebook();
       },
       error: (err) => console.log(err),
@@ -195,7 +195,6 @@ export class AddDataSqlService {
     for (const NOTEBOOK of this.notebooks) {
 
       const REVIEWS_COUNT = this.randomIndex(30);
-      console.log("nombre de reviews : REVIEWS_COUNT");
 
       for (let i = 0; i < REVIEWS_COUNT; i++) {
         const RANDOM_NUMBER_PEOPLE = this.randomIndex(this.people.length);
