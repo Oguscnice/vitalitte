@@ -13,6 +13,7 @@ nav {
   background-color: $white;
   z-index: 999;
   border-bottom: 2px solid $lilac;
+  box-shadow: 0 8px 16px $orange-dark;
 
   p {
     em {
@@ -29,10 +30,6 @@ nav {
     letter-spacing: 0.2rem;
     padding-left: $double-padding;
 
-    .lilac,
-    .orange {
-      //@include text-shadow(0.1px, $black);
-    }
     .lilac {
       color: $lilac-dark;
     }

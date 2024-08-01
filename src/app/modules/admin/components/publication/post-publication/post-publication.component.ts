@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { CreatePublication } from '../../../shared/interfaces/Publication';
+import { CreatePublication } from '../../../shared/interfaces/CreatePublication';
 import { FileUploadService } from '../../../shared/services/file-upload.service';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { urlValidator } from '../../../shared/validators/urlValidators';

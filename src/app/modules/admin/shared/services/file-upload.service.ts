@@ -18,8 +18,8 @@ export class FileUploadService extends BaseComponent {
   public readonly SIZE_MAX: number = 16 * 1048576; /* 1048576 = 1Mo*/
   public readonly imageMaterialDefault: string = 'https://i.ibb.co/vDJmDQ9/atelier.jpg'
   public readonly imageMaterialDefaultThumbnail: string = 'https://i.ibb.co/jHLGHWt/atelier.jpg'
-  public readonly imageNotebookDefault: string = 'https://i.ibb.co/PtWCfpG/carnet01.jpg'
-  public readonly imageNotebookDefaultThumbnail: string = 'https://i.ibb.co/ZNgTksz/carnet01.jpg'
+  public readonly imageProductDefault: string = 'https://i.ibb.co/PtWCfpG/carnet01.jpg'
+  public readonly imageProductDefaultThumbnail: string = 'https://i.ibb.co/ZNgTksz/carnet01.jpg'
   public readonly imageActivityDefault: string = 'https://i.ibb.co/R3fBXmH/atelier01.jpg'
   public readonly imageActivityDefaultThumbnail: string = 'https://i.ibb.co/2vxszQK/atelier01.jpg'
   public readonly imagePublicationDefault: string = 'https://i.ibb.co/7nXhnLY/publication.jpg'

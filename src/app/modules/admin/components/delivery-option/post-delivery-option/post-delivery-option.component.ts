@@ -4,7 +4,7 @@ import {NgClass} from "@angular/common";
 import {priceValidator} from "../../../shared/validators/priceValidators";
 import {FormHelperService} from "../../../shared/services/form-helper.service";
 import {AdminDeliveryOptionSignalService} from "../../../shared/services/admin-delivery-option-signal.service";
-import {CreateDeliveryOption} from "../../../shared/interfaces/DeliveryOption";
+import {CreateDeliveryOption} from "../../../shared/interfaces/CreateDeliveryOption";
 
 @Component({
   selector: 'app-post-delivery-option',

@@ -3,14 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { Page404Component } from './pages/page404/page404.component';
-import { NotebooksComponent } from './pages/notebooks-pages/notebooks/notebooks.component';
+import { ProductsComponent } from './pages/products-pages/products/products.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
-import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-prepared/notebooks-prepared.component';
-import { NotebookSelectedComponent } from './pages/notebooks-pages/notebook-selected/notebook-selected.component';
-import { CreateNotebookComponent } from './pages/notebooks-pages/create-notebook/create-notebook.component';
+import { ProductsPreparedComponent } from './pages/products-pages/products-prepared/products-prepared.component';
+import { ProductSelectedComponent } from './pages/products-pages/product-selected/product-selected.component';
+import { CreateProductComponent } from './pages/products-pages/create-product/create-product.component';
 import { WorkshopsComponent } from './pages/workshops-pages/workshop/workshops.component';
 import { PublicationsComponent } from './pages/publications-pages/publications/publications.component';
 import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
@@ -36,14 +36,14 @@ const routes: Routes = [
   { path: 'actualites', component: PublicationsComponent },
   { path: 'actualites/:publicationSlug', component : PublicationSelectedComponent},
   { path: 'page-404', component: Page404Component },
-  { path: 'imaginer-mon-carnet', component: CreateNotebookComponent },
+  { path: 'imaginer-mon-carnet', component: CreateProductComponent },
   { path: 'ateliers', component : WorkshopsComponent},
   { path: 'ateliers/:workshopSlug', component : WorkshopSelectedComponent},
   { path: 'formulaire-envoye', component : FormulaireEnvoyeComponent},
-  { path: 'carnets-pret-a-emploi', component : NotebooksPreparedComponent},
-  { path: 'carnets/:notebookSlug', component : NotebookSelectedComponent},
-  { path: 'carnets', component: NotebooksComponent },
   { path: 'panier', component: CheckoutComponent },
+  { path: 'produits/tous-les-modeles/:productType', component: ProductsPreparedComponent },
+  { path: 'produits/type/:productType', component: ProductsComponent },
+  { path: 'produits/:productSlug', component: ProductSelectedComponent },
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: 'page-404' },
 ];

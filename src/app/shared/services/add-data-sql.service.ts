@@ -1,26 +1,26 @@
-import { ApiNotebookAdminService } from '../../modules/admin/shared/services/api/api-notebook-admin.service';
+import { ApiProductAdminService } from '../../modules/admin/shared/services/api/api-product-admin.service';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { ApiCategoryAdminService } from '../../modules/admin/shared/services/api/api-category-admin.service';
 import { ApiMaterialAdminService } from '../../modules/admin/shared/services/api/api-material-admin.service';
 import { Injectable, inject } from '@angular/core';
-import { CreateMaterial } from '../../modules/admin/shared/interfaces/Material';
+import { CreateMaterial } from '../../modules/admin/shared/interfaces/CreateMaterial';
 import { CategoryDto } from '../interfaces/Category';
 import { MaterialDto } from '../interfaces/Material';
-import { CreateNotebook } from '../../modules/admin/shared/interfaces/Notebook';
+import { CreateProduct } from '../../modules/admin/shared/interfaces/CreateProduct';
 import { CollectionDto } from '../interfaces/Collection';
 import { ApiCollectionAdminService } from '../../modules/admin/shared/services/api/api-collection-admin.service';
 import { ApiWorkshopAdminService } from '../../modules/admin/shared/services/api/api-workshop-admin.service';
 import { CreateWorkshop } from '../../modules/admin/shared/interfaces/Workshop';
-import { CreatePublication } from '../../modules/admin/shared/interfaces/Publication';
+import { CreatePublication } from '../../modules/admin/shared/interfaces/CreatePublication';
 import { ApiPublicationAdminService } from '../../modules/admin/shared/services/api/api-publication-admin.service';
 import { SecondaryPictureDto } from '../interfaces/SecondaryPicture';
-import {CreateGiftCard} from "../../modules/admin/shared/interfaces/GiftCard";
+import {CreateGiftCard} from "../../modules/admin/shared/interfaces/CreateGiftCard";
 import {ApiGiftcardService} from "../../modules/admin/shared/services/api/api-giftcard.service";
-import {CreateDeliveryOption} from "../../modules/admin/shared/interfaces/DeliveryOption";
+import {CreateDeliveryOption} from "../../modules/admin/shared/interfaces/CreateDeliveryOption";
 import {ApiDeliveryOptionAdminService} from "../../modules/admin/shared/services/api/api-delivery-option-admin.service";
 import {ApiReviewAdminService} from "../../modules/admin/shared/services/api/api-review-admin.service";
 import {CreateReview, ReviewDto} from "../interfaces/Review";
-import {NotebookDto} from "../interfaces/Notebook";
+import {ProductDto} from "../interfaces/Product";
 import {DataSignalService} from "./data-signal.service";
 import {PaginationSignalService} from "./pagination-signal.service";
 import {PublicationDto} from "../interfaces/Publication";
@@ -32,7 +32,7 @@ import {GiftCardDto} from "../interfaces/GiftCard";
 })
 export class AddDataSqlService {
 
-  private apiNotebookAdminService = inject(ApiNotebookAdminService);
+  private apiProductAdminService = inject(ApiProductAdminService);
   private apiRequestsService = inject(ApiRequestsService);
   private apiMaterialAdminService = inject(ApiMaterialAdminService);
   private apiCategoryAdminService = inject(ApiCategoryAdminService);
@@ -53,14 +53,14 @@ export class AddDataSqlService {
     this.createDeliveryOptions();
   }
 
-  categories!: CategoryDto[];
-  materials!: MaterialDto[];
-  collections!: CollectionDto[];
-  notebooks!: NotebookDto[];
-  publications!: PublicationDto[];
-  deliveryOptions!: DeliveryOptionDto[];
-  giftCards!: GiftCardDto[];
-  reviews!: ReviewDto[];
+  categoriesDto!: CategoryDto[];
+  materialsDto!: MaterialDto[];
+  collectionsDto!: CollectionDto[];
+  productsDto!: ProductDto[];
+  publicationsDto!: PublicationDto[];
+  deliveryOptionsDto!: DeliveryOptionDto[];
+  giftCardsDto!: GiftCardDto[];
+  reviewsDto!: ReviewDto[];
 
   createCategories(): void {
     for (let category of this.categoriesToCreate) {
@@ -80,9 +80,9 @@ export class AddDataSqlService {
   getAllCategories(){
     this.apiRequestsService.getAllCategories().subscribe({
         next: (categories) => {
-          this.categories = categories;
+          this.categoriesDto = categories;
           console.log("Catégories : ")
-          console.log(this.categories)
+          console.log(this.categoriesDto)
         },
         error: (err) => console.log(err),
       })
@@ -106,9 +106,9 @@ export class AddDataSqlService {
   getAllCollections(){
     this.apiRequestsService.getAllCollections().subscribe({
         next: (collections) => {
-            this.collections = collections;
+            this.collectionsDto = collections;
             console.log("Collections :");
-            console.log(this.collections);
+            console.log(this.collectionsDto);
         },
         error: (err) => console.log(err),}
     )
@@ -131,42 +131,43 @@ export class AddDataSqlService {
   getAllMaterials(): void {
     this.apiRequestsService.getAllMaterials().subscribe({
         next: (materials) => {
-          this.materials = materials
+          this.materialsDto = materials
           console.log("Matériels :")
-          console.log(this.materials);
-          this.createNotebooks();
+          console.log(this.materialsDto);
+          this.createProducts();
         },
         error: (err) => console.log(err),
       })
   }
 
   selectRandomCategory(): CategoryDto{
-    let randomIndex = Math.floor(Math.random() * this.categories.length);
-    return this.categories[randomIndex];
+    let randomIndex = Math.floor(Math.random() * this.categoriesDto.length);
+    return this.categoriesDto[randomIndex];
   }
 
   selectRandomCollection(): CategoryDto{
-    let randomIndex = Math.floor(Math.random() * this.collections.length);
-    return this.collections[randomIndex];
+    let randomIndex = Math.floor(Math.random() * this.collectionsDto.length);
+    return this.collectionsDto[randomIndex];
   }
 
-  createNotebooks(): void {
-    for (const notebook of this.notebooksToCreate) {
-      const picture = this.secondaryPictures[this.randomIndex(this.secondaryPictures.length)];
-      const newNotebook: CreateNotebook = {
-        name : notebook.name,
-        picture : picture,
-        pictureThumbnail : picture,
-        introduction : notebook.introduction,
-        price : notebook.price,
-        description : notebook.description,
+  createProducts(): void {
+    for (const PRODUCT of this.productsToCreate) {
+      const PICTURE = this.secondaryPictures[this.randomIndex(this.secondaryPictures.length)];
+      const NEW_PRODUCT: CreateProduct = {
+        name : PRODUCT.name,
+        picture : PICTURE,
+        pictureThumbnail : PICTURE,
+        introduction : PRODUCT.introduction,
+        price : PRODUCT.price,
+        description : PRODUCT.description,
         materialsDto : this.selectRandomMaterials(),
-        categoryDto : this.categories[this.randomIndex(this.categories.length)],
-        collectionDto : this.collections[this.randomIndex(this.collections.length)],
+        categoryDto : this.categoriesDto[this.randomIndex(this.categoriesDto.length)],
+        collectionDto : this.collectionsDto[this.randomIndex(this.collectionsDto.length)],
         secondaryPicturesDto : this.selectRandomSecondaryPictures(),
+        productType: PRODUCT.productType
       }
 
-      this.apiNotebookAdminService.post(newNotebook).subscribe({
+      this.apiProductAdminService.post(NEW_PRODUCT).subscribe({
         next: (response) => console.log(response),
         error: (err) => {
           if (err.status !== 409) {
@@ -175,24 +176,24 @@ export class AddDataSqlService {
         }
       })
     }
-    this.getAllNotebooks();
+    this.getAllProducts();
   }
 
-  getAllNotebooks(): void {
-    this.apiRequestsService.getAllNotebooks().subscribe({
-      next: (notebooks) => {
-        this.notebooks = notebooks;
-        console.log("Carnets :");
-        console.log(this.notebooks);
-        this.createReviewsNotebook();
+  getAllProducts(): void {
+    this.apiRequestsService.getAllProducts().subscribe({
+      next: (products) => {
+        this.productsDto = products;
+        console.log("Produits :");
+        console.log(this.productsDto);
+        this.createReviewsProduct();
       },
       error: (err) => console.log(err),
     })
   }
 
-  createReviewsNotebook(): void {
+  createReviewsProduct(): void {
 
-    for (const NOTEBOOK of this.notebooks) {
+    for (const PRODUCT of this.productsDto) {
 
       const REVIEWS_COUNT = this.randomIndex(30);
 
@@ -207,7 +208,7 @@ export class AddDataSqlService {
           firstname: this.people[RANDOM_NUMBER_PEOPLE].lastname,
           email: this.people[RANDOM_NUMBER_PEOPLE].email,
           rating: this.reviewsToCreate[RANDOM_NUMBER_REVIEW].rating,
-          productCommonValuesDto: this.dataSignal.convertToProductDto(NOTEBOOK)
+          productDto: PRODUCT
         }
 
         this.apiRequestsService.postReview(reviewToCreate).subscribe({
@@ -299,9 +300,9 @@ export class AddDataSqlService {
   getAllGiftCards(): void {
       this.apiGiftCardAdminService.getAll().subscribe({
         next: (giftCards) => {
-          this.giftCards = giftCards;
+          this.giftCardsDto = giftCards;
           console.log("Carte Cdeau :");
-          console.log(this.giftCards);
+          console.log(this.giftCardsDto);
         },
         error: (err) => {
           if (err.status !== 409) {
@@ -328,9 +329,9 @@ export class AddDataSqlService {
   getAllDeliveryOptions(): void {
     this.apiDeliveryOptionAdminService.getAll().subscribe({
       next: (deliveryOption) => {
-        this.deliveryOptions = deliveryOption;
+        this.deliveryOptionsDto = deliveryOption;
         console.log("Option de Livraison :");
-        console.log(this.deliveryOptions);
+        console.log(this.deliveryOptionsDto);
       },
       error: (err) => {
         if (err.status !== 409) {
@@ -347,9 +348,9 @@ export class AddDataSqlService {
     let randomMaterialNumber = this.randomIndex(6);
 
     for(let i =0; i < randomMaterialNumber; i++){
-        let randomIndex = this.randomIndex(this.materials.length);
-        if (!materialsRandom.includes(this.materials[randomIndex])) {
-            materialsRandom.push(this.materials[randomIndex])
+        let randomIndex = this.randomIndex(this.materialsDto.length);
+        if (!materialsRandom.includes(this.materialsDto[randomIndex])) {
+            materialsRandom.push(this.materialsDto[randomIndex])
         }
     }
     return materialsRandom;
@@ -662,62 +663,69 @@ export class AddDataSqlService {
       }
   ]
 
-  notebooksToCreate = [
+  productsToCreate = [
     {
-    name : 'le végétal',
-    introduction : `Une immersion dans la nature à chaque page. Teintes vertes apaisantes évoquent les feuillages luxuriants. Fait main avec un engagement écologique, chaque carnet offre un espace pour vos pensées créatives. Inspiré par la nature, ce carnet biodégradable vous encourage à cultiver vos idées tout en préservant notre environnement, page après page.`,
-    price : 1.50,
-    secondaryPictures : [],
-    description : `une célébration de la nature et de la durabilité. Sa couverture, réalisée à la main à partir de matériaux écologiques, reflète la richesse de la vie végétale avec des motifs floraux délicats et des teintes organiques. Chaque détail est une ode à la beauté naturelle, mettant en lumière la diversité des plantes qui peuplent notre planète. À l'intérieur, les pages en papier recyclé offrent une toile respectueuse de l'environnement pour capturer les pensées, les croquis ou les notes. La texture douce du papier invite à l'exploration créative, tandis que des empreintes végétales subtiles rappellent le lien intrinsèque entre l'homme et la nature. Des illustrations botaniques exquises et des motifs inspirés par la flore mondiale parsèment les pages, créant une expérience immersive au cœur du règne végétal. Des nuances de vert apaisantes et des touches de couleur inspirées des plantes ajoutent une dimension artistique, faisant de chaque page un jardin miniature. Le carnet artisanal bio végétal incarne l'éthique d'une fabrication respectueuse de l'environnement, soulignant l'importance de préserver la biodiversité. En choisissant ce carnet, vous optez pour un compagnon d'écriture qui capture l'énergie vivifiante de la nature, tout en soutenant des pratiques responsables pour une planète plus verte.`,
-    materialsDto : [],
-    },
-    {
-    name : 'le braise',
-    introduction : `Une odyssée enflammée à chaque écriture. Les teintes chaudes évoquent les flammes dansantes. Réalisé à la main avec passion, chaque page offre un espace pour vos pensées ardentes. Inspiré par le feu, ce carnet biodégradable vous invite à graver vos idées tout en préservant notre planète, chaque mot s'embrasant sur ses pages.`,
-    price : 12.50,
-    secondaryPictures : [],
-    description : `évoque la puissance primitive et réconfortante du feu. Sa couverture, méticuleusement conçue à la main à partir de matériaux écologiques, reflète la lueur chaleureuse des braises avec des nuances de rouge, d'orange et de noir. Les motifs captivent l'esprit, évoquant le mouvement hypnotique des flammes dansantes. À l'intérieur, les pages en papier recyclé révèlent une toile résistante mais délicate, prête à accueillir les pensées ardentes et les idées passionnées. Chaque feuille semble prête à s'embraser, créant une toile où l'expression artistique ou l'écriture prend vie de manière flamboyante. Des illustrations captivantes de flammes tourbillonnantes et de braises incandescentes animent les pages, évoquant la vitalité et la force du feu. Des teintes de rouge, d'or et de noir créent un contraste saisissant, tandis que des détails subtils rappellent la ferveur de l'élément feu. Le carnet artisanal bio sur le thème de la braise et du feu symbolise la passion et la créativité brûlante. En choisissant ce carnet, vous emportez avec vous non seulement un objet artisanal magnifiquement conçu, mais aussi un rappel de la force inspiratrice du feu qui a captivé l'humanité depuis ses débuts.`,
-    materialsDto : [],
-    },
-    {
-    name: `Le Trésor de l'Océan`,
-    introduction: `Une plongée envoûtante dans les profondeurs marines. Ce carnet artisanal bio, teinté des nuances apaisantes du bleu océan, est créé à la main avec un profond respect pour l'environnement. Chaque page vous offre une toile pour vos pensées créatives, tandis que les motifs inspirés de la mer vous invitent à explorer votre propre océan d'idées.`,
-    price: 11.90,
-    secondaryPictures : [],
-    description: `La couverture, élaborée avec des matériaux écologiques, capture la beauté mystérieuse des fonds marins. Des motifs marins tels que les vagues, les coquillages et les étoiles de mer ornent la couverture, évoquant la richesse et la diversité de la vie sous-marine. Les pages du carnet révèlent un papier recyclé de haute qualité, offrant une surface lisse pour exprimer vos pensées et créations. Chaque feuille devient une fenêtre vers l'océan, avec des détails subtils tels que des reflets irisés ou des empreintes d'algues marines. Des illustrations délicates d'animaux marins et des citations inspirantes bordent les pages, créant une atmosphère empreinte de calme et de contemplation. Ce carnet est plus qu'un simple objet, c'est une invitation à plonger dans les profondeurs de votre imagination. Chaque carnet artisanal bio "Le Trésor de l'Océan" incarne l'engagement envers la préservation des océans et rappelle la beauté fragile de notre écosystème marin. En choisissant ce carnet, vous soutenez la protection des mers et des créatures qui les habitent.`,
-    materialsDto : [],
-    },
-    {
-    name: 'Le Jardin Enchanté',
-    introduction: `Un carnet féerique où chaque page est une invitation à explorer un jardin magique. Les teintes pastel et les motifs floraux délicats créent une ambiance enchanteresse. Fabriqué à la main avec un engagement écologique, ce carnet biodégradable offre un espace créatif pour cultiver vos idées et laisser fleurir votre imagination.`,
-    price: 10.50,
-    secondaryPictures : [],
-    description: `La couverture, ornée de motifs floraux et de papillons, transporte le regard dans un monde féerique. Réalisée avec des matériaux respectueux de l'environnement, elle incarne la beauté naturelle et éphémère d'un jardin enchanté. Les pages en papier recyclé offrent une toile douce et texturée pour vos écrits et croquis. Les détails délicats, tels que des empreintes de pétales et des motifs végétaux, ajoutent une touche de magie à chaque page, invitant à la rêverie. Des illustrations de fées, d'oiseaux chanteurs et de fleurs fantastiques parsèment le carnet, créant une atmosphère poétique. Les citations inspirantes vous guident dans ce voyage enchanteur, où chaque idée peut prendre racine et s'épanouir comme une fleur magique. Choisir le carnet "Le Jardin Enchanté", c'est inviter la magie dans votre quotidien tout en affirmant votre engagement envers des pratiques respectueuses de la nature. Ce carnet est une passerelle vers un monde où la créativité et la nature fusionnent harmonieusement.`,
+      name : 'le végétal',
+      introduction : `Une immersion dans la nature à chaque page. Teintes vertes apaisantes évoquent les feuillages luxuriants. Fait main avec un engagement écologique, chaque carnet offre un espace pour vos pensées créatives. Inspiré par la nature, ce carnet biodégradable vous encourage à cultiver vos idées tout en préservant notre environnement, page après page.`,
+      price : 1.50,
+      secondaryPictures : [],
+      description : `une célébration de la nature et de la durabilité. Sa couverture, réalisée à la main à partir de matériaux écologiques, reflète la richesse de la vie végétale avec des motifs floraux délicats et des teintes organiques. Chaque détail est une ode à la beauté naturelle, mettant en lumière la diversité des plantes qui peuplent notre planète. À l'intérieur, les pages en papier recyclé offrent une toile respectueuse de l'environnement pour capturer les pensées, les croquis ou les notes. La texture douce du papier invite à l'exploration créative, tandis que des empreintes végétales subtiles rappellent le lien intrinsèque entre l'homme et la nature. Des illustrations botaniques exquises et des motifs inspirés par la flore mondiale parsèment les pages, créant une expérience immersive au cœur du règne végétal. Des nuances de vert apaisantes et des touches de couleur inspirées des plantes ajoutent une dimension artistique, faisant de chaque page un jardin miniature. Le carnet artisanal bio végétal incarne l'éthique d'une fabrication respectueuse de l'environnement, soulignant l'importance de préserver la biodiversité. En choisissant ce carnet, vous optez pour un compagnon d'écriture qui capture l'énergie vivifiante de la nature, tout en soutenant des pratiques responsables pour une planète plus verte.`,
       materialsDto : [],
+      productType: "CARNETS"
     },
     {
-    name: 'Le Cosmos Mystique',
-    introduction: `Explorez l'infini avec le carnet "Le Cosmos Mystique". Sa couverture constellée et ses pages noires invitent à l'exploration cosmique. Chaque feuille devient une étoile où vos pensées brillent comme des galaxies lointaines. Un carnet biodégradable pour ceux qui rêvent au-delà des limites.`,
-    price: 14.90,
-    secondaryPictures : [],
-    description: `La couverture noire profonde, ornée d'étoiles scintillantes, capture la majesté de l'univers. Chaque page est un voyage stellaire, avec des détails subtils tels que des constellations discrètes et des bords galactiques. Les pages noires offrent un contraste saisissant pour l'écriture ou le dessin blanc. Les illustrations de planètes lointaines et de nébuleuses époustouflantes parsèment le carnet, créant une expérience immersive dans le cosmos. Inspiré par la magie de l'espace infini, ce carnet incite à la réflexion profonde et à l'exploration créative. Choisir ce carnet, c'est embrasser l'inconnu avec chaque ligne tracée.`,
-    materialsDto : [],
+      name : 'le braise',
+      introduction : `Une odyssée enflammée à chaque écriture. Les teintes chaudes évoquent les flammes dansantes. Réalisé à la main avec passion, chaque page offre un espace pour vos pensées ardentes. Inspiré par le feu, ce carnet biodégradable vous invite à graver vos idées tout en préservant notre planète, chaque mot s'embrasant sur ses pages.`,
+      price : 12.50,
+      secondaryPictures : [],
+      description : `évoque la puissance primitive et réconfortante du feu. Sa couverture, méticuleusement conçue à la main à partir de matériaux écologiques, reflète la lueur chaleureuse des braises avec des nuances de rouge, d'orange et de noir. Les motifs captivent l'esprit, évoquant le mouvement hypnotique des flammes dansantes. À l'intérieur, les pages en papier recyclé révèlent une toile résistante mais délicate, prête à accueillir les pensées ardentes et les idées passionnées. Chaque feuille semble prête à s'embraser, créant une toile où l'expression artistique ou l'écriture prend vie de manière flamboyante. Des illustrations captivantes de flammes tourbillonnantes et de braises incandescentes animent les pages, évoquant la vitalité et la force du feu. Des teintes de rouge, d'or et de noir créent un contraste saisissant, tandis que des détails subtils rappellent la ferveur de l'élément feu. Le carnet artisanal bio sur le thème de la braise et du feu symbolise la passion et la créativité brûlante. En choisissant ce carnet, vous emportez avec vous non seulement un objet artisanal magnifiquement conçu, mais aussi un rappel de la force inspiratrice du feu qui a captivé l'humanité depuis ses débuts.`,
+      materialsDto : [],
+      productType: "CARNETS"
     },
     {
-    name: 'Le Voyageur Temporel',
-    introduction: `Plongez dans les méandres du temps avec le carnet "Le Voyageur Temporel". Sa couverture énigmatique, inspirée par les engrenages du temps, vous invite à explorer des époques lointaines. Chaque page devient une chronique où vos pensées transcendent les limites du présent.`,
-    price: 16.50,
-    secondaryPictures : [],
-    description: `La couverture en cuir vieilli, ornée de motifs d'engrenages et de symboles mystérieux, évoque l'atmosphère d'une machine temporelle. Chaque détail invite à l'aventure dans les époques passées et futures. Les pages écrues, au grain délicat, sont une toile pour capturer vos pensées et visions temporelles. Des marques subtiles, telles que des empreintes d'horloges anciennes, ajoutent une dimension artistique et rappellent le passage du temps. Des illustrations évoquant différentes époques et des citations philosophiques jalonnent les pages, créant une expérience d'écriture qui transcende le présent. Choisir ce carnet, c'est entreprendre un voyage intemporel à chaque ligne.`,
-    materialsDto : [],
+      name: `Le Trésor de l'Océan`,
+      introduction: `Une plongée envoûtante dans les profondeurs marines. Ce carnet artisanal bio, teinté des nuances apaisantes du bleu océan, est créé à la main avec un profond respect pour l'environnement. Chaque page vous offre une toile pour vos pensées créatives, tandis que les motifs inspirés de la mer vous invitent à explorer votre propre océan d'idées.`,
+      price: 11.90,
+      secondaryPictures : [],
+      description: `La couverture, élaborée avec des matériaux écologiques, capture la beauté mystérieuse des fonds marins. Des motifs marins tels que les vagues, les coquillages et les étoiles de mer ornent la couverture, évoquant la richesse et la diversité de la vie sous-marine. Les pages du carnet révèlent un papier recyclé de haute qualité, offrant une surface lisse pour exprimer vos pensées et créations. Chaque feuille devient une fenêtre vers l'océan, avec des détails subtils tels que des reflets irisés ou des empreintes d'algues marines. Des illustrations délicates d'animaux marins et des citations inspirantes bordent les pages, créant une atmosphère empreinte de calme et de contemplation. Ce carnet est plus qu'un simple objet, c'est une invitation à plonger dans les profondeurs de votre imagination. Chaque carnet artisanal bio "Le Trésor de l'Océan" incarne l'engagement envers la préservation des océans et rappelle la beauté fragile de notre écosystème marin. En choisissant ce carnet, vous soutenez la protection des mers et des créatures qui les habitent.`,
+      materialsDto : [],
+      productType: "CARNETS"
     },
     {
-    name: 'La Forêt Enchantée',
-    introduction: `Plongez dans la magie de "La Forêt Enchantée", un carnet où les mystères de la nature s'entrelacent avec des histoires enchantées. La couverture, ornée de motifs floraux et d'animaux mystiques, invite à explorer un royaume féerique à chaque page.`,
-    price: 13.90,
-    secondaryPictures : [],
-    description: `La couverture, faite à la main avec du cuir végétalien, évoque la texture douce de l'écorce des arbres enchantés. Des détails tels que des fées dansantes et des animaux fantastiques ajoutent une touche de magie à chaque regard. Les pages, en papier recyclé et durable, offrent une toile naturelle pour vos idées créatives. Des empreintes délicates de feuilles et des motifs végétaux créent une expérience immersive, transportant chaque utilisateur au cœur de la forêt enchantée. Des illustrations évoquant des créatures mystiques et des citations inspirantes de la nature parsèment les pages, créant une atmosphère de calme et de rêverie. Choisir ce carnet, c'est s'immerger dans un monde où la magie de la forêt se mêle à l'expression artistique.`,
-    materialsDto : [],
+      name: 'Le Jardin Enchanté',
+      introduction: `Un carnet féerique où chaque page est une invitation à explorer un jardin magique. Les teintes pastel et les motifs floraux délicats créent une ambiance enchanteresse. Fabriqué à la main avec un engagement écologique, ce carnet biodégradable offre un espace créatif pour cultiver vos idées et laisser fleurir votre imagination.`,
+      price: 10.50,
+      secondaryPictures : [],
+      description: `La couverture, ornée de motifs floraux et de papillons, transporte le regard dans un monde féerique. Réalisée avec des matériaux respectueux de l'environnement, elle incarne la beauté naturelle et éphémère d'un jardin enchanté. Les pages en papier recyclé offrent une toile douce et texturée pour vos écrits et croquis. Les détails délicats, tels que des empreintes de pétales et des motifs végétaux, ajoutent une touche de magie à chaque page, invitant à la rêverie. Des illustrations de fées, d'oiseaux chanteurs et de fleurs fantastiques parsèment le carnet, créant une atmosphère poétique. Les citations inspirantes vous guident dans ce voyage enchanteur, où chaque idée peut prendre racine et s'épanouir comme une fleur magique. Choisir le carnet "Le Jardin Enchanté", c'est inviter la magie dans votre quotidien tout en affirmant votre engagement envers des pratiques respectueuses de la nature. Ce carnet est une passerelle vers un monde où la créativité et la nature fusionnent harmonieusement.`,
+      materialsDto : [],
+      productType: "CARNETS"
+    },
+    {
+      name: 'Le Cosmos Mystique',
+      introduction: `Explorez l'infini avec le carnet "Le Cosmos Mystique". Sa couverture constellée et ses pages noires invitent à l'exploration cosmique. Chaque feuille devient une étoile où vos pensées brillent comme des galaxies lointaines. Un carnet biodégradable pour ceux qui rêvent au-delà des limites.`,
+      price: 14.90,
+      secondaryPictures : [],
+      description: `La couverture noire profonde, ornée d'étoiles scintillantes, capture la majesté de l'univers. Chaque page est un voyage stellaire, avec des détails subtils tels que des constellations discrètes et des bords galactiques. Les pages noires offrent un contraste saisissant pour l'écriture ou le dessin blanc. Les illustrations de planètes lointaines et de nébuleuses époustouflantes parsèment le carnet, créant une expérience immersive dans le cosmos. Inspiré par la magie de l'espace infini, ce carnet incite à la réflexion profonde et à l'exploration créative. Choisir ce carnet, c'est embrasser l'inconnu avec chaque ligne tracée.`,
+      materialsDto : [],
+      productType: "CARNETS"
+    },
+    {
+      name: 'Le Voyageur Temporel',
+      introduction: `Plongez dans les méandres du temps avec le carnet "Le Voyageur Temporel". Sa couverture énigmatique, inspirée par les engrenages du temps, vous invite à explorer des époques lointaines. Chaque page devient une chronique où vos pensées transcendent les limites du présent.`,
+      price: 16.50,
+      secondaryPictures : [],
+      description: `La couverture en cuir vieilli, ornée de motifs d'engrenages et de symboles mystérieux, évoque l'atmosphère d'une machine temporelle. Chaque détail invite à l'aventure dans les époques passées et futures. Les pages écrues, au grain délicat, sont une toile pour capturer vos pensées et visions temporelles. Des marques subtiles, telles que des empreintes d'horloges anciennes, ajoutent une dimension artistique et rappellent le passage du temps. Des illustrations évoquant différentes époques et des citations philosophiques jalonnent les pages, créant une expérience d'écriture qui transcende le présent. Choisir ce carnet, c'est entreprendre un voyage intemporel à chaque ligne.`,
+      materialsDto : [],
+      productType: "CARNETS"
+    },
+    {
+      name: 'La Forêt Enchantée',
+      introduction: `Plongez dans la magie de "La Forêt Enchantée", un carnet où les mystères de la nature s'entrelacent avec des histoires enchantées. La couverture, ornée de motifs floraux et d'animaux mystiques, invite à explorer un royaume féerique à chaque page.`,
+      price: 13.90,
+      secondaryPictures : [],
+      description: `La couverture, faite à la main avec du cuir végétalien, évoque la texture douce de l'écorce des arbres enchantés. Des détails tels que des fées dansantes et des animaux fantastiques ajoutent une touche de magie à chaque regard. Les pages, en papier recyclé et durable, offrent une toile naturelle pour vos idées créatives. Des empreintes délicates de feuilles et des motifs végétaux créent une expérience immersive, transportant chaque utilisateur au cœur de la forêt enchantée. Des illustrations évoquant des créatures mystiques et des citations inspirantes de la nature parsèment les pages, créant une atmosphère de calme et de rêverie. Choisir ce carnet, c'est s'immerger dans un monde où la magie de la forêt se mêle à l'expression artistique.`,
+      materialsDto : [],
+      productType: "CARNETS"
     },
   ]
 

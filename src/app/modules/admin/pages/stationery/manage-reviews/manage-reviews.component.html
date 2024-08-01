@@ -68,7 +68,7 @@
           <i class="fa-solid fa-file-lines pointer flex center" (click)="openModalWithReviewContent(review.content)"></i>
         </td>
         <td>
-          <p> {{ review.productCommonValuesDto.name | titlecase }} </p>
+          <p> {{ review.productDto.name | titlecase }} </p>
         </td>
         <td class="table-width-icon">
           <div class="flex center">
@@ -93,6 +93,7 @@
   </table>
 
   <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
+
 } @else {
   <h2> Pas de commentaires avec ces critères de recherche</h2>
 }

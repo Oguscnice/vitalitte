@@ -45,10 +45,10 @@ export class AdminCollectionSignalService extends BaseComponent {
 
   confirmationModalForDeleteCollection(collection: CollectionDto): void {
 
-    this.adminDataSignal.getNotebooksByCollectionSlug(collection.slug);
+    this.adminDataSignal.getProductsByCollectionSlug(collection.slug);
     this.adminDataSignal.setItemToDelete(collection);
 
-    const MESSAGE: string = `Confirmez-vous vouloir supprimer la Catégorie: ${collection.name} ? Il y a ${this.adminDataSignal.$notebooksImpacted().length} carnet(s) impacté(s)`;
+    const MESSAGE: string = `Confirmez-vous vouloir supprimer la Catégorie: ${collection.name} ? Il y a ${this.adminDataSignal.$productsImpacted().length} carnet(s) impacté(s)`;
 
     this.subscriptions.push(
       this.modalSignal.showModal(MESSAGE, true).subscribe({
@@ -64,7 +64,7 @@ export class AdminCollectionSignalService extends BaseComponent {
         next: (res: ResponseEntity): void => {
           this.anguilleSignal.changeMessage(res.message);
           this.adminDataSignal.setItemToDelete(null);
-          this.adminDataSignal.setNotebooksImpacted([]);
+          this.adminDataSignal.setProductsImpacted([]);
           this.dataSignal.getAllCollections();
         },
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))

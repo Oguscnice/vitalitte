@@ -1,9 +1,6 @@
-export interface ProductCommonValuesDto {
-  name: string,
-  picture: string,
-  pictureThumbnail: string,
-  price: number,
-  description: string,
-  slug?: string,
-  isAvailable?: boolean,
+import { CreateProduct } from "../../modules/admin/shared/interfaces/CreateProduct";
+
+export interface ProductDto extends CreateProduct {
+  slug: string,
+  isAvailable: boolean,
 }

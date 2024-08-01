@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     '../../../assets/images/figma/school-work.jpg';
   backgroundImageBio: string = '../../../assets/images/loryane.jpg';
 
-  handmadeNotebooksPictures : ImagesPreview[] = [
+  handmadeProductsPictures : ImagesPreview[] = [
       {
         imgSrc : "../../../assets/images/figma/carnet02.jpg",
         imgAlt : "Image d'un carnet fait à la main"},
@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataSignal.getPublicationsSpotlighted();
-    this.addData.createAll();
+    // this.addData.createAll();
   }
 
   ngAfterViewInit(): void {

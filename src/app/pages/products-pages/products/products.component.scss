@@ -1,0 +1,74 @@
+@import "src/app/scss/variables";
+@import "src/app/scss/buttons";
+
+$customization-picture-size : 120px;
+
+section {
+  margin-top: $normal-margin;
+  padding: 0 $fourth-padding;
+
+  h4 {
+    font-size: $triple-font-size;
+    padding: $fourth-padding 0;
+  }
+
+  .similar-title {
+    font-family: $font-family-title;
+    font-size: $fourth-font-size;
+    padding: $fourth-padding 0;
+    letter-spacing: 4px;
+  }
+
+  .customization {
+
+    .custom-card {
+      padding-bottom : $fourth-padding;
+
+      .image-and-filter-color{
+        height: calc($customization-picture-size * 2);
+        width: $customization-picture-size;
+
+        img {
+          @include outline-picture;
+          min-height: calc($customization-picture-size * 2);
+          min-width: $customization-picture-size;
+        }
+
+        .filter-color {
+          z-index: $z-index + 1;
+          border-radius: 8px;
+          top: calc(0px - ($customization-picture-size * 2 ) - 4px);
+          min-height: calc($customization-picture-size * 2);
+          width: calc($customization-picture-size + 2px + 2px);
+        }
+      }
+
+      .title-description {
+        padding-left: $fourth-padding;
+
+        h4{
+          height : 20%;
+          padding: 0px;
+          display: flex;
+          align-items: center;
+        }
+
+        p {
+          height: 80%;
+          text-align: left;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}
+
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  section {
+    max-width: $max-width-768px;
+  }
+}

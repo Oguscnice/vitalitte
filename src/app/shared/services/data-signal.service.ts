@@ -4,7 +4,7 @@ import { DataSignalState } from '../interfaces/DataSignalState';
 import { CategoryDto } from '../interfaces/Category';
 import { BaseComponent } from 'src/app/base.component';
 import { CollectionDto } from '../interfaces/Collection';
-import { NotebookDto } from '../interfaces/Notebook';
+import { ProductDto } from '../interfaces/Product';
 import { MaterialDto } from '../interfaces/Material';
 import {BehaviorSubject, catchError, map, Observable, of} from 'rxjs';
 import { AnguilleSignalService } from './anguille-signal.service';
@@ -17,9 +17,8 @@ import {ShoppingCartService} from "./shopping-cart.service";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {ModalSignalService} from "./modal-signal.service";
 import {ObjectUtilsService} from "./object-utils.service";
-import {CategoryAndCollection} from "../interfaces/CategoryAndCollection";
+import {CategoryDtoAndCollectionDto} from "../interfaces/CategoryDtoAndCollectionDto";
 import {CreateReview, ReviewDto} from "../interfaces/Review";
-import {ProductCommonValuesDto} from "../interfaces/Product";
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +35,7 @@ export class DataSignalService extends BaseComponent {
   private readonly state: DataSignalState = {
     $privateCategoryList: signal<CategoryDto[]>([]),
     $privateCollectionList: signal<CategoryDto[]>([]),
-    $privateNotebookList: signal<NotebookDto[]>([]),
+    $privateProductDtoList: signal<ProductDto[]>([]),
     $privateMaterialTypeList: signal<string[]>([]),
     $privateMaterialList: signal<MaterialDto[]>([]),
     $privateWorkshopsDateToCome: signal<WorkshopDto[]>([]),
@@ -45,7 +44,7 @@ export class DataSignalService extends BaseComponent {
     $privateCounterRegistrationsReservedWorkshops: signal<WorkshopDisponibilities[]>([]),
     $privatePublications: signal<PublicationDto[]>([]),
     $privatePublicationsSpotlighted: signal<PublicationDto[]>([]),
-    $privateNotebookBySlug: new BehaviorSubject<NotebookDto | null>(null),
+    $privateProductDtoBySlug: new BehaviorSubject<ProductDto | null>(null),
     $privateWorkshopBySlug: new BehaviorSubject<WorkshopDto | null>(null),
     $privateMaterialBySlug: new BehaviorSubject<MaterialDto | null>(null),
     $privatePublicationBySlug: new BehaviorSubject<PublicationDto | null>(null),
@@ -56,10 +55,10 @@ export class DataSignalService extends BaseComponent {
 
   public readonly $categories: Signal<CategoryDto[]> = this.state.$privateCategoryList.asReadonly();
   public readonly $collections: Signal<CollectionDto[]> = this.state.$privateCollectionList.asReadonly();
-  public readonly $notebooks: Signal<NotebookDto[]> = this.state.$privateNotebookList.asReadonly();
+  public readonly $productsDto: Signal<ProductDto[]> = this.state.$privateProductDtoList.asReadonly();
   public readonly $materialTypes: Signal<string[]> = this.state.$privateMaterialTypeList.asReadonly();
   public readonly $materials: Signal<MaterialDto[]> = this.state.$privateMaterialList.asReadonly();
-  public readonly $notebookBySlug: Observable<NotebookDto | null> = this.state.$privateNotebookBySlug.asObservable();
+  public readonly $productDtoBySlug: Observable<ProductDto | null> = this.state.$privateProductDtoBySlug.asObservable();
   public readonly $workshopBySlug: Observable<WorkshopDto | null> = this.state.$privateWorkshopBySlug.asObservable();
   public readonly $materialBySlug: Observable<MaterialDto | null> = this.state.$privateMaterialBySlug.asObservable();
   public readonly $publicationBySlug: Observable<PublicationDto | null> = this.state.$privatePublicationBySlug.asObservable();
@@ -149,44 +148,42 @@ export class DataSignalService extends BaseComponent {
   }
 
   //-------------------
-  //------NOTEBOOK-----
+  //------PRODUCT-----
   //-------------------
 
-  setNotebookList(notebooks: NotebookDto[]): void {
-    this.state.$privateNotebookList.set(notebooks);
+  setProductsDtoList(products: ProductDto[]): void {
+    this.state.$privateProductDtoList.set(products);
   }
 
-  setNotebookBySlug(notebook: NotebookDto | null): void {
-    this.state.$privateNotebookBySlug.next(notebook);
+  setProductDtoBySlug(productDto: ProductDto | null): void {
+    this.state.$privateProductDtoBySlug.next(productDto);
   }
 
-  getAllNotebooks(filter?: boolean): void {
+  get3RandomProducts(): void {
     this.subscriptions.push(
-      this.apiRequests.getAllNotebooks().subscribe({
-        next: (notebooks: NotebookDto[]) => this.setNotebookList(filter ? this.filterNotebooksList(notebooks) : notebooks),
+      this.apiRequests.getProductsByCategoryAndCollection(this.paginationSignal.$productType(), this.paginationSignal.$categoryDtoAndCollectionDto()).subscribe({
+        next: (productsDto: ProductDto[]) => {
+          const RANDOM_PRODUCTS_DTO = productsDto.sort(() =>Math.random() - 0.5).slice(0, 3);
+          this.setProductsDtoList(RANDOM_PRODUCTS_DTO);
+        },
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }
 
-  getAllNotebooksByCategoryAndCollection(categoryAndCollection: CategoryAndCollection): void {
+  getAllProductsByCategoryAndCollection(): void {
     this.subscriptions.push(
-      this.apiRequests.getNotebooksByCategoryAndCollection(categoryAndCollection).subscribe({
-        next: (notebooks: NotebookDto[]) => this.setNotebookList(notebooks),
+      this.apiRequests.getProductsByCategoryAndCollection(this.paginationSignal.$productType(), this.paginationSignal.$categoryDtoAndCollectionDto()).subscribe({
+        next: (products: ProductDto[]) => this.setProductsDtoList(products),
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }
 
-  private filterNotebooksList(notebooks: NotebookDto[]): NotebookDto[] {
-    return notebooks.sort(() =>
-      Math.random() - 0.5).slice(0, 3);
-  }
-
-  getNotebookBySlug(notebookSlug: NotebookDto['slug']): void {
+  getProductBySlug(productSlug: ProductDto['slug']): void {
     this.subscriptions.push(
-      this.apiRequests.getNotebookBySlug(notebookSlug).subscribe({
-        next: (notebook: NotebookDto) => this.setNotebookBySlug(notebook),
+      this.apiRequests.getProductBySlug(productSlug).subscribe({
+        next: (productDto) => this.setProductDtoBySlug(productDto),
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
@@ -409,12 +406,12 @@ export class DataSignalService extends BaseComponent {
     const MESSAGE_ITEM_CHANGE = "Quelque chose a changé dans votre panier !";
 
     // on va rechercher via les slugs en BDD et on écrase systématiquement l'objet, pour être sûr de l'avoir à jour.
-    for (let notebook of cart.notebooks) {
+    for (let product of cart.products) {
       this.subscriptions.push(
-        this.apiRequests.getNotebookBySlug(notebook.item.slug).subscribe({
-          next: (notebookDto: NotebookDto): void => {
-            if (!this.objectUtils.compareNotebook(notebookDto, notebook.item)) {
-              notebook.item = notebookDto;
+        this.apiRequests.getProductBySlug(product.item.slug).subscribe({
+          next: (productDto): void => {
+            if (!this.objectUtils.compareProduct(productDto, product.item)) {
+              product.item = productDto;
               this.shoppingCart.editCartInLocalStorage(cart);
               this.modalSignal.showModal(MESSAGE_ITEM_CHANGE, false).subscribe();
             }
@@ -470,17 +467,5 @@ export class DataSignalService extends BaseComponent {
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
-  }
-
-  convertToProductDto(item: NotebookDto): ProductCommonValuesDto {
-    return {
-      name: item.name,
-      picture: item.picture,
-      pictureThumbnail: item.pictureThumbnail,
-      price: item.price,
-      description: item.description,
-      slug: item.slug,
-      isAvailable: item.isAvailable
-    }
   }
 }

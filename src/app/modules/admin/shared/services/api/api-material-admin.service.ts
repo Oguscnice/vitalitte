@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { MaterialDto } from '../../../../../shared/interfaces/Material';
 import { ResponseEntity } from '../../../../../shared/interfaces/ResponseEntity';
 import { VITALITTE_PROJECT } from '../../../../../shared/variables/AppConfig';
-import { CreateMaterial } from '../../interfaces/Material';
+import { CreateMaterial } from '../../interfaces/CreateMaterial';
 import {Page, PaginationWithSearchValue} from "../../../../../shared/interfaces/Page";
 
 @Injectable({

@@ -1,0 +1,103 @@
+@import "../../scss/variables.scss";
+
+.shopping-products-list {
+  width: 100%;
+  flex-direction: column;
+
+  .categories-and-collections {
+    width: 100%;
+    flex-direction: column;
+
+    .categories,
+    .collections {
+      width: 100%;
+    }
+  }
+
+  .products-list {
+    margin: auto;
+    gap: 32px;
+    flex-direction: column;
+
+    .product-container {
+      width: 80%;
+
+      img, .product-description {
+        width: 50%;
+        height: 260px;
+      }
+
+      img {
+        height: 260px;
+        width: 260px;
+        object-fit: cover;
+        @include outline-picture();
+      }
+
+      .product-description {
+        padding: 0 $double-padding;
+
+        h4 {
+          font-weight: bold;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  .shopping-products-list {
+    max-width: $max-width-768px;
+    .product-container {
+      .product-description {
+        .product-introduction {
+          background: linear-gradient(
+              to bottom,
+              rgba(0, 0, 0, 1),
+              transparent
+          ); /* Dégradé de haut en bas de noir à transparent */
+          background-clip: text; /* Applique le dégradé au texte */
+          -webkit-background-clip: text; /* Préfixe pour les anciens navigateurs Webkit */
+          color: transparent;
+          max-height: 60%;
+          line-height: normal;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .shopping-products-list {
+    max-width: $max-width-992px;
+    .categories-and-collections {
+      flex-direction: row;
+      .categories,
+      .collections {
+        width: 50%;
+      }
+    }
+    .products-list {
+      flex-direction: row;
+      flex-wrap: wrap;
+      .product-container {
+        width: 46%;
+        img, .product-description {
+          height: 180px;
+        }
+        img {
+          width: 120px;
+        }
+
+        .product-description {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

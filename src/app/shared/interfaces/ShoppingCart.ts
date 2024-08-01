@@ -1,4 +1,4 @@
-import {NotebookDto} from "./Notebook";
+import {ProductDto} from "./Product";
 import {InscriptionDto} from "./Inscription";
 
 export interface ShoppingCartItem<T> {
@@ -7,6 +7,8 @@ export interface ShoppingCartItem<T> {
 }
 
 export interface ShoppingCart {
-  notebooks:  ShoppingCartItem<NotebookDto>[],
+  products:  ShoppingCartItem<ProductDto>[],
   inscriptions: ShoppingCartItem<InscriptionDto>[],
 }
+
+export type KeyShoppingCart = 'products' | 'inscriptions';

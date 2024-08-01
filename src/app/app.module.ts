@@ -11,7 +11,7 @@ import { Page404Component } from './pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { httpInterceptorProviders } from './shared/interceptors';
 import { HttpClientModule } from '@angular/common/http';
-import { NotebooksComponent } from './pages/notebooks-pages/notebooks/notebooks.component';
+import { ProductsComponent } from './pages/products-pages/products/products.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
@@ -21,15 +21,15 @@ import { ContactFormComponent } from './components/contact-form/contact-form.com
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
-import { NotebooksPreparedComponent } from './pages/notebooks-pages/notebooks-prepared/notebooks-prepared.component';
-import { NotebookSelectedComponent } from './pages/notebooks-pages/notebook-selected/notebook-selected.component';
-import { NotebooksListComponent } from './components/notebooks-list/notebooks-list.component';
-import { CreateNotebookComponent } from './pages/notebooks-pages/create-notebook/create-notebook.component';
+import { ProductsPreparedComponent } from './pages/products-pages/products-prepared/products-prepared.component';
+import { ProductSelectedComponent } from './pages/products-pages/product-selected/product-selected.component';
+import { ProductsListComponent } from './components/products-list/products-list.component';
+import { CreateProductComponent } from './pages/products-pages/create-product/create-product.component';
 import { ImagesPreviewComponent } from './components/images-preview/images-preview.component';
 import { NewsHeadbandComponent } from './components/news-headband/news-headband.component';
 import { UpArrowComponent } from './components/up-arrow/up-arrow.component';
 import { PaypalComponent } from './components/paypal/paypal.component';
-import { ShoppingNotebooksListComponent } from './components/shopping-notebooks-list/shopping-notebooks-list.component';
+import { ShoppingProductsListComponent } from './components/shopping-products-list/shopping-products-list.component';
 import { ChoicesPersonalizedCreationComponent } from './components/choices-personalized-creation/choices-personalized-creation.component';
 import { WorkshopsComponent } from './pages/workshops-pages/workshop/workshops.component';
 import { RouterLink } from '@angular/router';
@@ -55,6 +55,7 @@ import {
 } from "./components/cart-item-quantity-manager/cart-item-quantity-manager.component";
 import {ReviewThumbnailComponent} from "./components/review/review-thumbnail/review-thumbnail.component";
 import {PostReviewFormComponent} from "./components/review/post-review-form/post-review-form.component";
+import {EnumProductTypeFormatPipe} from "./shared/services/pipes/enum-product-type-format.pipe";
 
 
 @NgModule({
@@ -63,14 +64,14 @@ import {PostReviewFormComponent} from "./components/review/post-review-form/post
     HomeComponent,
     LoginComponent,
     Page404Component,
-    NotebooksComponent,
+    ProductsComponent,
     BiographyComponent,
     BooktiqueComponent,
     ContactComponent,
     FormulaireEnvoyeComponent,
-    NotebooksPreparedComponent,
-    NotebookSelectedComponent,
-    CreateNotebookComponent,
+    ProductsPreparedComponent,
+    ProductSelectedComponent,
+    CreateProductComponent,
     WorkshopsComponent,
     PublicationsComponent,
     PublicationSelectedComponent,
@@ -91,11 +92,11 @@ import {PostReviewFormComponent} from "./components/review/post-review-form/post
     UpArrowComponent,
     ImagesPreviewComponent,
     ValuesComponent,
-    ShoppingNotebooksListComponent,
+    ShoppingProductsListComponent,
     ChoicesPersonalizedCreationComponent,
     PaypalComponent,
     ContactFormComponent,
-    NotebooksListComponent,
+    ProductsListComponent,
     PublicationThumbnailComponent,
     WorkshopThumbnailComponent,
     ModalComponent,
@@ -107,7 +108,8 @@ import {PostReviewFormComponent} from "./components/review/post-review-form/post
     CheckoutFormComponent,
     CartItemQuantityManagerComponent,
     ReviewThumbnailComponent,
-    PostReviewFormComponent
+    PostReviewFormComponent,
+    EnumProductTypeFormatPipe
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

@@ -8,7 +8,7 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
 import {FormHelperService} from "../../../modules/admin/shared/services/form-helper.service";
 import {BaseComponent} from "../../../base.component";
 import {ActivatedRoute} from "@angular/router";
-import {ProductCommonValuesDto} from "../../../shared/interfaces/Product";
+import {ProductDto} from "../../../shared/interfaces/Product";
 
 @Component({
   selector: 'app-post-review-form',
@@ -20,7 +20,7 @@ import {ProductCommonValuesDto} from "../../../shared/interfaces/Product";
   templateUrl: './post-review-form.component.html',
   styles: [`
 
-    @import "src/app/scss/variables.scss";
+    @import "../../../scss/variables.scss";
 
     .fa-circle-xmark {
       font-size: $max-font-size;
@@ -36,7 +36,7 @@ export class PostReviewFormComponent extends BaseComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   hoveredRating: number = 0;
-  product!: ProductCommonValuesDto;
+  productDto!: ProductDto;
 
   isFormSubmit: boolean = false;
   isFormVisible: boolean = false;
@@ -48,24 +48,24 @@ export class PostReviewFormComponent extends BaseComponent implements OnInit {
     email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
     title: ['', [Validators.required, Validators.maxLength(255)]],
     rating: [0, [Validators.required, ratingValidator()]],
-    productCommonValuesDto: ['', [Validators.required]]
+    productDto: ['', [Validators.required]]
   });
 
   ngOnInit(){
-    this.findNotebookBySlug();
-    this.subscribeToNotebookBySlugSignal();
+    this.findProductBySlug();
+    this.subscribeToProductBySlugSignal();
   }
 
-  private findNotebookBySlug(): void {
-    this.route.params.subscribe((params) => this.dataSignal.getNotebookBySlug(params['notebookSlug']));
+  private findProductBySlug(): void {
+    this.route.params.subscribe((params) => this.dataSignal.getProductBySlug(params['productSlug']));
   }
 
-  private subscribeToNotebookBySlugSignal(): void {
+  private subscribeToProductBySlugSignal(): void {
     this.subscriptions.push(
-      this.dataSignal.$notebookBySlug.subscribe(
-        (notebook) => {
-          if (notebook) {
-            this.product = this.dataSignal.convertToProductDto(notebook);
+      this.dataSignal.$productDtoBySlug.subscribe(
+        (productDto) => {
+          if (productDto) {
+            this.productDto = productDto;
             this.dataSignal.getAllReviewsByStatus();
             this.addProductToForm();
           }
@@ -74,7 +74,7 @@ export class PostReviewFormComponent extends BaseComponent implements OnInit {
   }
 
   private addProductToForm(): void {
-    this.formHelper.onValueSelected(this.product, 'productCommonValuesDto', this.postReviewForm);
+    this.formHelper.onValueSelected(this.productDto, 'productDto', this.postReviewForm);
   }
 
   onHoverStar(starNumber: number): void {
@@ -92,7 +92,7 @@ export class PostReviewFormComponent extends BaseComponent implements OnInit {
   submitReview(): void {
     this.isFormSubmit = true;
     if (this.postReviewForm.valid) {
-      const REVIEW = this.formHelper.formatFormAddValue<CreateReview>(this.postReviewForm, 'productCommonValuesDto');
+      const REVIEW = this.formHelper.formatFormAddValue<CreateReview>(this.postReviewForm, 'productDto');
       this.dataSignal.postReview(REVIEW);
       this.resetAll();
     }

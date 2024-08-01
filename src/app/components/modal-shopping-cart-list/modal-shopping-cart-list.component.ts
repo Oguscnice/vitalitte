@@ -88,8 +88,8 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
 })
 export class ModalShoppingCartListComponent implements OnDestroy {
 
-  shoppingCart = inject(ShoppingCartService);
-  shoppingCartValue = this.shoppingCart.$userShoppingCart;
+  shoppingCartService = inject(ShoppingCartService);
+  shoppingCartValue$ = this.shoppingCartService.$userShoppingCart;
 
   ngOnDestroy(): void {
     // Retirer la classe 'no-scroll' du body quand la modale est fermée

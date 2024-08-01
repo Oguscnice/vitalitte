@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { CreatePublication } from '../../interfaces/Publication';
+import { CreatePublication } from '../../interfaces/CreatePublication';
 import { Observable } from 'rxjs';
 import { ResponseEntity } from '../../../../../shared/interfaces/ResponseEntity';
 import { VITALITTE_PROJECT } from '../../../../../shared/variables/AppConfig';

@@ -56,7 +56,6 @@ export class HeaderComponent extends BaseComponent implements OnInit, AfterViewI
   initialLoad: boolean = true;
 
   ngOnInit(): void {
-    this.getAllNotebooks();
     this.shoppingCart.setShoppingCart();
     this.environment = environment.production ? "prod" : environment.staging ? "staging" : "dev";
   }
@@ -76,17 +75,6 @@ export class HeaderComponent extends BaseComponent implements OnInit, AfterViewI
       '--height-header',
       this.navBar.nativeElement.offsetHeight + 'px'
     );
-  }
-
-  getAllNotebooks(): void {
-    this.subscriptions.push(
-      this.apiRequestsService.getAllNotebooks().subscribe({
-        next: (notebooks) => {
-          // this.shoppingCart.items = notebooks,
-        },
-        error: (err) => (this.changeMessage(err.error.message))
-      })
-    )
   }
 
   changeMenuBurgerVisibility(): void {

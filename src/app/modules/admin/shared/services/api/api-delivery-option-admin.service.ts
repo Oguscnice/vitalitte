@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {CreateDeliveryOption} from "../../interfaces/DeliveryOption";
+import {CreateDeliveryOption} from "../../interfaces/CreateDeliveryOption";
 import {Observable} from "rxjs";
 import {ResponseEntity} from "../../../../../shared/interfaces/ResponseEntity";
 import { VITALITTE_PROJECT } from "../../../../../shared/variables/AppConfig";

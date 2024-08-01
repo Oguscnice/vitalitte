@@ -1,4 +1,4 @@
-import {ProductCommonValuesDto} from "./Product";
+import {ProductDto} from "./Product";
 
 export interface CreateReview {
   content: string,
@@ -7,7 +7,7 @@ export interface CreateReview {
   firstname: string,
   email: string,
   rating: number,
-  productCommonValuesDto: ProductCommonValuesDto
+  productDto: ProductDto
 }
 
 export interface ReviewDto extends CreateReview {

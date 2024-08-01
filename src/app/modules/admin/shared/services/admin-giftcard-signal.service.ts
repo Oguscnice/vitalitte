@@ -3,7 +3,7 @@ import {AnguilleSignalService} from "../../../../shared/services/anguille-signal
 import {AdminGiftCardSignalState} from "../interfaces/AdminGiftCardSignalState";
 import {GiftCardDto} from "../../../../shared/interfaces/GiftCard";
 import {ApiGiftcardService} from "./api/api-giftcard.service";
-import {CreateGiftCard} from "../interfaces/GiftCard";
+import {CreateGiftCard} from "../interfaces/CreateGiftCard";
 import {BaseComponent} from "../../../../base.component";
 import {ModalSignalService} from "../../../../shared/services/modal-signal.service";
 

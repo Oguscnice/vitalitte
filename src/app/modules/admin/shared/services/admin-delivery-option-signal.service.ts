@@ -4,7 +4,7 @@ import {ModalSignalService} from "../../../../shared/services/modal-signal.servi
 import {ApiDeliveryOptionAdminService} from "./api/api-delivery-option-admin.service";
 import {AdminDeliveryOptionSignalState} from "../interfaces/AdminDeliveryOptionSignalState";
 import {DeliveryOptionDto} from "../../../../shared/interfaces/DeliveryOptionDto";
-import {CreateDeliveryOption} from "../interfaces/DeliveryOption";
+import {CreateDeliveryOption} from "../interfaces/CreateDeliveryOption";
 import {BaseComponent} from "../../../../base.component";
 
 @Injectable({

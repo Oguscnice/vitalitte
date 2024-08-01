@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, Signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AnguilleSignalService } from '../../shared/services/anguille-signal.service';
 
 @Component({
