@@ -1,5 +1,6 @@
 import {WritableSignal} from "@angular/core";
-import {ProductCommonValuesDto} from "./Product";
+import {ProductDto} from "./Product";
+import {CategoryDtoAndCollectionDto} from "./CategoryDtoAndCollectionDto";
 
 export interface PaginationSignalState {
   $privateSearchValue: WritableSignal<string>;
@@ -9,5 +10,7 @@ export interface PaginationSignalState {
   $privateLastPage: WritableSignal<number>;
   $privateReviewStatus: WritableSignal<string>;
   $privateReviewRating: WritableSignal<number>;
-  $privateReviewProductCommonValuesDto: WritableSignal<ProductCommonValuesDto | null>;
+  $privateReviewProductDto: WritableSignal<ProductDto | null>;
+  $privateCategoryDtoAndCollectionDto: WritableSignal<CategoryDtoAndCollectionDto>;
+  $privateProductType: WritableSignal<string>;
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {NotebookDto} from "../interfaces/Notebook";
+import {ProductDto} from "../interfaces/Product";
 import {InscriptionDto} from "../interfaces/Inscription";
 
 @Injectable({
@@ -7,7 +7,7 @@ import {InscriptionDto} from "../interfaces/Inscription";
 })
 export class ObjectUtilsService {
 
-  compareNotebook(object1: NotebookDto, object2: NotebookDto): boolean {
+  compareProduct(object1: ProductDto, object2: ProductDto): boolean {
     return object1.price === object2.price;
   }
 

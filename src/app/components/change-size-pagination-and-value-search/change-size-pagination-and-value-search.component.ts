@@ -14,30 +14,33 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
           <input type="text" (keyup)="filteredByValueSearch($event)">
         </div>
       }
-      <div class="input-size flex center" [ngClass]="{'one-input': isInputSearchHidden}">
-        <p class="flex center">Nombre d'éléments par page :</p>
-        <div class="dropdown-container">
-          <div class="input-and-arrow flex">
-            <input type="text"
-                   autocomplete="off"
-                   [value]="pageSize$()"
-                   (click)="toggleSizeDropdown()"
-                   readonly/>
-            <div class="arrow-icon flex center">
-              @if (isSizeDropdownOpen) {
-                <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleSizeDropdown()"></i>
-              } @else {
-                <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleSizeDropdown()"></i>
-              }
+      @if (counterItem$() > 10) {
+        <div class="input-size flex center" [ngClass]="{'one-input': isInputSearchHidden}">
+          <p class="flex center">Nombre d'éléments par page :</p>
+          <div class="dropdown-container">
+            <div class="input-and-arrow flex">
+              <input type="text"
+                     autocomplete="off"
+                     [value]="pageSize$()"
+                     (click)="toggleSizeDropdown()"
+                     readonly/>
+              <div class="arrow-icon flex center">
+                @if (isSizeDropdownOpen) {
+                  <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleSizeDropdown()"></i>
+                } @else {
+                  <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleSizeDropdown()"></i>
+                }
+              </div>
             </div>
+            <ul class="items-list" [ngClass]="{'dropdown-visible': isSizeDropdownOpen}">
+              @for (number of [10,20,50]; track $index) {
+                <li (click)="this.onChangePageSize(number); toggleSizeDropdown() "> {{ number }} </li>
+              }
+            </ul>
           </div>
-          <ul class="items-list" [ngClass]="{'dropdown-visible': isSizeDropdownOpen}">
-            @for (number of [10,20,50]; track $index) {
-              <li (click)="this.onChangePageSize(number); toggleSizeDropdown() "> {{ number }} </li>
-            }
-          </ul>
         </div>
-      </div>
+      }
+
     </div>
     @if (counterItem$() && counterItem$() > 1 ) {
       <small class="width100 flex center"> {{ counterItem$() }} éléments au total. </small>

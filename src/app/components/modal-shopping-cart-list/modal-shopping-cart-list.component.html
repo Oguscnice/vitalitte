@@ -1,32 +1,32 @@
 <div class="shopping-cart-list-modal flex center">
   <div class="shopping-cart-list flex column center space-around">
-    @if (shoppingCartValue().notebooks.length > 0) {
-      @if (shoppingCartValue().notebooks.length > 1) {
+    @if (shoppingCartValue$().products.length > 0) {
+      @if (shoppingCartValue$().products.length > 1) {
         <h4> Carnets </h4>
       } @else {
         <h4> Carnet </h4>
       }
       <div class="shopping-cart-type-list">
-        @for (notebook of shoppingCartValue().notebooks; track notebook) {
+        @for (product of shoppingCartValue$().products; track product) {
           <div class="shopping-cart-type-title-quantity-price flex">
-            <p class="shopping-cart-item-title"> {{ notebook.item.name }} </p>
-            <p class="shopping-cart-item-price"> {{ notebook.item.price | customCurrency }} </p>
-            <p class="shopping-cart-item-quantity">x {{ notebook.quantity }} =</p>
-            <p class="shopping-cart-item-per-quantity-price"> {{ notebook.quantity * notebook.item.price | customCurrency }} </p>
+            <p class="shopping-cart-item-title"> {{ product.item.name }} </p>
+            <p class="shopping-cart-item-price"> {{ product.item.price | customCurrency }} </p>
+            <p class="shopping-cart-item-quantity">x {{ product.quantity }} =</p>
+            <p class="shopping-cart-item-per-quantity-price"> {{ product.quantity * product.item.price | customCurrency }} </p>
           </div>
         }
       </div>
-      <h6> Total {{ shoppingCart.counterQuantityByType('notebooks') }} Carnet(s) : {{ shoppingCart.priceByTypeWithDiscount('notebooks', false) | customCurrency }} </h6>
+      <h6> Total {{ shoppingCartService.counterQuantityByType('products') }} Carnet(s) : {{ shoppingCartService.priceByTypeWithDiscount('products', false) | customCurrency }} </h6>
       <hr>
     }
-    @if (shoppingCartValue().inscriptions.length > 0) {
-      @if (shoppingCartValue().inscriptions.length > 1) {
+    @if (shoppingCartValue$().inscriptions.length > 0) {
+      @if (shoppingCartValue$().inscriptions.length > 1) {
         <h4> Ateliers </h4>
       } @else {
         <h4> Atelier </h4>
       }
       <div class="shopping-cart-type-list">
-        @for (inscription of shoppingCartValue().inscriptions; track inscription) {
+        @for (inscription of shoppingCartValue$().inscriptions; track inscription) {
           <div class="shopping-cart-type-title-quantity-price flex">
             <div class="shopping-cart-item-title">
               <p> {{ inscription.item.workshopDto.title }} </p>
@@ -38,10 +38,10 @@
           </div>
         }
       </div>
-      <h6> Total {{ shoppingCart.counterQuantityByType('inscriptions') }} inscription(s) : {{ shoppingCart.priceByTypeWithDiscount('inscriptions', false) | customCurrency }} </h6>
+      <h6> Total {{ shoppingCartService.counterQuantityByType('inscriptions') }} inscription(s) : {{ shoppingCartService.priceByTypeWithDiscount('inscriptions', false) | customCurrency }} </h6>
       <hr>
     }
-    <h5>Total : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) | customCurrency }} </h5>
+    <h5>Total : {{ shoppingCartService.getTotalPriceWithGiftCardAndDelivery(false, false) | customCurrency }} </h5>
     <button class="btn-normal" routerLink="/panier">Confirmer le Panier</button>
   </div>
 </div>

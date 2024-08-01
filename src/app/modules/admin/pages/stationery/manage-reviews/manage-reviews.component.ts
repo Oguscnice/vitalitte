@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {DataSignalService} from "../../../../../shared/services/data-signal.service";
 import {ReviewDto} from "../../../../../shared/interfaces/Review";
 import {AdminReviewSignalService} from "../../../shared/services/admin-review-signal.service";
@@ -52,7 +52,7 @@ import {ModalSignalService} from "../../../../../shared/services/modal-signal.se
     }
   `]
 })
-export class ManageReviewsComponent implements OnInit, OnDestroy {
+export class ManageReviewsComponent implements OnInit {
 
   private dataSignal = inject(DataSignalService);
   private adminReviewSignal = inject(AdminReviewSignalService);
@@ -66,14 +66,7 @@ export class ManageReviewsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.paginationSignal.setReviewStatus(this.reviewStatusSelectedFilter);
-    this.dataSignal.getAllReviewsByStatus();
     this.adminReviewSignal.getAllReviewStatus();
-  }
-
-  ngOnDestroy(): void {
-    this.paginationSignal.setReviewStatus("");
-    this.paginationSignal.setReviewProductCommonValuesDto(null);
-    this.paginationSignal.setReviewRating(0);
   }
 
   onReviewStatusClicked(status : ReviewDto['status']): void {

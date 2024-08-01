@@ -1,7 +1,7 @@
 import { WritableSignal } from "@angular/core";
 import { CategoryDto } from "./Category";
 import { CollectionDto } from "./Collection";
-import { NotebookDto } from "./Notebook";
+import { ProductDto } from "./Product";
 import { MaterialDto } from "./Material";
 import { BehaviorSubject } from "rxjs";
 import {WorkshopDto} from "./Workshop";
@@ -13,10 +13,10 @@ import {ReviewDto} from "./Review";
 export interface DataSignalState {
   $privateCategoryList: WritableSignal<CategoryDto[]>;
   $privateCollectionList: WritableSignal<CollectionDto[]>;
-  $privateNotebookList: WritableSignal<NotebookDto[]>;
+  $privateProductDtoList: WritableSignal<ProductDto[]>;
   $privateMaterialTypeList: WritableSignal<string[]>;
   $privateMaterialList: WritableSignal<MaterialDto[]>;
-  $privateNotebookBySlug: BehaviorSubject<NotebookDto | null>;
+  $privateProductDtoBySlug: BehaviorSubject<ProductDto | null>;
   $privateWorkshopBySlug: BehaviorSubject<WorkshopDto | null>;
   $privateMaterialBySlug: BehaviorSubject<MaterialDto | null>;
   $privatePublicationBySlug: BehaviorSubject<PublicationDto | null>;

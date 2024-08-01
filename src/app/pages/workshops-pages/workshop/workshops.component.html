@@ -2,6 +2,7 @@
         [backgroundImageChild]="backgroundImageParent"></app-h1>
 
 <h3>A venir</h3>
+
 @if(workshopsWithDateToCome$() && workshopsWithDateToCome$().length > 0) {
   <div class="workshops flex wrap space-around">
     @for(workshop of workshopsWithDateToCome$(); track workshop) {

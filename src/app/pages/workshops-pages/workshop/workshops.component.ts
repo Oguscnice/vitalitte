@@ -53,12 +53,11 @@ export class WorkshopsComponent extends BaseComponent implements OnInit {
   }
 
   inscriptionsReservedByWorkshopSlug(workshopSlug: WorkshopDto['slug']): number {
-    for (let item of this.disponibilities$()) {
-      if (item.workshopSlug === workshopSlug) {
-        return item.registrationsReserved;
+    for (const ITEM of this.disponibilities$()) {
+      if (ITEM.workshopSlug === workshopSlug) {
+        return ITEM.registrationsReserved;
       }
     }
     return 0;
   }
-
 }

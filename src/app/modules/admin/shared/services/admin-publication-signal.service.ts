@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 import {BehaviorSubject, Observable} from "rxjs";
 import {AdminPublicationSignalState} from "../interfaces/AdminPublicationSignalState";
 import {PublicationDto} from "../../../../shared/interfaces/Publication";
-import {CreatePublication} from "../interfaces/Publication";
+import {CreatePublication} from "../interfaces/CreatePublication";
 import {BaseComponent} from "../../../../base.component";
 
 @Injectable({

@@ -1,7 +1,13 @@
-import {Injectable, Signal, signal, WritableSignal} from '@angular/core';
+import {Injectable, Signal, signal} from '@angular/core';
 import {PaginationSignalState} from "../interfaces/PaginationSignalState";
 import {Page, PageableValues, PaginationReviewsFiltered, PaginationWithSearchValue} from "../interfaces/Page";
-import {ProductCommonValuesDto} from "../interfaces/Product";
+import {ProductDto} from "../interfaces/Product";
+import {
+  CategoryDtoAndCollectionDto,
+  EMPTY_CATEGORY_DTO_AND_COLLECTION_DTO
+} from "../interfaces/CategoryDtoAndCollectionDto";
+import {CategoryDto} from "../interfaces/Category";
+import {CollectionDto} from "../interfaces/Collection";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +22,9 @@ export class PaginationSignalService {
     $privateLastPage: signal<number>(0),
     $privateReviewStatus: signal<string>(""),
     $privateReviewRating: signal<number>(0),
-    $privateReviewProductCommonValuesDto: signal<ProductCommonValuesDto | null>(null),
+    $privateReviewProductDto: signal<ProductDto | null>(null),
+    $privateCategoryDtoAndCollectionDto: signal<CategoryDtoAndCollectionDto>(EMPTY_CATEGORY_DTO_AND_COLLECTION_DTO),
+    $privateProductType: signal<string>("all"),
   } as const;
 
   public readonly $pageSize: Signal<number> = this.state.$privatePageSize.asReadonly();
@@ -25,8 +33,9 @@ export class PaginationSignalService {
   public readonly $lastPage: Signal<number> = this.state.$privateLastPage.asReadonly();
   public readonly $reviewStatus: Signal<string> = this.state.$privateReviewStatus.asReadonly();
   public readonly $reviewRating: Signal<number> = this.state.$privateReviewRating.asReadonly();
-  public readonly $reviewProductCommonValuesDto: Signal<ProductCommonValuesDto | null> = this.state.$privateReviewProductCommonValuesDto.asReadonly();
-
+  public readonly $reviewProductDto: Signal<ProductDto | null> = this.state.$privateReviewProductDto.asReadonly();
+  public readonly $categoryDtoAndCollectionDto: Signal<CategoryDtoAndCollectionDto> = this.state.$privateCategoryDtoAndCollectionDto.asReadonly();
+  public readonly $productType: Signal<string> = this.state.$privateProductType.asReadonly();
 
   private setCounterItem(value: number): void {
     this.state.$privateCounterItems.set(value);
@@ -57,6 +66,20 @@ export class PaginationSignalService {
     this.setCurrentPageNumber(page.pageable.pageNumber);
   }
 
+  setCategoryDtoAndCollectionDto(catOrColl: CategoryDto | CollectionDto | null, key: 'categoryDto' | 'collectionDto'): void {
+    const CAT_AND_COLL = this.$categoryDtoAndCollectionDto();
+    if (key === 'categoryDto') {
+      CAT_AND_COLL.categoryDto = catOrColl;
+    } else if (key === 'collectionDto') {
+      CAT_AND_COLL.collectionDto = catOrColl;
+    }
+    this.state.$privateCategoryDtoAndCollectionDto.set(CAT_AND_COLL);
+  }
+
+  setProductType(value: string): void {
+    this.state.$privateProductType.set(value);
+  }
+
   changeCurrentPage(choice : 'first' | 'prev' | 'next' | 'last'): void {
     const CURRENT_PAGE = this.state.$privatePageNumber();
     if (choice === 'first') {
@@ -84,6 +107,19 @@ export class PaginationSignalService {
     }
   }
 
+  resetSignal(): void {
+    this.setCounterItem(0);
+    this.setLastPage(0);
+    this.setSearchValue("");
+    this.setPageSize(10);
+    this.setReviewStatus("");
+    this.setReviewProductDto(null);
+    this.setReviewRating(0);
+    this.setCategoryDtoAndCollectionDto(null, 'categoryDto');
+    this.setCategoryDtoAndCollectionDto(null, 'collectionDto');
+    this.setProductType("all");
+  }
+
   //-------------------
   //------REVIEWS------
   //-------------------
@@ -96,15 +132,15 @@ export class PaginationSignalService {
     this.state.$privateReviewRating.set(rating);
   }
 
-  setReviewProductCommonValuesDto(productCommonValuesDto: ProductCommonValuesDto | null): void {
-    this.state.$privateReviewProductCommonValuesDto.set(productCommonValuesDto);
+  setReviewProductDto(productDto: ProductDto | null): void {
+    this.state.$privateReviewProductDto.set(productDto);
   }
 
   transformToPaginationReviewsFiltered(): PaginationReviewsFiltered {
     return {
       ...this.transformToPaginationWithSearchValue(),
       status: this.$reviewStatus(),
-      productCommonValuesDto: this.$reviewProductCommonValuesDto()!,
+      productDto: this.$reviewProductDto()!,
       rating: this.$reviewRating()
     }
   }

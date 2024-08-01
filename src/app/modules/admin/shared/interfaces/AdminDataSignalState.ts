@@ -1,8 +1,8 @@
 import { WritableSignal } from "@angular/core";
 import { SlugNameDto } from "./SlugNameDto";
-import { NotebookDto } from "../../../../shared/interfaces/Notebook";
+import { ProductDto } from "../../../../shared/interfaces/Product";
 
 export interface AdminDataSignalState {
   $privateItemToDelete: WritableSignal<SlugNameDto | null>;
-  $notebooksImpactedByItemToDelete: WritableSignal<NotebookDto[]>;
+  $productsImpactedByItemToDelete: WritableSignal<ProductDto[]>;
 }

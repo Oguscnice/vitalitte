@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 import {AdminMaterialSignalState} from "../interfaces/AdminMaterialSignalState";
 import {MaterialDto} from "../../../../shared/interfaces/Material";
 import {BaseComponent} from "../../../../base.component";
-import {CreateMaterial} from "../interfaces/Material";
+import {CreateMaterial} from "../interfaces/CreateMaterial";
 import {PaginationWithSearchValue} from "../../../../shared/interfaces/Page";
 import {BehaviorSubject, Observable} from "rxjs";
 import {ResponseEntity} from "../../../../shared/interfaces/ResponseEntity";

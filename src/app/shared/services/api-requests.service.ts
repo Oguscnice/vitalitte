@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { MaterialDto } from '../interfaces/Material';
-import { NotebookDto } from '../interfaces/Notebook';
+import { ProductDto } from '../interfaces/Product';
 import { CategoryDto } from '../interfaces/Category';
 import { CollectionDto } from '../interfaces/Collection';
 import { WorkshopDto } from '../interfaces/Workshop';
@@ -14,7 +14,7 @@ import {Page, PaginationReviewsFiltered, PaginationWithSearchValue} from '../int
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../interfaces/GiftCard";
 import {VITALITTE_PROJECT} from "../variables/AppConfig";
-import {CategoryAndCollection} from "../interfaces/CategoryAndCollection";
+import {CategoryDtoAndCollectionDto} from "../interfaces/CategoryDtoAndCollectionDto";
 import {CreateReview, ReviewDto} from "../interfaces/Review";
 
 @Injectable({
@@ -37,31 +37,31 @@ export class ApiRequestsService {
   }
 
   getAllMaterialsTypes(): Observable<string[]>{
-    return this.http.get<string[]>(VITALITTE_PROJECT.back.url + "/materialTypes")
+    return this.http.get<string[]>(VITALITTE_PROJECT.back.url + "/material-types")
   }
 
   //-------------------
-  //------Carnets------
+  //------Products-----
   //-------------------
 
-  getAllNotebooks(): Observable<NotebookDto[]> {
-    return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks")
+  getAllProducts(): Observable<ProductDto[]> {
+    return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products")
   }
 
-  getNotebookBySlug(notebookSlug : NotebookDto['slug']): Observable<NotebookDto> {
-    return this.http.get<NotebookDto>(VITALITTE_PROJECT.back.url + "/notebooks/" + notebookSlug)
+  getProductBySlug(productSlug : ProductDto['slug']): Observable<ProductDto> {
+    return this.http.get<ProductDto>(VITALITTE_PROJECT.back.url + "/products/" + productSlug)
   }
 
-  getNotebooksByCategorySlug(categorySlug: CategoryDto['slug']): Observable<NotebookDto[]> {
-    return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/category/" + categorySlug)
+  getProductsByCategorySlug(categorySlug: CategoryDto['slug']): Observable<ProductDto[]> {
+    return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products/category/" + categorySlug)
   }
 
-  getNotebooksByCollectionSlug(collectionSlug: CollectionDto['slug']): Observable<NotebookDto[]> {
-    return this.http.get<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/collection/" + collectionSlug)
+  getProductsByCollectionSlug(collectionSlug: CollectionDto['slug']): Observable<ProductDto[]> {
+    return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products/collection/" + collectionSlug)
   }
 
-  getNotebooksByCategoryAndCollection(categoryAndCollection: CategoryAndCollection): Observable<NotebookDto[]> {
-    return this.http.post<NotebookDto[]>(VITALITTE_PROJECT.back.url + "/notebooks/filtered-by-category-collection", categoryAndCollection)
+  getProductsByCategoryAndCollection(productType: ProductDto['productType'], categoryAndCollection: CategoryDtoAndCollectionDto): Observable<ProductDto[]> {
+    return this.http.post<ProductDto[]>(VITALITTE_PROJECT.back.url + `/products/type-${productType}/filter/category-collection`, categoryAndCollection)
   }
 
   //-------------------

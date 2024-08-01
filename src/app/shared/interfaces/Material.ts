@@ -1,4 +1,4 @@
-import { CreateMaterial } from "../../modules/admin/shared/interfaces/Material";
+import { CreateMaterial } from "../../modules/admin/shared/interfaces/CreateMaterial";
 
 
 export interface MaterialDto extends CreateMaterial {

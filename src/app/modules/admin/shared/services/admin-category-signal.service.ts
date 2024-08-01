@@ -45,9 +45,9 @@ export class AdminCategorySignalService extends BaseComponent {
 
   confirmationModalForDeleteCategory(category: CategoryDto): void {
 
-    this.adminDataSignal.getNotebooksByCategorySlug(category.slug);
+    this.adminDataSignal.getProductsByCategorySlug(category.slug);
     this.adminDataSignal.setItemToDelete(category);
-    const MESSAGE: string = `Confirmez-vous vouloir supprimer la Catégorie: ${category.name} ? Il y a ${this.adminDataSignal.$notebooksImpacted().length} carnet(s) impacté(s)`;
+    const MESSAGE: string = `Confirmez-vous vouloir supprimer la Catégorie: ${category.name} ? Il y a ${this.adminDataSignal.$productsImpacted().length} carnet(s) impacté(s)`;
 
     this.subscriptions.push(
       this.modalSignal.showModal(MESSAGE, true).subscribe({
@@ -63,7 +63,7 @@ export class AdminCategorySignalService extends BaseComponent {
         next: (res: ResponseEntity): void => {
           this.anguilleSignal.changeMessage(res.message);
           this.adminDataSignal.setItemToDelete(null);
-          this.adminDataSignal.setNotebooksImpacted([]);
+          this.adminDataSignal.setProductsImpacted([]);
           this.dataSignal.getAllCategories();
         },
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))

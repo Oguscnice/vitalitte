@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { CreateGiftCard } from '../../../shared/interfaces/GiftCard';
+import { CreateGiftCard } from '../../../shared/interfaces/CreateGiftCard';
 import { futureDateValidator } from '../../../shared/validators/pastDate';
 import { NgClass } from '@angular/common';
 import { priceValidator } from '../../../shared/validators/priceValidators';

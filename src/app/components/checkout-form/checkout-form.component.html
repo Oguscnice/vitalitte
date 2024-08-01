@@ -28,7 +28,7 @@
       }
     }
   </fieldset>
-  @if (shoppingCart.$userShoppingCart().notebooks.length > 0) {
+  @if (shoppingCart.$userShoppingCart().products.length > 0) {
     <fieldset class="delivery-options flex column">
       <label>Livraison</label>
       <small>Frais de port offert pour toute commande supérieur à {{ VITALITTE_PROJECT.front.shipping.free | customCurrency }}</small>
@@ -255,7 +255,7 @@
   </button>
 </form>
 
-<p class="total-resume"> Prix du (des) produit(s) sélectionné(s) : {{ shoppingCart.priceByTypeWithDiscount('notebooks', false) + shoppingCart.priceByTypeWithDiscount('inscriptions', false) | customCurrency }}</p>
+<p class="total-resume"> Prix du (des) produit(s) sélectionné(s) : {{ shoppingCart.priceByTypeWithDiscount('products', false) + shoppingCart.priceByTypeWithDiscount('inscriptions', false) | customCurrency }}</p>
 @if (giftCardActive$()) {
   @if (giftCardActive$()!.percentage) {
     <p class="total-resume"> Prix après réduction de {{ giftCardActive$()!.rising }}% (soit {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) - shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) | customCurrency }}): {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) | customCurrency }}</p>

@@ -1,5 +1,6 @@
-import {AfterViewChecked, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, HostListener, inject, ViewChild} from '@angular/core';
 import {Subject} from "rxjs";
+import {PaginationSignalService} from "../../shared/services/pagination-signal.service";
 
 @Component({
   standalone: false,

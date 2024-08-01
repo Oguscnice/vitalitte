@@ -4,6 +4,7 @@ import { CollectionDto } from '../../../../shared/interfaces/Collection';
 import { FormGroup } from '@angular/forms';
 import { SecondaryPictureDto } from '../../../../shared/interfaces/SecondaryPicture';
 import { MaterialDto } from '../../../../shared/interfaces/Material';
+import {ProductDto} from "../../../../shared/interfaces/Product";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class FormHelperService {
     return DTO_NAME ? DTO_NAME.name : '';
   }
 
-  formatFormToNotebookDto<T>(form: FormGroup): T {
+  formatFormToProductDto<T>(form: FormGroup): T {
     const CATEGORY_DTO: CategoryDto = this.jsonParse(form.get('categoryDto')!.value) as CategoryDto;
     const COLLECTION_DTO: CollectionDto = this.jsonParse(form.get('collectionDto')!.value) as CollectionDto;
     const MATERIALS_DTO: MaterialDto[] = this.jsonParse(form.get('materialsDto')!.value) as MaterialDto[];

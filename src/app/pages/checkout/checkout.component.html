@@ -1,12 +1,12 @@
 <app-h1 [titleChild]="'Panier'" [backgroundImageChild]="backgroundImageParentCreations"/>
 
-@if (shoppingCart$().notebooks.length < 1 && shoppingCart$().inscriptions.length < 1) {
+@if (shoppingCart$().products.length < 1 && shoppingCart$().inscriptions.length < 1) {
 
   <h3>Votre panier est vide...</h3>
   <img src="../../../assets/images/figma/caddie-vide.jpg" alt="Un caddie miniature devant un ordinateur">
 } @else {
   <h2>Actuellement dans le panier</h2>
-  @if (shoppingCart$().notebooks.length > 0) {
+  @if (shoppingCart$().products.length > 0) {
     <table>
       <thead>
         <tr>
@@ -18,35 +18,35 @@
         </tr>
       </thead>
       <tbody>
-        @for (notebook of shoppingCart$().notebooks; track notebook; let index = $index) {
+        @for (product of shoppingCart$().products; track product; let index = $index) {
           <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
-            <td class="label-column"> {{ notebook.item.name }} </td>
+            <td class="label-column"> {{ product.item.name }} </td>
             <td class="price-column line-nowrap flex column">
-              <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ notebook.item.price | customCurrency }} </p>
-              @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
-                <p> {{ shoppingCart.applyDiscount(notebook.item.price) | customCurrency }} </p>
+              <p [ngClass]="{'strike-through' : shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage}"> {{ product.item.price | customCurrency }} </p>
+              @if (shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage) {
+                <p> {{ shoppingCartService.applyDiscount(product.item.price) | customCurrency }} </p>
               }
             </td>
             <td class="quantity-column">
-              <app-cart-item-quantity-manager [product]="notebook"/>
+              <app-cart-item-quantity-manager [product]="product"/>
             </td>
             <td class="price-column line-nowrap flex column">
-              <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ notebook.quantity * notebook.item.price | customCurrency }} </p>
-              @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
-                <p> {{ notebook.quantity * shoppingCart.applyDiscount(notebook.item.price) | customCurrency }} </p>
+              <p [ngClass]="{'strike-through' : shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage}"> {{ product.quantity * product.item.price | customCurrency }} </p>
+              @if (shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage) {
+                <p> {{ product.quantity * shoppingCartService.applyDiscount(product.item.price) | customCurrency }} </p>
               }
             </td>
-            <td class="quantity-column"> <i class="fa-solid fa-trash-can pointer" (click)="shoppingCart.deleteItemToShoppingCart(notebook.item, 'notebooks')"></i> </td>
+            <td class="quantity-column"> <i class="fa-solid fa-trash-can pointer" (click)="shoppingCartService.deleteItemToShoppingCart(product.item, 'products')"></i> </td>
           </tr>
         }
       </tbody>
       <tfoot>
         <tr>
-          <th class="label-column  line-nowrap total-by-type-column" scope="row" colspan="4"> Total {{ shoppingCart.counterQuantityByType('notebooks') }} carnet(s) : </th>
+          <th class="label-column  line-nowrap total-by-type-column" scope="row" colspan="4"> Total {{ shoppingCartService.counterQuantityByType('products') }} carnet(s) : </th>
           <td class="price-column line-nowrap total-by-type-column flex column">
-            <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ shoppingCart.priceByTypeWithDiscount('notebooks', false) | customCurrency }} </p>
-            @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
-              <p> {{ shoppingCart.priceByTypeWithDiscount('notebooks', true) | customCurrency }} </p>
+            <p [ngClass]="{'strike-through' : shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage}"> {{ shoppingCartService.priceByTypeWithDiscount('products', false) | customCurrency }} </p>
+            @if (shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage) {
+              <p> {{ shoppingCartService.priceByTypeWithDiscount('products', true) | customCurrency }} </p>
             }
           </td>
         </tr>
@@ -69,20 +69,20 @@
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
           <td class="label-column"> {{ inscription.item.workshopDto.title }} ({{ inscription.item.workshopDto.date | date:'dd/MM/yy à hh:mm' }}) </td>
           <td class="price-column line-nowrap">
-            <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ inscription.item.workshopDto.price | customCurrency }} </p>
-            @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
-              <p> {{ shoppingCart.applyDiscount(inscription.item.workshopDto.price) | customCurrency }} </p>
+            <p [ngClass]="{'strike-through' : shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage}"> {{ inscription.item.workshopDto.price | customCurrency }} </p>
+            @if (shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage) {
+              <p> {{ shoppingCartService.applyDiscount(inscription.item.workshopDto.price) | customCurrency }} </p>
             }
           </td>
           <td class="quantity-column">
             <app-cart-item-quantity-manager [product]="inscription"/>
           </td>
           <td class="price-column line-nowrap flex column">
-            <p  [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}">
+            <p  [ngClass]="{'strike-through' : shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage}">
               {{ inscription.quantity * inscription.item.workshopDto.price | customCurrency }}
             </p>
-            @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
-              <p> {{ inscription.quantity * shoppingCart.applyDiscount(inscription.item.workshopDto.price) | customCurrency }} </p>
+            @if (shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage) {
+              <p> {{ inscription.quantity * shoppingCartService.applyDiscount(inscription.item.workshopDto.price) | customCurrency }} </p>
             }
           </td>
           <td class="quantity-column">
@@ -92,11 +92,11 @@
       </tbody>
         <tfoot>
           <tr>
-            <th class="label-column total-by-type-column" scope="row" colspan="4"> Total {{ shoppingCart.counterQuantityByType('inscriptions') }} inscription(s) d'atelier(s) : </th>
+            <th class="label-column total-by-type-column" scope="row" colspan="4"> Total {{ shoppingCartService.counterQuantityByType('inscriptions') }} inscription(s) d'atelier(s) : </th>
             <th class="price-column line-nowrap total-by-type-column">
-              <p [ngClass]="{'strike-through' : shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage}"> {{ shoppingCart.priceByTypeWithDiscount('inscriptions', false) | customCurrency }} </p>
-              @if (shoppingCart.$userGiftCardActive() && shoppingCart.$userGiftCardActive()!.percentage) {
-                <p> {{ shoppingCart.priceByTypeWithDiscount('inscriptions', true) | customCurrency }} </p>
+              <p [ngClass]="{'strike-through' : shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage}"> {{ shoppingCartService.priceByTypeWithDiscount('inscriptions', false) | customCurrency }} </p>
+              @if (shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage) {
+                <p> {{ shoppingCartService.priceByTypeWithDiscount('inscriptions', true) | customCurrency }} </p>
               }
             </th>
           </tr>

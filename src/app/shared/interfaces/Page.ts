@@ -1,4 +1,4 @@
-import {ProductCommonValuesDto} from "./Product";
+import {ProductDto} from "./Product";
 
 export interface Page<T> {
   content: T[],
@@ -62,6 +62,6 @@ export interface PaginationWithSearchValue {
 
 export interface PaginationReviewsFiltered {
   status: string,
-  productCommonValuesDto: ProductCommonValuesDto,
+  productDto: ProductDto,
   rating: number
 }

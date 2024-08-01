@@ -1,12 +1,12 @@
 import {Component, inject, Input, OnInit, Signal} from '@angular/core';
-import {NotebookDto} from "../../shared/interfaces/Notebook";
+import {ProductDto} from "../../shared/interfaces/Product";
 import {InscriptionDto} from "../../shared/interfaces/Inscription";
 import {DataSignalService} from "../../shared/services/data-signal.service";
 import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
 import {WorkshopDisponibilities} from "../../modules/admin/shared/interfaces/Workshop";
 import {BaseComponent} from "../../base.component";
 import {NgClass} from "@angular/common";
-import {ShoppingCartItem} from "../../shared/interfaces/ShoppingCart";
+import {KeyShoppingCart, ShoppingCartItem} from "../../shared/interfaces/ShoppingCart";
 
 @Component({
   selector: 'app-cart-item-quantity-manager',
@@ -78,8 +78,8 @@ import {ShoppingCartItem} from "../../shared/interfaces/ShoppingCart";
 })
 export class CartItemQuantityManagerComponent extends BaseComponent implements OnInit {
 
-  @Input() product!: ShoppingCartItem<InscriptionDto> | ShoppingCartItem<NotebookDto>;
-  type!: 'notebooks' | 'inscriptions';
+  @Input() product!: ShoppingCartItem<InscriptionDto> | ShoppingCartItem<ProductDto>;
+  type!: KeyShoppingCart;
   dataSignal = inject(DataSignalService);
   shoppingCart = inject(ShoppingCartService);
 
@@ -96,7 +96,7 @@ export class CartItemQuantityManagerComponent extends BaseComponent implements O
     if (this.isInscription()) {
       this.type = 'inscriptions';
     } else {
-      this.type = 'notebooks';
+      this.type = 'products';
     }
   }
 
@@ -110,7 +110,7 @@ export class CartItemQuantityManagerComponent extends BaseComponent implements O
     this.quantityDecreased = false;
     if (this.isInscription() && this.getAvailableRegistrations() > 0) {
       this.changeQuantity('add-participant');
-    } else if (this.type === 'notebooks') {
+    } else if (this.type === 'products') {
       this.shoppingCart.addItem(this.product.item, this.type);
     }
     setTimeout(() => {

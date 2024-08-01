@@ -6,14 +6,15 @@ import {VITALITTE_PROJECT} from "../../shared/variables/AppConfig";
 import {IPayer} from "ngx-paypal/lib/models/paypal-models";
 import {DeliveryOptionDto} from "../../shared/interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../../shared/interfaces/GiftCard";
-import {ShoppingCart} from "../../shared/interfaces/ShoppingCart";
 import {BaseComponent} from "../../base.component";
+import {LoaderComponent} from "../loader/loader.component";
 
 @Component({
   standalone: true,
-  imports: [ NgxPayPalModule ],
+  imports: [NgxPayPalModule, LoaderComponent],
   selector: 'app-paypal',
-  template: '<ngx-paypal [config]="payPalConfig"></ngx-paypal>',
+  template: `<ngx-paypal [config]="payPalConfig"></ngx-paypal>
+             <app-loader [isLoarderVisible]="loarderIsVisible"/>`,
   styleUrls: ['./paypal.component.scss']
 })
 export class PaypalComponent extends BaseComponent implements OnInit {
@@ -24,6 +25,7 @@ export class PaypalComponent extends BaseComponent implements OnInit {
   private modalSignal = inject(ModalSignalService);
   deliveryOptionSelected$: Signal<DeliveryOptionDto | null> = this.shoppingCart.$userDeliveryOption;
   giftCardActive$: Signal<GiftCardDto | null> = this.shoppingCart.$userGiftCardActive;
+  loarderIsVisible: boolean = false;
 
   protected payPalConfig? : IPayPalConfig;
 
@@ -33,10 +35,7 @@ export class PaypalComponent extends BaseComponent implements OnInit {
 
   subscribeToShoppingCartSignalChanges(): void {
     this.subscriptions.push(
-      this.shoppingCart.$shoppingCartSignalChanges.subscribe(changes => {
-        this.initConfig();
-        console.log("change paypal")
-      })
+      this.shoppingCart.$shoppingCartSignalChanges.subscribe(changes => this.initConfig())
     )
   }
 
@@ -47,7 +46,13 @@ export class PaypalComponent extends BaseComponent implements OnInit {
     const SHIPPING_DISCOUNT = this.shoppingCart.isDeliveryFree() ? this.shoppingCart.getDeliveryPrice() : 0;
     const DISCOUNT = this.giftCardActive$() && !this.giftCardActive$()!.percentage ? this.giftCardActive$()!.rising : 0;
     const ITEM_TOTAL_PRICE = this.shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false);
-    const TOTAL_AMOUNT = ITEM_TOTAL_PRICE + SHIPPING_PRICE - SHIPPING_DISCOUNT - DISCOUNT;
+    let totalAmount = ITEM_TOTAL_PRICE + SHIPPING_PRICE - SHIPPING_DISCOUNT - DISCOUNT;
+    totalAmount = Number(totalAmount.toFixed(2));
+    console.log("SHIPPING_PRICE : " + SHIPPING_PRICE)
+    console.log("SHIPPING_DISCOUNT : " + SHIPPING_DISCOUNT)
+    console.log("DISCOUNT : " + DISCOUNT)
+    console.log("ITEM_TOTAL_PRICE : " + ITEM_TOTAL_PRICE)
+    console.log("TOTAL_AMOUNT : " + totalAmount)
 
     this.payPalConfig = {
           currency: 'EUR',
@@ -57,7 +62,7 @@ export class PaypalComponent extends BaseComponent implements OnInit {
               purchase_units: [{
                 amount: {
                   currency_code: 'EUR',
-                  value: TOTAL_AMOUNT.toString(),
+                  value: totalAmount.toString(),
                   breakdown: {
                     item_total: {
                       currency_code: 'EUR',
@@ -115,19 +120,23 @@ export class PaypalComponent extends BaseComponent implements OnInit {
 
           },
           onClientAuthorization: (data) => {
-              console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-              this.shoppingCart.paymentSuccess();
+            console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+            this.shoppingCart.paymentSuccess();
+            this.loarderIsVisible = false;
           },
           onCancel: (data, actions) => {
-              console.log('OnCancel', data, actions);
-              this.modalSignal.showModal("Transaction Annulée par le client.", false);
+            console.log('OnCancel', data, actions);
+            this.modalSignal.showModal("Transaction Annulée par le client.", false);
+            this.loarderIsVisible = false;
           },
           onError: err => {
-              console.log('OnError', err);
-              this.modalSignal.showModal("Erreur Serveur chez Paypal, merci de recommencer.", false);
+            console.log('OnError', err);
+            this.modalSignal.showModal("Erreur Serveur chez Paypal, merci de recommencer.", false);
+            this.loarderIsVisible = false;
           },
           onClick: (data, actions) => {
-              console.log('onClick', data, actions);
+            console.log('onClick', data, actions);
+            this.loarderIsVisible = true;
           }
       };
   }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { CreateGiftCard } from '../../interfaces/GiftCard';
+import { CreateGiftCard } from '../../interfaces/CreateGiftCard';
 import { Observable } from 'rxjs';
 import { ResponseEntity } from '../../../../../shared/interfaces/ResponseEntity';
 import { VITALITTE_PROJECT } from '../../../../../shared/variables/AppConfig';

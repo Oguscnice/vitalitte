@@ -1,0 +1,55 @@
+<div class="title-functionality flex center">
+  <h4 class="flex center">Gérer les Carnets</h4>
+  <i class="fa-solid fa-arrow-down"
+     (click)="isTableVisible = !isTableVisible"
+     [ngClass]="{'rotated180': isTableVisible}"></i>
+</div>
+
+
+@if (productsDto$() && productsDto$().length > 0 && isTableVisible) {
+  <table>
+    <thead>
+      <tr>
+        <td>
+          <p>Dispo</p>
+        </td>
+        <td>
+          <p>Nom</p>
+        </td>
+        <td>
+          <p>Modif.</p>
+        </td>
+        <td>
+          <p>Supp.</p>
+        </td>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (product of productsDto$(); track product; let index = $index) {
+        <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
+          <td>
+            <div class="toggle-switch" (click)="changeAvailability(product)">
+              <input class="toggle-input"
+                      type="checkbox"
+                      [checked]="product.isAvailable">
+              <label class="toggle-label"></label>
+            </div>
+          </td>
+          <td class="flex column">
+            <p class="text-left">{{ product.name }}</p>
+          </td>
+          <td>
+            <i class="fa-solid fa-pencil flex center"
+              [routerLink]="'/admin/editer-produit/' + product.slug"></i>
+          </td>
+          <td>
+            <i class="fa-solid fa-trash-can flex center" (click)="onDeleteClick(product)"></i>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else if ((!productsDto$ || productsDto$.length < 1) && isTableVisible) {
+  <h5>Aucun Carnet</h5>
+}

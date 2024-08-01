@@ -11,7 +11,6 @@ import {BaseComponent} from "../../base.component";
 import {phoneValidator} from "../../shared/validators/PhoneValidator";
 import {IPayer} from "ngx-paypal/lib/models/paypal-models";
 import {VITALITTE_PROJECT} from "../../shared/variables/AppConfig";
-import {combineLatest, map, Observable, take} from "rxjs";
 import {DeliveryOptionDto} from "../../shared/interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../../shared/interfaces/GiftCard";
 
@@ -139,7 +138,7 @@ export class CheckoutFormComponent extends BaseComponent implements OnInit {
 
 
   isPaypalVisible(): boolean {
-    if (this.newOrder.valid && (this.deliveryOptionSelected$() && this.shoppingCart.$userShoppingCart().notebooks.length > 0) || this.shoppingCart.$userShoppingCart().notebooks.length === 0) {
+    if (this.newOrder.valid && (this.deliveryOptionSelected$() && this.shoppingCart.$userShoppingCart().products.length > 0) || this.shoppingCart.$userShoppingCart().products.length === 0) {
       return true;
     }
     return false;
@@ -190,7 +189,7 @@ export class CheckoutFormComponent extends BaseComponent implements OnInit {
 
   submitCheckoutForm(): void {
     this.isFormSubmit = true;
-    const requiredDeliverySystem = this.deliveryOptionSelected$() || (this.deliveryOptionSelected$() === null && this.shoppingCart.$userShoppingCart().notebooks.length < 1)
+    const requiredDeliverySystem = this.deliveryOptionSelected$() || (this.deliveryOptionSelected$() === null && this.shoppingCart.$userShoppingCart().products.length < 1)
     if (this.deliveryOptionSelected$() && this.newOrder.valid) {
       this.resetAllValues();
     }

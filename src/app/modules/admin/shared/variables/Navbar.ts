@@ -8,50 +8,60 @@ export const NAVBAR_ADMIN: Menu[] = [
   },
   {
     name: 'Commentaires',
-    routerLink: '/admin/gestion-des-commentaires',
+    routerLink: '/admin/gestion/commentaires',
     submenu : null
   },
   {
     name: 'Ateliers',
-    routerLink: '/admin/gestion-des-ateliers',
+    routerLink: '/admin/gestion/ateliers',
     submenu : null
   },
   {
     name: 'Publications',
-    routerLink: '/admin/gestion-des-publications',
+    routerLink: '/admin/gestion/publications',
     submenu : null
   },
   {
     name: 'Cartes Cadeaux',
-    routerLink: '/admin/gestion-des-cartes-cadeaux',
+    routerLink: '/admin/gestion/cartes-cadeaux',
     submenu : null
   },
   {
     name: 'Option de livraison',
-    routerLink: '/admin/gestion-des-options-de-livraison',
+    routerLink: '/admin/gestion/options-de-livraison',
     submenu : null
   },
   {
     name: 'Contact',
-    routerLink: '/admin/gestion-des-contacts',
+    routerLink: '/admin/gestion/contacts',
     submenu : null
   },
 ];
 
 export const NAVBAR_ADMIN_STATIONERY: Menu[] = [
-  {
-    name: 'Catégories et Collections',
-    routerLink: '/admin/gestion-des-categories-et-collections',
-    submenu : null
-  },
-  {
-    name: 'Matériaux',
-      routerLink: '/admin/gestion-des-materiaux',
-    submenu : null
-  },
-  {
-    name: 'Carnets',
-      routerLink: '/admin/gestion-des-carnets',
-    submenu : null
-  },
+    {
+      name: 'Catégories et Collections',
+    routerLink: '/admin/gestion/categories-collections',
+      submenu : null
+    },
+    {
+      name: 'Matériaux',
+      routerLink: '/admin/gestion/materiaux',
+      submenu : null
+    },
+    {
+      name: 'Carnets',
+      routerLink: '/admin/gestion/carnets',
+      submenu : null
+    },
+    {
+      name: 'Cartes Portales',
+      routerLink: '/admin/gestion/cartes-postales',
+      submenu : null
+    },
+    {
+      name: 'Marque Pages',
+      routerLink: '/admin/gestion/marque-pages',
+      submenu : null
+    },
   ]
