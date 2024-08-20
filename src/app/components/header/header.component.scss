@@ -1,5 +1,5 @@
-@import "../../scss/variables.scss";
-@import "../../../styles.scss";
+@import "src/app/scss/variables.scss";
+@import "src/styles.scss";
 
 $height-logo-mobile: 80px;
 $height-logo-desktop: 120px;
@@ -25,7 +25,6 @@ nav {
 
   h3 {
     text-align: center;
-    font-family: $font-family-title;
     font-size: $fourth-font-size;
     letter-spacing: 0.2rem;
     padding-left: $double-padding;

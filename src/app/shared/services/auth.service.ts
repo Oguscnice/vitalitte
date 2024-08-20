@@ -31,8 +31,8 @@ export class AuthService {
   }
 
   public setSession(userInfo: any) : void {
-    const jwt: any = jwt_decode(userInfo.accessToken);
-    const expiresAt = new Date(jwt.exp * 1000);
+    const JWT: any = jwt_decode(userInfo.accessToken);
+    const expiresAt = new Date(JWT.exp * 1000);
 
     localStorage.setItem(
       'USER_INFOS',

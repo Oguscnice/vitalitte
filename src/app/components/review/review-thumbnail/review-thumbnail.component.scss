@@ -25,12 +25,7 @@
 
   .review-content {
     margin: calc($half-margin/2) $half-margin;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    //max-height: 200px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Le nombre de lignes que vous souhaitez afficher */
-    -webkit-box-orient: vertical;
+    @include hiddenTextByLineNumber(3);
   }
 
   .full-content {

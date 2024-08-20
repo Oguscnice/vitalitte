@@ -1,8 +1,4 @@
-@import "../src/app/scss/forms.scss";
-@import "../src/app/scss/buttons.scss";
-@import "../src/app/scss/table.scss";
 @import "../src/app/scss/variables.scss";
-@import "../src/app/scss/dropdown.scss";
 
 html,
 body,
@@ -108,8 +104,7 @@ section {
 }
 
 html {
-  // width: 100%;
-  scrollbar-color: transparent;
+  width: 100vw;
 }
 
 body {
@@ -193,15 +188,21 @@ table {
   display: none;
 }
 
-h1,
-h2 {
-  font-family: $font-family-title;
-  line-height: 1;
+h1 {
+  font-family: "Holipop", sans-serif;
+  font-weight: bolder;
+}
+
+h2,
+h3 {
+  font-family: "Listian", sans-serif;
+  font-weight: bolder;
 }
 
 h1,
 h2,
 h3 {
+  line-height: 1;
   width: 100%;
   text-align: center;
 }

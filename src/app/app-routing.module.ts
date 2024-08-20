@@ -7,7 +7,7 @@ import { ProductsComponent } from './pages/products-pages/products/products.comp
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
-import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
+import { FormSendComponent } from './pages/form-send/form-send.component';
 import { ProductsPreparedComponent } from './pages/products-pages/products-prepared/products-prepared.component';
 import { ProductSelectedComponent } from './pages/products-pages/product-selected/product-selected.component';
 import { CreateProductComponent } from './pages/products-pages/create-product/create-product.component';
@@ -16,6 +16,7 @@ import { PublicationsComponent } from './pages/publications-pages/publications/p
 import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
 import { WorkshopSelectedComponent } from './pages/workshops-pages/workshop-selected/workshop-selected.component';
 import {CheckoutComponent} from "./pages/checkout/checkout.component";
+import {SignupComponent} from "./pages/signup/signup.component";
 
 const routes: Routes = [
   {
@@ -29,7 +30,8 @@ const routes: Routes = [
       import('./modules/user/user.module').then((m) => m.UserModule),
   },
 
-  // { path: 'connexion', component: LoginComponent },
+  { path: 'connexion', component: LoginComponent },
+  { path: 'inscription', component: SignupComponent },
   { path: 'qui-suis-je', component: BiographyComponent },
   { path: 'booktique', component: BooktiqueComponent },
   { path: 'contact', component: ContactComponent },
@@ -39,7 +41,7 @@ const routes: Routes = [
   { path: 'imaginer-mon-carnet', component: CreateProductComponent },
   { path: 'ateliers', component : WorkshopsComponent},
   { path: 'ateliers/:workshopSlug', component : WorkshopSelectedComponent},
-  { path: 'formulaire-envoye', component : FormulaireEnvoyeComponent},
+  { path: 'formulaire-envoye', component : FormSendComponent},
   { path: 'panier', component: CheckoutComponent },
   { path: 'produits/tous-les-modeles/:productType', component: ProductsPreparedComponent },
   { path: 'produits/type/:productType', component: ProductsComponent },

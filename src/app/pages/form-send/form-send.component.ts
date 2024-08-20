@@ -3,7 +3,7 @@ import { BaseComponent } from 'src/app/base.component';
 
 @Component({
   standalone: false,
-  selector: 'app-formulaire-envoye',
+  selector: 'app-form-send',
   template: `
               <app-h1 [titleChild]="'Formulaire envoyé !'" [backgroundImageChild]="backgroundImageParentHome"/>
               <div>
@@ -26,6 +26,6 @@ import { BaseComponent } from 'src/app/base.component';
             }
   `]
 })
-export class FormulaireEnvoyeComponent extends BaseComponent{
+export class FormSendComponent extends BaseComponent{
   backgroundImageParentHome = "../../../assets/images/figma/contact.jpg"
 }

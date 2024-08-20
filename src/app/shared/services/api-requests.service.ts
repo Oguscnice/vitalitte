@@ -64,6 +64,10 @@ export class ApiRequestsService {
     return this.http.post<ProductDto[]>(VITALITTE_PROJECT.back.url + `/products/type-${productType}/filter/category-collection`, categoryAndCollection)
   }
 
+  getProductTypes(): Observable<ProductDto['productType'][]> {
+    return this.http.get<ProductDto['productType'][]>(VITALITTE_PROJECT.back.url + "/product-types")
+  }
+
   //-------------------
   //-----Catégories----
   //-------------------

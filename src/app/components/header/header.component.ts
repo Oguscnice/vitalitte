@@ -21,6 +21,8 @@ import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
 import {ModalShoppingCartListComponent} from "../modal-shopping-cart-list/modal-shopping-cart-list.component";
 import {environment} from "../../../environments/environment";
 import {EnvironmentType} from "../../../environments/EnvironmentType";
+import {DataSignalService} from "../../shared/services/data-signal.service";
+import {toTitleCase} from "../../shared/function/string-to-title-case";
 
 @Component({
   standalone: true,
@@ -32,8 +34,7 @@ import {EnvironmentType} from "../../../environments/EnvironmentType";
 export class HeaderComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private router = inject(Router);
-  private renderer = inject(Renderer2);
-  private apiRequestsService = inject(ApiRequestsService);
+  private dataSignal = inject(DataSignalService);
   shoppingCart = inject(ShoppingCartService);
   activePageService = inject(ActivePageService);
   isShoppingCartListOpen: boolean = false;
@@ -51,13 +52,28 @@ export class HeaderComponent extends BaseComponent implements OnInit, AfterViewI
   @ViewChild('navBar') navBar!: ElementRef;
   @ViewChild('menuCheckbox') menuCheckbox!: ElementRef;
 
-  navbarUser: Menu[] = NAVBAR_USER;
+  navbarUser!: Menu[];
   isMenuBurgerChecked: boolean = false;
   initialLoad: boolean = true;
 
   ngOnInit(): void {
     this.shoppingCart.setShoppingCart();
     this.environment = environment.production ? "prod" : environment.staging ? "staging" : "dev";
+    this.dataSignal.getProductTypes().subscribe({
+      next: (productTypes) => {
+        let productTypeToAdd: Menu[] = [];
+        for (const TYPE of productTypes) {
+          const NEW_ITEM_MENU: Menu = {
+            name: toTitleCase(TYPE.replace('_', ' ')),
+            routerLink: "produits/type/" + TYPE.toLowerCase(),
+            submenu: null
+          };
+          productTypeToAdd.push(NEW_ITEM_MENU);
+        }
+        this.navbarUser = [...productTypeToAdd, ...NAVBAR_USER];
+      },
+      error: (err) => console.error(err)
+    });
   }
 
   override ngOnDestroy(): void {

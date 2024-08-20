@@ -7,7 +7,7 @@
     <h2 class="flex center"> {{ productDto.productType | enumProductTypeFormat:'singular' | titlecase }} : {{ productDto.name | titlecase }} </h2>
   }
 
-  <app-cart-item-quantity-manager [product]="{item:productDto, quantity:shoppingCart$.counterQuantity(productDto, 'products')}"/>
+  <app-cart-item-quantity-manager class="flex center width100" [product]="{item:productDto, quantity:shoppingCart$.counterQuantity(productDto, 'products')}"/>
 
   <div class="product-btns-choices flex row width100 space-around">
     <button class="btn-filter"
@@ -45,6 +45,9 @@
                 </p>
               }
             </div>
+
+            
+
             @if (materialSelected) {
               <div class="material-description flex column">
                 <h4> {{ materialSelected.name | titlecase }} </h4>

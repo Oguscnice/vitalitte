@@ -1,3 +1,4 @@
+<script src="../../shared/function/product-type-format.ts"></script>
 <nav class="flex space-between center" #navBar>
   <img src="../../../assets/images/logo.png"
        alt="Logo du site VitaLitté"
@@ -41,7 +42,7 @@
           (click)="item.submenu ?
                     openSubmenu(item) :
                     closeMenuBurger(item.routerLink, $event) ">
-        <p class="flex center"
+        <p class="flex center line-nowrap"
           [ngClass]="{
             'active': item.routerLink === activePageService.activePage,
             'submenu-close' : item.submenu && item.submenu.isOpen }">

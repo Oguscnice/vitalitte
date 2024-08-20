@@ -1,7 +1,12 @@
 @import "src/app/scss/variables.scss";
 @import "src/app/scss/buttons.scss";
 
+app-cart-item-quantity-manager {
+  width: 100%;
+}
+
 .product-btns-choices {
+  margin: $normal-margin 0;
   .btn-filter-active {
     i {
       color: $orange-light;
@@ -18,18 +23,23 @@
           flex-direction: row;
           width: 100%;
           h3 {
-            margin: 0;
+            margin: $half-margin 0;
           }
           p {
             margin-left: 4px;
           }
         }
         .material-description {
+          margin-top: $half-margin;
           width: 100%;
+          h4 {
+            font-weight: bold;
+            font-size: $triple-font-size;
+          }
           img {
             max-width: 100%;
             height: 400px;
-            object-fit: contain;
+            background-color: red;
           }
         }
       }

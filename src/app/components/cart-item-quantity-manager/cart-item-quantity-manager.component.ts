@@ -17,17 +17,21 @@ import {KeyShoppingCart, ShoppingCartItem} from "../../shared/interfaces/Shoppin
     @import "../../scss/variables.scss";
 
     .cart-manager {
-      width: 60%;
+      max-width: 240px;
       p {
         display: inline-block;
       }
       .manage-icon {
         color: $lilac;
         background-color: $white;
-        font-size: $triple-font-size;
+        font-size: $fourth-font-size;
         border-radius: 100%;
+        box-shadow: 0 4px 8px $orange-dark;
       }
       div {
+        p {
+          font-weight: bold;
+        }
         .fa-cart-shopping {
           transition: transform 0.2s;
           font-size: $fourth-font-size;

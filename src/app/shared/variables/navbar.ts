@@ -7,21 +7,6 @@ export const NAVBAR_USER: Menu[] = [
   //   submenu : null
   // },
   {
-    name: 'Carnets artisanaux',
-    routerLink: 'produits/type/carnets',
-    submenu : null
-  },
-  {
-    name: 'Cartes Postales',
-    routerLink: 'produits/type/cartes-postales',
-    submenu : null
-  },
-  {
-    name: 'Marque Pages',
-    routerLink: 'produits/type/marque-pages',
-    submenu : null
-  },
-  {
     name: 'Ateliers',
     routerLink: '/ateliers',
     submenu : null

@@ -1,32 +1,26 @@
-@import "src/app/scss/variables";
-@import "src/app/scss/buttons";
-@import "src/app/scss/chips";
+@import "src/app/scss/variables.scss";
+@import "src/app/scss/buttons.scss";
+@import "src/app/scss/chips.scss";
+@import "src/app/scss/dropdowns.scss";
+@import "src/app/scss/forms.scss";
 
-.collection-title-and-btns,
-.category-title-and-btns {
+.categories-and-collections {
   width: 100%;
+  flex-direction: column;
 
-  h4 {
-    text-align: center;
-  }
-  .categories-btns,
-  .collections-btns {
+  .categories,
+  .collections {
     width: 100%;
-    gap: 8px;
-    .btn-filter {
-      margin: 0;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .categories-and-collections {
+    flex-direction: row;
+
+    .categories,
+    .collections {
+      width: 50%;
     }
   }
-}
-
-// Breackpoint list
-// Mobiles vers Tablettes :
-@media screen and (min-width: 768px) {
-}
-// Tablettes vers ordinateurs portables :
-@media screen and (min-width: 992px) {
-}
-
-// Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1400px) {
 }

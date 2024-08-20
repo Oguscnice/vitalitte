@@ -8,6 +8,25 @@
   --width-img-monitored: 0px;
 }
 
+// Définition du chemin vers le dossier des polices
+$font-path: '~src/assets/fonts/';
+
+// Import de la police
+@font-face {
+  font-family: 'Holipop';
+  src: url('#{$font-path}holipop/Holipop.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Import de la police
+@font-face {
+  font-family: 'Listian';
+  src: url('#{$font-path}listian/Listian-Reguler.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 // ----- max-width -----
 $max-width-mobile: 80%;
 $max-width-768px: 650px;
@@ -69,7 +88,8 @@ $desktop-h1-component: 480px;
 // ----- height-headband-yellow-black;
 $height-headband: 16px;
 
-$font-family-title: "Aladin", sans-serif;
+$font-family-title-h1: "Holipop", sans-serif;
+$font-family-title-h2-h3: "Listian", sans-serif;
 $font-family-text: "Helvetica", sans-serif;
 
 $z-index: 1;
@@ -101,4 +121,12 @@ $z-index: 1;
   border: none;
   line-height: 1.15;
   box-shadow: 0px 10px 20px -18px $lilac-dark;
+}
+
+@mixin hiddenTextByLineNumber($lineNumber) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $lineNumber; /* Le nombre de lignes que vous souhaitez afficher */
+  -webkit-box-orient: vertical;
 }

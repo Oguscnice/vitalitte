@@ -20,7 +20,7 @@ import { ValuesComponent } from './components/values/values.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
+import { FormSendComponent } from './pages/form-send/form-send.component';
 import { ProductsPreparedComponent } from './pages/products-pages/products-prepared/products-prepared.component';
 import { ProductSelectedComponent } from './pages/products-pages/product-selected/product-selected.component';
 import { ProductsListComponent } from './components/products-list/products-list.component';
@@ -68,7 +68,7 @@ import {EnumProductTypeFormatPipe} from "./shared/services/pipes/enum-product-ty
     BiographyComponent,
     BooktiqueComponent,
     ContactComponent,
-    FormulaireEnvoyeComponent,
+    FormSendComponent,
     ProductsPreparedComponent,
     ProductSelectedComponent,
     CreateProductComponent,

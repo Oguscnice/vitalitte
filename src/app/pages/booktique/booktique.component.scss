@@ -1,5 +1,5 @@
-@import "../../scss/variables.scss";
-@import "../../../styles.scss";
+@import "src/app/scss/variables.scss";
+@import "src/styles.scss";
 
 .booktique-page {
 
@@ -80,7 +80,7 @@
 .heading {
   font-size: $triple-font-size;
   font-weight: 700;
-  font-family: $font-family-title;
+  font-family: $font-family-title-h1;
   letter-spacing: 3px;
 }
 

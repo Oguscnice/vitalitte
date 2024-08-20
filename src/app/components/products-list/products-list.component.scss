@@ -4,9 +4,9 @@
 
 $product-picture-size: calc(100vw - ($fourth-padding * 2));
 
-.products-list {
+.product-list {
   h5 {
-    font-size: $double-font-size;
+    font-size: $triple-font-size;
     padding-bottom: $triple-padding;
   }
   p {
@@ -31,6 +31,14 @@ $product-picture-size: calc(100vw - ($fourth-padding * 2));
       width: calc($product-picture-size + 2px + 2px);
     }
   }
+  .product-introduction {
+    padding-top: $double-padding;
+    max-height: 160px;
+    @include hiddenTextByLineNumber(5);
+  }
+  hr {
+    margin: $triple-padding 0;
+  }
 }
 
 // Breackpoint list
@@ -39,16 +47,16 @@ $product-picture-size: calc(100vw - ($fourth-padding * 2));
 
   $product-picture-size: 650px;
 
-  .products-list{
+  .product-list {
     max-width: $product-picture-size;
-    h5{
+    h5 {
       width: 100%;
       text-align: left;
     }
     .image-and-filter-color {
       max-width: $product-picture-size;
       max-height: $product-picture-size;
-      img{
+      img {
         min-width: $product-picture-size;
         min-height: $product-picture-size;
       }

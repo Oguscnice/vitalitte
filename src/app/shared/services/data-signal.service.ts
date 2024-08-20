@@ -17,8 +17,8 @@ import {ShoppingCartService} from "./shopping-cart.service";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {ModalSignalService} from "./modal-signal.service";
 import {ObjectUtilsService} from "./object-utils.service";
-import {CategoryDtoAndCollectionDto} from "../interfaces/CategoryDtoAndCollectionDto";
 import {CreateReview, ReviewDto} from "../interfaces/Review";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,7 @@ export class DataSignalService extends BaseComponent {
   private paginationSignal = inject(PaginationSignalService);
   private shoppingCart = inject(ShoppingCartService);
   private objectUtils = inject(ObjectUtilsService);
+  private router = inject(Router)
 
   private readonly state: DataSignalState = {
     $privateCategoryList: signal<CategoryDto[]>([]),
@@ -163,7 +164,7 @@ export class DataSignalService extends BaseComponent {
     this.subscriptions.push(
       this.apiRequests.getProductsByCategoryAndCollection(this.paginationSignal.$productType(), this.paginationSignal.$categoryDtoAndCollectionDto()).subscribe({
         next: (productsDto: ProductDto[]) => {
-          const RANDOM_PRODUCTS_DTO = productsDto.sort(() =>Math.random() - 0.5).slice(0, 3);
+          const RANDOM_PRODUCTS_DTO = productsDto.sort(() => Math.random() - 0.5).slice(0, 3);
           this.setProductsDtoList(RANDOM_PRODUCTS_DTO);
         },
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
@@ -187,6 +188,32 @@ export class DataSignalService extends BaseComponent {
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
+  }
+
+  getProductTypes(): Observable<ProductDto['productType'][]> {
+    return this.apiRequests.getProductTypes().pipe(
+      catchError((err) => {
+        this.anguilleSignal.changeMessage(err.error.message);
+        return of([]); // Retourne un tableau vide ou une valeur par défaut en cas d'erreur
+      })
+    );
+  }
+
+  checkIfProductTypeExists(productType: string): Observable<boolean> {
+    return this.getProductTypes().pipe(
+      map((productTypes) => {
+        const EXISTS = productTypes.some((type) => type.toLowerCase() === productType.toLowerCase());
+        if (!EXISTS) {
+          this.router.navigate(['/page-404']);
+        }
+        return EXISTS
+      }),
+      catchError((err) => {
+        console.error(err);
+        this.router.navigate(['/page-404']);
+        return of(false); // En cas d'erreur, retourner false
+      })
+    );
   }
 
   //-------------------

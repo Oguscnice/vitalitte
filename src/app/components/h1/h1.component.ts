@@ -13,8 +13,8 @@ import { Component, Input } from '@angular/core';
                 <h1 class="flex center"> {{ titleChild }} </h1>
               </div>`,
   styles: [`
-            @import "../../scss/variables.scss";
-            @import "../../../styles.scss";
+            @import "src/app/scss/variables.scss";
+            @import "src/styles.scss";
 
             .h1-image-container,
             img,
@@ -67,6 +67,7 @@ import { Component, Input } from '@angular/core';
               .thumbnail-h1-home {
                 height: 50vh;
                 width: calc(100% - ($desktop-padding * 2));
+
                 img,
                 .filter-color,
                 h1 {
