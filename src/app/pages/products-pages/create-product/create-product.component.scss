@@ -1,38 +1,22 @@
-@import "src/app/scss/variables";
-@import "src/app/scss/buttons";
+@import "../../../scss/variables";
+@import "../../../scss/buttons";
 
-.create-product-page {
+h3 {
+  font-weight: bold;
+}
 
-  .preview-picture {
-    height : 400px;
-    width: 300px;
-    background-color: red;
+h4 {
+  font-size: $triple-font-size;
+  letter-spacing: 0.2rem;
+  margin: $double-padding 0;
+  text-align: center;
+}
 
-    .binding-src {
-      height : 400px;
-      width: 40px;
-      background-color: blue;
-    }
-    div {
-      height : 400px;
-      width: 260px;
+p {
+  text-align: left;
+}
 
-      .cover-src {
-        height : 400px;
-        width: 260px;
-        background-color: green ;
-        padding-top : 100px;
-
-      }
-      .paper-src {
-        position: relative;
-        top : -300px;
-        left: 240px;
-        height : 40px;
-        width: 40px;
-        @include outline-picture;
-        border-radius: 100%;
-      }
-    }
-  }
+.strong-list {
+  font-weight: bold;
+  color: $lilac-dark;
 }

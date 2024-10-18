@@ -27,7 +27,7 @@ import {AdminPublicationSignalService} from "../../../shared/services/admin-publ
   imports: [NgClass, TitleCasePipe, AddEuroCurrencyPipe, RouterLink, ReactiveFormsModule, EditorModule, CounterZeroIfEmpty, ModalComponent, ChangeSizePaginationAndValueSearchComponent, ChangePageButtonsPagination ],
   selector: 'app-edit-delete-publication',
   templateUrl: './edit-delete-publication.component.html',
-  styles: [ `@import "../../../scss/admin-general.scss"; `]
+  styles: [` @import "../../../scss/admin-general.scss"; `]
 })
 export class EditDeletePublicationComponent extends BaseComponent implements OnInit {
 
@@ -41,7 +41,7 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
   publications$ = this.dataSignal.$publications;
 
   isTableVisible: boolean = true;
-  isFormSubmit : boolean = false;
+  isFormSubmit: boolean = false;
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 

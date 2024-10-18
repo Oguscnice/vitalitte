@@ -26,7 +26,11 @@ import {CustomCurrencyPipe} from "../../../../../../shared/services/pipes/custom
   imports: [NgClass, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty, EnumProductTypeFormatPipe, CustomCurrencyPipe],
   selector: 'app-post-product',
   templateUrl: './post-product.component.html',
-  styles: [` @import "../../../../scss/admin-general"; `]
+  styles: [`
+    @import "../../../../scss/admin-general.scss";
+    @import "src/app/scss/forms.scss";
+    @import "src/app/scss/dropdowns.scss";
+  `]
 })
 export class PostProductComponent implements OnInit {
 

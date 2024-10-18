@@ -1,5 +1,11 @@
-@import "src/app/scss/variables";
-@import "src/app/scss/buttons";
+@import "../../../scss/variables";
+@import "../../../scss/buttons";
+@import "../../../scss/dropdowns";
+@import "../../../scss/forms";
+
+:root {
+  --width-img-by-counter-image: 0%;
+}
 
 $customization-picture-size : 120px;
 
@@ -15,6 +21,34 @@ section {
     font-size: $fourth-font-size;
     padding: $fourth-padding 0;
     letter-spacing: 4px;
+  }
+
+  .categories-buttons {
+    height: 120px;
+    align-items: flex-start;
+    margin-bottom: $fourth-padding;
+
+    .category-img-title {
+      width: calc(var(--width-img-by-counter-image) - $normal-margin);
+
+      .img-circle {
+        width: 100%;
+        max-width: 100px;
+        aspect-ratio: 1 / 1;
+        background-color: $lilac-light;
+        border-radius: 50%;
+        transition: all 0.4s ease-in-out;
+        filter: grayscale(100%);
+      }
+
+      .active {
+        filter: grayscale(0%);
+      }
+
+      p {
+        text-align: center;
+      }
+    }
   }
 
   .customization {
@@ -44,7 +78,7 @@ section {
       .title-description {
         padding-left: $fourth-padding;
 
-        h4{
+        h4 {
           height : 20%;
           padding: 0px;
           display: flex;

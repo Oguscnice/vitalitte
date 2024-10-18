@@ -16,6 +16,7 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
   templateUrl: './modal-shopping-cart-list.component.html',
   styles: [`
     @import "../../scss/variables.scss";
+    @import "../../scss/buttons.scss";
 
     .shopping-cart-list-modal {
       position: fixed;

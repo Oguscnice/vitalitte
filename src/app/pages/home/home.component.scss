@@ -8,22 +8,24 @@
 }
 
 section {
+  width: 100%;
   p {
     padding: 0 $fourth-padding;
   }
 }
-.image-biography{
+
+.image-biography {
   @include outline-picture;
   width: 100vw;
   height: 32vh;
   overflow: hidden;
-  img{
+  img {
     height: 32vh;
     width: 100vw;
     z-index: $z-index;
     object-position: top;
   }
-  h2{
+  h2 {
     position : relative;
     height: 32vh;
     color: $white;
@@ -31,12 +33,13 @@ section {
     z-index: $z-index + 2;
     margin: 0px;
   }
-  .filter-color{
+  .filter-color {
     z-index: $z-index + 1;
     height: 100vh;
     top: calc(-64vh - 4px);
   }
 }
+
 .booktique-section {
   width: 100%;
   .booktique-title-and-text {
@@ -66,6 +69,19 @@ section {
   }
 }
 
+.review-and-arrows {
+  width: 100%;
+  i {
+    font-size: $fourth-font-size;
+  }
+  .fa-circle-arrow-left {
+    margin-right: $normal-margin;
+  }
+  .fa-circle-arrow-right {
+    margin-left: $normal-margin;
+  }
+}
+
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
@@ -91,6 +107,13 @@ section {
         max-height: 160px;
         max-width: 100%;
       }
+    }
+  }
+
+  .review-and-arrows {
+    max-width: 560px;
+    i {
+      font-size: $triple-font-size;
     }
   }
 }

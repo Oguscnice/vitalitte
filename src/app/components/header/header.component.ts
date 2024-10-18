@@ -1,15 +1,13 @@
-import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
 import { ActivePageService } from '../../shared/services/active-page.service';
 import {
   Component,
   ElementRef,
   ViewChild,
-  Renderer2,
   HostListener,
   inject,
   OnInit,
   AfterViewInit,
-  OnDestroy
+  OnDestroy, AfterViewChecked
 } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
 import { BaseComponent } from 'src/app/base.component';
@@ -31,12 +29,13 @@ import {toTitleCase} from "../../shared/function/string-to-title-case";
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeaderComponent extends BaseComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private router = inject(Router);
   private dataSignal = inject(DataSignalService);
+  private activePageService = inject(ActivePageService);
+
   shoppingCart = inject(ShoppingCartService);
-  activePageService = inject(ActivePageService);
   isShoppingCartListOpen: boolean = false;
   environment: EnvironmentType = "dev";
   env = environment;
@@ -52,28 +51,19 @@ export class HeaderComponent extends BaseComponent implements OnInit, AfterViewI
   @ViewChild('navBar') navBar!: ElementRef;
   @ViewChild('menuCheckbox') menuCheckbox!: ElementRef;
 
-  navbarUser!: Menu[];
+  navbarUser: Menu[] = NAVBAR_USER;
   isMenuBurgerChecked: boolean = false;
   initialLoad: boolean = true;
 
   ngOnInit(): void {
+    this.activePageService.getAllPaths();
     this.shoppingCart.setShoppingCart();
     this.environment = environment.production ? "prod" : environment.staging ? "staging" : "dev";
-    this.dataSignal.getProductTypes().subscribe({
-      next: (productTypes) => {
-        let productTypeToAdd: Menu[] = [];
-        for (const TYPE of productTypes) {
-          const NEW_ITEM_MENU: Menu = {
-            name: toTitleCase(TYPE.replace('_', ' ')),
-            routerLink: "produits/type/" + TYPE.toLowerCase(),
-            submenu: null
-          };
-          productTypeToAdd.push(NEW_ITEM_MENU);
-        }
-        this.navbarUser = [...productTypeToAdd, ...NAVBAR_USER];
-      },
-      error: (err) => console.error(err)
-    });
+    this.createMenu();
+  }
+
+  ngAfterViewChecked(): void {
+    this.checkValueResize();
   }
 
   override ngOnDestroy(): void {
@@ -82,11 +72,36 @@ export class HeaderComponent extends BaseComponent implements OnInit, AfterViewI
     document.body.classList.remove('no-scroll');
   }
 
-  ngAfterViewInit(): void {
-    this.checkValueResize();
+  isActualPage(url: string): boolean {
+    const urlSegments = url.split('/'); // Divise l'URL en segments
+    return this.activePageService.adaptUrlSegmentsArray(urlSegments)[0] === this.activePageService.activePage;
   }
 
-  checkValueResize(): void {
+  private createMenu(): void {
+    this.subscriptions.push(
+      this.dataSignal.getProductTypes().subscribe({
+        next: (productTypes) => {
+          let NEW_ITEM_MENU = {
+            name: "Papeterie",
+            routerLink: "produits/type/",
+            submenu: { isOpen: false, items: [] }
+          };
+          for (const PRODUCT_TYPE of productTypes) {
+            const NEW_ITEM_SUBMENU = {
+              name: toTitleCase(PRODUCT_TYPE.replace('_', ' ')),
+              routerLink: PRODUCT_TYPE.toLowerCase()
+            };
+            // @ts-ignore
+            NEW_ITEM_MENU.submenu.items.push(NEW_ITEM_SUBMENU);
+          }
+          this.navbarUser.splice(1, 0, NEW_ITEM_MENU);
+        },
+        error: (err) => console.error(err)
+      })
+    );
+  }
+
+  private checkValueResize(): void {
     document.documentElement.style.setProperty(
       '--height-header',
       this.navBar.nativeElement.offsetHeight + 'px'
@@ -108,12 +123,12 @@ export class HeaderComponent extends BaseComponent implements OnInit, AfterViewI
   openSubmenu(itemClicked : Menu): void {
     const actualState = itemClicked.submenu?.isOpen;
     this.closeSubmenu()
-    if(itemClicked.submenu) {
+    if (itemClicked.submenu) {
       itemClicked.submenu.isOpen = !actualState;
     }
   }
 
-  closeMenuBurger(routerLinkClicked: string, event: Event): void {
+  closeMenuBurger(event: Event): void {
 
     if (this.menuCheckbox && this.menuCheckbox.nativeElement) {
       this.menuCheckbox.nativeElement.checked = false;
@@ -122,7 +137,6 @@ export class HeaderComponent extends BaseComponent implements OnInit, AfterViewI
     event.stopPropagation();
     this.isMenuBurgerChecked = false;
     this.isShoppingCartListOpen = false;
-    this.activePageService.changeActivePage(routerLinkClicked);
     this.scrollTopAfterNavigate();
     this.closeSubmenu();
     document.body.classList.remove('no-scroll');

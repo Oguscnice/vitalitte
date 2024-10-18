@@ -1,4 +1,4 @@
-@import "src/app/scss/variables.scss";
+@import "../../../scss/variables.scss";
 
 .review-container {
   @include outline-picture;
@@ -37,15 +37,8 @@
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .review-container {
-    @include outline-picture;
-    width: 40%;
-  }
-}
-
-// Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1400px) {
-  .review-container {
-    @include outline-picture;
-    width: 28%;
+    .review-content {
+      min-height: 50px;
+    }
   }
 }

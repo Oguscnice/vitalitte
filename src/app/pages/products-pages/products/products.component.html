@@ -12,95 +12,166 @@
 
     <h3>Artisanat Responsable</h3>
 
-    <p> Chaque carnet que nous fabriquons à la main est un hommage
+    <p> Chaque modèle que nous fabriquons à la main est un hommage
       à l'artisanat authentique. Avec un engagement profond envers
       l'éco-responsabilité, chaque page est méticuleusement
       confectionnée pour stimuler votre créativité tout en respectant
       notre précieuse planète.</p>
 
-    <h4>Modèles :</h4>
-
-    <app-products-list [productsListChild]="products$()"/>
-
-    <h4>Encore plus de modèle içi...</h4>
-    <button class="btn-normal" [routerLink]="'/produits/tous-les-modeles/' + productType$()">
-      Voir tous les modèles
-    </button>
-
-    <h2>Les "sur mesures"</h2>
-    <p> Chaque carnet que nous fabriquons à la main est un hommage
-      à l'artisanat authentique. Avec un engagement profond envers
-      l'éco-responsabilité, chaque page est méticuleusement
-      confectionnée pour stimuler votre créativité tout en
-      respectant notre précieuse planète.</p>
-
-    <p class="similar-title">A vous de choisir !!!</p>
-    <div class="customization">
-      <div class="custom-card flex">
-        <div class="image-and-filter-color flex column">
-          <img src="../../../assets/images/figma/reliure.jpg" alt="Photo d'une reliure"/>
-          <div class="filter-color"></div>
-        </div>
-        <div class="title-description">
-          <h4>La reliure</h4>
-          <p>Personnalisez votre expérience :
-            Choisissez la reliure parmi nos
-            options pour créer le livre
-            parfaitement adapté à votre style.</p>
-        </div>
+    @if (categoriesDto$().length > 0) {
+      <h4>Catégories :</h4>
+      <p class="mobile-only"> {{ categorySelected ? categorySelected.name : '' }} </p>
+      <div class="categories-buttons width100 flex center space-between">
+        @for (categoryDto of categoriesDto$(); track categoryDto; let index = $index) {
+          <div class="category-img-title" (click)="onCategorySelected(categoryDto)">
+            <img class="img-circle"
+                 [ngClass]="{'active' : isCategorySelected(categoryDto)}"
+                 src="{{ categoriesImages[index] }}" alt="image secondaire du carnet">
+            <p class="width100 desktop-only"> {{ categoryDto.name }} </p>
+          </div>
+        }
       </div>
-      <div class="custom-card flex">
-        <div class="image-and-filter-color flex column">
-          <img
-          src="../../../assets/images/figma/papier.jpg"
-          alt="Photo d'une reliure"
-          />
-          <div class="filter-color"></div>
+    }
+
+    @if (collectionsDto$().length > 0) {
+      <h4>Collections :</h4>
+      <div class="dropdown-container">
+        <div class="input-and-arrow flex">
+<!--      La liste des collections ne s'affiche que si une catégorie à été sélectionnée-->
+          @if (categorySelected) {
+          <input type="text"
+                 placeholder="Choississez la collection..."
+                 autocomplete="off"
+                 class="pointer"
+                 value="{{ collectionSelected?.name | titlecase }}"
+                 (click)="toggleDropdown('Collection')"
+                 readonly/>
+          } @else {
+            <input type="text"
+                   placeholder="Selectionnez une Catégorie ..."
+                   autocomplete="off"
+                   class="disabled"
+                   readonly/>
+          }
+          <div class="arrow-icon flex center">
+            @if (!categorySelected) {
+              <i class="fa-solid fa-circle-chevron-up disabled"></i>
+            } @else {
+              @if (isCollectionDropdownOpen) {
+                <i class="fa-solid fa-circle-chevron-down pointer"></i>
+              } @else {
+                <i class="fa-solid fa-circle-chevron-up pointer"></i>
+              }
+            }
+          </div>
         </div>
-        <div class="title-description">
-          <h4>Le type de papier</h4>
-          <p>Exprimez-vous pleinement :
-            Sélectionnez votre papier parmi
-            nos variétés pour personnaliser
-            chaque page selon votre préférence
-            et votre inspiration.</p>
-        </div>
+
+<!--    La liste des collections ne s'affiche que si une catégorie à été sélectionnée-->
+        @if (categorySelected) {
+          <ul class="items-list" [ngClass]="{'dropdown-visible': isCollectionDropdownOpen}">
+            @for (collection of collectionsDto$(); track collection) {
+              @if (isCategoryOrCollectionPresent(collection)) {
+                <li (click)="onCollectionSelected(collection); toggleDropdown('Collection') ">
+                  {{ collection.name | titlecase }}
+                </li>
+              }
+            }
+          </ul>
+        }
       </div>
-      <div class="custom-card flex">
-        <div class="image-and-filter-color flex column">
-          <img
-          src="../../../assets/images/figma/couverture.jpg"
-          alt="Photo d'une reliure"
-          />
-          <div class="filter-color"></div>
-        </div>
-        <div class="title-description">
-          <h4>La couverture</h4>
-          <p>Votre style, votre choix :
-            Optez pour la couverture qui
-            vous ressemble parmi nos options
-            variées, pour un livre aussi
-            unique que vous.</p>
-        </div>
-      </div>
-      <div class="custom-card flex">
-        <div class="image-and-filter-color flex column">
-          <img src="../../../assets/images/figma/idée.jpg" alt="Photo d'une reliure"/>
-          <div class="filter-color"></div>
-        </div>
-        <div class="title-description">
-          <h4>Votre thème</h4>
-          <p>Libérez votre créativité :
-            Choisissez un thème original
-            à votre goût pour personnaliser
-            votre livre et le rendre
-            véritablement exceptionnel.</p>
-        </div>
-      </div>
-    </div>
-    <button class="btn-normal" routerLink="/imaginer-mon-carnet">
-      Créer mon carnet
-    </button>
+    }
+
+    @if (productsDto$() && categorySelected) {
+      @if (productsDto$().length === 0) {
+        <h4>Aucun modèle correspondant à ces critères</h4>
+      } @else if (productsDto$().length === 1) {
+        <h4>1 modèle :</h4>
+      } @else {
+        <h4>Nos Modèles :</h4>
+      }
+      <app-products-list/>
+<!--      @if (productsDto$().length > 3) {-->
+<!--        <h4>Encore plus de modèle içi...</h4>-->
+<!--      }-->
+<!--      <button class="btn-normal" [routerLink]="'/produits/tous-les-modeles/' + productType$()">-->
+<!--        Voir tous les modèles-->
+<!--      </button>-->
+    }
+
+<!--    <h2>Les "sur mesures"</h2>-->
+<!--    <p> Chaque modèle que nous fabriquons à la main est un hommage-->
+<!--      à l'artisanat authentique. Avec un engagement profond envers-->
+<!--      l'éco-responsabilité, chaque page est méticuleusement-->
+<!--      confectionnée pour stimuler votre créativité tout en-->
+<!--      respectant notre précieuse planète.</p>-->
+
+<!--    <p class="similar-title">A vous de choisir !!!</p>-->
+<!--    <div class="customization">-->
+<!--      <div class="custom-card flex">-->
+<!--        <div class="image-and-filter-color flex column">-->
+<!--          <img src="../../../assets/images/figma/reliure.jpg" alt="Photo d'une reliure"/>-->
+<!--          <div class="filter-color"></div>-->
+<!--        </div>-->
+<!--        <div class="title-description">-->
+<!--          <h4>La reliure</h4>-->
+<!--          <p>Personnalisez votre expérience :-->
+<!--            Choisissez la reliure parmi nos-->
+<!--            options pour créer le livre-->
+<!--            parfaitement adapté à votre style.</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="custom-card flex">-->
+<!--        <div class="image-and-filter-color flex column">-->
+<!--          <img-->
+<!--          src="../../../assets/images/figma/papier.jpg"-->
+<!--          alt="Photo d'une reliure"-->
+<!--          />-->
+<!--          <div class="filter-color"></div>-->
+<!--        </div>-->
+<!--        <div class="title-description">-->
+<!--          <h4>Le type de papier</h4>-->
+<!--          <p>Exprimez-vous pleinement :-->
+<!--            Sélectionnez votre papier parmi-->
+<!--            nos variétés pour personnaliser-->
+<!--            chaque page selon votre préférence-->
+<!--            et votre inspiration.</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="custom-card flex">-->
+<!--        <div class="image-and-filter-color flex column">-->
+<!--          <img-->
+<!--          src="../../../assets/images/figma/couverture.jpg"-->
+<!--          alt="Photo d'une reliure"-->
+<!--          />-->
+<!--          <div class="filter-color"></div>-->
+<!--        </div>-->
+<!--        <div class="title-description">-->
+<!--          <h4>La couverture</h4>-->
+<!--          <p>Votre style, votre choix :-->
+<!--            Optez pour la couverture qui-->
+<!--            vous ressemble parmi nos options-->
+<!--            variées, pour un livre aussi-->
+<!--            unique que vous.</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="custom-card flex">-->
+<!--        <div class="image-and-filter-color flex column">-->
+<!--          <img src="../../../assets/images/figma/idée.jpg" alt="Photo d'une reliure"/>-->
+<!--          <div class="filter-color"></div>-->
+<!--        </div>-->
+<!--        <div class="title-description">-->
+<!--          <h4>Votre thème</h4>-->
+<!--          <p>Libérez votre créativité :-->
+<!--            Choisissez un thème original-->
+<!--            à votre goût pour personnaliser-->
+<!--            votre livre et le rendre-->
+<!--            véritablement exceptionnel.</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <button class="btn-normal" routerLink="/imaginer">-->
+<!--      Imaginer ma création-->
+<!--    </button>-->
 
   </section>
 

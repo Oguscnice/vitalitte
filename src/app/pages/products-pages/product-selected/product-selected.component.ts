@@ -8,6 +8,7 @@ import {MaterialDto} from "../../../shared/interfaces/Material";
 import {Subject} from "rxjs";
 import {VITALITTE_PROJECT} from "../../../shared/variables/AppConfig";
 import {PaginationSignalService} from "../../../shared/services/pagination-signal.service";
+import {ReviewDto} from "../../../shared/interfaces/Review";
 
 @Component({
   standalone: false,

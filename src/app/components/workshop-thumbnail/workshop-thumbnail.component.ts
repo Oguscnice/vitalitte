@@ -11,6 +11,7 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
   templateUrl: './workshop-thumbnail.component.html',
   styles: [`
             @import "../../scss/variables.scss";
+            @import "../../scss/buttons.scss";
 
             .workshop {
               @include outline-picture;

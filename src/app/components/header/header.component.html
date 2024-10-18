@@ -1,4 +1,3 @@
-<script src="../../shared/function/product-type-format.ts"></script>
 <nav class="flex space-between center" #navBar>
   <img src="../../../assets/images/logo.png"
        alt="Logo du site VitaLitté"
@@ -15,16 +14,6 @@
     <p> <em>Env. Front : {{ environment | titlecase }}</em></p>
   }
 
-  <div class="shopping-cart-counter pointer"
-       [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'"
-       (click)="changeModalShoppingCartVisibility(!isShoppingCartListOpen)">
-    <i class="fa-solid fa-cart-shopping"></i>
-    <p class="flex center"> {{ shoppingCart.counterTotalShoppingCart() }} </p>
-  </div>
-  @if (isShoppingCartListOpen) {
-    <app-modal-shopping-cart-list (click)="isShoppingCartListOpen = !isShoppingCartListOpen"/>
-  }
-
   <ul
     class="flex center space-around"
     [ngClass]="
@@ -37,14 +26,14 @@
       <li [routerLink]="item.submenu ? null : item.routerLink"
           class="flex center column pointer"
           [ngClass]="{
-            'active': item.routerLink === activePageService.activePage,
+            'active': isActualPage(item.routerLink),
             'separator': index !== navbarUser.length - 1 }"
           (click)="item.submenu ?
                     openSubmenu(item) :
-                    closeMenuBurger(item.routerLink, $event) ">
+                    closeMenuBurger($event) ">
         <p class="flex center line-nowrap"
           [ngClass]="{
-            'active': item.routerLink === activePageService.activePage,
+            'active': isActualPage(item.routerLink),
             'submenu-close' : item.submenu && item.submenu.isOpen }">
           {{ item.name }}
         </p>
@@ -54,8 +43,8 @@
 
               @for (subItem of item.submenu!.items; track subItem) {
                 <a class="flex center"
-                  [href]="item.routerLink + '#' + subItem.anchor"
-                  (click)="closeMenuBurger(item.routerLink, $event)">
+                  [href]="item.routerLink + subItem.routerLink"
+                  (click)="closeMenuBurger($event)">
                   {{ subItem.name }}
                 </a>
               }
@@ -66,6 +55,7 @@
     }
 
   </ul>
+
   <input type="checkbox" id="checkbox" #menuCheckbox (click)="changeMenuBurgerVisibility()" />
   <label for="checkbox" class="toggle">
     <div class="bars" id="bar1"></div>
@@ -73,4 +63,15 @@
     <div class="bars" id="bar3"></div>
     <div class="bars" id="bar4"></div>
   </label>
+
+  <div class="shopping-cart-counter pointer"
+       [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'"
+       (click)="changeModalShoppingCartVisibility(!isShoppingCartListOpen)">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <p class="flex center"> {{ shoppingCart.counterTotalShoppingCart() }} </p>
+  </div>
+
+  @if (isShoppingCartListOpen) {
+    <app-modal-shopping-cart-list (click)="isShoppingCartListOpen = !isShoppingCartListOpen"/>
+  }
 </nav>

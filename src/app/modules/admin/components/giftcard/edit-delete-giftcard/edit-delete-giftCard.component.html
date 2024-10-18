@@ -20,6 +20,9 @@
           <p>Réduction</p>
         </td>
         <td>
+          <p>Usage Unique</p>
+        </td>
+        <td>
           <p>Supp.</p>
         </td>
       </tr>
@@ -29,19 +32,27 @@
       @for (giftCard of giftCards(); track giftCard; let index = $index) {
         <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
           <td>
-            <p class="flex text-left pointer" [routerLink]="'/admin/utilisateurs-carte-cadeaux/' + giftCard.code">
+            <p class="flex text-left pointer">
               {{ giftCard.expiryDate | date : 'dd/MM/yyyy' }}
             </p>
           </td>
           <td>
-            <p class="title pointer" [routerLink]="'/admin/utilisateurs-carte-cadeaux/' + giftCard.code">
+            <p class="title pointer">
               {{ giftCard.code }}
             </p>
           </td>
           <td>
-            <p class="pointer" [routerLink]="'/admin/utilisateurs-carte-cadeaux/' + giftCard.code">
+            <p class="pointer">
               {{ giftCard.rising | number: '0.2' }}  {{ giftCard.percentage ? ' %' : ' €' }}
             </p>
+          </td>
+          <td>
+            <div class="toggle-switch">
+              <input class="toggle-input"
+                     type="checkbox"
+                     [checked]="giftCard.singleUse">
+              <label class="toggle-label"></label>
+            </div>
           </td>
           <td>
             <i (click)="delete(giftCard)" class="fa-solid fa-trash-can pointer flex center"></i>
@@ -51,5 +62,5 @@
     </tbody>
   </table>
 } @else if ((!giftCards() || giftCards().length < 1) && isTableVisible) {
-  <h5>Aucune carte cadeau active</h5>
+  <h5>Aucune carte cadeau active.</h5>
 }

@@ -36,7 +36,8 @@ import { AdminCategorySignalService } from '../../../shared/services/admin-categ
                       <div>
                         @if (newItemForm.controls.name.errors?.['required']) {
                           <small>Le nom de {{ type }} est obligatoire.</small>
-                        } @else if (newItemForm.controls.name.errors?.['maxlength']) {
+                        }
+                        @if (newItemForm.controls.name.errors?.['maxlength']) {
                           <small>Le nom de {{ type }} ne doit pas dépasser 255 charactères.</small>
                         }
                       </div>

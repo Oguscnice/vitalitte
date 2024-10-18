@@ -1,4 +1,61 @@
-<!-- <form
-(ngSubmit)="(signInForm.valid)"
-[formGroup]="signInForm"
-#myForm="ngForm"></form> -->
+<h1>Page de Connexion</h1>
+
+<form (ngSubmit)="(signInForm.valid)"
+      [formGroup]="signInForm"
+      #myForm="ngForm">
+
+  <fieldset class="flex column">
+    <label for="email">Email :</label>
+    <input type="email"
+           id="email"
+           placeholder="xxxx@xxxx.xx"
+           formControlName="email"
+           autocomplete="off"/>
+
+    @if (isFormSubmit && myForm.submitted && signInForm.controls.email.invalid) {
+      <div class="flex column">
+        @if (signInForm.controls.email.errors?.['required']) {
+          <small>L'email est obligatoire.</small>
+        }
+        @if (signInForm.controls.email.errors?.['maxlength']) {
+          <small>L'email ne doit pas dépasser 255 charactères.</small>
+        }
+        @if (signInForm.controls.email.errors?.['email']) {
+          <small>L'email doit être au format d'un email (des caractères avant l' &commat;, après, contenir un point et des valeurs après).</small>
+          <small>( xxxxx&commat;xxxxx.xx )</small>
+        }
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="flex column">
+    <label>Mot de passe :</label>
+    <div class="flex center space-between">
+      <div class="dropdown-container">
+        <div class="input-and-arrow flex">
+          <input [type]="showPassword ? 'text' : 'password'"
+                 id="password"
+                 formControlName="password"
+                 autocomplete="off"/>
+          <div class="arrow-icon flex center">
+            @if (showPassword) {
+              <i class="fa fa-eye" (click)="showPassword = !showPassword"></i>
+            } @else {
+              <i class="fa fa-eye-slash" (click)="showPassword = !showPassword"></i>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <button type="submit"
+          class="display-none"
+          (click)="submitLoginForm()"
+          #submitForm>
+  </button>
+</form>
+
+<button class="btn-normal" (click)="submitForm.click()">
+  Se Connecter
+</button>

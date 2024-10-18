@@ -13,20 +13,20 @@ export class ApiGiftcardService {
 
   private http = inject(HttpClient);
 
-  post(giftCard : CreateGiftCard): Observable<ResponseEntity>{
+  post(giftCard : CreateGiftCard): Observable<ResponseEntity> {
     return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/giftCards", giftCard)
   }
 
-  getAll(): Observable<GiftCardDto[]>{
+  getAll(): Observable<GiftCardDto[]> {
     return this.http.get<GiftCardDto[]>(VITALITTE_PROJECT.back.url + "/giftCards")
   }
 
-  getByCode(code : string): Observable<GiftCardDto>{
+  getByCode(code : string): Observable<GiftCardDto> {
     return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + "/giftCards/" + code)
   }
 
-  delete(giftCardSlug : GiftCardDto['slug']): Observable<ResponseEntity>{
-    return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/giftCards/" + giftCardSlug)
+  delete(code : GiftCardDto['code']): Observable<ResponseEntity> {
+    return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/giftCards/" + code)
   }
 
 }

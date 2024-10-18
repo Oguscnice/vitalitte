@@ -42,7 +42,6 @@ export class AddDataSqlService {
   private apiGiftCardAdminService = inject(ApiGiftcardService);
   private apiDeliveryOptionAdminService = inject(ApiDeliveryOptionAdminService);
   private apiReviewAdminService = inject(ApiReviewAdminService);
-  private dataSignal = inject(DataSignalService);
   private paginationSignal = inject(PaginationSignalService);
 
   createAll(){
@@ -746,38 +745,58 @@ export class AddDataSqlService {
       code:"code de noel",
       rising: 0.65,
       percentage: true,
-      expiryDate: new Date(new Date().getFullYear(), new Date().setMonth(new Date().getMonth()+1), 24)
+      expiryDate: new Date(new Date().getFullYear(), new Date().setMonth(new Date().getMonth()+1), 24),
+      singleUse: false,
     },
     {
       code:"code d'été",
       rising: 5,
       percentage: true,
-      expiryDate: new Date(new Date().getFullYear(), 8, 31)
+      expiryDate: new Date(new Date().getFullYear(), 8, 31),
+      singleUse: false,
     },
     {
       code:"la rentrée en folie",
       rising: 20,
       percentage: false,
-      expiryDate: new Date(new Date().getFullYear(), 8, 15)
+      expiryDate: new Date(new Date().getFullYear(), 8, 15),
+      singleUse: false,
     },
     {
       code:"code de d'anniversaire",
       rising: 10,
       percentage: true,
-      expiryDate: new Date(new Date().getFullYear(), 10, 10)
+      expiryDate: new Date(new Date().getFullYear(), 10, 10),
+      singleUse: false,
     },
     {
       code:"fete des mères 2024",
       rising: 20,
       percentage: false,
-      expiryDate: new Date(new Date().getFullYear(), 6, 10)
+      expiryDate: new Date(new Date().getFullYear(), 6, 10),
+      singleUse: false,
     },
     {
       code:"offre de bienvenue",
       rising: 5,
       percentage: false,
-      expiryDate: new Date(new Date().getFullYear(), 6, 10)
+      expiryDate: new Date(new Date().getFullYear(), 6, 10),
+      singleUse: false,
     },
+    {
+      code:"usage unique",
+      rising: 5,
+      percentage: false,
+      expiryDate: new Date(new Date().getFullYear(), 12, 12),
+      singleUse: true,
+    },
+    {
+      code:"encore usage unique",
+      rising: 100,
+      percentage: false,
+      expiryDate: new Date(new Date().getFullYear(), 12, 12),
+      singleUse: true,
+    }
   ]
 
   deliveryOptionsToCreate: CreateDeliveryOption[] = [

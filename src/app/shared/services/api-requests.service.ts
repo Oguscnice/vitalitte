@@ -152,8 +152,12 @@ export class ApiRequestsService {
   //-----GiftCards-----
   //-------------------
 
-  checkGiftCard(code : string): Observable<GiftCardDto> {
-    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + "/giftCards/user/" + code)
+  checkGiftCard(code: string, email: string): Observable<GiftCardDto> {
+    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + `/giftCards/user/${code}/${email}`);
+  }
+
+   verifyIfGiftCardIsAlreadyUsed(code: string, email: string): Observable<boolean> {
+    return this.http.get<boolean>(VITALITTE_PROJECT.back.url + `/giftCards/is-already-used/${code}/${email}`);
   }
 
   //-------------------
@@ -174,6 +178,10 @@ export class ApiRequestsService {
 
   getReviewsByStatus(paginationReviewsFiltered: PaginationReviewsFiltered): Observable<Page<ReviewDto>> {
     return this.http.post<Page<ReviewDto>>(VITALITTE_PROJECT.back.url + "/reviews/paginated", paginationReviewsFiltered)
+  }
+
+  getRandomReviews(): Observable<ReviewDto[]> {
+    return this.http.get<ReviewDto[]>(VITALITTE_PROJECT.back.url + "/reviews/random")
   }
 
   // //-------------------

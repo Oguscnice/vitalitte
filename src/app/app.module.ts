@@ -21,7 +21,6 @@ import { ContactFormComponent } from './components/contact-form/contact-form.com
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormSendComponent } from './pages/form-send/form-send.component';
-import { ProductsPreparedComponent } from './pages/products-pages/products-prepared/products-prepared.component';
 import { ProductSelectedComponent } from './pages/products-pages/product-selected/product-selected.component';
 import { ProductsListComponent } from './components/products-list/products-list.component';
 import { CreateProductComponent } from './pages/products-pages/create-product/create-product.component';
@@ -56,6 +55,7 @@ import {
 import {ReviewThumbnailComponent} from "./components/review/review-thumbnail/review-thumbnail.component";
 import {PostReviewFormComponent} from "./components/review/post-review-form/post-review-form.component";
 import {EnumProductTypeFormatPipe} from "./shared/services/pipes/enum-product-type-format.pipe";
+import {CarouselProductComponent} from "./components/carousel-product/carousel-product.component";
 
 
 @NgModule({
@@ -69,7 +69,6 @@ import {EnumProductTypeFormatPipe} from "./shared/services/pipes/enum-product-ty
     BooktiqueComponent,
     ContactComponent,
     FormSendComponent,
-    ProductsPreparedComponent,
     ProductSelectedComponent,
     CreateProductComponent,
     WorkshopsComponent,
@@ -77,40 +76,41 @@ import {EnumProductTypeFormatPipe} from "./shared/services/pipes/enum-product-ty
     PublicationSelectedComponent,
     CheckoutComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    RouterLink,
-    TitleCasePipe,
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        RouterLink,
+        TitleCasePipe,
 
-    HeaderComponent,
-    NewsHeadbandComponent,
-    H1Component,
-    FooterComponent,
-    UpArrowComponent,
-    ImagesPreviewComponent,
-    ValuesComponent,
-    ShoppingProductsListComponent,
-    ChoicesPersonalizedCreationComponent,
-    PaypalComponent,
-    ContactFormComponent,
-    ProductsListComponent,
-    PublicationThumbnailComponent,
-    WorkshopThumbnailComponent,
-    ModalComponent,
-    AnguilleComponent,
-    ChangeSizePaginationAndValueSearchComponent,
-    ChangePageButtonsPagination,
-    CustomCurrencyPipe,
-    ReactiveFormsModule,
-    CheckoutFormComponent,
-    CartItemQuantityManagerComponent,
-    ReviewThumbnailComponent,
-    PostReviewFormComponent,
-    EnumProductTypeFormatPipe
-  ],
+        HeaderComponent,
+        NewsHeadbandComponent,
+        H1Component,
+        FooterComponent,
+        UpArrowComponent,
+        ImagesPreviewComponent,
+        ValuesComponent,
+        ShoppingProductsListComponent,
+        ChoicesPersonalizedCreationComponent,
+        PaypalComponent,
+        ContactFormComponent,
+        ProductsListComponent,
+        PublicationThumbnailComponent,
+        WorkshopThumbnailComponent,
+        ModalComponent,
+        AnguilleComponent,
+        ChangeSizePaginationAndValueSearchComponent,
+        ChangePageButtonsPagination,
+        CustomCurrencyPipe,
+        ReactiveFormsModule,
+        CheckoutFormComponent,
+        CartItemQuantityManagerComponent,
+        ReviewThumbnailComponent,
+        PostReviewFormComponent,
+        EnumProductTypeFormatPipe,
+        CarouselProductComponent
+    ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],

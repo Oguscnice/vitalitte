@@ -15,7 +15,7 @@
 
     @if(workshop.available && isFutureDate(workshop.date)) {
       <div class="flex space-between width80">
-        @if(workshop.registrations - disponibility === 1) {
+        @if (workshop.registrations - disponibility === 1) {
           <p class="registration flex center line-nowrap"> {{ workshop.registrations - disponibility }} place dispo.</p>
         } @else if (workshop.registrations - disponibility > 1) {
           <p class="registration flex center line-nowrap"> {{ workshop.registrations - disponibility }} places dispo.</p>

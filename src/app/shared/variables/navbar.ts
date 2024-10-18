@@ -1,11 +1,11 @@
 import { Menu } from '../interfaces/Menu';
 
 export const NAVBAR_USER: Menu[] = [
-  // {
-  //   name: 'Accueil',
-  //   routerLink: '/',
-  //   submenu : null
-  // },
+  {
+    name: 'Accueil',
+    routerLink: '/',
+    submenu : null
+  },
   {
     name: 'Ateliers',
     routerLink: '/ateliers',
@@ -19,13 +19,7 @@ export const NAVBAR_USER: Menu[] = [
   {
     name: 'A Propos',
     routerLink: '/qui-suis-je',
-    submenu : {
-      isOpen : false,
-      items : [
-        { name : "Ma démarche", anchor : "myApproach" },
-        { name : "Qui suis-je ?", anchor : "who-am-i" }
-      ]
-    },
+    submenu : null,
   },
   // {
   //   name: 'Booktique',

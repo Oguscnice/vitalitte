@@ -6,7 +6,7 @@
         <div class="product-container flex space-around">
           <img src="{{ product.pictureThumbnail }}"
                alt="Image du Carnet {{ product.name }}"
-               [routerLink]="['produits', product.productType, product.slug]"
+               [routerLink]="['/produits', product.slug]"
                class="pointer">
           <div class="product-description flex column center space-between">
             <h4> {{ product.name | titlecase }} </h4>

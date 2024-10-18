@@ -72,8 +72,30 @@ app-cart-item-quantity-manager {
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
+  .two-choices-pages {
+    .second-choice-container {
+      .second-choice-content {
+        .reviews {
+          app-review-thumbnail {
+            max-width: 40%;
+          }
+        }
+      }
+    }
+  }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
+  .two-choices-pages {
+    .second-choice-container {
+      .second-choice-content {
+        .reviews {
+          app-review-thumbnail {
+            max-width: 28%;
+          }
+        }
+      }
+    }
+  }
 }

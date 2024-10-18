@@ -40,7 +40,8 @@
           <div>
             @if (newInscriptionForm.controls.lastname.errors?.['required']) {
               <small>Le nom de famille est obligatoire.</small>
-            } @else if(newInscriptionForm.controls.lastname.errors?.['maxlength']) {
+            }
+            @if (newInscriptionForm.controls.lastname.errors?.['maxlength']) {
               <small>Le nom de famille ne doit pas dépasser 255 charactères.</small>
             }
           </div>
@@ -59,7 +60,8 @@
           <div>
             @if (newInscriptionForm.controls.firstname.errors?.['required']) {
               <small>Le prénom est obligatoire.</small>
-            } @else if (newInscriptionForm.controls.firstname.errors?.['maxlength']) {
+            }
+            @if (newInscriptionForm.controls.firstname.errors?.['maxlength']) {
               <small>Le prénom ne doit pas dépasser 255 charactères.</small>
             }
           </div>
@@ -80,7 +82,8 @@
           <div>
             @if (newInscriptionForm.controls.phone.errors?.['required']) {
               <small>Le téléphone est obligatoire.</small>
-            } @else if (newInscriptionForm.controls.phone.errors?.['invalidPhone']) {
+            }
+            @if (newInscriptionForm.controls.phone.errors?.['invalidPhone']) {
               <small>Le téléphone doit être composé de 10 chiffres commençant par '0' (ex : 06 12 34 56 78) ou 12 charactères commençant par '+' (ex : +33 6 12 34 56 78).</small>
             }
           </div>
@@ -99,7 +102,8 @@
           <div>
             @if (newInscriptionForm.controls.email.errors?.['required']) {
               <small>L'email est obligatoire.</small>
-            } @else if (newInscriptionForm.controls.email.errors?.['email']) {
+            }
+            @if (newInscriptionForm.controls.email.errors?.['email']) {
               <small>L'email ne respecte pas le format d'une adresse mail'.</small>
             }
           </div>
@@ -120,16 +124,17 @@
         <div>
           @if (newInscriptionForm.controls.quantity.errors?.['required']) {
             <small>La quantité est obligatoire.</small>
-          } @else if (newInscriptionForm.controls.quantity.errors?.['quantityError'] || (newInscriptionForm.get('quantity')!.value && newInscriptionForm.get('quantity')!.value! > (registrationsFree() > maxInscriptions ? maxInscriptions : registrationsFree()))) {
+          }
+          @if (newInscriptionForm.controls.quantity.errors?.['quantityError'] || (newInscriptionForm.get('quantity')!.value && newInscriptionForm.get('quantity')!.value! > (registrationsFree() > maxInscriptions ? maxInscriptions : registrationsFree()))) {
             <small>La quantité doit être comprise entre 1 et {{ registrationsFree() > 5 ? maxInscriptions : registrationsFree() }}.</small>
           }
         </div>
         }
       </fieldset>
 
-      <p class="total-price">Montant total : {{ totalPrice() === 0 ? 'GRATUIT' : (totalPrice() | customCurrency) }}</p>
+      <p class="total-price">Montant total : {{ currentWorkshop.price === 0 ? 'GRATUIT' : (totalPrice() | customCurrency) }}</p>
 
-      <button class="btn-submit-admin"
+      <button class="btn-normal"
               type="submit"
               (click)="addCartInscription()">
         Ajouter au Panier

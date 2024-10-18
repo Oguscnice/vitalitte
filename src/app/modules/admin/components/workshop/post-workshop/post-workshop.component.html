@@ -21,7 +21,8 @@
         <div>
           @if (newWorkshopForm.controls.title.errors?.['required']) {
             <small>Le titre de l'atelier est obligatoire.</small>
-          } @else if (newWorkshopForm.controls.title.errors?.['maxlength']) {
+          }
+          @if (newWorkshopForm.controls.title.errors?.['maxlength']) {
             <small>Le titre de l'atelier ne doit pas dépasser 255 charactères.</small>
           }
         </div>
@@ -41,7 +42,8 @@
         <div>
           @if (newWorkshopForm.controls.description.errors?.['required']) {
             <small>La description de l'atelier est requise.</small>
-          } @else if (newWorkshopForm.controls.description.errors?.['maxlength']) {
+          }
+          @if (newWorkshopForm.controls.description.errors?.['maxlength']) {
             <small>La description de l'atelier ne doit pas dépasser 65.534 charactères.</small>
           }
         </div>
@@ -110,9 +112,11 @@
         <div>
           @if (newWorkshopForm.controls.price.errors?.['required']) {
             <small>Le prix doit être indiqué (même 0€).</small>
-          } @else if (newWorkshopForm.controls.price.errors?.['invalidPriceFormat']) {
+          }
+          @if (newWorkshopForm.controls.price.errors?.['invalidPriceFormat']) {
             <small>Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
-          } @else if (newWorkshopForm.controls.price.errors?.['invalidPrice']) {
+          }
+          @if (newWorkshopForm.controls.price.errors?.['invalidPrice']) {
             <small>Le prix ne peut pas être inférieur à 0€.</small>
           }
         </div>
@@ -142,7 +146,8 @@
         <div>
           @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
             <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
-          } @else if (newWorkshopForm.controls.price.errors?.['invalidUrl']) {
+          }
+          @if (newWorkshopForm.controls.price.errors?.['invalidUrl']) {
             <small>L'image doit être au format d'une URL (commencer par => http:// ou https://).</small>
           }
         </div>

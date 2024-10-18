@@ -241,6 +241,7 @@ export class ShoppingCartService extends BaseComponent {
         }
       }
     }
+
     this.setShoppingCartChanges();
   }
 
@@ -253,6 +254,11 @@ export class ShoppingCartService extends BaseComponent {
     } else if (type === 'inscriptions') {
       cart.inscriptions = cart.inscriptions.filter(item => item.item.slug !== itemToDelete.slug) as ShoppingCartItem<InscriptionDto>[];
     }
+
+    if (cart.products.length < 1) {
+      this.setDeliveryOption(null);
+    }
+
     this.editCartInLocalStorage(cart);
     this.setShoppingCartChanges();
   }

@@ -1,15 +1,14 @@
 import { TitleCasePipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ProductDto } from '../../shared/interfaces/Product';
-import {last} from "rxjs";
+import {DataSignalService} from "../../shared/services/data-signal.service";
 
 @Component({
   standalone: true,
   imports: [ TitleCasePipe, RouterLink ],
   selector: 'app-products-list',
   template: `
-    @for (product of productsListChild; track product; let index = $index) {
+    @for (product of products$(); track product; let index = $index) {
       <div class="product-list flex column center">
         <h5> {{ product.name | titlecase }} </h5>
         <div class="image-and-filter-color flex column pointer"
@@ -18,7 +17,7 @@ import {last} from "rxjs";
           <div class="filter-color"></div>
         </div>
         <div class="product-introduction" [innerHTML]="product.introduction"></div>
-        @if (index < productsListChild.length - 1) {
+        @if (index < products$().length - 1) {
           <hr>
         }
       </div>
@@ -28,6 +27,7 @@ import {last} from "rxjs";
 })
 export class ProductsListComponent {
 
-  @Input() productsListChild! : ProductDto[];
+  private dataSignal = inject(DataSignalService);
+  products$ = this.dataSignal.$productsDto;
 
 }

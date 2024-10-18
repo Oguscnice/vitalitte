@@ -10,13 +10,13 @@ import { ApiRequestsService } from 'src/app/shared/services/api-requests.service
   templateUrl: './publication-selected.component.html',
   styles: [`
 
-    @import "src/app/scss/variables.scss";
+    @import "../../../scss/variables.scss";
 
     .actuality-date {
       font-size: $normal-font-size;
       margin-bottom: $normal-margin;
     }
-    
+
   `]
 })
 export class PublicationSelectedComponent extends BaseComponent {
@@ -37,7 +37,10 @@ export class PublicationSelectedComponent extends BaseComponent {
   findPublication(): void {
     this.subscriptions.push(
       this.apiRequestsService.getPublicationBySlug(this.publicationSlug).subscribe({
-        next: (publication) => this.publicationSelected = publication,
+        next: (publication) => {
+          this.publicationSelected = publication
+          console.log(publication)
+        },
         error: (err) => (this.changeMessage(err.error.message))
       })
     )

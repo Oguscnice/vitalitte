@@ -77,13 +77,16 @@ export class DataSignalService extends BaseComponent {
 
   setCategoryList(categories: CategoryDto[]): void {
     this.state.$privateCategoryList.set(categories);
+
+    // Utile pour la page products.html
+    document.documentElement.style.setProperty('--width-img-by-counter-image', `calc(100% / ${this.$categories().length})`);
   }
 
   getAllCategories(): void {
     this.subscriptions.push(
       this.apiRequests.getAllCategories().subscribe({
-        next: (categories: CategoryDto[]): void => this.setCategoryList(categories),
-        error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
+        next: (categories: CategoryDto[]) => this.setCategoryList(categories),
+        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }
@@ -347,11 +350,17 @@ export class DataSignalService extends BaseComponent {
   //-----GIFT-CARD-----
   //-------------------
 
-  checkGiftCard(code: string): void {
+  checkGiftCard(code: string, email: string): void {
     this.subscriptions.push(
-      this.apiRequests.checkGiftCard(code).subscribe({
+      this.apiRequests.checkGiftCard(code, email).subscribe({
         next: (giftCard) => {
-          this.shoppingCart.setGiftCardActive(giftCard)
+          if (!giftCard.percentage) {
+            if (this.shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) < giftCard.rising) {
+              this.modalSignal.showModal("La carte cadeau est trop élevée par rapport au montant du panier.", false)
+              return;
+            }
+          }
+          this.shoppingCart.setGiftCardActive(giftCard);
           this.anguilleSignal.changeMessage("Carte cadeau appliquée avec succès.")
         },
         error: (err) => {
@@ -361,6 +370,20 @@ export class DataSignalService extends BaseComponent {
       })
     )
   }
+
+  verifyIfGiftCardIsAlreadyUsed(code: string, email: string): Observable<boolean> {
+    return this.apiRequests.verifyIfGiftCardIsAlreadyUsed(code, email).pipe(
+      map((res: boolean) => {
+          return res;
+        },
+      catchError((err) => {
+        this.anguilleSignal.changeMessage(err.error.message);
+        this.shoppingCart.setGiftCardActive(null);
+        return of(false); // on retourne 'false' en cas d'erreur
+      })
+    ))
+  }
+
 
   private truncateString(value : string, length : number): string {
     return value.length > length ? value.slice(0, length) + "..." : value
@@ -491,6 +514,15 @@ export class DataSignalService extends BaseComponent {
           this.paginationSignal.setPageInfo(page);
           this.setReviews(page.content);
         },
+        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  getRandomReviews(): void {
+    this.subscriptions.push(
+      this.apiRequests.getRandomReviews().subscribe({
+        next: (reviews) => this.setReviews(reviews),
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )

@@ -21,6 +21,8 @@ import {ProductDto} from "../../../shared/interfaces/Product";
   styles: [`
 
     @import "../../../scss/variables.scss";
+    @import "../../../scss/buttons.scss";
+    @import "../../../scss/forms.scss";
 
     .fa-circle-xmark {
       font-size: $max-font-size;

@@ -19,15 +19,15 @@ import { AnguilleSignalService } from '../../shared/services/anguille-signal.ser
             .messages-anguille {
               position: fixed;
               top : calc($normal-margin + var(--height-header));
-              right: -80vw;
-              width: 160vw;
+              right: -300px;
+              width: 600px;
               z-index : 999;
 
               p {
                 position: relative;
-                max-width: 80vw;
+                max-width: 300px;
                 background-color: $lilac-light;
-                padding : $fourth-padding;
+                padding : $triple-padding;
                 margin-bottom: $half-margin;
                 transition: right 1s linear;
                 word-break: normal;
@@ -44,7 +44,7 @@ import { AnguilleSignalService } from '../../shared/services/anguille-signal.ser
 
             @keyframes slideInFromRight {
               0% {
-                right : -80vw;
+                right : -300px;
                 height: max-content;
               }
               100% {
@@ -62,7 +62,7 @@ import { AnguilleSignalService } from '../../shared/services/anguille-signal.ser
               }
               100% {
                 height: 0px;
-                right : -80vw;
+                right : -300vw;
                 padding : 0px;
                 margin-bottom: 0px;
               }

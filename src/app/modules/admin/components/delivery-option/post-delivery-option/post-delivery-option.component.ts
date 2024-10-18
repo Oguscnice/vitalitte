@@ -14,7 +14,9 @@ import {CreateDeliveryOption} from "../../../shared/interfaces/CreateDeliveryOpt
     NgClass
   ],
   templateUrl: './post-delivery-option.component.html',
-  styles: [`@import "../../../scss/admin-general.scss";`]
+  styles: [`
+    @import "../../../scss/admin-general.scss";
+  `]
 })
 export class PostDeliveryOptionComponent {
 

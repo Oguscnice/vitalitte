@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Page404Component } from './page404.component';
+import { CarouselProductComponent } from './carousel-product.component';
 
-describe('Page404Component', () => {
-  let component: Page404Component;
-  let fixture: ComponentFixture<Page404Component>;
+describe('CarousselProductComponent', () => {
+  let component: CarouselProductComponent;
+  let fixture: ComponentFixture<CarouselProductComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ Page404Component ]
+      imports: [CarouselProductComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Page404Component);
+    fixture = TestBed.createComponent(CarouselProductComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

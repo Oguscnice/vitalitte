@@ -22,8 +22,7 @@ export class UserGuard  {
     if (this.authService.isLoggedIn()) {
       return true;
     }
-    this.router.navigate(['']);
+    this.router.navigate(['/page-404']);
     return false;
   }
-
 }

@@ -1,5 +1,5 @@
-@if (publicationsSpotlighted() && publicationsSpotlighted().length > 0) {
-  <app-news-headband [publicationsSpotlighted]="publicationsSpotlighted()"/>
+@if (publicationsSpotlighted$() && publicationsSpotlighted$().length > 0) {
+  <app-news-headband [publicationsSpotlighted]="publicationsSpotlighted$()"/>
 }
 
 <app-h1 [titleChild]="'Nous sommes tous reliés !'" [backgroundImageChild]="backgroundImageParentHome"/>
@@ -54,8 +54,15 @@
   </div>
 </section>
 
-<!--<section>-->
-<!--  <div class="elfsight-app-d87e3d11-78e5-41f9-ada7-12602a8cf46c" data-elfsight-app-lazy></div>-->
-<!--</section>-->
-
 <button class="btn-normal" routerLink="/booktique">Accéder à la Booktique</button>
+
+@if (randomReviews$().length > 0) {
+  <section class="flex column center">
+    <h2>Avis</h2>
+    <div class="review-and-arrows flex center">
+      <i class="fa-solid fa-circle-arrow-left" (click)="changeReviewDisplay('minus')"></i>
+      <app-review-thumbnail [review]="reviews$()[indexReview]"/>
+      <i class="fa-solid fa-circle-arrow-right" (click)="changeReviewDisplay('more')"></i>
+    </div>
+  </section>
+}

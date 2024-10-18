@@ -9,31 +9,7 @@ import { BaseComponent } from '../../../base.component';
 })
 export class CreateProductComponent extends BaseComponent{
 
-  protected backgroundImageParentHome = '../../../assets/images/figma/couverture.jpg';
+  backgroundImageParentHome = '../../../assets/images/figma/couverture.jpg';
 
-  isFormClicked: boolean = false;
-  hasErrors: boolean = false;
-  isLoaderVisible: boolean = false;
 
-  titleValue! : string;
-  coverValue! : string;
-  bookBindingValue! : string;
-  paperValue! : string;
-
-  changeCoverValue(coverClicked: string) {
-    this.coverValue = coverClicked;
-  }
-
-  changeBookBindingValue(bookBindingClicked: string) {
-    this.bookBindingValue = bookBindingClicked;
-  }
-
-  changePaperValue(paperClicked: string) {
-    this.paperValue = paperClicked;
-  }
-
-  changeTitleValue(event: KeyboardEvent) {
-    const inputElement = event.target as HTMLInputElement;
-    this.titleValue = inputElement.value;
-  }
 }

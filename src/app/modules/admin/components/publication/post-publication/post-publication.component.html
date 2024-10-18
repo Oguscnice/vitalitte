@@ -22,7 +22,8 @@
         <div>
           @if (newPublicationForm.controls.title.errors?.['required']) {
             <small>Le titre de la publication est obligatoire.</small>
-          } @else if (newPublicationForm.controls.title.errors?.['maxlength']) {
+          }
+          @if (newPublicationForm.controls.title.errors?.['maxlength']) {
             <small>Le titre de la publication ne doit pas dépasser 255 charactères.</small>
           }
         </div>
@@ -43,7 +44,8 @@
         <div>
           @if (newPublicationForm.controls.description.errors?.['required']) {
             <small>La description de l'atelier est requise.</small>
-          } @else if (newPublicationForm.controls.description.errors?.['maxlength']) {
+          }
+          @if (newPublicationForm.controls.description.errors?.['maxlength']) {
             <small>La description de l'atelier ne doit pas dépasser 2000 charactères.</small>
           }
         </div>
@@ -73,7 +75,8 @@
         <div>
           @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
             <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
-          } @else if (newPublicationForm.controls.description.errors?.['invalidUrl']) {
+          }
+          @if (newPublicationForm.controls.description.errors?.['invalidUrl']) {
             <small>L'image doit respecter le format d'une URL (http://, https://).</small>
           }
         </div>

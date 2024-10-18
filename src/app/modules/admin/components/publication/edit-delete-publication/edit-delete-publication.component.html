@@ -103,7 +103,8 @@
         <div>
           @if (editPublicationForm.controls.title.errors?.['required']) {
             <small>Le titre de la publication est obligatoire.</small>
-          } @else if (editPublicationForm.controls.title.errors?.['maxlength']) {
+          }
+          @if (editPublicationForm.controls.title.errors?.['maxlength']) {
             <small>Le titre de la publication ne doit pas dépasser 255 charactères.</small>
           }
         </div>
@@ -124,7 +125,8 @@
         <div>
           @if (editPublicationForm.controls.description.errors?.['required']) {
             <small>La description de l'atelier est requise.</small>
-          } @else if (editPublicationForm.controls.description.errors?.['maxlength']) {
+          }
+          @if (editPublicationForm.controls.description.errors?.['maxlength']) {
             <small>La description de l'atelier ne doit pas dépasser 2000 charactères.</small>
           }
         </div>

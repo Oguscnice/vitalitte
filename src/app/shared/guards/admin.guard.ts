@@ -27,7 +27,7 @@ export class AdminGuard  {
     ) {
       return true;
     }
-    this.router.navigate(['/user']);
+    this.router.navigate(['/page-404']);
     return false;
   }
 }

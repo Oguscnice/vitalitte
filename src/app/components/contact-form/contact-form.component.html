@@ -1,5 +1,3 @@
-<h2>Formulaire de contact</h2>
-
 <form action="https://formsubmit.io/send/guillaume.cometto@gmail.com"
       method="POST"
       class="flex center"
@@ -8,7 +6,6 @@
 <fieldset>
     <label>Nom...</label>
     <input
-      matInput
       type="text"
       name="lastname"
       id="lastname"
@@ -19,9 +16,11 @@
       <div class="errors">
         @if (lastnameValue && lastnameValue.length > 255) {
           <small>Le nom ne doit pas comporter plus de<strong>255 caractères</strong>.</small>
-        } @else if (lastnameValue && lastnameValue.length <= 2) {
+        }
+        @if (lastnameValue && lastnameValue.length <= 2) {
           <small>Le nom doit comporter plus de<strong>2 caractères</strong>.</small>
-        } @else if (!lastnameValue) {
+        }
+        @if (!lastnameValue) {
           <small>Le nom est<strong>obligatoire</strong>.</small>
         }
       </div>
@@ -31,7 +30,6 @@
 <fieldset>
     <label>Prénom...</label>
     <input
-      matInput
       type="text"
       name="firstname"
       id="firstname"
@@ -42,9 +40,11 @@
       <div class="errors">
         @if (firstnameValue && lastnameValue.length > 255) {
           <small>Le prénom ne doit pas comporter plus de<strong>255 caractères</strong>.</small>
-        } @else if (firstnameValue.length <= 2) {
+        }
+        @if (firstnameValue.length <= 2) {
           <small>Le prénom doit comporter plus de<strong>2 caractères</strong>.</small>
-        } @else if (!firstnameValue) {
+        }
+        @if (!firstnameValue) {
           <small>Le prénom est<strong>obligatoire</strong>.</small>
         }
       </div>
@@ -57,7 +57,6 @@
       type="email"
       name="email"
       id="email"
-      matInput
       placeholder="Ex: email@example.com"
       (keyup)="changeEmailValue($event)"
     />
@@ -65,7 +64,8 @@
       <div class="errors">
         @if (!validateEmail()) {
           <small>Renseigner un email au bon format<strong>bon format</strong>.</small>
-        } @else if (!emailValue) {
+        }
+        @if (!emailValue) {
           <small>L'email est<strong>obligatoire</strong>.</small>
         }
       </div>
@@ -76,7 +76,6 @@
     <label>Telephone</label>
     <input
       type="tel"
-      matInput
       placeholder="06 11 22 33 44"
       name="phone"
       id="phone"
@@ -86,7 +85,8 @@
       <div class="errors">
         @if (validatePhone()) {
           <small>Merci d'entrer un numéro de téléphone à<strong>10 chiffres</strong>.</small>
-        } @else if (!phoneValue) {
+        }
+        @if (!phoneValue) {
           <small>Le numéro de téléphone est <strong>obligatoire</strong>.</small>
         }
       </div>
@@ -134,8 +134,7 @@
 
 <fieldset class="field-text-area flex column">
   <label>Message</label>
-  <textarea matInput
-            placeholder="Ex. Bonjour, je voudrais des informations sur..."
+  <textarea placeholder="Ex. Bonjour, je voudrais des informations sur..."
             name="message"
             id="message"
             (keyup)="changeMessageValue($event)">
@@ -146,9 +145,11 @@
     <div class="errors">
       @if (messageValue && messageValue.length > 1000) {
         <small>Le message ne doit pas comporter plus de<strong>1000 caractères</strong>.</small>
-      } @else if (messageValue && messageValue.length <= 10) {
+      }
+      @if (messageValue && messageValue.length <= 10) {
         <small>Le message doit comporter plus de<strong>10 caractères</strong>.</small>
-      } @else if (!messageValue) {
+      }
+      @if (!messageValue) {
         <small>Le message est<strong>obligatoire</strong>.</small>
       }
     </div>

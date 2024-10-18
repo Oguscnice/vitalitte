@@ -4,8 +4,13 @@ import { BaseComponent } from 'src/app/base.component';
 @Component({
   standalone: false,
   selector: 'app-page404',
-  templateUrl: './page404.component.html',
-  styleUrls: ['./page404.component.scss']
+  template: `
+    <app-h1 [titleChild]="'Erreur de direction'"
+            [backgroundImageChild]="'../assets/images/notebook/book-dream.jpg'"/>
+    <h2>Vous êtes perdu(e) ?</h2>
+    <button class="btn-normal" [routerLink]="'/'">Retour page d'accueil</button>
+  `,
+  styles: [` @import "src/app/scss/buttons.scss"; `]
 })
 
 export class Page404Component extends BaseComponent{

@@ -28,7 +28,6 @@ import { EditDeleteWorkshopComponent } from './components/workshop/edit-delete-w
 import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
 import { PostPublicationComponent } from './components/publication/post-publication/post-publication.component';
 import { EditDeletePublicationComponent } from './components/publication/edit-delete-publication/edit-delete-publication.component';
-import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used/user-list-giftcards-used.component';
 import { EditProductComponent } from './pages/stationery/product/edit-product/edit-product.component';
 import {ManageGiftCardsComponent} from "./pages/manage-giftcards/manage-giftcards.component";
 import {EditDeleteGiftCardComponent} from "./components/giftcard/edit-delete-giftcard/edit-delete-giftcard.component";
@@ -77,7 +76,6 @@ import {EnumProductTypeFormatPipe} from "../../shared/services/pipes/enum-produc
         EditDeletePublicationComponent,
         PostGiftCardComponent,
         EditDeleteGiftCardComponent,
-        UserListGiftcardsUsedComponent,
         EnumProductTypeFormatPipe,
     ],
   providers: [

@@ -24,6 +24,7 @@ import {CustomCurrencyPipe} from "../../../shared/services/pipes/custom-currency
   styles: [`
             @import "../../../scss/variables.scss";
             @import "../../../scss/forms.scss";
+            @import "../../../scss/buttons.scss";
 
             .workshop-content,
             .workshop-resgistrations-free,

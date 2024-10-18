@@ -11,12 +11,14 @@ import {AdminGiftCardSignalService} from "../../../shared/services/admin-giftcar
   standalone: true,
   imports: [ ReactiveFormsModule, NgClass ],
   templateUrl: './post-giftCard.component.html',
-  styles: [` @import "../../../scss/admin-general.scss";
-            .toggle-switch {
-              .toggle-label {
-                background-color: $lilac-dark;
-              }
-            }
+  styles: [`
+    @import "../../../scss/admin-general.scss";
+
+    .toggle-switch {
+      .toggle-label {
+        background-color: $lilac-dark;
+      }
+    }
   `]
 })
 export class PostGiftCardComponent {
@@ -27,26 +29,36 @@ export class PostGiftCardComponent {
   isFormVisible: boolean = false;
   isFormSubmit: boolean = false;
 
-  newGiftcardForm = this.formBuilder.group({
-    code : ['', [Validators.required, Validators.maxLength(50)]],
-    rising : ['', [Validators.required, priceValidator()]],
-    expiryDate : ['', [Validators.required, futureDateValidator()]],
-    isPercentage : [false]
+  newGiftCardForm = this.formBuilder.group({
+    code: ['', [Validators.required, Validators.maxLength(50)]],
+    rising: ['', [Validators.required, priceValidator()]],
+    expiryDate: ['', [Validators.required, futureDateValidator()]],
+    isPercentage: [false],
+    isSingleUse: [false]
   });
 
   changePercentageBoolean(): void {
     const ACTUAL_VALUE = this.isPercent();
-    this.newGiftcardForm.get('isPercentage')!.setValue(!ACTUAL_VALUE);
+    this.newGiftCardForm.get('isPercentage')!.setValue(!ACTUAL_VALUE);
+  }
+
+  changeSingleUseBoolean(): void {
+    const ACTUAL_VALUE = this.isSingleUsage();
+    this.newGiftCardForm.get('isSingleUse')!.setValue(!ACTUAL_VALUE);
   }
 
   isPercent(): boolean {
-    return this.newGiftcardForm.get('isPercentage')!.value || false;
+    return this.newGiftCardForm.get('isPercentage')!.value || false;
+  }
+
+  isSingleUsage(): boolean {
+    return this.newGiftCardForm.get('isSingleUse')!.value || false;
   }
 
   submitNewGiftCardForm(): void {
     this.isFormSubmit = true;
-    if (this.newGiftcardForm.valid) {
-      const CREATED_GIFTCARD: CreateGiftCard = this.transformToCreateGiftCard(this.newGiftcardForm)
+    if (this.newGiftCardForm.valid) {
+      const CREATED_GIFTCARD: CreateGiftCard = this.transformToCreateGiftCard(this.newGiftCardForm)
       this.adminGiftCardSignal.post(CREATED_GIFTCARD);
       this.resetAllValues();
     }
@@ -62,6 +74,6 @@ export class PostGiftCardComponent {
   resetAllValues(): void {
     this.isFormSubmit = false;
     this.isFormVisible = false;
-    this.newGiftcardForm.reset();
+    this.newGiftCardForm.reset();
   }
 }

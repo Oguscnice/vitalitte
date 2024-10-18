@@ -10,6 +10,7 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
   templateUrl: './workshops.component.html',
   styles: [`
             @import "../../../scss/variables.scss";
+            @import "../../../scss/buttons.scss";
 
             .dropdown-container {
               margin-bottom: $half-margin;

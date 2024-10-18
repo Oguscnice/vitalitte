@@ -1,0 +1,15 @@
+<div class="carousel" aria-label="Gallery">
+  <img src="{{ urlPictureDisplay }}" alt="image du carnet">
+  <div class="buttons-image width100 flex center space-between">
+    <img class="img-circle"
+         [ngClass]="{'active' : isPictureDisplay(product.picture)}"
+         src="{{ product.pictureThumbnail }}" alt="image secondaire du carnet"
+         (click)="selectPicture(product.picture)">
+    @for (secondaryPicture of product.secondaryPicturesDto; track secondaryPicture) {
+      <img class="img-circle"
+           [ngClass]="{'active' : isPictureDisplay(secondaryPicture.picture)}"
+           src="{{ secondaryPicture.pictureThumbnail }}" alt="image secondaire du carnet"
+           (click)="selectPicture(secondaryPicture.picture)">
+    }
+  </div>
+</div>
