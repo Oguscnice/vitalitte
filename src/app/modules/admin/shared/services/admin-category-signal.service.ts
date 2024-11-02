@@ -7,6 +7,7 @@ import { DataSignalService } from '../../../../shared/services/data-signal.servi
 import { AnguilleSignalService } from '../../../../shared/services/anguille-signal.service';
 import {ModalSignalService} from "../../../../shared/services/modal-signal.service";
 import {ResponseEntity} from "../../../../shared/interfaces/ResponseEntity";
+import {CreateCategory} from "../interfaces/CreateCategory";
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,9 @@ export class AdminCategorySignalService extends BaseComponent {
   private anguilleSignal: AnguilleSignalService = inject(AnguilleSignalService);
   private modalSignal: ModalSignalService = inject(ModalSignalService);
 
-  postCategory(newCategoryName : CategoryDto['name']): void{
+  postCategory(newCategory: CreateCategory): void {
     this.subscriptions.push(
-      this.apiCategoryAdmin.post(newCategoryName).subscribe({
+      this.apiCategoryAdmin.post(newCategory).subscribe({
         next: (res: ResponseEntity): void => {
           this.anguilleSignal.changeMessage(res.message);
           this.dataSignal.getAllCategories();

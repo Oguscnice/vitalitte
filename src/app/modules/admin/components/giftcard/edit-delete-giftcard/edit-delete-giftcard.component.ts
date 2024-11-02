@@ -33,5 +33,5 @@ export class EditDeleteGiftCardComponent implements OnInit {
     this.adminGiftCardsSignal.getAllGiftCards();
   }
 
-  delete = (giftcard : GiftCardDto) => this.adminGiftCardsSignal.confirmationModalForDeleteGiftCard(giftcard);
+  delete = (giftCard : GiftCardDto) => this.adminGiftCardsSignal.confirmationModalForDeleteGiftCard(giftCard);
 }

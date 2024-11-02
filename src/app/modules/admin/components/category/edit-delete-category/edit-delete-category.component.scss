@@ -1,0 +1,80 @@
+@import "../../../../../scss/variables.scss";
+@import "../../../scss/admin-general.scss";
+
+.categories {
+  margin: $normal-margin auto 0 auto;
+  gap: $normal-margin;
+  .category-thumbnail {
+    @include outline-picture;
+    padding : $normal-padding;
+    width: 100%;
+    .category-image-and-actions-name {
+      img {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+      }
+      .category-actions-name {
+        width: 100%;
+        height: calc(160px / 2);
+        .category-actions {
+          width: 50%;
+        }
+        .category-name {
+          align-items: center;
+          margin: $normal-padding;
+          font-weight: bold;
+        }
+        fieldset {
+          input {
+            margin-top: 0;
+            margin-left: $normal-padding;
+            width: calc(100% - (2 * $normal-padding));
+          }
+        }
+      }
+    }
+    .category-description {
+      margin: $normal-padding;
+      @include hiddenTextByLineNumber(6);
+      editor {
+        margin-top: 0;
+      }
+    }
+    button {
+      margin: $normal-padding 0;
+    }
+    fieldset {
+      width: auto;
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  .categories {
+    .category-thumbnail {
+      .category-image-and-actions-name {
+        img {
+          width: 80px;
+          height: 80px;
+        }
+        .category-actions-name {
+          height: calc(80px / 2);
+        }
+      }
+
+      fieldset {
+        .image-blur-icon {
+          cursor: pointer;
+          height: 80px;
+          width: 80px;
+        }
+        i {
+          font-size: calc(80px/2);
+        }
+      }
+    }
+  }
+}

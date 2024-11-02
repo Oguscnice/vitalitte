@@ -56,6 +56,7 @@ import {ReviewThumbnailComponent} from "./components/review/review-thumbnail/rev
 import {PostReviewFormComponent} from "./components/review/post-review-form/post-review-form.component";
 import {EnumProductTypeFormatPipe} from "./shared/services/pipes/enum-product-type-format.pipe";
 import {CarouselProductComponent} from "./components/carousel-product/carousel-product.component";
+import {FileDownloadComponent} from "./file-download/file-download.component";
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import {CarouselProductComponent} from "./components/carousel-product/carousel-p
     WorkshopsComponent,
     PublicationsComponent,
     PublicationSelectedComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    FileDownloadComponent
   ],
     imports: [
         BrowserModule,

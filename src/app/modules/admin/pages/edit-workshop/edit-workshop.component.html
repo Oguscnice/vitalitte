@@ -12,7 +12,7 @@
            formControlName="title"
            autocomplete="off"/>
 
-    @if (isFormSubmit && myForm.submitted && editWorkshopForm.controls['title'].invalid) {
+    @if (formHelper.isFormSubmit && myForm.submitted && editWorkshopForm.controls['title'].invalid) {
       <div>
         @if (editWorkshopForm.controls.title.errors?.['required']) {
           <small>Le titre de l'atelier est obligatoire.</small>
@@ -28,13 +28,11 @@
     <label for="description">Description : </label>
     <editor [init]="toolBarConfig"
             id="description"
-            placeholder="Description.."
-            formControlName="description"
-            autocomplete="off">
+            formControlName="description">
     </editor>
     <p [style.color]=" this.editWorkshopForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ this.editWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
 
-    @if (isFormSubmit && editWorkshopForm.controls['description'].invalid) {
+    @if (formHelper.isFormSubmit && editWorkshopForm.controls['description'].invalid) {
       <div>
         @if (editWorkshopForm.controls.description.errors?.['required']) {
           <small>La description de l'atelier est requise.</small>
@@ -52,7 +50,7 @@
            id="date"
            formControlName="date">
 
-    @if (isFormSubmit && myForm.submitted && editWorkshopForm.controls['date'].invalid) {
+    @if (formHelper.isFormSubmit && myForm.submitted && editWorkshopForm.controls['date'].invalid) {
       <div>
         @if (editWorkshopForm.controls.date.errors?.['required']) {
           <small>La date et heure sont obligatoires.</small>
@@ -95,7 +93,7 @@
       </ul>
     </div>
 
-    @if (isFormSubmit && myForm.submitted && editWorkshopForm.controls['address'].invalid) {
+    @if (formHelper.isFormSubmit && myForm.submitted && editWorkshopForm.controls['address'].invalid) {
       <div>
         @if (editWorkshopForm.controls.address.errors?.['required']) {
           <small>L'adresse est obligatoire.</small>
@@ -111,7 +109,7 @@
            formControlName="price"
            placeholder="0"/>
 
-    @if (isFormSubmit && editWorkshopForm.controls['price'].invalid) {
+    @if (formHelper.isFormSubmit && editWorkshopForm.controls['price'].invalid) {
       <div>
         @if (editWorkshopForm.controls.price.errors?.['required']) {
           <small>Le prix doit être indiqué (même 0€).</small>
@@ -145,7 +143,7 @@
          [src]="editWorkshopForm.get('picture')!.value"
          alt="Photo à choisir pour le carnet"/>
 
-    @if (isFormSubmit && editWorkshopForm.controls['picture'].invalid) {
+    @if (formHelper.isFormSubmit && editWorkshopForm.controls['picture'].invalid) {
       <div>
         @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
           <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
@@ -163,7 +161,7 @@
            id="registrations"
            formControlName="registrations"
            placeholder="0"/>
-    @if (isFormSubmit && editWorkshopForm.controls['registrations'].invalid) {
+    @if (formHelper.isFormSubmit && editWorkshopForm.controls['registrations'].invalid) {
       <div>
         @if (editWorkshopForm.controls.registrations.errors?.['required']) {
           <small>Le nombre de place doit être indiqué (mettre un grand nombre si illimité, exemple : 99999).</small>

@@ -28,8 +28,8 @@ import {CustomCurrencyPipe} from "../../../../../../shared/services/pipes/custom
   templateUrl: './post-product.component.html',
   styles: [`
     @import "../../../../scss/admin-general.scss";
-    @import "src/app/scss/forms.scss";
-    @import "src/app/scss/dropdowns.scss";
+    @import "../../../../../../scss/forms.scss";
+    @import "../../../../../../scss/dropdowns.scss";
   `]
 })
 export class PostProductComponent implements OnInit {

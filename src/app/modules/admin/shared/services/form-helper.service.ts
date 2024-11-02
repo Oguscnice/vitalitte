@@ -5,11 +5,16 @@ import { FormGroup } from '@angular/forms';
 import { SecondaryPictureDto } from '../../../../shared/interfaces/SecondaryPicture';
 import { MaterialDto } from '../../../../shared/interfaces/Material';
 import {ProductDto} from "../../../../shared/interfaces/Product";
+import {FileDto} from "../../../../shared/interfaces/FileDto";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormHelperService {
+
+  isTableVisible: boolean = true;
+  isFormVisible: boolean = false;
+  isFormSubmit: boolean = false;
 
   jsonParse<T>(value: string | null): T | null {
     return value ? JSON.parse(value) : null;
@@ -31,6 +36,13 @@ export class FormHelperService {
   getDtoNameByFormControlValue<T>(value: string | null): string {
     const DTO_NAME = this.jsonParse<T>(value) as CategoryDto | CollectionDto | MaterialDto;
     return DTO_NAME ? DTO_NAME.name : '';
+  }
+
+  formatFormWithMainPicture<T>(form: FormGroup, picture: FileDto): T {
+    return {
+      ...form.value,
+      pictureDto: picture
+    }
   }
 
   formatFormToProductDto<T>(form: FormGroup): T {
@@ -62,6 +74,12 @@ export class FormHelperService {
 
   formatFormToDto<T>(form: FormGroup): T {
     return { ...form.value }
+  }
+
+  resetAllValues(form: FormGroup): void {
+    this.isFormSubmit = false;
+    this.isFormVisible = false;
+    form.reset();
   }
 }
 

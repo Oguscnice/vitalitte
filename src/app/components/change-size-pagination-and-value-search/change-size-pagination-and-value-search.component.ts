@@ -51,9 +51,9 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
     }
   `,
   styles: [`
-    @import "src/app/scss/variables.scss";
-    @import "src/app/scss/dropdowns.scss";
-    @import "src/app/scss/forms.scss";
+    @import "../../scss/variables.scss";
+    @import "../../scss/dropdowns.scss";
+    @import "../../scss/forms.scss";
 
     .inputs {
       margin-top : $half-margin;

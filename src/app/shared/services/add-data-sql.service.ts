@@ -26,6 +26,8 @@ import {PaginationSignalService} from "./pagination-signal.service";
 import {PublicationDto} from "../interfaces/Publication";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../interfaces/GiftCard";
+import {CreateCategory} from "../../modules/admin/shared/interfaces/CreateCategory";
+import {FileDto} from "../interfaces/FileDto";
 
 @Injectable({
   providedIn: 'root'
@@ -61,9 +63,15 @@ export class AddDataSqlService {
   giftCardsDto!: GiftCardDto[];
   reviewsDto!: ReviewDto[];
 
-  createCategories(): void {
-    for (let category of this.categoriesToCreate) {
-      this.apiCategoryAdminService.post(category).subscribe({
+  async createCategories() {
+    for (const CATEGORY of this.categoriesToCreate) {
+      const file = await this.urlToFile(CATEGORY.picture.url, CATEGORY.picture.name, CATEGORY.picture.type);
+      const CATEGORY_TO_CREATE: CreateCategory = {
+        name: CATEGORY.name,
+        description: CATEGORY.description,
+        pictureDto: file,
+      }
+      this.apiCategoryAdminService.post(CATEGORY_TO_CREATE).subscribe({
         next: (response) => console.log(response),
         error: (err) => {
           if (err.status !== 409) {
@@ -139,12 +147,12 @@ export class AddDataSqlService {
       })
   }
 
-  selectRandomCategory(): CategoryDto{
+  selectRandomCategory(): CategoryDto {
     let randomIndex = Math.floor(Math.random() * this.categoriesDto.length);
     return this.categoriesDto[randomIndex];
   }
 
-  selectRandomCollection(): CategoryDto{
+  selectRandomCollection(): CollectionDto {
     let randomIndex = Math.floor(Math.random() * this.collectionsDto.length);
     return this.collectionsDto[randomIndex];
   }
@@ -573,11 +581,34 @@ export class AddDataSqlService {
     }
   ]
 
-  categoriesToCreate: string[] = [
-    "Les illustrés",
-    "Les amoureux du papier",
-    "Les créations uniques",
-    "Les sur-mesures"
+  categoriesToCreate: any[] = [
+    {
+     name: "Les illustrés",
+     description: "Des carnets illustrés pour laisser libre cours à votre créativité !",
+     picture: {
+       url: "https://i.ibb.co/Jmxv2WK/category-les-illustres.jpg",
+       name: "category-les-illustres.jpg",
+       type: "image/jpeg"
+     },
+    },
+    {
+     name: "Les classiques",
+     description: "Des carnets intemporels pour noter vos pensées et idées !",
+     picture: {
+       url: "https://i.ibb.co/XCy7VGD/category-les-classiques.jpg",
+       name: "category-les-classiques.jpg",
+       type: "image/jpeg"
+     },
+    },
+    {
+      name: "Les éco-responsables",
+      description: "Des carnets fabriqués à partir de matériaux durables et recyclage !",
+      picture: {
+        url: "https://i.ibb.co/HhRPsPK/category-les-eco-responsables.jpg",
+        name: "category-les-eco-responsables.jpg",
+        type: "image/jpeg"
+      },
+    }
   ];
 
   collectionsToCreate: string[] = [
@@ -993,4 +1024,23 @@ export class AddDataSqlService {
       title: "Carnet endommagé et mauvaise qualité"
     }
   ];
+
+  async urlToFile(url: string, filename: string, mimeType: string): Promise<FileDto> {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const reader = new FileReader();
+
+    return new Promise((resolve, reject) => {
+      reader.onloadend = () => {
+        const base64String = (reader.result as string).split(',')[1];
+        resolve({
+          slug: "",
+          fileData: base64String,
+          fileName: filename
+        });
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
 }

@@ -83,15 +83,14 @@ import {FormHelperService} from "../../../shared/services/form-helper.service";
 })
 export class SlugNameDtoEditDeleteComponent implements OnInit {
 
-  private formBuilder: FormBuilder = inject(FormBuilder);
-  private formHelper: FormHelperService = inject(FormHelperService);
-  private dataSignal: DataSignalService = inject(DataSignalService);
-  private adminCollectionSignal: AdminCollectionSignalService = inject(AdminCollectionSignalService);
-  private adminCategorySignal: AdminCategorySignalService = inject(AdminCategorySignalService);
+  private formBuilder = inject(FormBuilder);
+  private formHelper = inject(FormHelperService);
+  private dataSignal = inject(DataSignalService);
+  private adminCollectionSignal = inject(AdminCollectionSignalService);
 
-  @Input() type! : 'Catégories' | 'Collections';
+  @Input() type! : 'Collections';
 
-  items!: Signal<CategoryDto[]> | Signal<CollectionDto[]>;
+  items!: Signal<CollectionDto[]>;
 
   isTableVisible: boolean = true;
   isFormSubmit: boolean = false;
@@ -102,10 +101,11 @@ export class SlugNameDtoEditDeleteComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.type === 'Catégories') {
-      this.dataSignal.getAllCategories();
-      this.items = this.dataSignal.$categories;
-    } else if (this.type === 'Collections') {
+    // if (this.type === 'Catégories') {
+    //   this.dataSignal.getAllCategories();
+    //   this.items = this.dataSignal.$categories;
+    // }
+    if (this.type === 'Collections') {
       this.dataSignal.getAllCollections();
       this.items = this.dataSignal.$collections;
     }
@@ -130,9 +130,10 @@ export class SlugNameDtoEditDeleteComponent implements OnInit {
     this.isFormSubmit = true;
 
     if (this.itemForm.valid) {
-      if (this.type === 'Catégories') {
-        this.adminCategorySignal.putCategory(this.formHelper.formatFormToDto<CategoryDto>(this.itemForm));
-      } else if (this.type === 'Collections') {
+      // if (this.type === 'Catégories') {
+      //   this.adminCategorySignal.putCategory(this.formHelper.formatFormToDto<CategoryDto>(this.itemForm));
+      // }
+      if (this.type === 'Collections') {
         this.adminCollectionSignal.putCollection(this.formHelper.formatFormToDto<CollectionDto>(this.itemForm));
       }
       this.itemForm.reset();
@@ -141,9 +142,10 @@ export class SlugNameDtoEditDeleteComponent implements OnInit {
   }
 
   delete(item: SlugNameDto): void {
-    if (this.type === 'Catégories') {
-      this.adminCategorySignal.confirmationModalForDeleteCategory(item);
-    } else if (this.type === 'Collections') {
+    // if (this.type === 'Catégories') {
+    //   this.adminCategorySignal.confirmationModalForDeleteCategory(item);
+    // }
+    if (this.type === 'Collections') {
       this.adminCollectionSignal.confirmationModalForDeleteCollection(item);
     }
   }

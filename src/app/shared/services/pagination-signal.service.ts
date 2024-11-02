@@ -69,9 +69,9 @@ export class PaginationSignalService {
   setCategoryDtoAndCollectionDto(catOrColl: CategoryDto | CollectionDto | null, key: 'categoryDto' | 'collectionDto'): void {
     const CAT_AND_COLL = this.$categoryDtoAndCollectionDto();
     if (key === 'categoryDto') {
-      CAT_AND_COLL.categoryDto = catOrColl;
+      CAT_AND_COLL.categoryDto = catOrColl as CategoryDto;
     } else if (key === 'collectionDto') {
-      CAT_AND_COLL.collectionDto = catOrColl;
+      CAT_AND_COLL.collectionDto = catOrColl as CollectionDto;
     }
     this.state.$privateCategoryDtoAndCollectionDto.set(CAT_AND_COLL);
   }

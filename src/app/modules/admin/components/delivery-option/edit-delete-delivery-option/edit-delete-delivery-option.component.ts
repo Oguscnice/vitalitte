@@ -20,12 +20,10 @@ import {DeliveryOptionDto} from "../../../../../shared/interfaces/DeliveryOption
 export class EditDeleteDeliveryOptionComponent implements OnInit {
 
   private formBuilder = inject(FormBuilder);
-  private formHelper = inject(FormHelperService);
+  formHelper = inject(FormHelperService);
   modalSignal = inject(ModalSignalService);
   adminDeliveryOptionSignal = inject(AdminDeliveryOptionSignalService);
   deliveryOptions = this.adminDeliveryOptionSignal.$deliveryOptions;
-  isTableVisible: boolean = true;
-  isFormSubmit: boolean = false;
 
   editDeliveryOptionForm = this.formBuilder.group({
     slug: ['', [Validators.required]],
@@ -57,16 +55,11 @@ export class EditDeleteDeliveryOptionComponent implements OnInit {
   }
 
   submitEditDeliveryOptionForm(): void {
-    this.isFormSubmit = true;
+    this.formHelper.isFormSubmit = true;
     if (this.editDeliveryOptionForm.valid) {
       const EDITED_DELIVERY_OPTION: DeliveryOptionDto = this.formHelper.formatFormToDto<DeliveryOptionDto>(this.editDeliveryOptionForm);
       this.adminDeliveryOptionSignal.put(EDITED_DELIVERY_OPTION);
-      this.resetAllValues();
+      this.formHelper.resetAllValues(this.editDeliveryOptionForm);
     }
-  }
-
-  resetAllValues(): void {
-    this.isFormSubmit = false;
-    this.editDeliveryOptionForm.reset();
   }
 }

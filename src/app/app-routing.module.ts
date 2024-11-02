@@ -17,6 +17,7 @@ import { WorkshopSelectedComponent } from './pages/workshops-pages/workshop-sele
 import {CheckoutComponent} from "./pages/checkout/checkout.component";
 import {SignupComponent} from "./pages/signup/signup.component";
 import {UserGuard} from "./shared/guards/user.guard";
+import {FileDownloadComponent} from "./file-download/file-download.component";
 
 const routes: Routes = [
   {
@@ -30,7 +31,7 @@ const routes: Routes = [
       import('./modules/user/user.module').then((m) => m.UserModule),
     canActivate: [UserGuard]
   },
-
+  { path: 'file-upload', component: FileDownloadComponent },
   { path: 'connexion', component: LoginComponent },
   { path: 'inscription', component: SignupComponent },
   { path: 'qui-suis-je', component: BiographyComponent },

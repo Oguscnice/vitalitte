@@ -26,11 +26,9 @@ export class EditWorkshopComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private dataSignal = inject(DataSignalService);
   private adminWorkshopSignal = inject(AdminWorkshopSignalService);
-  private formHelper = inject(FormHelperService);
+  formHelper = inject(FormHelperService);
   fileUploadService = inject(FileUploadService);
   apiBanService = inject(ApiBanService);
-
-  isFormSubmit : boolean = false;
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
@@ -93,17 +91,11 @@ export class EditWorkshopComponent implements OnInit {
   }
 
   submitEditWorkshopForm(): void{
-
-    this.isFormSubmit = true
-
+    this.formHelper.isFormSubmit = true
     if (this.editWorkshopForm.valid) {
       const EDITED_WORKSHOP : WorkshopDto = this.formHelper.formatFormToDto(this.editWorkshopForm)
       this.adminWorkshopSignal.put(EDITED_WORKSHOP);
-      this.resetAllValues();
+      this.formHelper.resetAllValues(this.editWorkshopForm);
     }
-  }
-
-  resetAllValues(): void {
-    this.isFormSubmit = false;
   }
 }

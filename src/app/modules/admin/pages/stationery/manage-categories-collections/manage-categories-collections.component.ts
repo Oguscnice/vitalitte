@@ -23,6 +23,10 @@ import { Component } from '@angular/core';
       @media screen and (min-width: 768px) {
         div {
           flex-direction: row;
+          app-manage-categories,
+          app-manage-collections {
+            width: 48%;
+          }
         }
       }
     `]

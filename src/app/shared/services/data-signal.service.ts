@@ -85,7 +85,7 @@ export class DataSignalService extends BaseComponent {
   getAllCategories(): void {
     this.subscriptions.push(
       this.apiRequests.getAllCategories().subscribe({
-        next: (categories: CategoryDto[]) => this.setCategoryList(categories),
+        next: (categories) => this.setCategoryList(categories),
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
