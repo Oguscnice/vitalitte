@@ -10,7 +10,7 @@ import { BaseComponent } from 'src/app/base.component';
     <h2>Vous êtes perdu(e) ?</h2>
     <button class="btn-normal" [routerLink]="'/'">Retour page d'accueil</button>
   `,
-  styles: [` @import "src/app/scss/buttons.scss"; `]
+  styles: [` @import "../../scss/buttons.scss"; `]
 })
 
 export class Page404Component extends BaseComponent{

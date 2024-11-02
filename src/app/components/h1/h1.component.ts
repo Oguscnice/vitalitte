@@ -13,8 +13,7 @@ import { Component, Input } from '@angular/core';
                 <h1 class="flex center"> {{ titleChild }} </h1>
               </div>`,
   styles: [`
-            @import "src/app/scss/variables.scss";
-            @import "src/styles.scss";
+            @import "../../scss/variables.scss";
 
             .h1-image-container,
             img,

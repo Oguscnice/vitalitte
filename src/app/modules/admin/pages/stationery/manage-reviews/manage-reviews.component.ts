@@ -26,9 +26,9 @@ import {ModalSignalService} from "../../../../../shared/services/modal-signal.se
   ],
   templateUrl: './manage-reviews.component.html',
   styles: [`
-    @import "src/app/scss/chips.scss";
-    @import "src/app/modules/admin/scss/admin-table.scss";
-    @import "src/app/modules/admin/scss/admin-toggle.scss";
+    @import "../../../../../scss/chips.scss";
+    @import "../../../scss/admin-table.scss";
+    @import "../../../scss/admin-toggle.scss";
 
     h1 {
       color: $lilac-dark

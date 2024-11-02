@@ -7,7 +7,7 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
   selector: 'app-publications',
   templateUrl: './publications.component.html',
   styles: [`
-            @import "src/app/scss/variables.scss";
+            @import "../../../scss/variables.scss";
 
             .publications {
 
