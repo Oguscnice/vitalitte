@@ -3,10 +3,6 @@
 @import "../../../scss/dropdowns";
 @import "../../../scss/forms";
 
-:root {
-  --width-img-by-counter-image: 0%;
-}
-
 $customization-picture-size : 120px;
 
 section {
@@ -24,16 +20,15 @@ section {
   }
 
   .categories-buttons {
-    height: 120px;
     align-items: flex-start;
     margin-bottom: $fourth-padding;
 
     .category-img-title {
-      width: calc(var(--width-img-by-counter-image) - $normal-margin);
+      width: $customization-picture-size;
+      margin: 0 $normal-padding;
 
       .img-circle {
         width: 100%;
-        max-width: 100px;
         aspect-ratio: 1 / 1;
         background-color: $lilac-light;
         border-radius: 50%;

@@ -5,6 +5,7 @@ import {PaginationSignalService} from "../../../shared/services/pagination-signa
 import {BaseComponent} from "../../../base.component";
 import {CategoryDto} from "../../../shared/interfaces/Category";
 import {CollectionDto} from "../../../shared/interfaces/Collection";
+import {FileService} from "../../../shared/services/file.service";
 
 @Component({
   standalone: false,
@@ -18,6 +19,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   private paginationSignal = inject(PaginationSignalService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  fileService = inject(FileService);
 
   backgroundImageParentCreations = '../../../assets/images/figma/carnet02.jpg';
   productsDto$ = this.dataSignal.$productsDto;
@@ -27,19 +29,6 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   categorySelected: CategoryDto | null = null;
   collectionSelected: CollectionDto | null = null;
   isCollectionDropdownOpen: boolean  = false;
-
-  categoriesImages: string[] = [
-    './assets/images/notebook/book-dream.jpg',
-    './assets/images/notebook/notebook01.jpg',
-    './assets/images/notebook/notebook02.jpg',
-    './assets/images/notebook/notebook03.jpg',
-    './assets/images/notebook/notebook04.jpg',
-    './assets/images/notebook/notebook05.jpg',
-    './assets/images/notebook/notebook06.jpg',
-    './assets/images/notebook/notebook07.jpg',
-    './assets/images/notebook/notebook08.jpg',
-    './assets/images/notebook/notebook09.jpg',
-  ]
 
   ngOnInit(): void {
     this.findProductTypeUrl();
