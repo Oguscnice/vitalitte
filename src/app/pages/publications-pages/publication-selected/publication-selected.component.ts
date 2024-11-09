@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { ApiRequestsService } from 'src/app/shared/services/api-requests.service';
+import {FileService} from "../../../shared/services/file.service";
 
 @Component({
   standalone: false,
@@ -23,6 +24,7 @@ export class PublicationSelectedComponent extends BaseComponent {
 
   private route = inject(ActivatedRoute);
   private apiRequestsService = inject(ApiRequestsService);
+  fileService = inject(FileService);
 
   publicationSlug! : string;
   publicationSelected! : PublicationDto;

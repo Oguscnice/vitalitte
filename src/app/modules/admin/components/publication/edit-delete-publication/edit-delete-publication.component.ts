@@ -4,7 +4,6 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
-import { FileUploadService } from '../../../shared/services/file-upload.service';
 import { urlValidator } from '../../../shared/validators/urlValidators';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
@@ -21,6 +20,7 @@ import {FormHelperService} from "../../../shared/services/form-helper.service";
 import {BaseComponent} from "../../../../../base.component";
 import {ModalSignalService} from "../../../../../shared/services/modal-signal.service";
 import {AdminPublicationSignalService} from "../../../shared/services/admin-publication-signal.service";
+import {FileService} from "../../../../../shared/services/file.service";
 
 @Component({
   standalone: true,
@@ -31,17 +31,14 @@ import {AdminPublicationSignalService} from "../../../shared/services/admin-publ
 })
 export class EditDeletePublicationComponent extends BaseComponent implements OnInit {
 
-  fileUploadService = inject(FileUploadService);
   private formBuilder = inject(FormBuilder);
-  private formHelper = inject(FormHelperService);
   private modalSignal = inject(ModalSignalService);
   private adminPublicationSignal = inject(AdminPublicationSignalService);
   private dataSignal = inject(DataSignalService);
+  formHelper = inject(FormHelperService);
+  fileService = inject(FileService);
 
   publications$ = this.dataSignal.$publications;
-
-  isTableVisible: boolean = true;
-  isFormSubmit: boolean = false;
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
@@ -49,8 +46,7 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
     slug: ['', [Validators.required]],
     title: ['', [Validators.required, Validators.maxLength(255)]],
     description: ['', [Validators.required, Validators.maxLength(2000)]],
-    picture: ['', [Validators.required, urlValidator()]],
-    pictureThumbnail: ['', [Validators.required, urlValidator()]],
+    pictureDto: ['', [Validators.required]],
     spotlighted: [ true ],
     createdAt: [ new Date() ]
   });
@@ -84,26 +80,23 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
       this.editPublicationForm.get('slug')!.setValue(publication.slug);
       this.editPublicationForm.get('title')!.setValue(publication.title);
       this.editPublicationForm.get('description')!.setValue(publication.description);
-      this.editPublicationForm.get('picture')!.setValue(publication.picture);
-      this.editPublicationForm.get('pictureThumbnail')!.setValue(publication.pictureThumbnail);
+      this.editPublicationForm.get('pictureDto')!.setValue(publication.pictureDto.fileName);
       this.editPublicationForm.get('spotlighted')!.setValue(publication.spotlighted);
       this.editPublicationForm.get('createdAt')!.setValue(publication.createdAt);
+      this.fileService.picture = publication.pictureDto;
     } else {
       this.editPublicationForm.reset();
     }
   }
 
-  onFileSelected(event: Event): void {
-    this.fileUploadService.onFileSelected(event, this.editPublicationForm).subscribe();
-  }
-
   submitEditPublicationForm(): void {
 
-    this.isFormSubmit = true
+    this.formHelper.isFormSubmit = true
 
     if (this.editPublicationForm.valid) {
-      const EDITED_PUBLICATION: PublicationDto = this.formHelper.formatFormToDto(this.editPublicationForm);
+      const EDITED_PUBLICATION: PublicationDto = this.formHelper.formatFormWithMainPicture(this.editPublicationForm, this.fileService.picture!);
       this.adminPublicationSignal.put(EDITED_PUBLICATION);
+      this.formHelper.resetAllValues(this.editPublicationForm);
     }
   }
 

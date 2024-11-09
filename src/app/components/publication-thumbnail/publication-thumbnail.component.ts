@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
+import {FileService} from "../../shared/services/file.service";
 
 @Component({
   selector: 'app-publication-thumbnail',
@@ -8,7 +9,7 @@ import { PublicationDto } from 'src/app/shared/interfaces/Publication';
   imports: [ RouterLink ],
   template: `
               <div class="actuality-container flex pointer" [routerLink]="'/actualites/' + publication.slug">
-                <img [src]="publication.pictureThumbnail" alt="Image de l'article : {{ publication.title }}">
+                <img [src]="fileService.getDataForImageSrc(publication.pictureDto)" alt="Image de l'article : {{ publication.title }}">
                 <div class="actuality-description">
                   <h4>{{ publication.title }}</h4>
                   <div class="actuality-text" [innerHTML]="publication.description"></div>
@@ -69,6 +70,8 @@ import { PublicationDto } from 'src/app/shared/interfaces/Publication';
           `]
 })
 export class PublicationThumbnailComponent {
+
+  fileService = inject(FileService);
 
   @Input() publication! : PublicationDto;
 

@@ -11,7 +11,6 @@ import { CollectionDto } from '../interfaces/Collection';
 import { ApiCollectionAdminService } from '../../modules/admin/shared/services/api/api-collection-admin.service';
 import { ApiWorkshopAdminService } from '../../modules/admin/shared/services/api/api-workshop-admin.service';
 import { CreateWorkshop } from '../../modules/admin/shared/interfaces/Workshop';
-import { CreatePublication } from '../../modules/admin/shared/interfaces/CreatePublication';
 import { ApiPublicationAdminService } from '../../modules/admin/shared/services/api/api-publication-admin.service';
 import { SecondaryPictureDto } from '../interfaces/SecondaryPicture';
 import {CreateGiftCard} from "../../modules/admin/shared/interfaces/CreateGiftCard";
@@ -65,7 +64,7 @@ export class AddDataSqlService {
 
   async createCategories() {
     for (const CATEGORY of this.categoriesToCreate) {
-      const file = await this.urlToFile(CATEGORY.picture.url, CATEGORY.picture.name, CATEGORY.picture.type);
+      const file = await this.urlToFile(CATEGORY.picture.url, CATEGORY.picture.name);
       const CATEGORY_TO_CREATE: CreateCategory = {
         name: CATEGORY.name,
         description: CATEGORY.description,
@@ -439,7 +438,7 @@ export class AddDataSqlService {
   ];
 
 
-  publicationsToCreate: CreatePublication[] = [
+  publicationsToCreate: any[] = [
       {
         title: "Atelier d'inspiration : Créez votre propre carnet artistique !",
         description: "<p>Rejoignez-nous lors de notre prochain atelier o&ugrave; vous pourrez laisser libre cours &agrave; votre cr&eacute;ativit&eacute; en fabriquant votre propre carnet, guid&eacute; par nos artisans exp&eacute;riment&eacute;s.</p>",
@@ -1025,7 +1024,7 @@ export class AddDataSqlService {
     }
   ];
 
-  async urlToFile(url: string, filename: string, mimeType: string): Promise<FileDto> {
+  async urlToFile(url: string, filename: string): Promise<FileDto> {
     const response = await fetch(url);
     const blob = await response.blob();
     const reader = new FileReader();

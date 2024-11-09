@@ -25,7 +25,7 @@
           <div class="category-img-title" (click)="onCategorySelected(categoryDto)">
             <img class="img-circle"
                  [ngClass]="{'active' : isCategorySelected(categoryDto)}"
-                 src="{{fileService.getImageMimeType(categoryDto.pictureDto.fileName) + categoryDto.pictureDto.fileData}}" alt="image secondaire du carnet">
+                 src="{{fileService.getDataForImageSrc(categoryDto.pictureDto)}}" alt="image secondaire du carnet">
             <p class="width100 desktop-only"> {{ categoryDto.name }} </p>
           </div>
         }

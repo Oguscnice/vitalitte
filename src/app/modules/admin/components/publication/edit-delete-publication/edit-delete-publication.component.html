@@ -1,14 +1,14 @@
 <div class="title-functionality flex center">
   <h4 class="flex center">Gérer les Publications</h4>
   <i class="fa-solid fa-arrow-down"
-     (click)="isTableVisible = !isTableVisible"
-     [ngClass]="{'rotated180': isTableVisible}">
+     (click)="formHelper.isTableVisible = !formHelper.isTableVisible"
+     [ngClass]="{'rotated180': formHelper.isTableVisible}">
   </i>
 </div>
 
 <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
 
-@if (publications$() && publications$().length > 0 && isTableVisible) {
+@if (publications$() && publications$().length > 0 && formHelper.isTableVisible) {
 
   <table>
     <thead>
@@ -53,7 +53,7 @@
             </i>
           </td>
           <td class="flex center">
-            <img src="{{ publication.pictureThumbnail }}" alt="Photo de la publication {{ publication.title }}">
+            <img src="{{ fileService.getDataForImageSrc(publication.pictureDto) }}" alt="Photo de la publication {{ publication.title }}">
           </td>
           <td>
             @if (publication.slug !== editPublicationForm.get('slug')!.value) {
@@ -75,7 +75,7 @@
     <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
   }
 
-} @else if ((!publications$() || publications$().length < 1) && isTableVisible) {
+} @else if ((!publications$() || publications$().length < 1) && formHelper.isTableVisible) {
   <h5>Aucune publication</h5>
 }
 
@@ -99,7 +99,7 @@
               formControlName="title"
               autocomplete="off"/>
 
-      @if (isFormSubmit && myForm.submitted && editPublicationForm.controls['title'].invalid) {
+      @if (formHelper.isFormSubmit && myForm.submitted && editPublicationForm.controls['title'].invalid) {
         <div>
           @if (editPublicationForm.controls.title.errors?.['required']) {
             <small>Le titre de la publication est obligatoire.</small>
@@ -121,7 +121,7 @@
       </editor>
       <p [style.color]=" this.editPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
 
-      @if (isFormSubmit && editPublicationForm.controls['description'].invalid) {
+      @if (formHelper.isFormSubmit && editPublicationForm.controls['description'].invalid) {
         <div>
           @if (editPublicationForm.controls.description.errors?.['required']) {
             <small>La description de l'atelier est requise.</small>
@@ -138,7 +138,7 @@
       <input class="display-none"
              type="file"
              accept="image/png, image/jpeg, image/bmp, image/gif"
-             (change)="onFileSelected($event)"
+             (change)="fileService.onFileChange($event, 'picture', fileService.picture?.slug)"
              #fileUpload/>
       <input type="text"
              id="picture"
@@ -149,13 +149,13 @@
 
       <img class="pointer"
            (click)="fileUpload.click()"
-           [src]="editPublicationForm.get('picture')!.value"
+           [src]="fileService.getDataForImageSrc(fileService.picture!)"
            alt="Photo à choisir pour le carnet"/>
 
-      @if (isFormSubmit && editPublicationForm.controls['picture'].invalid) {
+      @if (formHelper.isFormSubmit && editPublicationForm.controls['pictureDto'].invalid) {
         <div>
-          @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
-            <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
+          @if (editPublicationForm.controls.pictureDto.errors?.['required']) {
+            <small>L'image est obligatoire.</small>
           }
         </div>
       }
