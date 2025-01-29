@@ -118,7 +118,7 @@
               id="description"
               formControlName="description">
       </editor>
-      <p [style.color]=" this.editPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
+      <p [style.color]="editPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ editPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
 
       @if (formHelper.isFormSubmit && editPublicationForm.controls['description'].invalid) {
         <div>

@@ -6,13 +6,12 @@ import {
   HostListener,
   inject,
   OnInit,
-  AfterViewInit,
   OnDestroy, AfterViewChecked
 } from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
 import { BaseComponent } from 'src/app/base.component';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
-import {DatePipe, DecimalPipe, NgClass, TitleCasePipe} from '@angular/common';
+import {NgClass, TitleCasePipe} from '@angular/common';
 import { Subject, filter } from 'rxjs';
 import { NAVBAR_USER } from 'src/app/shared/variables/navbar';
 import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
@@ -24,7 +23,7 @@ import {toTitleCase} from "../../shared/function/string-to-title-case";
 
 @Component({
   standalone: true,
-  imports: [RouterLink, NgClass, DecimalPipe, DatePipe, ModalShoppingCartListComponent, TitleCasePipe],
+  imports: [RouterLink, NgClass, ModalShoppingCartListComponent, TitleCasePipe],
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

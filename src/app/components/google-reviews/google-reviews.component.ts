@@ -18,12 +18,12 @@ export class GoogleReviewsComponent {
 
   getGoogleReviews(): void {
     // this.subscriptions.push(
-      this.apiRequestsService.getGoogleReviews().subscribe({
-        next: (reviews) => {
-
-        },
-        // error: (err) => (this.changeMessage(err.error.message))
-      })
+    //   this.apiRequestsService.getGoogleReviews().subscribe({
+    //     next: (reviews) => {
+    //
+    //     },
+    //     // error: (err) => (this.changeMessage(err.error.message))
+    //   })
     // )
   }
 }

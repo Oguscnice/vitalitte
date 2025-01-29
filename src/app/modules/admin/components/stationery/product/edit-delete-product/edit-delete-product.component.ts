@@ -4,13 +4,11 @@ import {Component, OnInit, inject, Signal} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import { ProductDto } from '../../../../../../shared/interfaces/Product';
 import { DataSignalService } from '../../../../../../shared/services/data-signal.service';
-import { AnguilleComponent } from '../../../../../../components/anguille/anguille.component';
-import { ModalComponent } from '../../../../../../components/modal/modal.component';
 import {PaginationSignalService} from "../../../../../../shared/services/pagination-signal.service";
 
 @Component({
   standalone: true,
-  imports: [ NgClass, RouterLink, AnguilleComponent, ModalComponent ],
+  imports: [ NgClass, RouterLink ],
   selector: 'app-edit-delete-product',
   templateUrl: './edit-delete-product.component.html',
   styles: [` @import "../../../../scss/admin-general"; `]

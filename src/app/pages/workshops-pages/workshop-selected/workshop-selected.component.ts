@@ -1,12 +1,8 @@
-import { DecimalPipe } from '@angular/common';
 import {Component, inject, OnInit, Signal} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { H1Component } from 'src/app/components/h1/h1.component';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { PaypalComponent } from 'src/app/components/paypal/paypal.component';
-import { AnguilleComponent } from 'src/app/components/anguille/anguille.component';
 import { CreateInscription } from 'src/app/shared/interfaces/Inscription';
 import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
 import { phoneValidator } from 'src/app/shared/validators/PhoneValidator';
@@ -19,7 +15,7 @@ import {FileService} from "../../../shared/services/file.service";
 
 @Component({
   standalone: true,
-  imports: [H1Component, ReactiveFormsModule, AnguilleComponent, ModalComponent, PaypalComponent, DecimalPipe, CustomCurrencyPipe],
+  imports: [H1Component, ReactiveFormsModule, CustomCurrencyPipe],
   selector: 'app-workshop-selected',
   templateUrl: './workshop-selected.component.html',
   styles: [`

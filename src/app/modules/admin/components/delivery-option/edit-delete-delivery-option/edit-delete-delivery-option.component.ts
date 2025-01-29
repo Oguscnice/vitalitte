@@ -1,11 +1,9 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {AdminDeliveryOptionSignalService} from "../../../shared/services/admin-delivery-option-signal.service";
 import {NgClass} from "@angular/common";
-import {RouterLink} from "@angular/router";
 import {CustomCurrencyPipe} from "../../../../../shared/services/pipes/custom-currency.pipe";
 import {ModalSignalService} from "../../../../../shared/services/modal-signal.service";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {urlValidator} from "../../../shared/validators/urlValidators";
 import {FormHelperService} from "../../../shared/services/form-helper.service";
 import {priceValidator} from "../../../shared/validators/priceValidators";
 import {DeliveryOptionDto} from "../../../../../shared/interfaces/DeliveryOptionDto";
@@ -13,7 +11,7 @@ import {DeliveryOptionDto} from "../../../../../shared/interfaces/DeliveryOption
 @Component({
   selector: 'app-edit-delete-delivery-option',
   standalone: true,
-  imports: [NgClass, RouterLink, CustomCurrencyPipe, ReactiveFormsModule],
+  imports: [NgClass, CustomCurrencyPipe, ReactiveFormsModule],
   templateUrl: './edit-delete-delivery-option.component.html',
   styles:  [`@import "../../../scss/admin-general.scss";`]
 })

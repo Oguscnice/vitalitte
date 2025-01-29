@@ -36,7 +36,7 @@
               id="description"
               formControlName="description">
       </editor>
-      <p [style.color]=" this.newPublicationForm.get('description')!.value!.length > 2000 ? 'red': ''">{{ this.newPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
+      <p [style.color]="newPublicationForm.get('description')!.value!.length > 2000 ? 'red': ''">{{ newPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
 
       @if (formHelper.isFormSubmit && newPublicationForm.controls['description'].invalid) {
         <div>

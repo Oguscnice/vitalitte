@@ -238,7 +238,7 @@
             id="introduction"
             formControlName="introduction">
     </editor>
-    <p [style.color]=" this.editProductForm.get('introduction')!.value!.length > 65534 ? 'red': ''">{{ this.editProductForm.get('introduction')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+    <p [style.color]="editProductForm.get('introduction')!.value!.length > 65534 ? 'red': ''">{{ editProductForm.get('introduction')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
 
     @if (formHelper.isFormSubmit && editProductForm.controls['introduction'].invalid) {
       <div>
@@ -257,7 +257,7 @@
             id="description"
             formControlName="description">
     </editor>
-    <p [style.color]=" this.editProductForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ this.editProductForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+    <p [style.color]="editProductForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ editProductForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
 
     @if (formHelper.isFormSubmit && editProductForm.controls['description'].invalid) {
       <div>

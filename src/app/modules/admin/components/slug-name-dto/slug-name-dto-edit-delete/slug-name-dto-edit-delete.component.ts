@@ -2,17 +2,14 @@ import { NgClass } from '@angular/common';
 import {Component, Input, Signal, inject, OnInit} from '@angular/core';
 import { SlugNameDto } from '../../../shared/interfaces/SlugNameDto';
 import { FormBuilder, Validators } from '@angular/forms';
-import { CategoryDto } from 'src/app/shared/interfaces/Category';
 import { CollectionDto } from 'src/app/shared/interfaces/Collection';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { AdminCollectionSignalService } from '../../../shared/services/admin-collection-signal.service';
-import { AdminCategorySignalService } from '../../../shared/services/admin-category-signal.service';
 import { DataSignalService } from 'src/app/shared/services/data-signal.service';
 import {FormHelperService} from "../../../shared/services/form-helper.service";
 
 @Component({
   standalone: true,
-  imports: [ NgClass, ModalComponent ],
+  imports: [ NgClass ],
   selector: 'app-slug-name-dto-edit-delete',
   template: ` <div class="title-functionality flex center">
                 <h4 class="flex center">Gérer les {{ type }}</h4>

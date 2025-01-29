@@ -30,7 +30,7 @@
             id="description"
             formControlName="description">
     </editor>
-    <p [style.color]=" this.editWorkshopForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ this.editWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+    <p [style.color]="editWorkshopForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ editWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
 
     @if (formHelper.isFormSubmit && editWorkshopForm.controls['description'].invalid) {
       <div>

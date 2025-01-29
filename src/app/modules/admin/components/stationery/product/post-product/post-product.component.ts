@@ -5,7 +5,7 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { CreateProduct } from '../../../../shared/interfaces/CreateProduct';
 import { priceValidator } from '../../../../shared/validators/priceValidators';
 import { CollectionDto } from '../../../../../../shared/interfaces/Collection';
-import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from '../../../../../../shared/services/pipes/counter-zero-if-empty.pipe';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../../../shared/variables/Other';
@@ -23,7 +23,7 @@ import {AnguilleSignalService} from "../../../../../../shared/services/anguille-
 
 @Component({
   standalone: true,
-  imports: [NgClass, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty, EnumProductTypeFormatPipe, CustomCurrencyPipe],
+  imports: [NgClass, ReactiveFormsModule, TitleCasePipe, EditorModule, CounterZeroIfEmpty, EnumProductTypeFormatPipe, CustomCurrencyPipe],
   selector: 'app-post-product',
   templateUrl: './post-product.component.html',
   styles: [`

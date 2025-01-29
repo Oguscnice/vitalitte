@@ -1,14 +1,12 @@
 import { NgClass } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AnguilleComponent } from 'src/app/components/anguille/anguille.component';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { BaseComponent } from 'src/app/base.component';
 import { AdminCollectionSignalService } from '../../../shared/services/admin-collection-signal.service';
 
 @Component({
   standalone: true,
-  imports: [ NgClass, ReactiveFormsModule, AnguilleComponent, ModalComponent ],
+  imports: [ NgClass, ReactiveFormsModule ],
   selector: 'app-slug-name-dto-post',
   template: `
               <div class="title-functionality flex center">

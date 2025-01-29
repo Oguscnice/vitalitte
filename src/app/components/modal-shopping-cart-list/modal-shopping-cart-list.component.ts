@@ -1,5 +1,5 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {Component, inject, OnDestroy} from '@angular/core';
+import {DatePipe} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
 import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pipe";
@@ -8,7 +8,6 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
   selector: 'app-modal-shopping-cart-list',
   standalone: true,
   imports: [
-    CurrencyPipe,
     DatePipe,
     RouterLink,
     CustomCurrencyPipe

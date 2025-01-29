@@ -1,9 +1,7 @@
 import { NgClass, TitleCasePipe } from '@angular/common';
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
-import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
@@ -23,7 +21,7 @@ import {FileService} from "../../../../../shared/services/file.service";
 
 @Component({
   standalone: true,
-  imports: [NgClass, TitleCasePipe, AddEuroCurrencyPipe, RouterLink, ReactiveFormsModule, EditorModule, CounterZeroIfEmpty, ModalComponent, ChangeSizePaginationAndValueSearchComponent, ChangePageButtonsPagination ],
+  imports: [NgClass, TitleCasePipe, ReactiveFormsModule, EditorModule, CounterZeroIfEmpty, ModalComponent, ChangeSizePaginationAndValueSearchComponent, ChangePageButtonsPagination ],
   selector: 'app-edit-delete-publication',
   templateUrl: './edit-delete-publication.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]

@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { CreateWorkshop } from '../../../shared/interfaces/Workshop';
-import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { priceValidator } from '../../../shared/validators/priceValidators';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
@@ -16,7 +16,7 @@ import {AnguilleSignalService} from "../../../../../shared/services/anguille-sig
 @Component({
   selector: 'app-post-workshop',
   standalone: true,
-  imports: [ NgClass, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty ],
+  imports: [ NgClass, ReactiveFormsModule, TitleCasePipe, EditorModule, CounterZeroIfEmpty ],
   templateUrl: './post-workshop.component.html',
   styles: [` @import "../../../scss/admin-general.scss"; `]
 })

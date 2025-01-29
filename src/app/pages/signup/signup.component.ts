@@ -2,16 +2,12 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../shared/services/auth.service";
 import {confirmPasswordValidator} from "../../shared/validators/ConfirmPasswordValidator";
-import {NgClass} from "@angular/common";
 import {BaseComponent} from "../../base.component";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgClass
-  ],
+  imports: [ ReactiveFormsModule ],
   templateUrl: './signup.component.html',
   styles: [`
     @import "../../scss/variables.scss";

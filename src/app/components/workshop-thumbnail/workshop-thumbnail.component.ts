@@ -1,6 +1,6 @@
 import { DatePipe, NgClass } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { WorkshopDto } from '../../shared/interfaces/Workshop';
 import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pipe";
 import {FileService} from "../../shared/services/file.service";

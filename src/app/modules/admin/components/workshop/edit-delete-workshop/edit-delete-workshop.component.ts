@@ -3,7 +3,6 @@ import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
 import {NgClass, TitleCasePipe} from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import {AdminWorkshopSignalService} from "../../../shared/services/admin-workshop-signal.service";
 import {ModalSignalService} from "../../../../../shared/services/modal-signal.service";
 import {
@@ -11,7 +10,6 @@ import {
 } from "../../../../../components/change-page-buttons-pagination/change-page-buttons-pagination.component";
 import {DataSignalService} from "../../../../../shared/services/data-signal.service";
 import {BaseComponent} from "../../../../../base.component";
-import {PaginationSignalService} from "../../../../../shared/services/pagination-signal.service";
 import {
   ChangeSizePaginationAndValueSearchComponent
 } from "../../../../../components/change-size-pagination-and-value-search/change-size-pagination-and-value-search.component";
@@ -19,7 +17,7 @@ import {FileService} from "../../../../../shared/services/file.service";
 
 @Component({
   standalone: true,
-  imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent, ChangePageButtonsPagination, ChangeSizePaginationAndValueSearchComponent],
+  imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ChangePageButtonsPagination, ChangeSizePaginationAndValueSearchComponent],
   selector: 'app-edit-delete-workshop',
   templateUrl: './edit-delete-workshop.component.html',
   styles: [ `@import "../../../scss/admin-general.scss"; `]

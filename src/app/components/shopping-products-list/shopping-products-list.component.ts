@@ -1,4 +1,4 @@
-import {DecimalPipe, NgClass, TitleCasePipe} from '@angular/common';
+import {DecimalPipe, TitleCasePipe} from '@angular/common';
 import {Component, inject, Signal, OnInit} from '@angular/core';
 import { ProductDto } from '../../shared/interfaces/Product';
 import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
@@ -10,7 +10,7 @@ import {FileService} from "../../shared/services/file.service";
 
 @Component({
   standalone: true,
-  imports: [TitleCasePipe, DecimalPipe, NgClass, RouterLink, ReactiveFormsModule, CartItemQuantityManagerComponent],
+  imports: [TitleCasePipe, DecimalPipe, RouterLink, ReactiveFormsModule, CartItemQuantityManagerComponent],
   selector: 'app-shopping-products-list',
   templateUrl: './shopping-products-list.component.html',
   styleUrls: ['./shopping-products-list.component.scss']

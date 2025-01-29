@@ -15,11 +15,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/starter-front",
+            "outputPath": {
+              "base": "dist/starter-front"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -43,7 +44,8 @@
             ],
             "scripts": [
               "node_modules/tinymce/tinymce.min.js"
-            ]
+            ],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "prod":{
@@ -76,10 +78,9 @@
               "fileReplacements": [{
                 "replace": "src/environments/environment.ts",
                 "with": "src/environments/environment.dev.ts"
-              }],
-              "buildOptimizer": true,
+              }
+            ],
               "optimization": true,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
