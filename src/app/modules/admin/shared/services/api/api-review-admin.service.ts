@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ReviewDto} from "../../../../../shared/interfaces/Review";
 import {VITALITTE_PROJECT} from "../../../../../shared/variables/AppConfig";

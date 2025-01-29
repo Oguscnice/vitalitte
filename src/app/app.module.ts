@@ -10,7 +10,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { Page404Component } from './pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { httpInterceptorProviders } from './shared/interceptors';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ProductsComponent } from './pages/products-pages/products/products.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
@@ -57,32 +57,31 @@ import {PostReviewFormComponent} from "./components/review/post-review-form/post
 import {EnumProductTypeFormatPipe} from "./shared/services/pipes/enum-product-type-format.pipe";
 import {CarouselProductComponent} from "./components/carousel-product/carousel-product.component";
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    LoginComponent,
-    Page404Component,
-    ProductsComponent,
-    BiographyComponent,
-    BooktiqueComponent,
-    ContactComponent,
-    FormSendComponent,
-    ProductSelectedComponent,
-    CreateProductComponent,
-    WorkshopsComponent,
-    PublicationsComponent,
-    PublicationSelectedComponent,
-    CheckoutComponent
-  ],
-    imports: [
-        BrowserModule,
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        LoginComponent,
+        Page404Component,
+        ProductsComponent,
+        BiographyComponent,
+        BooktiqueComponent,
+        ContactComponent,
+        FormSendComponent,
+        ProductSelectedComponent,
+        CreateProductComponent,
+        WorkshopsComponent,
+        PublicationsComponent,
+        PublicationSelectedComponent,
+        CheckoutComponent
+    ],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
-        HttpClientModule,
         BrowserAnimationsModule,
         RouterLink,
         TitleCasePipe,
-
         HeaderComponent,
         NewsHeadbandComponent,
         H1Component,
@@ -108,17 +107,11 @@ import {CarouselProductComponent} from "./components/carousel-product/carousel-p
         ReviewThumbnailComponent,
         PostReviewFormComponent,
         EnumProductTypeFormatPipe,
-        CarouselProductComponent
-    ],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ],
-  providers: [
-    CurrencyPipe,
-    DecimalPipe,
-    AuthGuard,
-    httpInterceptorProviders
-  ],
-  bootstrap: [AppComponent],
-})
+        CarouselProductComponent], providers: [
+        CurrencyPipe,
+        DecimalPipe,
+        AuthGuard,
+        httpInterceptorProviders,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {}
