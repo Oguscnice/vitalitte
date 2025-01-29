@@ -88,7 +88,7 @@
             formControlName="description"
             autocomplete="off">
     </editor>
-    <p [style.color]="editMaterialForm.get('description')!.value && this.editMaterialForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ editMaterialForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+    <p [style.color]="editMaterialForm.get('description')!.value && editMaterialForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ editMaterialForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
     @if (formHelper.isFormSubmit && editMaterialForm.controls['description'].invalid) {
       <div>
         @if (editMaterialForm.controls.description.errors?.['required']) {
