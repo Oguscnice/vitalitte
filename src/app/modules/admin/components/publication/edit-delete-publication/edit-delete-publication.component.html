@@ -1,4 +1,4 @@
-<div class="title-functionality flex center">
+<div class="title-functionality flex center" id="title">
   <h4 class="flex center">Gérer les Publications</h4>
   <i class="fa-solid fa-arrow-down"
      (click)="formHelper.isTableVisible = !formHelper.isTableVisible"
@@ -83,7 +83,8 @@
 
   <form (ngSubmit)="(editPublicationForm.valid)"
         [formGroup]="editPublicationForm"
-        #myForm="ngForm">
+        #myForm="ngForm"
+        id="editPublication">
 
     <button class="btn-submit-admin"
             (click)="patchFormValue(null)">
@@ -115,9 +116,7 @@
       <label for="description">Description : </label>
       <editor [init]="toolBarConfig"
               id="description"
-              placeholder="Description.."
-              formControlName="description"
-              autocomplete="off">
+              formControlName="description">
       </editor>
       <p [style.color]=" this.editPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.editPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
 
@@ -134,15 +133,15 @@
     </fieldset>
 
     <fieldset class="flex column">
-      <label for="picture">Image : </label>
+      <label for="pictureDto">Image : </label>
       <input class="display-none"
              type="file"
              accept="image/png, image/jpeg, image/bmp, image/gif"
              (change)="fileService.onFileChange($event, 'picture', fileService.picture?.slug)"
              #fileUpload/>
       <input type="text"
-             id="picture"
-             formControlName="picture"
+             id="pictureDto"
+             formControlName="pictureDto"
              class="display-none"/>
 
       <small>Cliquez sur l'image pour en télécharger une.</small>

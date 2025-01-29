@@ -12,6 +12,8 @@ import {DataSignalService} from "../../../../shared/services/data-signal.service
 import {Subscription} from "rxjs";
 import {FormHelperService} from "../../shared/services/form-helper.service";
 import { AdminWorkshopSignalService } from '../../shared/services/admin-workshop-signal.service';
+import {FileService} from "../../../../shared/services/file.service";
+import {BaseComponent} from "../../../../base.component";
 
 @Component({
   standalone: false,
@@ -20,19 +22,17 @@ import { AdminWorkshopSignalService } from '../../shared/services/admin-workshop
   styles: [` @import "../../scss/admin-general.scss"; `]
 })
 
-export class EditWorkshopComponent implements OnInit {
+export class EditWorkshopComponent extends BaseComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private dataSignal = inject(DataSignalService);
   private adminWorkshopSignal = inject(AdminWorkshopSignalService);
   formHelper = inject(FormHelperService);
-  fileUploadService = inject(FileUploadService);
+  fileService = inject(FileService);
   apiBanService = inject(ApiBanService);
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
-
-  private subscription!: Subscription;
 
   editWorkshopForm  = this.formBuilder.group({
     slug: ['', [Validators.required]],
@@ -41,19 +41,24 @@ export class EditWorkshopComponent implements OnInit {
     date: ['', [Validators.required, futureDateValidator()]],
     address: ['', [Validators.required]],
     price: ['', [Validators.required, priceValidator()]],
-    picture: ['', [Validators.required, urlValidator()]],
-    pictureThumbnail: ['', [Validators.required, urlValidator()]],
+    pictureDto: ['', [Validators.required]],
     registrations: ['', [Validators.required]],
   });
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => this.dataSignal.getWorkshopBySlug(params['workshopSlug']));
-    this.subscription = this.dataSignal.$workshopBySlug.subscribe(
+    this.subscribeToWorkshopBySlugSignal();
+  }
+
+  private subscribeToWorkshopBySlugSignal(): void {
+    this.subscriptions.push(
+      this.dataSignal.$workshopBySlug.subscribe(
       (workshop) => {
         if (workshop) {
           this.patchFormValue(workshop);
         }
-      });
+      })
+    )
   }
 
   patchFormValue(workshop: WorkshopDto): void {
@@ -63,9 +68,9 @@ export class EditWorkshopComponent implements OnInit {
     this.editWorkshopForm.get('date')!.setValue(this.formatDate(this.formHelper.jsonStringify(workshop.date)));
     this.editWorkshopForm.get('address')!.setValue(workshop.address);
     this.editWorkshopForm.get('price')!.setValue(workshop.price.toString());
-    this.editWorkshopForm.get('picture')!.setValue(workshop.picture);
-    this.editWorkshopForm.get('pictureThumbnail')!.setValue(workshop.pictureThumbnail);
+    this.editWorkshopForm.get('pictureDto')!.setValue(workshop.pictureDto.fileName);
     this.editWorkshopForm.get('registrations')!.setValue((workshop.registrations).toString());
+    this.fileService.picture = workshop.pictureDto;
   }
 
   formatDate(dateString: string): string {
@@ -86,14 +91,10 @@ export class EditWorkshopComponent implements OnInit {
     this.editWorkshopForm.get('address')!.setValue(addressClicked);
   }
 
-  onFileSelected(event: Event): void {
-    this.fileUploadService.onFileSelected(event, this.editWorkshopForm).subscribe();
-  }
-
-  submitEditWorkshopForm(): void{
+  submitEditWorkshopForm(): void {
     this.formHelper.isFormSubmit = true
     if (this.editWorkshopForm.valid) {
-      const EDITED_WORKSHOP : WorkshopDto = this.formHelper.formatFormToDto(this.editWorkshopForm)
+      const EDITED_WORKSHOP : WorkshopDto = this.formHelper.formatFormWithMainPicture<WorkshopDto>(this.editWorkshopForm, this.fileService.picture!)
       this.adminWorkshopSignal.put(EDITED_WORKSHOP);
       this.formHelper.resetAllValues(this.editWorkshopForm);
     }

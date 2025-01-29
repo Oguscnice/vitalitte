@@ -15,6 +15,8 @@ import {
   ChangeSizePaginationAndValueSearchComponent
 } from "../../../../../../components/change-size-pagination-and-value-search/change-size-pagination-and-value-search.component";
 import {PaginationSignalService} from "../../../../../../shared/services/pagination-signal.service";
+import {FileService} from "../../../../../../shared/services/file.service";
+import {WorkshopDto} from "../../../../../../shared/interfaces/Workshop";
 
 @Component({
   selector: 'app-edit-delete-material',
@@ -34,7 +36,8 @@ export class EditDeleteMaterialComponent extends BaseComponent implements OnInit
 
   private dataSignal = inject(DataSignalService);
   private adminMaterialSignal = inject(AdminMaterialSignalService);
-  modalSignal : ModalSignalService = inject(ModalSignalService);
+  private modalSignal = inject(ModalSignalService);
+  fileService = inject(FileService);
 
   materials$ = this.dataSignal.$materials;
 
@@ -46,6 +49,10 @@ export class EditDeleteMaterialComponent extends BaseComponent implements OnInit
 
   onValuePageChange(event : string): void {
     this.adminMaterialSignal.getPaginatedWithSearchValue();
+  }
+
+  openModalWithDescription(materialDescription : MaterialDto['description']): void {
+    this.modalSignal.showModal(materialDescription, false);
   }
 
   changeAvailability = (material : MaterialDto) => this.adminMaterialSignal.changeAvailabilityMaterial(material);

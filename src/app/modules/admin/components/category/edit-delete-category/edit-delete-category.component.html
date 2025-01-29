@@ -21,9 +21,9 @@
                    #inputFile/>
             <div class="image-blur-icon" (click)="inputFile.click()">
               @if (fileService.picture) {
-                <img src="{{fileService.getDataForImageSrc(fileService.picture)}}" alt="Logo de la catégorie {{fileService.picture!.fileName}}">
+                <img src="{{fileService.getDataForImageSrc(fileService.picture)}}" alt="Logo de la catégorie {{fileService.picture.fileName}}">
               }
-              <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.pictureUrl}"></i>
+              <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
             </div>
 
             @if (formHelper.isFormSubmit && myForm.submitted && editCategoryForm.controls['pictureDto'].invalid) {

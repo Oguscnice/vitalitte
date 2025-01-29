@@ -1,25 +1,25 @@
 @if (currentWorkshop) {
-  <app-h1 [titleChild]="'Atelier : ' + currentWorkshop.title" [backgroundImageChild]="currentWorkshop.picture"/>
+  <app-h1 [titleChild]="'Atelier : ' + currentWorkshop.title" [backgroundImageChild]="fileService.getDataForImageSrc(currentWorkshop.pictureDto)"/>
 
   <div class="workshop-content" [innerHTML]="currentWorkshop.description"></div>
   @if (registrationsFree() > 0) {
     @if (currentWorkshop.available && isWorkshopInFuture(currentWorkshop)) {
       @if (registrationsFree() === 1) {
-        <p class="workshop-resgistrations-free">Place disponible : {{ registrationsFree() }} </p>
+        <p class="workshop-registrations-free">Place disponible : {{ registrationsFree() }} </p>
       } @else {
-        <p class="workshop-resgistrations-free">Places disponibles : {{ registrationsFree() }} </p>
+        <p class="workshop-registrations-free">Places disponibles : {{ registrationsFree() }} </p>
         @if (registrationsFree() > 5) {
           <small> {{ maxInscriptions }} places maximum par réservation</small>
         }
       }
       <button class="btn-normal" (click)="isFormVisible = !isFormVisible"> Formulaire d'inscription </button>
     } @else {
-      <p class="workshop-resgistrations-free">Inscription Indisponible.</p>
+      <p class="workshop-registrations-free">Inscription Indisponible.</p>
     }
   } @else {
     <div class="flex center">
       <button class="btn-normal btn-grey">COMPLET</button>
-      <p class="workshop-resgistrations-free">Plus de place disponible.</p>
+      <p class="workshop-registrations-free">Plus de place disponible.</p>
     </div>
   }
 

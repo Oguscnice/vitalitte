@@ -1,16 +1,14 @@
 import {Component, inject, OnInit, Signal} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import { MaterialDto } from '../../../../../../shared/interfaces/Material';
-import { FileUploadService } from '../../../../shared/services/file-upload.service';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { urlValidator } from '../../../../shared/validators/urlValidators';
+import { FormBuilder, Validators} from '@angular/forms';
 import { priceValidator } from '../../../../shared/validators/priceValidators';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../../../shared/variables/Other';
 import {FormHelperService} from "../../../../shared/services/form-helper.service";
 import {DataSignalService} from "../../../../../../shared/services/data-signal.service";
 import {AdminMaterialSignalService} from "../../../../shared/services/admin-material-signal.service";
-import {Subscription} from "rxjs";
 import {BaseComponent} from "../../../../../../base.component";
+import {FileService} from "../../../../../../shared/services/file.service";
 
 @Component({
   standalone: false,
@@ -20,18 +18,16 @@ import {BaseComponent} from "../../../../../../base.component";
 })
 export class EditMaterialComponent extends BaseComponent implements OnInit {
 
-  private route: ActivatedRoute  = inject(ActivatedRoute);
-  private formBuilder: FormBuilder = inject(FormBuilder);
-  private formHelper: FormHelperService = inject(FormHelperService);
-  private dataSignal: DataSignalService = inject(DataSignalService);
-  private adminMaterialSignal: AdminMaterialSignalService = inject(AdminMaterialSignalService);
-  fileUploadService: FileUploadService = inject(FileUploadService);
+  private route  = inject(ActivatedRoute);
+  private formBuilder = inject(FormBuilder);
+  private dataSignal = inject(DataSignalService);
+  private adminMaterialSignal = inject(AdminMaterialSignalService);
+  fileService = inject(FileService);
+  formHelper = inject(FormHelperService);
 
   materialTypes: Signal<string[]> = this.dataSignal.$materialTypes;
 
   isCategoryDropdownOpen : boolean = false;
-  isFormSubmit : boolean = false;
-  private subscription!: Subscription;
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
@@ -41,8 +37,7 @@ export class EditMaterialComponent extends BaseComponent implements OnInit {
     materialType : ['', [Validators.required]],
     price: ['', [priceValidator()]],
     description: ['', [Validators.required, Validators.maxLength(65534)]],
-    picture: ['', [Validators.required, urlValidator()]],
-    pictureThumbnail: ['', [Validators.required, urlValidator()]]
+    pictureDto: ['', [Validators.required]]
   });
 
   ngOnInit(): void {
@@ -53,8 +48,8 @@ export class EditMaterialComponent extends BaseComponent implements OnInit {
 
   subscribeToMaterialSlugChanges(): void {
     this.subscriptions.push(
-      this.subscription = this.dataSignal.$materialBySlug.subscribe(
-        (material: MaterialDto | null): void => {
+      this.dataSignal.$materialBySlug.subscribe(
+        (material): void => {
           if (material) {
             this.patchFormValue(material);
           }
@@ -72,8 +67,8 @@ export class EditMaterialComponent extends BaseComponent implements OnInit {
     this.editMaterialForm.get('price')!.setValue(material.price.toString());
     this.editMaterialForm.get('materialType')!.setValue(material.materialType);
     this.editMaterialForm.get('description')!.setValue(material.description);
-    this.editMaterialForm.get('picture')!.setValue(material.picture);
-    this.editMaterialForm.get('pictureThumbnail')!.setValue(material.pictureThumbnail);
+    this.editMaterialForm.get('pictureDto')!.setValue(material.pictureDto.fileName);
+    this.fileService.picture = material.pictureDto;
   }
 
   toggleDropdown(dropdownClicked : 'Category'): void {
@@ -84,15 +79,12 @@ export class EditMaterialComponent extends BaseComponent implements OnInit {
     this.editMaterialForm.controls['materialType'].setValue(valueClicked);
   }
 
-  onFileSelected(event: Event, form: FormGroup): void {
-    this.fileUploadService.onFileSelected(event, form).subscribe();
-  }
-
   submitEditMaterialForm(): void {
-    this.isFormSubmit = true
+    this.formHelper.isFormSubmit = true
     if (this.editMaterialForm.valid) {
-      const EDITED_MATERIAL: MaterialDto = this.formHelper.formatFormToDto(this.editMaterialForm)
+      const EDITED_MATERIAL: MaterialDto = this.formHelper.formatFormWithMainPicture<MaterialDto>(this.editMaterialForm, this.fileService.picture!)
       this.adminMaterialSignal.put(EDITED_MATERIAL);
+      this.formHelper.resetAllValues(this.editMaterialForm);
     }
   }
 }

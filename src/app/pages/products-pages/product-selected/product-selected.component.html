@@ -1,5 +1,5 @@
 <app-h1 [titleChild]="(productDto ? productDto.name : '').toUpperCase()"
-        [backgroundImageChild]="productDto ? productDto.picture : 'https://i.ibb.co/PtWCfpG/carnet01.jpg'"/>
+        [backgroundImageChild]="productDto ? fileService.getDataForImageSrc(productDto.pictureDto) : VITALITTE_PROJECT.front.urlImgDefault.product"/>
 
 @if (productDto) {
   @if (productDto.name) {
@@ -53,7 +53,7 @@
             @if (materialSelected) {
               <div class="material-description flex column">
                 <h4> {{ materialSelected.name | titlecase }} </h4>
-                <img src="{{ materialSelected.pictureThumbnail }}"
+                <img src="{{ fileService.getDataForImageSrc(materialSelected.pictureDto) }}"
                      alt="image du matériel {{ materialSelected.name }} pour la composition du {{ productDto.productType | enumProductTypeFormat:'singular' }} {{ productDto.name }}">
                 <div class="flex column width100 text-left" [innerHTML]="materialSelected.description"></div>
               </div>

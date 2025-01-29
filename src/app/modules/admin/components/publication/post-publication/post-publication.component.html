@@ -36,7 +36,7 @@
               id="description"
               formControlName="description">
       </editor>
-      <p [style.color]=" this.newPublicationForm.get('description')!.value!.length > 1000 ? 'red': ''">{{ this.newPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
+      <p [style.color]=" this.newPublicationForm.get('description')!.value!.length > 2000 ? 'red': ''">{{ this.newPublicationForm.get('description')!.value | counterZeroIfEmpty }} caractères / 2000 </p>
 
       @if (formHelper.isFormSubmit && newPublicationForm.controls['description'].invalid) {
         <div>
@@ -65,10 +65,10 @@
       <small>Cliquez sur l'image pour en télécharger une.</small>
 
       <div class="image-blur-icon" (click)="inputFile.click()">
-        @if (fileService.pictureUrl) {
-          <img src="{{fileService.pictureUrl}}" alt="Photo à choisir pour la publication en cours de carnet">
+        @if (fileService.picture) {
+          <img [src]="fileService.getDataForImageSrc(fileService.picture)" alt="Photo à choisir pour la publication en cours de carnet">
         }
-        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.pictureUrl}"></i>
+        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
       </div>
 
       @if (formHelper.isFormSubmit && newPublicationForm.controls['pictureDto'].invalid) {

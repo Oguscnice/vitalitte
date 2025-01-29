@@ -9,7 +9,6 @@
 <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
 
 @if (materials$() && isTableVisible) {
-
   <table>
     <thead>
       <tr>
@@ -74,11 +73,11 @@
             <p> {{ material.price | addEuroCurrency }} </p>
           </td>
           <td class="table-width-icon">
-            <i class="fa-solid fa-file-lines pointer flex center" (click)="modalSignal.showModal(material.description, false)">
+            <i class="fa-solid fa-file-lines pointer flex center" (click)="openModalWithDescription(material.description)">
             </i>
           </td>
           <td class="flex center">
-            <img src="{{ material.pictureThumbnail }}" alt="Photo de {{ material.name }}">
+            <img src="{{ fileService.getDataForImageSrc(material.pictureDto) }}" alt="Photo de {{ material.name }}">
           </td>
           <td class="table-width-icon">
             <i [routerLink]="'/admin/editer-materiel/' + material.slug" class="fa-solid fa-pencil pointer flex center"></i>

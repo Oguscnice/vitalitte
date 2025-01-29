@@ -4,11 +4,9 @@ import { ProductDto } from '../../shared/interfaces/Product';
 import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
 import {DataSignalService} from "../../shared/services/data-signal.service";
 import {RouterLink} from "@angular/router";
-import {CategoryDto} from "../../shared/interfaces/Category";
-import {CollectionDto} from "../../shared/interfaces/Collection";
 import {ReactiveFormsModule} from "@angular/forms";
 import {CartItemQuantityManagerComponent} from "../cart-item-quantity-manager/cart-item-quantity-manager.component";
-import {PaginationSignalService} from "../../shared/services/pagination-signal.service";
+import {FileService} from "../../shared/services/file.service";
 
 @Component({
   standalone: true,
@@ -20,6 +18,7 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
 export class ShoppingProductsListComponent implements OnInit {
 
   private dataSignal = inject(DataSignalService);
+  fileService = inject(FileService);
   shoppingCartService = inject(ShoppingCartService);
 
   productsDto$: Signal<ProductDto[]> = this.dataSignal.$productsDto;

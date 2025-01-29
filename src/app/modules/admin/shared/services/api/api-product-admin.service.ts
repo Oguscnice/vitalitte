@@ -32,4 +32,8 @@ export class ApiProductAdminService {
   delete(productSlug : ProductDto['slug']): Observable<ResponseEntity>{
     return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/products/" + productSlug)
   }
+
+  getProductTypes(): Observable<ProductDto['productType'][]> {
+    return this.http.get<ProductDto['productType'][]>(VITALITTE_PROJECT.back.url + "/product-types")
+  }
 }

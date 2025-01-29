@@ -70,7 +70,7 @@
             <i class="fa-solid fa-file-lines pointer flex center" (click)="openModalWithDescription(workshop.description)"></i>
           </td>
           <td class="flex center">
-            <img src="{{ workshop.pictureThumbnail }}" alt="Photo de l'atelier {{ workshop.title }}">
+            <img src="{{ fileService.getDataForImageSrc(workshop.pictureDto) }}" alt="Photo de l'atelier {{ workshop.title }}">
           </td>
           <td>
             <i [routerLink]="'/admin/editer-atelier/' + workshop.slug" class="fa-solid fa-pencil pointer flex center"></i>
@@ -128,7 +128,7 @@
             <i class="fa-solid fa-file-lines pointer flex center" (click)="openModalWithDescription(workshop.description)"></i>
           </td>
           <td class="flex center">
-            <img src="{{ workshop.pictureThumbnail }}" alt="Photo de l'atelier {{ workshop.title }}">
+            <img src="{{ fileService.getDataForImageSrc(workshop.pictureDto) }}" alt="Photo de l'atelier {{ workshop.title }}">
           </td>
           <td>
             <i [routerLink]="'/admin/editer-atelier/' + workshop.slug" class="fa-solid fa-pencil pointer flex center"></i>

@@ -2,6 +2,7 @@ import { TitleCasePipe } from '@angular/common';
 import {Component, inject} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {DataSignalService} from "../../shared/services/data-signal.service";
+import {FileService} from "../../shared/services/file.service";
 
 @Component({
   standalone: true,
@@ -13,7 +14,7 @@ import {DataSignalService} from "../../shared/services/data-signal.service";
         <h5> {{ product.name | titlecase }} </h5>
         <div class="image-and-filter-color flex column pointer"
              [routerLink]="['/produits', product.slug]">
-          <img src="{{ product.picture }}" alt="Photo d'un carnet"/>
+          <img src="{{ fileService.getDataForImageSrc(product.pictureDto) }}" alt="Photo d'un carnet"/>
           <div class="filter-color"></div>
         </div>
         <div class="product-introduction" [innerHTML]="product.introduction"></div>
@@ -28,6 +29,7 @@ import {DataSignalService} from "../../shared/services/data-signal.service";
 export class ProductsListComponent {
 
   private dataSignal = inject(DataSignalService);
+  fileService = inject(FileService);
   products$ = this.dataSignal.$productsDto;
 
 }

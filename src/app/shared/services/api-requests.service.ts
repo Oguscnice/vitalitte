@@ -1,4 +1,3 @@
-import { GoogleReviews, Review } from '../interfaces/GoogleReviews';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -65,7 +64,7 @@ export class ApiRequestsService {
   }
 
   getProductTypes(): Observable<ProductDto['productType'][]> {
-    return this.http.get<ProductDto['productType'][]>(VITALITTE_PROJECT.back.url + "/product-types")
+    return this.http.get<ProductDto['productType'][]>(VITALITTE_PROJECT.back.url + "/product-types/has-product")
   }
 
   //-------------------

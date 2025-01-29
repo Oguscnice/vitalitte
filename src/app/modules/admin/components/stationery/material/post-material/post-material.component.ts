@@ -1,7 +1,5 @@
-import {Component, Input, Output, EventEmitter, inject, OnInit, Signal} from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FileUploadService } from '../../../../shared/services/file-upload.service';
-import { urlValidator } from '../../../../shared/validators/urlValidators';
+import {Component, inject, OnInit, Signal} from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { priceValidator } from '../../../../shared/validators/priceValidators';
 import { CreateMaterial } from '../../../../shared/interfaces/CreateMaterial';
 import { NgClass, TitleCasePipe } from '@angular/common';
@@ -11,6 +9,9 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../../shared/variables/Other';
 import {FormHelperService} from "../../../../shared/services/form-helper.service";
 import {DataSignalService} from "../../../../../../shared/services/data-signal.service";
 import {AdminMaterialSignalService} from "../../../../shared/services/admin-material-signal.service";
+import {FileService} from "../../../../../../shared/services/file.service";
+import {AnguilleSignalService} from "../../../../../../shared/services/anguille-signal.service";
+import {BaseComponent} from "../../../../../../base.component";
 
 @Component({
   standalone: true,
@@ -19,42 +20,43 @@ import {AdminMaterialSignalService} from "../../../../shared/services/admin-mate
   templateUrl: './post-material.component.html',
   styles: [` @import "../../../../scss/admin-general"; `]
 })
-export class PostMaterialComponent implements OnInit {
+export class PostMaterialComponent extends BaseComponent implements OnInit {
 
-  private formBuilder = inject(FormBuilder);
-  private formHelper = inject(FormHelperService);
   private dataSignal = inject(DataSignalService);
+  private formBuilder = inject(FormBuilder);
   private adminMaterialSignal = inject(AdminMaterialSignalService);
-  fileUploadService = inject(FileUploadService);
-
-  materialTypes: Signal<string[]> = this.dataSignal.$materialTypes;
-
-  isFormVisible: boolean = false;
+  private anguilleSignal = inject(AnguilleSignalService);
+  fileService = inject(FileService);
+  formHelper = inject(FormHelperService);
   isCategoryDropdownOpen: boolean = false;
-  isFormSubmit: boolean = false;
-
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
+
+  materialTypes = this.dataSignal.$materialTypes;
 
   newMaterialForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     materialType : ['', [Validators.required]],
     price: ['', [Validators.required, priceValidator()]],
     description: ['', [Validators.required, Validators.maxLength(65534)]],
-    picture: ['', [Validators.required, urlValidator()]],
-    pictureThumbnail: ['', [Validators.required, urlValidator()]]
+    pictureDto: ['', [Validators.required]],
   });
 
   ngOnInit(): void {
-      this.fileUploadService.patchImage(this.newMaterialForm, this.fileUploadService.imageMaterialDefault, this.fileUploadService.imageMaterialDefaultThumbnail);
-      this.dataSignal.getAllMaterialsTypes();
+    this.patchImageDefault();
+    this.dataSignal.getAllMaterialsTypes();
+  }
+
+  private patchImageDefault(): void {
+    this.subscriptions.push(
+      this.fileService.patchImage(this.fileService.imageMaterialDefault).subscribe({
+        next: (fileDto) => this.newMaterialForm.get('pictureDto')!.setValue(fileDto.fileName),
+        error: (err) => this.anguilleSignal.changeMessage("Erreur lors de la récupération de l'image par défaut"),
+      })
+    )
   }
 
   toggleDropdown(dropdownClicked : 'Category'): void {
     this[`is${dropdownClicked}DropdownOpen`] = !this[`is${dropdownClicked}DropdownOpen`];
-  }
-
-  onFileSelected(event: Event, form: FormGroup): void {
-    this.fileUploadService.onFileSelected(event, form).subscribe();
   }
 
   onMaterialTypeClicked(valueClicked : string): void {
@@ -62,18 +64,12 @@ export class PostMaterialComponent implements OnInit {
   }
 
   submitNewMaterialForm(): void {
-    this.isFormSubmit = true
+    this.formHelper.isFormSubmit = true;
     if (this.newMaterialForm.valid) {
-      const CREATE_MATERIAL:  CreateMaterial = this.formHelper.formatFormToDto<CreateMaterial>(this.newMaterialForm);
+      const CREATE_MATERIAL: CreateMaterial = this.formHelper.formatFormWithMainPicture<CreateMaterial>(this.newMaterialForm, this.fileService.picture!);
       this.adminMaterialSignal.post(CREATE_MATERIAL);
-      this.resetAllValues();
+      this.formHelper.resetAllValues(this.newMaterialForm);
+      this.patchImageDefault();
     }
-  }
-
-  resetAllValues(): void {
-    this.isFormSubmit = false;
-    this.isFormVisible = false;
-    this.newMaterialForm.reset()
-    this.fileUploadService.patchImage(this.newMaterialForm, this.fileUploadService.imageMaterialDefault, this.fileUploadService.imageMaterialDefault);
   }
 }

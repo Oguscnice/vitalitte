@@ -12,7 +12,6 @@ import { ApiCollectionAdminService } from '../../modules/admin/shared/services/a
 import { ApiWorkshopAdminService } from '../../modules/admin/shared/services/api/api-workshop-admin.service';
 import { CreateWorkshop } from '../../modules/admin/shared/interfaces/Workshop';
 import { ApiPublicationAdminService } from '../../modules/admin/shared/services/api/api-publication-admin.service';
-import { SecondaryPictureDto } from '../interfaces/SecondaryPicture';
 import {CreateGiftCard} from "../../modules/admin/shared/interfaces/CreateGiftCard";
 import {ApiGiftcardService} from "../../modules/admin/shared/services/api/api-giftcard.service";
 import {CreateDeliveryOption} from "../../modules/admin/shared/interfaces/CreateDeliveryOption";
@@ -20,13 +19,14 @@ import {ApiDeliveryOptionAdminService} from "../../modules/admin/shared/services
 import {ApiReviewAdminService} from "../../modules/admin/shared/services/api/api-review-admin.service";
 import {CreateReview, ReviewDto} from "../interfaces/Review";
 import {ProductDto} from "../interfaces/Product";
-import {DataSignalService} from "./data-signal.service";
 import {PaginationSignalService} from "./pagination-signal.service";
 import {PublicationDto} from "../interfaces/Publication";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../interfaces/GiftCard";
 import {CreateCategory} from "../../modules/admin/shared/interfaces/CreateCategory";
-import {FileDto} from "../interfaces/FileDto";
+import {FileDto, ImageDefault} from "../interfaces/FileDto";
+import {CreatePublication} from "../../modules/admin/shared/interfaces/CreatePublication";
+import {FileService} from "./file.service";
 
 @Injectable({
   providedIn: 'root'
@@ -44,10 +44,11 @@ export class AddDataSqlService {
   private apiDeliveryOptionAdminService = inject(ApiDeliveryOptionAdminService);
   private apiReviewAdminService = inject(ApiReviewAdminService);
   private paginationSignal = inject(PaginationSignalService);
+  private fileService = inject(FileService);
 
   createAll(){
     this.createCategories(); // il s'enchaine avec collection, Carnets et Reviews
-    this.createWorkshop();
+    this.createWorkshops();
     this.createPublications();
     this.createGiftCards();
     this.createDeliveryOptions();
@@ -62,25 +63,39 @@ export class AddDataSqlService {
   giftCardsDto!: GiftCardDto[];
   reviewsDto!: ReviewDto[];
 
-  async createCategories() {
-    for (const CATEGORY of this.categoriesToCreate) {
-      const file = await this.urlToFile(CATEGORY.picture.url, CATEGORY.picture.name);
-      const CATEGORY_TO_CREATE: CreateCategory = {
-        name: CATEGORY.name,
-        description: CATEGORY.description,
-        pictureDto: file,
-      }
-      this.apiCategoryAdminService.post(CATEGORY_TO_CREATE).subscribe({
-        next: (response) => console.log(response),
+  createCategories() {
+    for (let i = 0; i < this.categoriesToCreate.length; i++) {
+      this.fileService.patchImage(this.categoriesImages[i]).subscribe({
+        next: (file) => {
+            this.categoriesToCreate[i].pictureDto = file;
+            this.apiCategoryAdminService.post(this.categoriesToCreate[i]).subscribe({
+              next: (response) => {
+                console.log(response)
+                if (i === this.categoriesToCreate.length - 1) {
+                  this.getAllCategories();
+                  this.createCollections();
+                }
+              },
+              error: (err) => {
+                if (err.status !== 409) {
+                  console.log(err)
+                }
+                if (i === this.categoriesToCreate.length - 1) {
+                  this.getAllCategories();
+                  this.createCollections();
+                }
+              },
+            })
+          },
         error: (err) => {
-          if (err.status !== 409) {
-            console.log(err)
+          console.log("Erreur au chargement de l'image pour la catégory : " + this.categoriesToCreate[i].name)
+          if (i === this.categoriesToCreate.length - 1) {
+            this.getAllCategories();
+            this.createCollections();
           }
         },
-      })
+        });
     }
-    this.getAllCategories();
-    this.createCollections();
   }
 
   getAllCategories(){
@@ -90,23 +105,35 @@ export class AddDataSqlService {
           console.log("Catégories : ")
           console.log(this.categoriesDto)
         },
-        error: (err) => console.log(err),
-      })
-  }
-
-  createCollections(): void{
-    for (let collection of this.collectionsToCreate) {
-      this.apiCollectionAdminService.post(collection).subscribe({
-        next: (response) => console.log(response),
         error: (err) => {
           if (err.status !== 409) {
             console.log(err)
           }
+        },
+      })
+  }
+
+  createCollections(): void{
+    for (let i = 0; i < this.collectionsToCreate.length; i++) {
+      this.apiCollectionAdminService.post(this.collectionsToCreate[i]).subscribe({
+        next: (response) => {
+          console.log(response)
+          if (i === this.collectionsToCreate.length - 1) {
+            this.getAllCollections();
+            this.createMaterials();
+          }
+        },
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+          if (i === this.collectionsToCreate.length - 1) {
+            this.getAllCollections();
+            this.createMaterials();
+          }
         }
       })
     }
-    this.getAllCollections();
-    this.createMaterials();
   }
 
   getAllCollections(){
@@ -116,22 +143,40 @@ export class AddDataSqlService {
             console.log("Collections :");
             console.log(this.collectionsDto);
         },
-        error: (err) => console.log(err),}
+        error: (err) => {
+          if (err.status !== 409) {
+            console.log(err)
+          }
+        },
+      }
     )
   }
 
-  createMaterials(): void {
-    for (let material of this.materialsToCreate) {
-        this.apiMaterialAdminService.post(material).subscribe({
-          next: (response) => console.log(response),
-          error: (err) => {
-            if (err.status !== 409) {
-              console.log(err)
-            }
-          }
-        })
+  createMaterials() {
+    for (let i = 0; i < this.materialsToCreate.length; i++) {
+      this.fileService.patchImage(this.materialsImages[i]).subscribe({
+        next: (file) => {
+          this.materialsToCreate[i].pictureDto = file;
+          this.apiMaterialAdminService.post(this.materialsToCreate[i]).subscribe({
+            next: (response) => {
+              console.log(response);
+              if (i === this.materialsToCreate.length - 1) {
+                this.getAllMaterials();
+              }
+            },
+            error: (err) => {
+              if (err.status !== 409) {
+                console.log(err)
+              }
+              if (i === this.materialsToCreate.length - 1) {
+                this.getAllMaterials();
+              }
+            },
+          })
+        },
+        error: (err) => console.log("Erreur au chargement de l'image pour la catégory : " + this.categoriesToCreate[i].name),
+      });
     }
-    this.getAllMaterials();
   }
 
   getAllMaterials(): void {
@@ -157,32 +202,65 @@ export class AddDataSqlService {
   }
 
   createProducts(): void {
-    for (const PRODUCT of this.productsToCreate) {
-      const PICTURE = this.secondaryPictures[this.randomIndex(this.secondaryPictures.length)];
-      const NEW_PRODUCT: CreateProduct = {
-        name : PRODUCT.name,
-        picture : PICTURE,
-        pictureThumbnail : PICTURE,
-        introduction : PRODUCT.introduction,
-        price : PRODUCT.price,
-        description : PRODUCT.description,
-        materialsDto : this.selectRandomMaterials(),
-        categoryDto : this.categoriesDto[this.randomIndex(this.categoriesDto.length)],
-        collectionDto : this.collectionsDto[this.randomIndex(this.collectionsDto.length)],
-        secondaryPicturesDto : this.selectRandomSecondaryPictures(),
-        productType: PRODUCT.productType
+    for (let i = 0; i < this.productsToCreate.length; i++) {
+      let newProduct: CreateProduct = {
+        ...this.productsToCreate[i],
+        categoryDto: this.categoriesDto[this.randomIndex(this.categoriesDto.length)],
+        materialsDto: this.selectRandomMaterials(),
+        collectionDto: this.collectionsDto[this.randomIndex(this.collectionsDto.length)],
       }
-
-      this.apiProductAdminService.post(NEW_PRODUCT).subscribe({
-        next: (response) => console.log(response),
-        error: (err) => {
-          if (err.status !== 409) {
-            console.log(err)
+      let mainPicture = this.secondaryPictures[this.randomIndex(this.secondaryPictures.length)];
+      this.fileService.patchImage(mainPicture).subscribe({
+        next: (file) => {
+          newProduct.pictureDto = file;
+          const SECONDARY_PICTURES_IMAGE_DEFAULT = this.selectRandomSecondaryPictures();
+          let secondaryPicturesDto: FileDto[] = [];
+          for (let j = 0; j < SECONDARY_PICTURES_IMAGE_DEFAULT.length; j++) {
+            this.fileService.patchImage(SECONDARY_PICTURES_IMAGE_DEFAULT[j]).subscribe({
+              next: (file) => {
+                secondaryPicturesDto.push(file);
+                if (j === SECONDARY_PICTURES_IMAGE_DEFAULT.length - 1) {
+                  newProduct.secondaryPicturesDto = secondaryPicturesDto;
+                  this.postNewProduct(newProduct, i);
+                }
+              },
+              error: (err) => {
+                console.log("Erreur au chargement d'une image secondaire pour le produit : " + this.productsToCreate[i].name);
+                if (j === SECONDARY_PICTURES_IMAGE_DEFAULT.length - 1) {
+                  this.postNewProduct(newProduct, i);
+                }
+              },
+            })
           }
-        }
+        },
+        error: (err) => {
+          console.log("Erreur au chargement de l'image principale pour le produit : " + this.productsToCreate[i].name);
+          if (i === this.productsToCreate.length - 1) {
+            this.getAllProducts();
+          }
+        },
       })
     }
-    this.getAllProducts();
+  }
+
+  private postNewProduct(newProduct: CreateProduct, index: number): void {
+    console.log(newProduct)
+    this.apiProductAdminService.post(newProduct).subscribe({
+      next: (response) => {
+        console.log(response);
+        if (index === this.productsToCreate.length - 1) {
+          this.getAllProducts();
+        }
+      },
+      error: (err) => {
+        if (err.status !== 409) {
+          console.log(err)
+        }
+        if (index === this.productsToCreate.length - 1) {
+          this.getAllProducts();
+        }
+      },
+    })
   }
 
   getAllProducts(): void {
@@ -220,12 +298,19 @@ export class AddDataSqlService {
         this.apiRequestsService.postReview(reviewToCreate).subscribe({
           next: (res) => {
             console.log(res.message);
+            if (i === REVIEWS_COUNT - 1) {
+              this.changeReviewsStatus();
+            }
           },
-          error: (err) => console.log(err),
+          error: (err) => {
+            console.log(err)
+            if (i === REVIEWS_COUNT - 1) {
+              this.changeReviewsStatus();
+            }
+          },
         });
       }
     }
-    this.changeReviewsStatus();
   }
 
   changeReviewsStatus(): void {
@@ -262,24 +347,50 @@ export class AddDataSqlService {
     })
   }
 
-  createWorkshop(): void {
-    for (let workshop of this.workshopsToCreate) {
-      this.apiWorkshopAdminService.post(workshop).subscribe({
-        next: (response) => console.log(response),
-        error: (err) => {
-          if (err.status !== 409) {
-            console.log(err)
-          }
-        }
-      })
+  createWorkshops() {
+    for (let i = 0; i < this.workshopsToCreate.length; i++) {
+      let newWorkshop = this.workshopsToCreate[i];
+      this.fileService.patchImage(this.workshopImages[i]).subscribe({
+        next: (file) => {
+          newWorkshop.pictureDto = file;
+          this.apiWorkshopAdminService.post(newWorkshop).subscribe({
+            next: (response) => {
+              if (i === this.workshopsToCreate.length - 1) {
+                this.createPublications();
+              }
+            },
+            error: (err) => {
+              console.log("erreur à la création de l'atelier")
+              if (err.status !== 409) {
+                console.log(err)
+              }
+              if (i === this.workshopsToCreate.length - 1) {
+                this.createPublications();
+              }
+            },
+          })
+        },
+        error: (err) => console.log("Erreur au chargement de l'image pour la catégory : " + this.categoriesToCreate[i].name),
+      });
     }
-    this.createPublications();
   }
 
-  createPublications(): void {
-    for (let publication of this.publicationsToCreate) {
-      this.apiPublicationAdminService.post(publication).subscribe({
-        next: (response) => console.log(response),
+  createPublications() {
+    for (let i = 0; i < this.publicationsToCreate.length; i++) {
+      let newPublication = this.publicationsToCreate[i];
+      this.fileService.patchImage(this.fileService.imagePublicationDefault).subscribe({
+        next: (file) => {
+          newPublication.pictureDto = file;
+          this.apiPublicationAdminService.post(this.publicationsToCreate[i]).subscribe({
+            next: (response) => console.log(response),
+            error: (err) => {
+              console.log("erreur à la création de la publication")
+              if (err.status !== 409) {
+                console.log(err)
+              }
+            }
+          })
+        },
         error: (err) => {
           if (err.status !== 409) {
             console.log(err)
@@ -290,17 +401,24 @@ export class AddDataSqlService {
   }
 
   createGiftCards(): void {
-    for (let giftCard of this.giftCardsToCreate) {
-      this.apiGiftCardAdminService.post(giftCard).subscribe({
-        next: (response) => console.log(response),
+    for (let i = 0; i < this.giftCardsToCreate.length; i++) {
+      this.apiGiftCardAdminService.post(this.giftCardsToCreate[i]).subscribe({
+        next: (response) => {
+          console.log(response)
+          if (i === this.giftCardsToCreate.length - 1) {
+            this.getAllGiftCards();
+          }
+        },
         error: (err) => {
           if (err.status !== 409) {
             console.log(err)
           }
+          if (i === this.giftCardsToCreate.length - 1) {
+            this.getAllGiftCards();
+          }
         }
       })
     }
-    this.getAllGiftCards();
   }
 
   getAllGiftCards(): void {
@@ -319,17 +437,24 @@ export class AddDataSqlService {
   }
 
   createDeliveryOptions(): void {
-    for (const DELIVERY_OPTION of this.deliveryOptionsToCreate) {
-      this.apiDeliveryOptionAdminService.post(DELIVERY_OPTION).subscribe({
-        next: (response) => console.log(response),
+    for (let i = 0; i < this.deliveryOptionsToCreate.length; i++) {
+      this.apiDeliveryOptionAdminService.post(this.deliveryOptionsToCreate[i]).subscribe({
+        next: (response) => {
+          console.log(response)
+          if (i === this.deliveryOptionsToCreate.length - 1) {
+            this.getAllDeliveryOptions();
+          }
+        },
         error: (err) => {
           if (err.status !== 409) {
             console.log(err)
           }
+          if (i === this.deliveryOptionsToCreate.length - 1) {
+            this.getAllDeliveryOptions();
+          }
         }
       })
     }
-    this.getAllDeliveryOptions();
   }
 
   getAllDeliveryOptions(): void {
@@ -352,8 +477,8 @@ export class AddDataSqlService {
 
     let materialsRandom : MaterialDto[] = [];
     let randomMaterialNumber = this.randomIndex(6);
-
-    for(let i =0; i < randomMaterialNumber; i++){
+    randomMaterialNumber += 1;
+    for(let i = 0; i < randomMaterialNumber; i++){
         let randomIndex = this.randomIndex(this.materialsDto.length);
         if (!materialsRandom.includes(this.materialsDto[randomIndex])) {
             materialsRandom.push(this.materialsDto[randomIndex])
@@ -362,22 +487,17 @@ export class AddDataSqlService {
     return materialsRandom;
   }
 
-  selectRandomSecondaryPictures(): SecondaryPictureDto[] {
+  selectRandomSecondaryPictures(): ImageDefault[] {
 
-    let secondaryPictures : SecondaryPictureDto[] = [];
+    let secondaryPictures: ImageDefault[] = [];
     let randomPicturesNumber = this.randomIndex(5);
-
-    for(let i = 0; i < randomPicturesNumber; i++){
+    randomPicturesNumber += 1;
+    for (let i = 0; i < randomPicturesNumber; i++) {
         const RANDOM_INDEX = this.randomIndex(this.secondaryPictures.length);
-        if(!secondaryPictures.some(item => item.picture === this.secondaryPictures[RANDOM_INDEX])) {
-          const secPic = {
-            picture : this.secondaryPictures[RANDOM_INDEX],
-            pictureThumbnail : this.secondaryPictures[RANDOM_INDEX]
-          }
-            secondaryPictures.push(secPic)
+        if (!secondaryPictures.some(item => item.fileName === this.secondaryPictures[RANDOM_INDEX].fileName)) {
+            secondaryPictures.push(this.secondaryPictures[RANDOM_INDEX])
         }
     }
-
     return secondaryPictures;
   }
 
@@ -438,94 +558,133 @@ export class AddDataSqlService {
   ];
 
 
-  publicationsToCreate: any[] = [
+  publicationsToCreate: CreatePublication[] = [
       {
         title: "Atelier d'inspiration : Créez votre propre carnet artistique !",
         description: "<p>Rejoignez-nous lors de notre prochain atelier o&ugrave; vous pourrez laisser libre cours &agrave; votre cr&eacute;ativit&eacute; en fabriquant votre propre carnet, guid&eacute; par nos artisans exp&eacute;riment&eacute;s.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Rencontre avec l'artisan : Découvrez l'histoire derrière nos créations !",
         description: "<p>Plongez dans l'univers de la fabrication artisanale en rencontrant notre artisan principal, qui partagera ses inspirations et son savoir-faire lors d'une s&eacute;ance exclusive.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Concours de design : Montrez votre talent et gagnez des carnets exclusifs !",
         description: "<p>Participez &agrave; notre concours de design et montrez-nous votre cr&eacute;ativit&eacute; en proposant votre propre motif de carnet. Les gagnants recevront une collection de nos carnets exclusifs en r&eacute;compense.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Carnets sur mesure : Personnalisez votre compagnon d'écriture !",
         description: "<p>Exprimez votre individualit&eacute; en commandant un carnet enti&egrave;rement personnalis&eacute;, adapt&eacute; &agrave; vos besoins et &agrave; votre style.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Cadeau artisanal : Offrez un carnet unique pour célébrer les moments spéciaux !",
         description: "<p>Faites de chaque occasion un souvenir inoubliable en offrant un cadeau artisanal unique, tel qu'un carnet fait &agrave; la main, parfait pour capturer les moments pr&eacute;cieux de la vie.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Édition limitée : Nos nouveaux carnets inspirés de la nature sont disponibles !",
         description: "<p>Explorez la beaut&eacute; de la nature &agrave; travers notre derni&egrave;re &eacute;dition limit&eacute;e de carnets, orn&eacute;s de motifs floraux et de textures organiques uniques.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Carnets éco-responsables : Engagez-vous pour un avenir plus vert avec nos produits durables !",
         description: "<p>Faites un pas vers un mode de vie plus respectueux de l'environnement en optant pour nos carnets &eacute;co-responsables, fabriqu&eacute;s &agrave; partir de mat&eacute;riaux durables et recycl&eacute;s.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Nouvelle collection artisanale : Découvrez nos carnets exclusifs !",
         description: "<p>Plongez dans l'artisanat authentique avec notre derni&egrave;re collection de carnets, alliant qualit&eacute;, design et durabilit&eacute;.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Artisanat local : Soutenez nos créateurs locaux en achetant des carnets faits à la main !",
         description: "<p>Valorisez l'artisanat local et soutenez nos talentueux artisans en choisissant nos carnets faits &agrave; la main, fabriqu&eacute;s avec amour et d&eacute;vouement dans notre atelier.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: "Nouvelle technique de reliure : Découvrez notre dernière innovation artisanale !",
         description: "<p>Explorez notre toute nouvelle technique de reliure, fusionnant tradition et innovation pour cr&eacute;er des carnets &agrave; la fois &eacute;l&eacute;gants et r&eacute;sistants, parfaits pour accompagner vos aventures quotidiennes.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       },
       {
         title: " Offrez un carnet ",
         description: "<p>Valorisez l'artisanat local et soutenez nos talentueux artisans en choisissant nos carnets faits &agrave; la main, fabriqu&eacute;s avec amour et d&eacute;vouement dans notre atelier.</p> <p>Participez &agrave; notre concours de design et montrez-nous votre cr&eacute;ativit&eacute; en proposant votre propre motif de carnet. Les gagnants recevront une collection de nos carnets exclusifs en r&eacute;compense.</p> <p>Explorez notre toute nouvelle technique de reliure, fusionnant tradition et innovation pour cr&eacute;er des carnets &agrave; la fois &eacute;l&eacute;gants et r&eacute;sistants, parfaits pour accompagner vos aventures quotidiennes.</p>",
-        picture: "https://i.ibb.co/7nXhnLY/publication.jpg",
-        pictureThumbnail: "https://i.ibb.co/7nXhnLY/publication.jpg"
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       }
     ]
 
   workshopsToCreate: CreateWorkshop[] = [
     {
-      title : "Papier d'Artisanat Carnet",
+      title : "Papier Carnet",
       description : "Dans l'atelier du Papier d'Artisanat Carnet, chaque carnet est façonné avec passion et dévotion, mêlant habilement tradition et innovation. Nos artisans expérimentés utilisent des techniques ancestrales de reliure et de façonnage du papier pour créer des carnets uniques en leur genre. Chaque étape du processus est effectuée à la main, de la sélection méticuleuse des matériaux à la découpe précise du papier, en passant par l'assemblage et la finition minutieuse. Notre engagement envers la qualité se reflète dans chaque détail, des couvertures exquises aux pages lisses et durables. Que ce soit pour capturer des pensées fugaces, noter des idées créatives ou simplement pour le plaisir d'écrire, nos carnets artisanaux offrent une expérience d'écriture incomparable, empreinte de caractère et d'authenticité.",
-      date : new Date("08/09/2024 18:36"),
+      date : new Date("08/09/2025 18:36"),
       address : "123 Rue des Nuages, Ville-sur-Mer, France",
       price : (5.99),
-      picture : "https://pliereliure.com/569-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
-      pictureThumbnail : "https://pliereliure.com/569-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       registrations : 8
     },
     {
-      title : "Carnets Faits à la Main Co.",
+      title : "Carnets Faits à Main",
       description : "Chez Carnets Faits à la Main Co., nous croyons en l'importance de l'artisanat traditionnel et de la qualité intemporelle. Chaque carnet qui quitte notre atelier est le fruit d'un travail méticuleux réalisé par nos artisans qualifiés. Inspirés par la beauté de la simplicité, nous utilisons des matériaux de haute qualité et des techniques de reliure traditionnelles pour créer des carnets qui allient fonctionnalité et esthétique. Chaque carnet est conçu pour être un compagnon fidèle, offrant un espace où les idées prennent vie et les souvenirs sont préservés. Qu'il s'agisse d'un journal intime, d'un carnet de croquis ou d'un cahier de voyage, nos carnets faits à la main sont conçus pour inspirer la créativité et nourrir l'âme.",
-      date : new Date("10/09/2024 08:00"),
+      date : new Date("10/09/2025 08:00"),
       address : "456 Avenue de l'Arc-en-Ciel, Ville-en-Montagne, Canada",
       price : (0),
-      picture : "https://pliereliure.com/1386-large_default/carnet-artisanal-carnettiste-artistique.jpg",
-      pictureThumbnail : "https://pliereliure.com/1386-large_default/carnet-artisanal-carnettiste-artistique.jpg",
+      pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       registrations : 3
     },
     {
@@ -534,8 +693,11 @@ export class AddDataSqlService {
       date : new Date("10/04/2024 09:00"),
       address : "789 Boulevard des Étoiles, Ville-aux-Étoiles, Australie",
       price : (10),
-      picture : "https://pliereliure.com/568-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
-      pictureThumbnail : "https://pliereliure.com/568-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       registrations : 999
     },
     {
@@ -544,71 +706,122 @@ export class AddDataSqlService {
       date : new Date("12/05/2024 14:30"),
       address : "1010 Rue de la Licorne, Ville-enchantée, Royaume-Uni",
       price : (5.99),
-      picture : "https://pliereliure.com/333-large_default/carnet-artisanal-de-notes-avec-petit-message.jpg",
-      pictureThumbnail : "https://pliereliure.com/333-large_default/carnet-artisanal-de-notes-avec-petit-message.jpg",
+        pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       registrations : 2
     },
     {
-      title : "L'Atelier des Carnets d'Écriture",
+      title : "L'Atelier des Carnets",
       description : "Au Studio de Reliure Créative, nous sommes dévoués à l'art intemporel de la reliure artisanale. Chaque carnet qui quitte notre atelier est le fruit d'un processus méticuleux et passionné, où chaque étape est effectuée à la main avec une attention méticuleuse aux détails. Nos artisans talentueux utilisent des matériaux de haute qualité, allant du papier de qualité supérieure aux tissus et cuirs exquis, pour créer des carnets qui allient fonctionnalité et esthétique. Chaque carnet est conçu pour être une œuvre d'art en soi, offrant un espace où les idées peuvent s'épanouir et les pensées peuvent être capturées. Qu'il s'agisse d'un carnet de voyage, d'un journal intime ou d'un carnet de croquis, nos créations sont conçues pour inspirer la créativité et enrichir la vie de nos clients.",
-      date : new Date("06/05/2024 17:00"),
+      date : new Date("06/05/2025 17:00"),
       address : "1313 Avenue de la Lune, Ville-lunaire, États-Unis",
       price : (0),
-      picture : "https://latelierdestephanieaguado.com/wp-content/uploads/2020/05/mini-carnet-07.jpg",
-      pictureThumbnail : "https://latelierdestephanieaguado.com/wp-content/uploads/2020/05/mini-carnet-07.jpg",
-      registrations : 9
+      pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
+        registrations : 9
     },
     {
-      title : "Carnet",
+      title : "Carnet d'Écriture",
       description : "L'Atelier des Carnets d'Écriture est un sanctuaire pour les amoureux de l'écriture et du papier de qualité. Dans notre atelier, nous mettons l'accent sur l'artisanat traditionnel et la qualité exceptionnelle, en utilisant des techniques de reliure ancestrales pour créer des carnets qui sont à la fois beaux et fonctionnels. Chaque carnet est conçu avec soin et attention aux détails, depuis la sélection des matériaux jusqu'à la finition finale. Nos artisans expérimentés mettent leur expertise au service de la création de carnets uniques en leur genre, offrant un espace où les pensées peuvent s'épanouir et les idées peuvent prendre forme. Qu'il s'agisse d'un carnet de voyage rempli d'aventures ou d'un journal intime rempli de souvenirs, nos créations sont conçues pour inspirer et enrichir la vie de nos clients, une page à la fois.",
-      date : new Date("05/06/2024 20:00"),
+      date : new Date("05/06/2025 20:00"),
       address : "1313 Avenue de la Lune, Ville-lunaire, États-Unis",
       price : 7.89,
-      picture : "https://pliereliure.com/565-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
-      pictureThumbnail : "https://pliereliure.com/565-large_default/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       registrations : 10
     },
     {
       title : "Artisanat Carnet",
       description : "L'Atelier des Carnets d'Écriture est un sanctuaire pour les amoureux de l'écriture et du papier de qualité. Dans notre atelier, nous mettons l'accent sur l'artisanat traditionnel et la qualité exceptionnelle, en utilisant des techniques de reliure ancestrales pour créer des carnets qui sont à la fois beaux et fonctionnels. Chaque carnet est conçu avec soin et attention aux détails, depuis la sélection des matériaux jusqu'à la finition finale. Nos artisans expérimentés mettent leur expertise au service de la création de carnets uniques en leur genre, offrant un espace où les pensées peuvent s'épanouir et les idées peuvent prendre forme. Qu'il s'agisse d'un carnet de voyage rempli d'aventures ou d'un journal intime rempli de souvenirs, nos créations sont conçues pour inspirer et enrichir la vie de nos clients, une page à la fois.",
-      date : new Date("01/08/2024 08:00"),
+      date : new Date("01/08/2025 08:00"),
       address : "1515 Chemin de la Magie, Ville-mystère, Espagne",
       price : (5.99),
-      picture : "https://pliereliure.com/img/cms/30-03.jpg",
-      pictureThumbnail : "https://pliereliure.com/img/cms/30-03.jpg",
+      pictureDto : {
+          slug: "",
+          fileName: "",
+          fileData: "",
+        },
       registrations : 80
     }
   ]
 
-  categoriesToCreate: any[] = [
+  workshopImages: ImageDefault[] = [
+    {
+      url: "https://i.ibb.co/c8zZL1S/carnet-artisanal-carnettiste-artistique.jpg",
+      fileName: "carnet-artisanal-carnettiste-artistique.jpg",
+    },
+    {
+      url: "https://i.ibb.co/bHRPvR0/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      fileName: "carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+    },
+    {
+      url: "https://i.ibb.co/gSSwbpd/carnet-artisanal-de-notes-avec-petit-message.jpg",
+      fileName: "carnet-artisanal-de-notes-avec-petit-message.jpg",
+    },
+    {
+      url: "https://i.ibb.co/6tYm1T2/mini-carnet-07.jpg",
+      fileName: "mini-carnet-07.jpg",
+    },
+    {
+      url: "https://i.ibb.co/7J1z9v6/carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+      fileName: "carnet-artisanal-a5-livre-d-artiste-mon-univers-scrapbooking.jpg",
+    }
+  ];
+
+
+  categoriesToCreate: CreateCategory[] = [
     {
      name: "Les illustrés",
      description: "Des carnets illustrés pour laisser libre cours à votre créativité !",
-     picture: {
-       url: "https://i.ibb.co/Jmxv2WK/category-les-illustres.jpg",
-       name: "category-les-illustres.jpg",
-       type: "image/jpeg"
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
      },
     },
     {
      name: "Les classiques",
      description: "Des carnets intemporels pour noter vos pensées et idées !",
-     picture: {
-       url: "https://i.ibb.co/XCy7VGD/category-les-classiques.jpg",
-       name: "category-les-classiques.jpg",
-       type: "image/jpeg"
-     },
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
     },
     {
       name: "Les éco-responsables",
       description: "Des carnets fabriqués à partir de matériaux durables et recyclage !",
-      picture: {
-        url: "https://i.ibb.co/HhRPsPK/category-les-eco-responsables.jpg",
-        name: "category-les-eco-responsables.jpg",
-        type: "image/jpeg"
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
     }
   ];
+
+  categoriesImages: ImageDefault[] = [
+    {
+      url: "https://i.ibb.co/Jmxv2WK/category-les-illustres.jpg",
+      fileName: "category-les-illustres.jpg",
+    },
+    {
+      url: "https://i.ibb.co/XCy7VGD/category-les-classiques.jpg",
+      fileName: "category-les-classiques.jpg",
+    },
+    {
+      url: "https://i.ibb.co/HhRPsPK/category-les-eco-responsables.jpg",
+      fileName: "category-les-eco-responsables.jpg",
+    }
+  ]
 
   collectionsToCreate: string[] = [
     "été",
@@ -617,87 +830,165 @@ export class AddDataSqlService {
     "automne"
   ];
 
-  materialsToCreate : CreateMaterial[] = [
-      {
-          "name": "copte",
-          "price": 7.85,
-          "description": "<p>Cette reliure artisanale tient son nom des coptes, ch&eacute;tiens d&rsquo;Egypte, qui seraiet les premiers &agrave; cr&eacute;er des livres constitu&eacute;s de cahiers cousus ensemble. Ses caract&eacute;riques sont de ne pas utiliser de colle et d&rsquo;avoir un dos ouvert avec la couture apparente : les couvertures et les cahiers sont reli&eacute;s par une couture en forme de tresse.</p>\n<p>Elle permet une ouverture du livre &agrave; plat.</p>",
-          "picture": "https://www.reliurealamain.fr/wp-content/uploads/2018/04/Copte-marbr%C3%A9.jpg",
-          "pictureThumbnail": "https://www.reliurealamain.fr/wp-content/uploads/2018/04/Copte-marbr%C3%A9.jpg",
-          "materialType": "RELIURE",
+  materialsToCreate: CreateMaterial[] = [
+    {
+      name: "copte",
+      price: 7.85,
+      description: "<p>Cette reliure artisanale tient son nom des coptes, chrétiens d’Égypte...</p>",
+      materialType: "RELIURE",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
-      {
-          "name": "cousue ‘simple’",
-          "price": 3.80,
-          "description": "<p>Cette technique de reliure artisanale permet de relier &lsquo;simplement&rsquo; des ouvrages peu &eacute;pais et ne n&eacute;cessie pas de mat&eacute;riel professionnel. Les feuilles sont assembl&eacute;es en cahiers qui sont cousus entre eux le long de la tranche. Le dos du corps d&rsquo;ouvrage est coll&eacute; et est reli&eacute; &agrave; la couverture gr&acirc;ce au collage des pages de garde.</p>",
-          "picture": "https://i.pinimg.com/originals/97/e3/53/97e353825b7888020a83c652ce1ef216.jpg",
-          "pictureThumbnail": "https://i.pinimg.com/originals/97/e3/53/97e353825b7888020a83c652ce1ef216.jpg",
-          "materialType": "RELIURE",
+    },
+    {
+      name: "cousue ‘simple’",
+      price: 3.80,
+      description: "<p>Cette technique de reliure artisanale permet de relier...</p>",
+      materialType: "RELIURE",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
-      {
-          "name": "A5",
-          "price": 3.50,
-          "description": "<p>&nbsp;format A5 orientation paysage : environ 21,5 x 15 cm, &eacute;paisseur environ 3 cm.</p>",
-          "picture": "http://www.format-papier-a0-a1-a2-a3-a4-a5.fr/format-a5/surface-A5.jpg",
-          "pictureThumbnail": "http://www.format-papier-a0-a1-a2-a3-a4-a5.fr/format-a5/surface-A5.jpg",
-          "materialType": "PAPIER",
+    },
+    {
+      name: "A5",
+      price: 3.50,
+      description: "<p>&nbsp;format A5 orientation paysage : environ 21,5 x 15 cm...</p>",
+      materialType: "PAPIER",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
-      {
-          "name": "A4 portrait",
-          "price": 2.80,
-          "description": "<p>format A4 orientation portrait, environ 21,5 x 30 cm, &eacute;paisseur environ 3 cm.</p>",
-          "picture": "http://www.format-papier-a0-a1-a2-a3-a4-a5.fr/format-a4/format-a4.jpg",
-          "pictureThumbnail": "http://www.format-papier-a0-a1-a2-a3-a4-a5.fr/format-a4/format-a4.jpg",
-          "materialType": "PAPIER",
+    },
+    {
+      name: "A4 portrait",
+      price: 2.80,
+      description: "<p>format A4 orientation portrait, environ 21,5 x 30 cm...</p>",
+      materialType: "PAPIER",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
-      {
-          "name": "cartonné",
-          "price": 5.60,
-          "description": "<p>du joli carton</p>",
-          "picture": "http://pmco.com.mx/wp-content/uploads/2020/07/LAMINA-DE-CARTON.jpg",
-          "pictureThumbnail": "http://pmco.com.mx/wp-content/uploads/2020/07/LAMINA-DE-CARTON.jpg",
-          "materialType": "COUVERTURE",
+    },
+    {
+      name: "cartonné",
+      price: 5.60,
+      description: "<p>du joli carton</p>",
+      materialType: "COUVERTURE",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
-      {
-          "name": "recyclé",
-          "price": 4.50,
-          "description": "<p>superbe papier recycl&eacute;</p>",
-          "picture": "http://www.purplejumble.com/wp-content/uploads/2021/09/66D25212-E768-4C38-A0F7-939FC59FFF9A.jpeg",
-          "pictureThumbnail": "http://www.purplejumble.com/wp-content/uploads/2021/09/66D25212-E768-4C38-A0F7-939FC59FFF9A.jpeg",
-          "materialType": "COUVERTURE",
+    },
+    {
+      name: "recyclé",
+      price: 4.50,
+      description: "<p>superbe papier recyclé</p>",
+      materialType: "COUVERTURE",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
-      {
-          "name": "japonaise",
-          "price": 8.95,
-          "description": "<p>Cette technique de reliure artisanale est h&eacute;rit&eacute;e des traditions japonaises. Les feuilles simples sont assembl&eacute;s entre les deux plats de couverture et sont cousus avec la couverture par une couture apparente. Ce type de reliure offre un r&eacute;sultat esth&eacute;tique mais avec une ouverture r&eacute;duite.</p>",
-          "picture": "https://www.sayonneara.fr/wp-content/uploads/2019/02/thumbnail_reliure-japonaise.jpg",
-          "pictureThumbnail": "https://www.sayonneara.fr/wp-content/uploads/2019/02/thumbnail_reliure-japonaise.jpg",
-          "materialType": "RELIURE",
+    },
+    {
+      name: "japonaise",
+      price: 8.95,
+      description: "<p>Cette technique de reliure artisanale est héritée des traditions...</p>",
+      materialType: "RELIURE",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
-      {
-          "name": "dos brisé ou ficelle passée",
-          "price": 5.99,
-          "description": "<p>C&rsquo;est la reliure traditionnelle, n&eacute;cessitant un savoir faire et&nbsp; de nombreuses op&eacute;rations.<br>Dans cette reliure artisanale, le dos du livre est ind&eacute;pendant des pages, c&rsquo;est &agrave; dire que seules les pages de garde sont coll&eacute;es &agrave; la couverture, une ficelle ou un ruban assure la solidit&eacute; du collage entre le coprs d&rsquo;ouvrage et la couverture. Le dos est souvent courb&eacute; afin de permettre une amplitude d&rsquo;ouverture du livre.</p>\n<p>Les reliures pr&eacute;sent&eacute;es par la suite ne demande pas de mat&eacute;riel de professionnel</p>",
-          "picture": "https://www.plumetismagazine.net/medias/2015/12/couture_3-690x370.jpg",
-          "pictureThumbnail": "https://www.plumetismagazine.net/medias/2015/12/couture_3-690x370.jpg",
-          "materialType": "RELIURE",
+    },
+    {
+      name: "dos brisé ou ficelle passée",
+      price: 5.99,
+      description: "<p>C’est la reliure traditionnelle, nécessitant un savoir-faire...</p>",
+      materialType: "RELIURE",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
       },
-      {
-          "name": "cuir",
-          "price": 9.99,
-          "description": "<p>peau de vache morte</p>",
-          "picture": "https://cdn.shopify.com/s/files/1/2574/6280/products/image_6ddedc23-d3e7-4c7f-b995-3307b9d3e79d.jpg?v=1570187484",
-          "pictureThumbnail": "https://cdn.shopify.com/s/files/1/2574/6280/products/image_6ddedc23-d3e7-4c7f-b995-3307b9d3e79d.jpg?v=1570187484",
-          "materialType": "COUVERTURE",
-      }
-  ]
+    },
+    {
+      name: "cuir",
+      price: 9.99,
+      description: "<p>peau de vache morte</p>",
+      materialType: "COUVERTURE",
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
+    }
+  ];
 
-  productsToCreate = [
+  // Liste des images pour materials
+  materialsImages: ImageDefault[] = [
+    {
+      url: "https://i.ibb.co/3vJ5mRK/Copte-marbr.jpg",
+      fileName: "Copte-marbre.jpg",
+    },
+    {
+      url: "https://i.ibb.co/19TXPmW/97e353825b7888020a83c652ce1ef216.jpg",
+      fileName: "97e353825b7888020a83c652ce1ef216.jpg",
+    },
+    {
+      url: "https://i.ibb.co/SBv8x2K/surface-A5.jpg",
+      fileName: "surface-A5.jpg",
+    },
+    {
+      url: "https://i.ibb.co/nLWyHJ4/format-a4.jpg",
+      fileName: "format-a4.jpg",
+    },
+    {
+      url: "https://i.ibb.co/pKsZGpR/LAMINA-DE-CARTON.jpg",
+      fileName: "LAMINA-DE-CARTON.jpg",
+    },
+    {
+      url: "https://i.ibb.co/19TXPmW/97e353825b7888020a83c652ce1ef216.jpg",
+      fileName: "66D25212-E768-4C38-A0F7-939FC59FFF9A.jpeg",
+    },
+    {
+      url: "https://i.ibb.co/4R7vckp/thumbnail-reliure-japonaise.jpg",
+      fileName: "thumbnail_reliure-japonaise.jpg",
+    },
+    {
+      url: "https://i.ibb.co/2yB01MV/couture-3-690x370.jpg",
+      fileName: "couture_3-690x370.jpg",
+    },
+    {
+      url: "https://i.ibb.co/Pc20L1D/image-6ddedc23-d3e7-4c7f-b995-3307b9d3e79d.webp",
+      fileName: "image_6ddedc23-d3e7-4c7f-b995-3307b9d3e79d.jpg",
+    }
+  ];
+
+  productsToCreate: Omit<CreateProduct, 'categoryDto' | 'collectionDto'>[] = [
     {
       name : 'le végétal',
-      introduction : `Une immersion dans la nature à chaque page. Teintes vertes apaisantes évoquent les feuillages luxuriants. Fait main avec un engagement écologique, chaque carnet offre un espace pour vos pensées créatives. Inspiré par la nature, ce carnet biodégradable vous encourage à cultiver vos idées tout en préservant notre environnement, page après page.`,
-      price : 1.50,
-      secondaryPictures : [],
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
+      secondaryPicturesDto: [
+        {
+          slug: "",
+          fileName: "",
+          fileData: ""
+        }
+      ],
+      introduction: `Une immersion dans la nature à chaque page. Teintes vertes apaisantes évoquent les feuillages luxuriants. Fait main avec un engagement écologique, chaque carnet offre un espace pour vos pensées créatives. Inspiré par la nature, ce carnet biodégradable vous encourage à cultiver vos idées tout en préservant notre environnement, page après page.`,
+      price: 1.50,
       description : `une célébration de la nature et de la durabilité. Sa couverture, réalisée à la main à partir de matériaux écologiques, reflète la richesse de la vie végétale avec des motifs floraux délicats et des teintes organiques. Chaque détail est une ode à la beauté naturelle, mettant en lumière la diversité des plantes qui peuplent notre planète. À l'intérieur, les pages en papier recyclé offrent une toile respectueuse de l'environnement pour capturer les pensées, les croquis ou les notes. La texture douce du papier invite à l'exploration créative, tandis que des empreintes végétales subtiles rappellent le lien intrinsèque entre l'homme et la nature. Des illustrations botaniques exquises et des motifs inspirés par la flore mondiale parsèment les pages, créant une expérience immersive au cœur du règne végétal. Des nuances de vert apaisantes et des touches de couleur inspirées des plantes ajoutent une dimension artistique, faisant de chaque page un jardin miniature. Le carnet artisanal bio végétal incarne l'éthique d'une fabrication respectueuse de l'environnement, soulignant l'importance de préserver la biodiversité. En choisissant ce carnet, vous optez pour un compagnon d'écriture qui capture l'énergie vivifiante de la nature, tout en soutenant des pratiques responsables pour une planète plus verte.`,
       materialsDto : [],
       productType: "CARNETS"
@@ -706,7 +997,18 @@ export class AddDataSqlService {
       name : 'le braise',
       introduction : `Une odyssée enflammée à chaque écriture. Les teintes chaudes évoquent les flammes dansantes. Réalisé à la main avec passion, chaque page offre un espace pour vos pensées ardentes. Inspiré par le feu, ce carnet biodégradable vous invite à graver vos idées tout en préservant notre planète, chaque mot s'embrasant sur ses pages.`,
       price : 12.50,
-      secondaryPictures : [],
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
+      secondaryPicturesDto: [
+        {
+          slug: "",
+          fileName: "",
+          fileData: ""
+        }
+      ],
       description : `évoque la puissance primitive et réconfortante du feu. Sa couverture, méticuleusement conçue à la main à partir de matériaux écologiques, reflète la lueur chaleureuse des braises avec des nuances de rouge, d'orange et de noir. Les motifs captivent l'esprit, évoquant le mouvement hypnotique des flammes dansantes. À l'intérieur, les pages en papier recyclé révèlent une toile résistante mais délicate, prête à accueillir les pensées ardentes et les idées passionnées. Chaque feuille semble prête à s'embraser, créant une toile où l'expression artistique ou l'écriture prend vie de manière flamboyante. Des illustrations captivantes de flammes tourbillonnantes et de braises incandescentes animent les pages, évoquant la vitalité et la force du feu. Des teintes de rouge, d'or et de noir créent un contraste saisissant, tandis que des détails subtils rappellent la ferveur de l'élément feu. Le carnet artisanal bio sur le thème de la braise et du feu symbolise la passion et la créativité brûlante. En choisissant ce carnet, vous emportez avec vous non seulement un objet artisanal magnifiquement conçu, mais aussi un rappel de la force inspiratrice du feu qui a captivé l'humanité depuis ses débuts.`,
       materialsDto : [],
       productType: "CARNETS"
@@ -715,7 +1017,18 @@ export class AddDataSqlService {
       name: `Le Trésor de l'Océan`,
       introduction: `Une plongée envoûtante dans les profondeurs marines. Ce carnet artisanal bio, teinté des nuances apaisantes du bleu océan, est créé à la main avec un profond respect pour l'environnement. Chaque page vous offre une toile pour vos pensées créatives, tandis que les motifs inspirés de la mer vous invitent à explorer votre propre océan d'idées.`,
       price: 11.90,
-      secondaryPictures : [],
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
+      secondaryPicturesDto: [
+        {
+          slug: "",
+          fileName: "",
+          fileData: ""
+        }
+      ],
       description: `La couverture, élaborée avec des matériaux écologiques, capture la beauté mystérieuse des fonds marins. Des motifs marins tels que les vagues, les coquillages et les étoiles de mer ornent la couverture, évoquant la richesse et la diversité de la vie sous-marine. Les pages du carnet révèlent un papier recyclé de haute qualité, offrant une surface lisse pour exprimer vos pensées et créations. Chaque feuille devient une fenêtre vers l'océan, avec des détails subtils tels que des reflets irisés ou des empreintes d'algues marines. Des illustrations délicates d'animaux marins et des citations inspirantes bordent les pages, créant une atmosphère empreinte de calme et de contemplation. Ce carnet est plus qu'un simple objet, c'est une invitation à plonger dans les profondeurs de votre imagination. Chaque carnet artisanal bio "Le Trésor de l'Océan" incarne l'engagement envers la préservation des océans et rappelle la beauté fragile de notre écosystème marin. En choisissant ce carnet, vous soutenez la protection des mers et des créatures qui les habitent.`,
       materialsDto : [],
       productType: "CARNETS"
@@ -724,7 +1037,18 @@ export class AddDataSqlService {
       name: 'Le Jardin Enchanté',
       introduction: `Un carnet féerique où chaque page est une invitation à explorer un jardin magique. Les teintes pastel et les motifs floraux délicats créent une ambiance enchanteresse. Fabriqué à la main avec un engagement écologique, ce carnet biodégradable offre un espace créatif pour cultiver vos idées et laisser fleurir votre imagination.`,
       price: 10.50,
-      secondaryPictures : [],
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
+      secondaryPicturesDto: [
+        {
+          slug: "",
+          fileName: "",
+          fileData: ""
+        }
+      ],
       description: `La couverture, ornée de motifs floraux et de papillons, transporte le regard dans un monde féerique. Réalisée avec des matériaux respectueux de l'environnement, elle incarne la beauté naturelle et éphémère d'un jardin enchanté. Les pages en papier recyclé offrent une toile douce et texturée pour vos écrits et croquis. Les détails délicats, tels que des empreintes de pétales et des motifs végétaux, ajoutent une touche de magie à chaque page, invitant à la rêverie. Des illustrations de fées, d'oiseaux chanteurs et de fleurs fantastiques parsèment le carnet, créant une atmosphère poétique. Les citations inspirantes vous guident dans ce voyage enchanteur, où chaque idée peut prendre racine et s'épanouir comme une fleur magique. Choisir le carnet "Le Jardin Enchanté", c'est inviter la magie dans votre quotidien tout en affirmant votre engagement envers des pratiques respectueuses de la nature. Ce carnet est une passerelle vers un monde où la créativité et la nature fusionnent harmonieusement.`,
       materialsDto : [],
       productType: "CARNETS"
@@ -733,7 +1057,18 @@ export class AddDataSqlService {
       name: 'Le Cosmos Mystique',
       introduction: `Explorez l'infini avec le carnet "Le Cosmos Mystique". Sa couverture constellée et ses pages noires invitent à l'exploration cosmique. Chaque feuille devient une étoile où vos pensées brillent comme des galaxies lointaines. Un carnet biodégradable pour ceux qui rêvent au-delà des limites.`,
       price: 14.90,
-      secondaryPictures : [],
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
+      secondaryPicturesDto: [
+        {
+          slug: "",
+          fileName: "",
+          fileData: ""
+        }
+      ],
       description: `La couverture noire profonde, ornée d'étoiles scintillantes, capture la majesté de l'univers. Chaque page est un voyage stellaire, avec des détails subtils tels que des constellations discrètes et des bords galactiques. Les pages noires offrent un contraste saisissant pour l'écriture ou le dessin blanc. Les illustrations de planètes lointaines et de nébuleuses époustouflantes parsèment le carnet, créant une expérience immersive dans le cosmos. Inspiré par la magie de l'espace infini, ce carnet incite à la réflexion profonde et à l'exploration créative. Choisir ce carnet, c'est embrasser l'inconnu avec chaque ligne tracée.`,
       materialsDto : [],
       productType: "CARNETS"
@@ -742,7 +1077,18 @@ export class AddDataSqlService {
       name: 'Le Voyageur Temporel',
       introduction: `Plongez dans les méandres du temps avec le carnet "Le Voyageur Temporel". Sa couverture énigmatique, inspirée par les engrenages du temps, vous invite à explorer des époques lointaines. Chaque page devient une chronique où vos pensées transcendent les limites du présent.`,
       price: 16.50,
-      secondaryPictures : [],
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
+      secondaryPicturesDto: [
+        {
+          slug: "",
+          fileName: "",
+          fileData: ""
+        }
+      ],
       description: `La couverture en cuir vieilli, ornée de motifs d'engrenages et de symboles mystérieux, évoque l'atmosphère d'une machine temporelle. Chaque détail invite à l'aventure dans les époques passées et futures. Les pages écrues, au grain délicat, sont une toile pour capturer vos pensées et visions temporelles. Des marques subtiles, telles que des empreintes d'horloges anciennes, ajoutent une dimension artistique et rappellent le passage du temps. Des illustrations évoquant différentes époques et des citations philosophiques jalonnent les pages, créant une expérience d'écriture qui transcende le présent. Choisir ce carnet, c'est entreprendre un voyage intemporel à chaque ligne.`,
       materialsDto : [],
       productType: "CARNETS"
@@ -751,24 +1097,62 @@ export class AddDataSqlService {
       name: 'La Forêt Enchantée',
       introduction: `Plongez dans la magie de "La Forêt Enchantée", un carnet où les mystères de la nature s'entrelacent avec des histoires enchantées. La couverture, ornée de motifs floraux et d'animaux mystiques, invite à explorer un royaume féerique à chaque page.`,
       price: 13.90,
-      secondaryPictures : [],
+      pictureDto: {
+        slug: "",
+        fileName: "",
+        fileData: ""
+      },
+      secondaryPicturesDto: [
+        {
+          slug: "",
+          fileName: "",
+          fileData: ""
+        }
+      ],
       description: `La couverture, faite à la main avec du cuir végétalien, évoque la texture douce de l'écorce des arbres enchantés. Des détails tels que des fées dansantes et des animaux fantastiques ajoutent une touche de magie à chaque regard. Les pages, en papier recyclé et durable, offrent une toile naturelle pour vos idées créatives. Des empreintes délicates de feuilles et des motifs végétaux créent une expérience immersive, transportant chaque utilisateur au cœur de la forêt enchantée. Des illustrations évoquant des créatures mystiques et des citations inspirantes de la nature parsèment les pages, créant une atmosphère de calme et de rêverie. Choisir ce carnet, c'est s'immerger dans un monde où la magie de la forêt se mêle à l'expression artistique.`,
       materialsDto : [],
       productType: "CARNETS"
     },
   ]
 
-  secondaryPictures : string[] =[
-    "https://pliereliure.com/1272-large_default/carnet-artisanal-livre-artiste-a5-papier-fait-main.jpg",
-    "https://pliereliure.com/550-large_default/carnet-couture-belge-nature.jpg",
-    "https://pliereliure.com/333-large_default/carnet-artisanal-de-notes-avec-petit-message.jpg",
-    "https://media.cdnws.com/_i/259334/1051/2842/51/carnet-cuir-5.jpeg",
-    "https://pliereliure.com/img/cms/30-12.jpg",
-    "https://bluevertsoul.fr/wp-content/uploads/2023/07/Bluevert-Soul-carnet-creatif-carnet-aqaurelle-format-A6-couleur-bleue-motif-colibri-papier-100-coton-32-pages-reliure-dos-exposee-carnet-artisanal-jardin-creatif-booster-sa-creativite-scaled.jpg",
-    "https://www.skinproject.fr/2610-large_default/carnet-en-cuir-a-crochet-figuratif.jpg",
-    "https://millastudio.fr/wp-content/uploads/2022/02/20220207_162149-scaled.jpg",
-    "https://les-ames-papier.com/wp-content/uploads/2019/06/crisscross-225x300.jpg"
-  ]
+  secondaryPictures: ImageDefault[] = [
+    {
+      url: "https://i.ibb.co/kX3hbYV/carnet-artisanal-livre-artiste-a5-papier-fait-main.jpg",
+      fileName: "carnet-artisanal-livre-artiste-a5-papier-fait-main.jpg",
+    },
+    {
+      url: "https://i.ibb.co/RTypXqv/carnet-couture-belge-nature.jpg",
+      fileName: "carnet-couture-belge-nature.jpg",
+    },
+    {
+      url: "https://i.ibb.co/RTypXqv/carnet-couture-belge-nature.jpg",
+      fileName: "carnet-artisanal-de-notes-avec-petit-message.jpg",
+    },
+    {
+      url: "https://i.ibb.co/WtRzkQg/carnet-cuir-5.jpg",
+      fileName: "carnet-cuir-5.jpeg",
+    },
+    {
+      url: "https://i.ibb.co/dD9nryB/30-12.jpg",
+      fileName: "30-12.jpg",
+    },
+    {
+      url: "https://i.ibb.co/KGL6ksL/Bluevert-Soul-carnet-creatif-carnet-aqaurelle-format-A6-couleur-bleue-motif-colibri-papier-100-coton.webp",
+      fileName: "Bluevert-Soul-carnet-creatif-carnet-aqaurelle-format-A6-couleur-bleue-motif-colibri-papier-100-coton-32-pages-reliure-dos-exposee-carnet-artisanal-jardin-creatif-booster-sa-creativite-scaled.jpg",
+    },
+    {
+      url: "https://i.ibb.co/VYPs7Cy/carnet-en-cuir-a-crochet-figuratif.jpg",
+      fileName: "carnet-en-cuir-a-crochet-figuratif.jpg",
+    },
+    {
+      url: "https://i.ibb.co/VDrr17c/20220207-162149-scaled.jpg",
+      fileName: "20220207_162149-scaled.jpg",
+    },
+    {
+      url: "https://i.ibb.co/ftHp6Xq/crisscross-225x300.jpg",
+      fileName: "crisscross-225x300.jpg",
+    }
+  ];
 
   giftCardsToCreate: CreateGiftCard[] = [
     {
@@ -1023,23 +1407,4 @@ export class AddDataSqlService {
       title: "Carnet endommagé et mauvaise qualité"
     }
   ];
-
-  async urlToFile(url: string, filename: string): Promise<FileDto> {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const reader = new FileReader();
-
-    return new Promise((resolve, reject) => {
-      reader.onloadend = () => {
-        const base64String = (reader.result as string).split(',')[1];
-        resolve({
-          slug: "",
-          fileData: base64String,
-          fileName: filename
-        });
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  }
 }

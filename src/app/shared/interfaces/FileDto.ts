@@ -3,3 +3,8 @@ export interface FileDto {
   fileName: string,
   fileData: string
 }
+
+export interface ImageDefault {
+  url: string;
+  fileName: string;
+}

@@ -1,9 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { FileUploadService } from '../../../shared/services/file-upload.service';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { CreateWorkshop } from '../../../shared/interfaces/Workshop';
 import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
-import { urlValidator } from '../../../shared/validators/urlValidators';
 import { priceValidator } from '../../../shared/validators/priceValidators';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
@@ -12,6 +10,8 @@ import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
 import {AdminWorkshopSignalService} from "../../../shared/services/admin-workshop-signal.service";
 import {FormHelperService} from "../../../shared/services/form-helper.service";
 import {BaseComponent} from "../../../../../base.component";
+import {FileService} from "../../../../../shared/services/file.service";
+import {AnguilleSignalService} from "../../../../../shared/services/anguille-signal.service";
 
 @Component({
   selector: 'app-post-workshop',
@@ -23,14 +23,12 @@ import {BaseComponent} from "../../../../../base.component";
 
 export class PostWorkshopComponent extends BaseComponent implements OnInit {
 
-  private formBuilder: FormBuilder = inject(FormBuilder);
-  private formHelper: FormHelperService = inject(FormHelperService);
-  private adminWorkshopSignal: AdminWorkshopSignalService = inject(AdminWorkshopSignalService);
-  apiBanService: ApiBanService = inject(ApiBanService);
-  fileUploadService: FileUploadService = inject(FileUploadService);
-
-  isFormVisible: boolean = false;
-  isFormSubmit: boolean = false;
+  private formBuilder = inject(FormBuilder);
+  private adminWorkshopSignal = inject(AdminWorkshopSignalService);
+  private anguilleSignal = inject(AnguilleSignalService);
+  apiBanService = inject(ApiBanService);
+  fileService = inject(FileService);
+  formHelper = inject(FormHelperService);
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
 
@@ -40,17 +38,21 @@ export class PostWorkshopComponent extends BaseComponent implements OnInit {
     date: ['', [Validators.required]],
     address: ['', [Validators.required]],
     price: ['', [Validators.required, priceValidator()]],
-    picture: ['', [Validators.required, urlValidator()]],
-    pictureThumbnail: ['', [Validators.required, urlValidator()]],
+    pictureDto: ['', [Validators.required]],
     registrations: ['', [Validators.required]],
   });
 
   ngOnInit(): void {
-    this.fileUploadService.patchImage(this.newWorkshopForm, this.fileUploadService.imageActivityDefault, this.fileUploadService.imageActivityDefaultThumbnail)
+    this.patchImageDefault();
   }
 
-  onFileSelected(event: Event, form: FormGroup): void {
-    this.fileUploadService.onFileSelected(event, form).subscribe();
+  private patchImageDefault(): void {
+    this.subscriptions.push(
+      this.fileService.patchImage(this.fileService.imageWorkshopDefault).subscribe({
+        next: (fileDto) => this.newWorkshopForm.get('pictureDto')!.setValue(fileDto.fileName),
+        error: (err) => this.anguilleSignal.changeMessage("Erreur lors de la récupération de l'image par défaut"),
+      })
+    )
   }
 
   onAddressClicked(addressClicked: string): void {
@@ -58,20 +60,12 @@ export class PostWorkshopComponent extends BaseComponent implements OnInit {
   }
 
   submitNewWorkshopForm(): void {
-
-    this.isFormSubmit = true;
-
+    this.formHelper.isFormSubmit = true;
     if (this.newWorkshopForm.valid) {
-      const CREATED_WORKSHOP: CreateWorkshop = this.formHelper.formatFormToDto<CreateWorkshop>(this.newWorkshopForm)
+      const CREATED_WORKSHOP: CreateWorkshop = this.formHelper.formatFormWithMainPicture<CreateWorkshop>(this.newWorkshopForm, this.fileService.picture!)
       this.adminWorkshopSignal.post(CREATED_WORKSHOP);
-      this.resetAllValues();
+      this.formHelper.resetAllValues(this.newWorkshopForm);
+      this.patchImageDefault();
     }
-  }
-
-  resetAllValues(): void {
-    this.isFormSubmit = false;
-    this.isFormVisible = false;
-    this.newWorkshopForm.reset();
-    this.fileUploadService.patchImage(this.newWorkshopForm, this.fileUploadService.imageActivityDefault, this.fileUploadService.imageActivityDefaultThumbnail)
   }
 }

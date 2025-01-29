@@ -15,6 +15,7 @@ import {FormHelperService} from "../../../modules/admin/shared/services/form-hel
 import {DataSignalService} from "../../../shared/services/data-signal.service";
 import {WorkshopDisponibilities} from "../../../modules/admin/shared/interfaces/Workshop";
 import {CustomCurrencyPipe} from "../../../shared/services/pipes/custom-currency.pipe";
+import {FileService} from "../../../shared/services/file.service";
 
 @Component({
   standalone: true,
@@ -27,14 +28,14 @@ import {CustomCurrencyPipe} from "../../../shared/services/pipes/custom-currency
             @import "../../../scss/buttons.scss";
 
             .workshop-content,
-            .workshop-resgistrations-free,
+            .workshop-registrations-free,
             .btn-normal,
             .total-price,
             .price-per-person {
               margin-top: $normal-margin;
             }
 
-            .workshop-resgistrations-free {
+            .workshop-registrations-free {
               font-weight: bold;
             }
 
@@ -51,6 +52,7 @@ export class WorkshopSelectedComponent extends BaseComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private formHelper = inject(FormHelperService);
   private route = inject(ActivatedRoute);
+  fileService = inject(FileService);
   readonly maxInscriptions = 5;
 
   currentWorkshop!: WorkshopDto | null;

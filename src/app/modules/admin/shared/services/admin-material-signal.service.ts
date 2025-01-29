@@ -73,12 +73,12 @@ export class AdminMaterialSignalService extends  BaseComponent {
 
           this.subscriptions.push(
             this.modalSignal.showModal(MESSAGE, false).subscribe({
-              next: () => this.router.navigate(['/admin/gestion-des-materiaux']),
-              error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+              next: () => this.router.navigate(['/admin/gestion/materiaux']),
+              error: (err) => this.anguilleSignal.changeMessage(err.error.message)
             })
           )
         },
-        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+        error: (err) => this.anguilleSignal.changeMessage(err.error.message)
       })
     )
   }

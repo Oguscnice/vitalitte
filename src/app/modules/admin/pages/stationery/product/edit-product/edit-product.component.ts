@@ -1,20 +1,18 @@
 import {Component, Signal, inject, OnInit} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { FileUploadService } from '../../../../shared/services/file-upload.service';
 import { ProductDto } from '../../../../../../shared/interfaces/Product';
 import { MaterialDto } from '../../../../../../shared/interfaces/Material';
-import { urlValidator } from '../../../../shared/validators/urlValidators';
 import { priceValidator } from '../../../../shared/validators/priceValidators';
 import { CategoryDto } from '../../../../../../shared/interfaces/Category';
 import { CollectionDto } from '../../../../../../shared/interfaces/Collection';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../../../shared/variables/Other';
 import { FormHelperService } from '../../../../shared/services/form-helper.service';
 import { DataSignalService } from '../../../../../../shared/services/data-signal.service';
-import { SecondaryPictureDto } from '../../../../../../shared/interfaces/SecondaryPicture';
 import { AdminProductSignalService } from '../../../../shared/services/admin-product-signal.service';
-import { FileInfo } from '../../../../shared/interfaces/FileInfo';
 import {BaseComponent} from "../../../../../../base.component";
+import {FileService} from "../../../../../../shared/services/file.service";
+import {FileDto} from "../../../../../../shared/interfaces/FileDto";
 
 @Component({
   standalone: false,
@@ -29,7 +27,7 @@ export class EditProductComponent extends BaseComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   formHelper = inject(FormHelperService);
-  fileUploadService = inject(FileUploadService);
+  fileService = inject(FileService);
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR;
 
@@ -37,19 +35,15 @@ export class EditProductComponent extends BaseComponent implements OnInit {
   categories: Signal<CategoryDto[]> = this.dataSignal.$categories;
   collections: Signal<CollectionDto[]> = this.dataSignal.$collections;
   currentMaterials: MaterialDto[] | null = [];
-  currentSecondaryPictures: SecondaryPictureDto[] | null = [];
 
   isCategoryDropdownOpen : boolean = false;
   isCollectionDropdownOpen : boolean = false;
   isMaterialsDropdownOpen : boolean = false;
 
-  isFormSubmit : boolean = false;
-
   editProductForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
     slug: ['', [Validators.required]],
-    picture: ['', [Validators.required, urlValidator()]],
-    pictureThumbnail: ['', [Validators.required, urlValidator()]],
+    pictureDto: ['', [Validators.required]],
     introduction: ['', [Validators.required, Validators.maxLength(65534)]],
     price: ['', [priceValidator()]],
     description: ['', [Validators.required, Validators.maxLength(65534)]],
@@ -61,8 +55,7 @@ export class EditProductComponent extends BaseComponent implements OnInit {
   });
 
   newSecondaryPictureForm = this.formBuilder.group({
-    picture: [''],
-    pictureThumbnail: [''],
+    pictureDto: [null]
   });
 
   ngOnInit(): void {
@@ -73,7 +66,7 @@ export class EditProductComponent extends BaseComponent implements OnInit {
     this.subscribeToProductBySlugSignal();
   }
 
-  subscribeToProductBySlugSignal(): void {
+  private subscribeToProductBySlugSignal(): void {
     this.subscriptions.push(
       this.dataSignal.$productDtoBySlug.subscribe(
       (productDto) => {
@@ -94,33 +87,20 @@ export class EditProductComponent extends BaseComponent implements OnInit {
     this.editProductForm.get('price')!.setValue(productDto.price.toString());
     this.editProductForm.get('introduction')!.setValue(productDto.introduction);
     this.editProductForm.get('description')!.setValue(productDto.description);
-    this.editProductForm.get('picture')!.setValue(productDto.picture);
-    this.editProductForm.get('pictureThumbnail')!.setValue(productDto.pictureThumbnail);
+    this.editProductForm.get('pictureDto')!.setValue(productDto.pictureDto.fileName);
     this.editProductForm.get('categoryDto')!.setValue(this.formHelper.jsonStringify<CategoryDto>(productDto.categoryDto));
     this.editProductForm.get('collectionDto')!.setValue(this.formHelper.jsonStringify<CollectionDto>(productDto.collectionDto));
     this.editProductForm.get('materialsDto')!.setValue(this.formHelper.jsonStringify<MaterialDto[]>(productDto.materialsDto));
-    this.editProductForm.get('secondaryPicturesDto')!.setValue(this.formHelper.jsonStringify<SecondaryPictureDto[]>(productDto.secondaryPicturesDto));
+    this.editProductForm.get('secondaryPicturesDto')!.setValue(this.formHelper.jsonStringify<FileDto[]>(productDto.secondaryPicturesDto));
     this.editProductForm.get('productType')!.setValue(productDto.productType)
     this.currentMaterials = productDto.materialsDto;
-    this.currentSecondaryPictures = productDto.secondaryPicturesDto;
+    this.fileService.picture = productDto.pictureDto;
+    this.fileService.secondaryPictures = productDto.secondaryPicturesDto;
   }
 
-  addOrDeleteSecondaryPicture(secondaryPicture: SecondaryPictureDto): void {
-
-    let currentSecondaryPictures: SecondaryPictureDto[] | '' = this.formHelper.jsonParse<SecondaryPictureDto[]>(this.editProductForm.get('secondaryPicturesDto')!.value) as SecondaryPictureDto[];
-
-    if (!currentSecondaryPictures) {
-      currentSecondaryPictures = [];
-    }
-
-    if (!currentSecondaryPictures.some(url => url.picture === secondaryPicture.picture)) {
-      currentSecondaryPictures.push(secondaryPicture)
-    } else {
-      currentSecondaryPictures = currentSecondaryPictures.filter(item => item.picture !== secondaryPicture.picture);
-    }
-
-    this.currentSecondaryPictures = currentSecondaryPictures.length < 1 ? null : currentSecondaryPictures
-    this.editProductForm.get('secondaryPicturesDto')!.setValue(this.formHelper.jsonStringify(currentSecondaryPictures));
+  addOrDeleteSecondaryPicture(secondaryPicture: FileDto): void {
+    this.fileService.addOrDeleteSecondaryPicture(secondaryPicture);
+    this.editProductForm.get('secondaryPicturesDto')!.setValue(this.formHelper.jsonStringify(this.fileService.secondaryPictures));
   }
 
   addOrDeleteMateriel(materialClicked : MaterialDto): void {
@@ -150,7 +130,6 @@ export class EditProductComponent extends BaseComponent implements OnInit {
   }
 
   totalPriceMaterials(): number {
-
     if (this.currentMaterials && this.currentMaterials.length > 0) {
       let sum = 0;
       for(const MATERIAL of this.currentMaterials){
@@ -165,26 +144,14 @@ export class EditProductComponent extends BaseComponent implements OnInit {
     this.formHelper.onValueSelected<CategoryDto | CollectionDto>(value, control, this.editProductForm);
   }
 
-  onFileSelected(event: Event, form: 'editProductForm' | 'newSecondaryPictureForm'): void {
-
-    const FORM_GROUP = this[form];
-
-    this.fileUploadService.onFileSelected(event, FORM_GROUP).subscribe((fileInfo: FileInfo | null) => {
-          if (form === 'newSecondaryPictureForm' && fileInfo) {
-            this.addOrDeleteSecondaryPicture(FORM_GROUP.value as SecondaryPictureDto);
-            FORM_GROUP.reset();
-          }
-        });
-    }
-
   submitEditProductForm(): void {
 
-    this.isFormSubmit = true
+    this.formHelper.isFormSubmit = true
 
     if (this.editProductForm.valid) {
-      const EDITED_PRODUCT: ProductDto = this.formHelper.formatFormToProductDto<ProductDto>(this.editProductForm);
+      const EDITED_PRODUCT: ProductDto = this.formHelper.formatFormToProductDto<ProductDto>(this.editProductForm, this.fileService.picture!, this.fileService.secondaryPictures!);
       this.adminProductSignal.put(EDITED_PRODUCT);
-      this.isFormSubmit = false;
+      this.formHelper.resetAllValues(this.editProductForm);
     }
   }
 }

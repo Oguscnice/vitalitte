@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import { Menu } from 'src/app/shared/interfaces/Menu';
 import { NAVBAR_ADMIN } from '../../shared/variables/Navbar';
 
@@ -32,5 +32,6 @@ import { NAVBAR_ADMIN } from '../../shared/variables/Navbar';
           `]
 })
 export class AdminHomeComponent {
+
   navbarAdmin : Menu[] = NAVBAR_ADMIN
 }

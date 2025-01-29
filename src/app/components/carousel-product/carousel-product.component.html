@@ -1,15 +1,15 @@
 <div class="carousel" aria-label="Gallery">
-  <img src="{{ urlPictureDisplay }}" alt="image du carnet">
+  <img src="{{ fileService.getDataForImageSrc(pictureDtoDisplay!) }}" alt="image principale du produit">
   <div class="buttons-image width100 flex center space-between">
     <img class="img-circle"
-         [ngClass]="{'active' : isPictureDisplay(product.picture)}"
-         src="{{ product.pictureThumbnail }}" alt="image secondaire du carnet"
-         (click)="selectPicture(product.picture)">
+         [ngClass]="{'active' : isPictureDisplay(product.pictureDto)}"
+         src="{{ fileService.getDataForImageSrc(product.pictureDto) }}" alt="image principale du produit"
+         (click)="selectPicture(product.pictureDto)">
     @for (secondaryPicture of product.secondaryPicturesDto; track secondaryPicture) {
       <img class="img-circle"
-           [ngClass]="{'active' : isPictureDisplay(secondaryPicture.picture)}"
-           src="{{ secondaryPicture.pictureThumbnail }}" alt="image secondaire du carnet"
-           (click)="selectPicture(secondaryPicture.picture)">
+           [ngClass]="{'active' : isPictureDisplay(secondaryPicture)}"
+           src="{{ fileService.getDataForImageSrc(secondaryPicture) }}" alt="image secondaire du produit"
+           (click)="selectPicture(secondaryPicture)">
     }
   </div>
 </div>

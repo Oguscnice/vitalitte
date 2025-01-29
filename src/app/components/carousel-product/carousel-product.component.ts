@@ -1,7 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {ReviewThumbnailComponent} from "../review/review-thumbnail/review-thumbnail.component";
 import {NgClass} from "@angular/common";
 import {ProductDto} from "../../shared/interfaces/Product";
+import {FileService} from "../../shared/services/file.service";
+import {FileDto} from "../../shared/interfaces/FileDto";
 
 @Component({
   selector: 'app-carousel-product',
@@ -16,11 +18,12 @@ import {ProductDto} from "../../shared/interfaces/Product";
 export class CarouselProductComponent implements OnInit {
 
   @Input({ required : true}) product!: ProductDto;
-  urlPictureDisplay: string | null = null;
+  fileService = inject(FileService);
+  pictureDtoDisplay: FileDto | null = null;
 
   ngOnInit(): void {
     this.countImages();
-    this.selectPicture(this.product.picture);
+    this.selectPicture(this.product.pictureDto);
   }
 
   private countImages(): void {
@@ -38,11 +41,14 @@ export class CarouselProductComponent implements OnInit {
     );
   }
 
-  selectPicture(urlPicture: string): void {
-    this.urlPictureDisplay = urlPicture;
+  selectPicture(pictureDto: FileDto): void {
+    this.pictureDtoDisplay = pictureDto;
   }
 
-  isPictureDisplay(urlPicture: string): boolean {
-    return this.urlPictureDisplay === urlPicture;
+  isPictureDisplay(pictureDto: FileDto): boolean {
+    if (this.pictureDtoDisplay) {
+      return this.pictureDtoDisplay?.slug === pictureDto.slug;
+    }
+    return false;
   }
 }

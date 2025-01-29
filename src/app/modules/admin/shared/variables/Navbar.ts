@@ -48,20 +48,5 @@ export const NAVBAR_ADMIN_STATIONERY: Menu[] = [
       name: 'Matériaux',
       routerLink: '/admin/gestion/materiaux',
       submenu : null
-    },
-    {
-      name: 'Carnets',
-      routerLink: '/admin/gestion/carnets',
-      submenu : null
-    },
-    {
-      name: 'Cartes Portales',
-      routerLink: '/admin/gestion/cartes-postales',
-      submenu : null
-    },
-    {
-      name: 'Marque Pages',
-      routerLink: '/admin/gestion/marque-pages',
-      submenu : null
-    },
+    }
   ]

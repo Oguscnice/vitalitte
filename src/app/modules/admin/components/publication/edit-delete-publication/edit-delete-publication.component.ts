@@ -4,7 +4,6 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { AddEuroCurrencyPipe } from 'src/app/shared/services/pipes/add-euro-currency.pipe';
-import { urlValidator } from '../../../shared/validators/urlValidators';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
@@ -84,8 +83,14 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
       this.editPublicationForm.get('spotlighted')!.setValue(publication.spotlighted);
       this.editPublicationForm.get('createdAt')!.setValue(publication.createdAt);
       this.fileService.picture = publication.pictureDto;
+      setTimeout(() =>
+          document.getElementById('editPublication')!.scrollIntoView()
+        , 20)
     } else {
       this.editPublicationForm.reset();
+      setTimeout(() =>
+          document.getElementById('title')!.scrollIntoView()
+        , 20)
     }
   }
 
@@ -94,7 +99,7 @@ export class EditDeletePublicationComponent extends BaseComponent implements OnI
     this.formHelper.isFormSubmit = true
 
     if (this.editPublicationForm.valid) {
-      const EDITED_PUBLICATION: PublicationDto = this.formHelper.formatFormWithMainPicture(this.editPublicationForm, this.fileService.picture!);
+      const EDITED_PUBLICATION: PublicationDto = this.formHelper.formatFormWithMainPicture<PublicationDto>(this.editPublicationForm, this.fileService.picture!);
       this.adminPublicationSignal.put(EDITED_PUBLICATION);
       this.formHelper.resetAllValues(this.editPublicationForm);
     }

@@ -1,4 +1,4 @@
-@if(workshop) {
+@if (workshop) {
   <div class="workshop flex"
       [ngClass]="!workshop.available ? 'unavailable' : 'pointer'"
       [routerLink]="'/ateliers/' + workshop.slug">
@@ -7,13 +7,13 @@
       <p class="workshop-unavailable">INDISPONIBLE</p>
     </div>
   }
-  <img [src]="workshop.picture" alt="Photo de l'atelier + {{workshop.title}}">
+  <img [src]="fileService.getDataForImageSrc(workshop.pictureDto)" alt="Photo de l'atelier + {{ workshop.title }}">
   <div class="workshop-description flex column center">
     <h4 class="workshop-title"> {{ workshop.title }} </h4>
     <p class="workshop-address"> {{ workshop.date | date : 'dd/MM/yyyy à hh:MM' }} </p>
     <p class="workshop-address"> {{ workshop.address }} </p>
 
-    @if(workshop.available && isFutureDate(workshop.date)) {
+    @if (workshop.available && isFutureDate(workshop.date)) {
       <div class="flex space-between width80">
         @if (workshop.registrations - disponibility === 1) {
           <p class="registration flex center line-nowrap"> {{ workshop.registrations - disponibility }} place dispo.</p>

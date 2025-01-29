@@ -57,6 +57,7 @@ export class HeaderComponent extends BaseComponent implements OnInit, AfterViewC
 
   ngOnInit(): void {
     this.activePageService.getAllPaths();
+    this.dataSignal.verifyShoppingCartValidity();
     this.shoppingCart.setShoppingCart();
     this.environment = environment.production ? "prod" : environment.staging ? "staging" : "dev";
     this.createMenu();

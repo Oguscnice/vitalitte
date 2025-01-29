@@ -19,7 +19,6 @@ export class AdminWorkshopSignalService extends BaseComponent {
   private modalSignal = inject(ModalSignalService);
   private dataSignal = inject(DataSignalService);
   private apiWorkshopAdmin = inject(ApiWorkshopAdminService);
-  private paginationSignal = inject(PaginationSignalService);
   private router = inject(Router);
 
   private readonly state: AdminWorkshopSignalState = {
@@ -51,7 +50,7 @@ export class AdminWorkshopSignalService extends BaseComponent {
           const MESSAGE = `Materiel : ${editedWorkshop.title} mise à jour avec succès`;
           this.subscriptions.push(
             this.modalSignal.showModal(res.message, false).subscribe({
-              next: () => this.router.navigate(['/admin/gestion-des-ateliers']),
+              next: () => this.router.navigate(['/admin/gestion/ateliers']),
               error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
             })
           )

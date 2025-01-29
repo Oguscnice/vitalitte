@@ -4,7 +4,7 @@
     <div class="products-list flex center">
       @for (product of productsDto$(); track product; let index = $index) {
         <div class="product-container flex space-around">
-          <img src="{{ product.pictureThumbnail }}"
+          <img src="{{ fileService.getDataForImageSrc(product.pictureDto) }}"
                alt="Image du Carnet {{ product.name }}"
                [routerLink]="['/produits', product.slug]"
                class="pointer">
