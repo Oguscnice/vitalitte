@@ -14,11 +14,15 @@ import {AnguilleSignalService} from "../../../../../../shared/services/anguille-
 import {BaseComponent} from "../../../../../../base.component";
 
 @Component({
-  standalone: true,
   imports: [ NgClass, ReactiveFormsModule, TitleCasePipe, EditorModule, CounterZeroIfEmpty ],
   selector: 'app-post-material',
   templateUrl: './post-material.component.html',
-  styles: [` @import "../../../../scss/admin-general"; `]
+  styles: [`
+    @use "../../../../scss/admin-general.scss";
+    @use "../../../../scss/admin-button.scss";
+    @use "../../../../../../scss/forms.scss";
+    @use "../../../../../../scss/dropdowns.scss";
+  `]
 })
 export class PostMaterialComponent extends BaseComponent implements OnInit {
 

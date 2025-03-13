@@ -6,7 +6,7 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
 
 @Component({
   selector: 'app-modal-shopping-cart-list',
-  standalone: true,
+
   imports: [
     DatePipe,
     RouterLink,
@@ -14,8 +14,8 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
   ],
   templateUrl: './modal-shopping-cart-list.component.html',
   styles: [`
-    @import "../../scss/variables.scss";
-    @import "../../scss/buttons.scss";
+    @use "../../scss/variables.scss" as variablesScss;
+    @use "../../scss/buttons.scss";
 
     .shopping-cart-list-modal {
       position: fixed;
@@ -26,11 +26,11 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
       backdrop-filter: blur(5px);
 
       .shopping-cart-list {
-        @include outline-picture;
+        @include variablesScss.outline-picture;
         height: 80%;
         width: 80%;
-        background-color: $white;
-        padding: $triple-padding;
+        background-color: variablesScss.$white;
+        padding: variablesScss.$triple-padding;
 
         h4, h5, h6 {
           font-weight: bolder;
@@ -41,11 +41,11 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
           text-align: left;
         }
         h4, h5 {
-          font-size: $triple-font-size;
+          font-size: variablesScss.$triple-font-size;
         }
         h6 {
           font-weight: bold;
-          font-size: $double-font-size;
+          font-size: variablesScss.$double-font-size;
         }
 
         .shopping-cart-type-list {
@@ -55,7 +55,7 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
             .shopping-cart-item-quantity,
             .shopping-cart-item-price,
             .shopping-cart-item-per-quantity-price {
-              padding: $normal-padding 0 $normal-padding $normal-padding;
+              padding: variablesScss.$normal-padding 0 variablesScss.$normal-padding variablesScss.$normal-padding;
               white-space: nowrap;
             }
             .shopping-cart-item-title {
@@ -80,7 +80,7 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
     @media screen and (min-width: 768px) {
       .shopping-cart-list-modal {
         .shopping-cart-list {
-          max-width: $max-width-768px;
+          max-width: variablesScss.$max-width-768px;
         }
       }
     }

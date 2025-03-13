@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-google-reviews',
-  standalone: true,
+
   imports: [],
   templateUrl: './google-reviews.component.html',
   styleUrl: './google-reviews.component.scss'

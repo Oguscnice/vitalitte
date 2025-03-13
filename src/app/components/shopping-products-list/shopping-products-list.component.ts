@@ -9,7 +9,6 @@ import {CartItemQuantityManagerComponent} from "../cart-item-quantity-manager/ca
 import {FileService} from "../../shared/services/file.service";
 
 @Component({
-  standalone: true,
   imports: [TitleCasePipe, DecimalPipe, RouterLink, ReactiveFormsModule, CartItemQuantityManagerComponent],
   selector: 'app-shopping-products-list',
   templateUrl: './shopping-products-list.component.html',

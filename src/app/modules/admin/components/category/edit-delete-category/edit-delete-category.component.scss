@@ -1,12 +1,14 @@
-@import "../../../../../scss/variables.scss";
-@import "../../../scss/admin-general.scss";
+@use "../../../../../scss/variables.scss" as variablesScss;
+@use "../../../scss/admin-general.scss";
+@use "../../../../../scss/forms.scss";
+@use "../../../scss/admin-button.scss";
 
 .categories {
-  margin: $normal-margin auto 0 auto;
-  gap: $normal-margin;
+  margin: variablesScss.$normal-margin auto 0 auto;
+  gap: variablesScss.$normal-margin;
   .category-thumbnail {
-    @include outline-picture;
-    padding : $normal-padding;
+    @include variablesScss.outline-picture;
+    padding : variablesScss.$normal-padding;
     width: 100%;
     .category-image-and-actions-name {
       img {
@@ -19,30 +21,33 @@
         height: calc(160px / 2);
         .category-actions {
           width: 50%;
+          p {
+            margin-left: variablesScss.$normal-padding;
+          }
         }
         .category-name {
           align-items: center;
-          margin: $normal-padding;
+          margin: variablesScss.$normal-padding;
           font-weight: bold;
         }
         fieldset {
           input {
             margin-top: 0;
-            margin-left: $normal-padding;
-            width: calc(100% - (2 * $normal-padding));
+            margin-left: variablesScss.$normal-padding;
+            width: calc(100% - (2 * #{variablesScss.$normal-padding}));
           }
         }
       }
     }
     .category-description {
-      margin: $normal-padding;
-      @include hiddenTextByLineNumber(6);
+      margin: variablesScss.$normal-padding;
+      @include variablesScss.hiddenTextByLineNumber(6);
       editor {
         margin-top: 0;
       }
     }
     button {
-      margin: $normal-padding 0;
+      margin: variablesScss.$normal-padding 0;
     }
     fieldset {
       width: auto;

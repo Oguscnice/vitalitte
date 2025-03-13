@@ -56,11 +56,11 @@
                    [value]="getDeliveryOptionValueForm()"
                    (click)="toggleDropdown(!isDeliveryDropdownOpen, 'Delivery')"
                    readonly/>
-            <div class="arrow-icon flex center">
+            <div class="arrow-icon flex center" (click)="toggleDropdown(!isDeliveryDropdownOpen, 'Delivery')">
               @if (isDeliveryDropdownOpen) {
-                <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false, 'Delivery')"></i>
+                <i class="fa-solid fa-circle-chevron-down pointer"></i>
               } @else {
-                <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true, 'Delivery')"></i>
+                <i class="fa-solid fa-circle-chevron-up pointer"></i>
               }
             </div>
           </div>
@@ -166,19 +166,19 @@
                autocomplete="off"
                class="pointer"
                (keyup)="apiBanService.searchAddress($event)"
-               (focus)="apiBanService.toggleDropdown(true)"
+               (focus)="apiBanService.toggleDropdown()"
                [value]="userAddress"/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="apiBanService.toggleDropdown()">
           @if (apiBanService.isDropdownBanOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="apiBanService.toggleDropdown(false)"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
       <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.addressList && apiBanService.addressList.length > 0}">
         @for (address of apiBanService.addressList; track address) {
-          <li (click)="onAddressClicked(address); apiBanService.toggleDropdown(false) ">
+          <li (click)="onAddressClicked(address); apiBanService.toggleDropdown() ">
             {{ address.properties.label | titlecase }}
           </li>
         }
@@ -242,11 +242,11 @@
                [value]="countrySelected.name"
                (click)="toggleDropdown(!isCountryCodeDropdownOpen,'CountryCode')"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown(!isCountryCodeDropdownOpen, 'CountryCode')">
           @if (isCountryCodeDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(true, 'CountryCode')"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(false, 'CountryCode')"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>

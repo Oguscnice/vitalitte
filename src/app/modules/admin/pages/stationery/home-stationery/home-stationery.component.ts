@@ -9,7 +9,7 @@ import {BaseComponent} from "../../../../../base.component";
 
 @Component({
   selector: 'app-home-stationery',
-  standalone: true,
+
   imports: [
     RouterLink,
     ReturnAdminHomeComponent
@@ -24,19 +24,20 @@ import {BaseComponent} from "../../../../../base.component";
                 }
               </div>`,
   styles: [`
-            @import "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../../../scss/variables.scss" as variablesScss;
 
-            h1 {
-              color: $lilac-dark;
-              margin-top: $normal-margin;
-            }
-            h2 {
-              max-width: $max-width-mobile;
-            }
-            .btns-admin-home {
-              gap: 24px;
-            }
-          `]
+    h1 {
+      color: variablesScss.$lilac-dark;
+      margin-top: variablesScss.$normal-margin;
+    }
+    h2 {
+      max-width: variablesScss.$max-width-mobile;
+    }
+    .btns-admin-home {
+      gap: 24px;
+    }
+  `]
 })
 export class HomeStationeryComponent extends BaseComponent implements OnInit {
 

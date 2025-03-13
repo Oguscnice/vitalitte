@@ -8,7 +8,6 @@ import { DataSignalService } from 'src/app/shared/services/data-signal.service';
 import {FormHelperService} from "../../../shared/services/form-helper.service";
 
 @Component({
-  standalone: true,
   imports: [ NgClass ],
   selector: 'app-slug-name-dto-edit-delete',
   template: ` <div class="title-functionality flex center">
@@ -76,7 +75,11 @@ import {FormHelperService} from "../../../shared/services/form-helper.service";
                 </table>
               }
               `,
-  styles: [` @import "../../../scss/admin-general.scss"; `]
+  styles: [`
+    @use "../../../../../scss/forms.scss";
+    @use "../../../scss/admin-table.scss";
+    @use "../../../scss/admin-general.scss";
+  `]
 })
 export class SlugNameDtoEditDeleteComponent implements OnInit {
 

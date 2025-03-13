@@ -1,7 +1,7 @@
-@import "../../../scss/variables.scss";
+@use "../../../scss/variables.scss" as variablesScss;
 
 table {
-  margin: $normal-margin auto 0 auto;
+  margin: variablesScss.$normal-margin auto 0 auto;
   border-collapse: collapse;
   width: 100%;
   background-color: transparent;
@@ -9,16 +9,16 @@ table {
 
 table {
   border-radius: 4px;
-  border: 1px solid $lilac-dark;
+  border: 1px solid variablesScss.$lilac-dark;
   thead {
-    background-color: $lilac-light;
+    background-color: variablesScss.$lilac-light;
     tr {
       td {
-        border-bottom: 1px solid $lilac-dark;
+        border-bottom: 1px solid variablesScss.$lilac-dark;
         font-weight: bold;
         p {
-          font-size: $normal-font-size;
-          padding: $normal-padding;
+          font-size: variablesScss.$normal-font-size;
+          padding: variablesScss.$normal-padding;
         }
       }
     }
@@ -26,7 +26,7 @@ table {
 
   tbody {
     tr {
-      border-bottom: 1px solid $lilac-dark;
+      border-bottom: 1px solid variablesScss.$lilac-dark;
       td {
         max-width: 50vw;
         vertical-align: middle;
@@ -35,18 +35,18 @@ table {
           max-height: 80px;
         }
         p {
-          font-size: $normal-font-size;
-          padding: $normal-padding;
+          font-size: variablesScss.$normal-font-size;
+          padding: variablesScss.$normal-padding;
         }
         .text-left {
-          padding-left: $normal-padding;
+          padding-left: variablesScss.$normal-padding;
         }
         .title {
           white-space: nowrap;
           overflow: hidden;
         }
         i {
-          color: $lilac-dark;
+          color: variablesScss.$lilac-dark;
         }
       }
     }
@@ -82,7 +82,7 @@ table {
             max-height: 160px;
           }
           p {
-            font-size: $double-font-size;
+            font-size: variablesScss.$double-font-size;
           }
         }
       }

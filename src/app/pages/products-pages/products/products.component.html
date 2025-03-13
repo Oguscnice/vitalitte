@@ -32,13 +32,13 @@
       </div>
       @if (categorySelected) {
         <h5 class="mobile-only"> {{ categorySelected.name }} </h5>
-        <div [innerHTML]="categorySelected.description"></div>
+        <div class="category-description" [innerHTML]="categorySelected.description"></div>
       }
     }
 
     @if (collectionsDto$().length > 0) {
       <h4>Collections :</h4>
-      <div class="dropdown-container">
+      <div class="dropdown-container" [ngClass]="{'pointer' : categorySelected}">
         <div class="input-and-arrow flex">
 <!--      La liste des collections ne s'affiche que si une catégorie à été sélectionnée-->
           @if (categorySelected) {
@@ -56,7 +56,7 @@
                    class="disabled"
                    readonly/>
           }
-          <div class="arrow-icon flex center">
+          <div class="arrow-icon flex center" (click)="toggleDropdown('Collection')">
             @if (!categorySelected) {
               <i class="fa-solid fa-circle-chevron-up disabled"></i>
             } @else {

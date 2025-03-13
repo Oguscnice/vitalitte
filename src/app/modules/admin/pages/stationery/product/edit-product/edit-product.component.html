@@ -64,11 +64,11 @@
                (focus)="toggleDropdown('Category')"
                [value]="formHelper.getDtoNameByFormControlValue(editProductForm.get('categoryDto')!.value!)"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown('Category')">
           @if (isCategoryDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Category')"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Category')"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
@@ -103,11 +103,11 @@
                (focus)="toggleDropdown('Collection')"
                [value]="formHelper.getDtoNameByFormControlValue(editProductForm.get('collectionDto')!.value!)"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown('Collection')">
           @if (isCollectionDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Collection')"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Collection')"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
@@ -141,11 +141,11 @@
                class="pointer"
                (click)="toggleDropdown('Materials')"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown('Materials')">
           @if (isMaterialsDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Materials')"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Materials')"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
@@ -189,7 +189,7 @@
                   <p class="flex text-left"> {{ material.name | titlecase }} </p>
                 </td>
                 <td>
-                  <p> {{ material.price | number :'0.2' }} €</p>
+                  <p> {{ material.price | customCurrency }}</p>
                 </td>
                 <td>
                   <p> {{ material.materialType | titlecase }} </p>
@@ -202,7 +202,7 @@
           }
         </tbody>
       </table>
-      <p>Total : {{ totalPriceMaterials() }}€</p>
+      <p>Total : {{ totalPriceMaterials() | customCurrency }}</p>
     </div>
 
     @if (formHelper.isFormSubmit && myForm.submitted && editProductForm.controls['materialsDto'].invalid) {
@@ -302,9 +302,6 @@
       <thead>
         <tr>
           <td>
-            <p>URL</p>
-          </td>
-          <td>
             <p>Image</p>
           </td>
           <td>
@@ -316,9 +313,6 @@
         @if (fileService.secondaryPictures && fileService.secondaryPictures.length > 0) {
           @for (secondaryPicture of fileService.secondaryPictures; track secondaryPicture) {
             <tr>
-              <td>
-                <p class="flex text-left"> {{ secondaryPicture }} </p>
-              </td>
               <td>
                 <img src="{{ fileService.getDataForImageSrc(secondaryPicture) }}" alt="image secondaire du produit {{ editProductForm.get('name')!.value }} en cours de selection">
               </td>

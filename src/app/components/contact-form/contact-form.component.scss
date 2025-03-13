@@ -1,27 +1,27 @@
-@import "../../scss/variables.scss";
-@import "../../scss/buttons.scss";
-@import "../../scss/forms.scss";
-@import "../../scss/dropdowns.scss";
+@use "../../scss/variables.scss" as variablesScss;
+@use "../../scss/buttons.scss";
+@use "../../scss/forms.scss";
+@use "../../scss/dropdowns.scss";
 
 form {
   flex-direction: column;
 
   h2 {
-    padding: $double-padding 0;
+    padding: variablesScss.$double-padding 0;
   }
 
   fieldset {
     .dropdown-container {
       width: 100%;
-      margin: $half-margin 0;
+      margin: variablesScss.$half-margin 0;
     }
   }
 
   .field-text-area {
       textarea {
-        @include inputStyleBorder;
-        margin-top: $half-margin;
-        padding: $normal-padding;
+        @include variablesScss.inputStyleBorder;
+        margin-top: variablesScss.$half-margin;
+        padding: variablesScss.$normal-padding;
         height : 240px;
         max-height: 100%;
         width: 100%;
@@ -62,7 +62,7 @@ form {
       justify-content: center;
 
       textarea {
-        max-width: $max-width-768px;
+        max-width: variablesScss.$max-width-768px;
       }
     }
   }

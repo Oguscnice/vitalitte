@@ -14,7 +14,12 @@ import {FileService} from "../../../../../../shared/services/file.service";
   standalone: false,
   selector: 'app-edit-material',
   templateUrl: './edit-material.component.html',
-  styles: [` @import "../../../../scss/admin-general"; `]
+  styles: [`
+    @use "../../../../scss/admin-general.scss";
+    @use "../../../../scss/admin-button.scss";
+    @use "../../../../../../scss/forms.scss";
+    @use "../../../../../../scss/dropdowns.scss";
+  `]
 })
 export class EditMaterialComponent extends BaseComponent implements OnInit {
 
@@ -48,7 +53,7 @@ export class EditMaterialComponent extends BaseComponent implements OnInit {
 
   subscribeToMaterialSlugChanges(): void {
     this.subscriptions.push(
-      this.dataSignal.$materialBySlug.subscribe(
+      this.adminMaterialSignal.$materialBySlug.subscribe(
         (material): void => {
           if (material) {
             this.patchFormValue(material);
@@ -58,7 +63,7 @@ export class EditMaterialComponent extends BaseComponent implements OnInit {
   }
 
   findMaterialSlugInUrl(): void {
-    this.route.params.subscribe((params: Params) => this.dataSignal.getMaterialBySlug(params['materielSlug']));
+    this.route.params.subscribe((params: Params) => this.adminMaterialSignal.getMaterialBySlug(params['materielSlug']));
   }
 
   patchFormValue(material: MaterialDto): void {

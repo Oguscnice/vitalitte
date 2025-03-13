@@ -12,7 +12,7 @@ import {ProductDto} from "../../../shared/interfaces/Product";
 
 @Component({
   selector: 'app-post-review-form',
-  standalone: true,
+
   imports: [
     ReactiveFormsModule,
     NgClass
@@ -20,12 +20,12 @@ import {ProductDto} from "../../../shared/interfaces/Product";
   templateUrl: './post-review-form.component.html',
   styles: [`
 
-    @import "../../../scss/variables.scss";
-    @import "../../../scss/buttons.scss";
-    @import "../../../scss/forms.scss";
+    @use "../../../scss/variables.scss" as variablesScss;
+    @use "../../../scss/buttons.scss";
+    @use "../../../scss/forms.scss";
 
     .fa-circle-xmark {
-      font-size: $max-font-size;
+      font-size: variablesScss.$max-font-size;
     }
   `]
 })

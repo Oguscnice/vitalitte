@@ -4,7 +4,6 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from 'src/app/shared/services/pipes/counter-zero-if-empty.pipe';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../../shared/variables/Other';
 import {
   ChangeSizePaginationAndValueSearchComponent
@@ -20,11 +19,20 @@ import {AdminPublicationSignalService} from "../../../shared/services/admin-publ
 import {FileService} from "../../../../../shared/services/file.service";
 
 @Component({
-  standalone: true,
-  imports: [NgClass, TitleCasePipe, ReactiveFormsModule, EditorModule, CounterZeroIfEmpty, ModalComponent, ChangeSizePaginationAndValueSearchComponent, ChangePageButtonsPagination ],
+  imports: [NgClass, TitleCasePipe, ReactiveFormsModule, EditorModule, CounterZeroIfEmpty, ChangeSizePaginationAndValueSearchComponent, ChangePageButtonsPagination ],
   selector: 'app-edit-delete-publication',
   templateUrl: './edit-delete-publication.component.html',
-  styles: [` @import "../../../scss/admin-general.scss"; `]
+  styles: [`
+    @use "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-form.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../scss/admin-toggle.scss";
+    @use "../../../scss/admin-table.scss";
+    @use "../../../../../scss/forms.scss";
+    @use "../../../../../scss/dropdowns.scss";
+    @use "../../../../../scss/buttons.scss";
+    @use "../../../../../scss/table.scss";
+  `]
 })
 export class EditDeletePublicationComponent extends BaseComponent implements OnInit {
 

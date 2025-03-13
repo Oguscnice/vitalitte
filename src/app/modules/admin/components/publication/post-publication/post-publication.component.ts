@@ -12,11 +12,17 @@ import {AnguilleSignalService} from "../../../../../shared/services/anguille-sig
 import {BaseComponent} from "../../../../../base.component";
 
 @Component({
-  standalone: true,
   imports: [ NgClass, ReactiveFormsModule, CounterZeroIfEmpty, EditorModule ],
   selector: 'app-post-publication',
   templateUrl: './post-publication.component.html',
-  styles: [` @import "../../../scss/admin-general.scss"; `]
+  styles: [`
+    @use "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-form.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../../../scss/forms.scss";
+    @use "../../../../../scss/dropdowns.scss";
+    @use "../../../../../scss/buttons.scss";
+  `]
 })
 export class PostPublicationComponent extends BaseComponent implements OnInit {
 

@@ -68,8 +68,7 @@
         @if (fileService.picture) {
           <img [src]="fileService.getDataForImageSrc(fileService.picture)" alt="Photo à choisir pour la publication en cours de carnet">
         }
-        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
-      </div>
+        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture, 'picture-selected': fileService.picture}"></i>      </div>
 
       @if (formHelper.isFormSubmit && newPublicationForm.controls['pictureDto'].invalid) {
         <div>

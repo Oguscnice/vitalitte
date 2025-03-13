@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  standalone: true,
   imports: [ ],
   selector: 'app-loader',
   template: `

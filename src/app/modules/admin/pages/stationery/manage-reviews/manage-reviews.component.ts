@@ -14,7 +14,7 @@ import {ModalSignalService} from "../../../../../shared/services/modal-signal.se
 
 @Component({
   selector: 'app-manage-reviews',
-  standalone: true,
+
   imports: [
     NgClass,
     TitleCasePipe,
@@ -26,12 +26,17 @@ import {ModalSignalService} from "../../../../../shared/services/modal-signal.se
   ],
   templateUrl: './manage-reviews.component.html',
   styles: [`
-    @import "../../../../../scss/chips.scss";
-    @import "../../../scss/admin-table.scss";
-    @import "../../../scss/admin-toggle.scss";
+    @use "../../../../../scss/chips.scss";
+    @use "../../../scss/admin-table.scss";
+    @use "../../../scss/admin-toggle.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../../../scss/variables.scss" as variablesScss;
+    @use "../../../../../scss/buttons.scss";
+    @use "../../../../../scss/table.scss";
 
     h1 {
-      color: $lilac-dark
+      color: variablesScss.$lilac-dark;
+      margin: variablesScss.$normal-margin auto;
     }
 
     table {
@@ -40,10 +45,10 @@ import {ModalSignalService} from "../../../../../shared/services/modal-signal.se
           div {
             div {
               .fa-circle-check {
-                color: $green;
+                color: variablesScss.$green;
               }
               .fa-circle-xmark {
-                color: $red;
+                color: variablesScss.$red;
               }
             }
           }

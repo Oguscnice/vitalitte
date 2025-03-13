@@ -14,21 +14,25 @@ import {CustomCurrencyPipe} from "../../../shared/services/pipes/custom-currency
 import {FileService} from "../../../shared/services/file.service";
 
 @Component({
-  standalone: true,
   imports: [H1Component, ReactiveFormsModule, CustomCurrencyPipe],
   selector: 'app-workshop-selected',
   templateUrl: './workshop-selected.component.html',
   styles: [`
-            @import "../../../scss/variables.scss";
-            @import "../../../scss/forms.scss";
-            @import "../../../scss/buttons.scss";
+            @use "../../../scss/variables.scss" as variablesScss;
+            @use "../../../scss/forms.scss";
+            @use "../../../scss/buttons.scss";
 
             .workshop-content,
             .workshop-registrations-free,
             .btn-normal,
             .total-price,
             .price-per-person {
-              margin-top: $normal-margin;
+              margin-top: variablesScss.$normal-margin;
+            }
+
+            .workshop-content {
+              font-family: variablesScss.$font-family-text;
+              letter-spacing: 1px;
             }
 
             .workshop-registrations-free {
@@ -36,8 +40,8 @@ import {FileService} from "../../../shared/services/file.service";
             }
 
             .price-per-person {
-              margin-top : $normal-margin;
-              margin-right: $half-margin;
+              margin-top : variablesScss.$normal-margin;
+              margin-right: variablesScss.$half-margin;
             }
 
           `]

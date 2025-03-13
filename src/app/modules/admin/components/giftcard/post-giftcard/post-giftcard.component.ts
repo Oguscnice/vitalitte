@@ -8,15 +8,22 @@ import {AdminGiftCardSignalService} from "../../../shared/services/admin-giftcar
 
 @Component({
   selector: 'app-post-giftCard',
-  standalone: true,
+
   imports: [ ReactiveFormsModule, NgClass ],
   templateUrl: './post-giftCard.component.html',
   styles: [`
-    @import "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-form.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../scss/admin-toggle.scss";
+    @use "../../../../../scss/forms.scss";
+    @use "../../../../../scss/dropdowns.scss";
+    @use "../../../../../scss/buttons.scss";
+    @use "../../../../../scss/variables.scss" as variablesScss;
 
     .toggle-switch {
       .toggle-label {
-        background-color: $lilac-dark;
+        background-color: variablesScss.$lilac-dark;
       }
     }
   `]

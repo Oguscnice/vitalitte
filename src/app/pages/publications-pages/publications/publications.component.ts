@@ -7,7 +7,7 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
   selector: 'app-publications',
   templateUrl: './publications.component.html',
   styles: [`
-            @import "../../../scss/variables.scss";
+            @use "../../../scss/variables.scss" as variablesScss;
 
             .publications {
 
@@ -16,7 +16,7 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
 
                 app-publication-thumbnail {
                   width: 100%;
-                  margin-top: $half-margin;
+                  margin-top: variablesScss.$half-margin;
                 }
               }
             }

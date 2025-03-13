@@ -1,5 +1,4 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
-import {ReviewThumbnailComponent} from "../review/review-thumbnail/review-thumbnail.component";
 import {NgClass} from "@angular/common";
 import {ProductDto} from "../../shared/interfaces/Product";
 import {FileService} from "../../shared/services/file.service";
@@ -7,11 +6,8 @@ import {FileDto} from "../../shared/interfaces/FileDto";
 
 @Component({
   selector: 'app-carousel-product',
-  standalone: true,
-  imports: [
-    ReviewThumbnailComponent,
-    NgClass
-  ],
+
+  imports: [NgClass],
   templateUrl: './carousel-product.component.html',
   styleUrl: './carousel-product.component.scss'
 })

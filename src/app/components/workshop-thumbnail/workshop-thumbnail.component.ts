@@ -7,19 +7,19 @@ import {FileService} from "../../shared/services/file.service";
 
 @Component({
   selector: 'app-workshop-thumbnail',
-  standalone: true,
+
   imports: [DatePipe, NgClass, RouterLink, CustomCurrencyPipe],
   templateUrl: './workshop-thumbnail.component.html',
   styles: [`
-            @import "../../scss/variables.scss";
-            @import "../../scss/buttons.scss";
+            @use "../../scss/variables.scss" as variablesScss;
+            @use "../../scss/buttons.scss" as buttonsScss;
 
             .workshop {
-              @include outline-picture;
+              @include variablesScss.outline-picture;
               height: 160px;
               position: relative;
               overflow: hidden;
-              margin-top: $half-margin;
+              margin-top: variablesScss.$half-margin;
 
               img {
                 object-fit: cover;
@@ -28,31 +28,31 @@ import {FileService} from "../../shared/services/file.service";
               }
 
               .workshop-description {
-                padding: $normal-padding;
+                padding: variablesScss.$normal-padding;
                 width: 100%;
 
                 p {
-                  margin-top: $half-padding;
+                  margin-top: variablesScss.$half-padding;
                   width: 100%;
                   text-align: center;
                 }
 
                 .workshop-date {
-                  font-size: $normal-font-size;
+                  font-size: variablesScss.$normal-font-size;
                 }
 
                 .workshop-address {
-                  font-size: $normal-font-size;
+                  font-size: variablesScss.$normal-font-size;
                 }
 
                 .registration {
-                  font-size: $normal-font-size;
+                  font-size: variablesScss.$normal-font-size;
                   max-width: max-content;
                 }
                 .btn-normal {
-                  font-size: $normal-font-size;
-                  padding: $normal-padding;
-                  margin: calc($half-margin / 2);
+                  font-size: variablesScss.$normal-font-size;
+                  padding: variablesScss.$normal-padding;
+                  margin: calc( (#{variablesScss.$half-margin}) / 2);
                 }
               }
 
@@ -62,10 +62,10 @@ import {FileService} from "../../shared/services/file.service";
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-color: $lilac-dark-transparent;
+                background-color: variablesScss.$lilac-dark-transparent;
 
                 .workshop-unavailable {
-                  @include text-shadow(0.4px, $black);
+                  @include variablesScss.text-shadow(0.4px, variablesScss.$black);
                   color: white;
                   font-size: 2em;
                   font-weight: bold;
@@ -76,12 +76,12 @@ import {FileService} from "../../shared/services/file.service";
             }
 
             .unavailable {
-              border: 2px solid $grey;
-              box-shadow: 4px 4px 4px rgba($black, 0.8);
+              border: 2px solid variablesScss.$grey;
+              box-shadow: 4px 4px 4px rgba(variablesScss.$black, 0.8);
 
               .workshop-description {
                 p {
-                  color: $grey;
+                  color: variablesScss.$grey;
                 }
               }
             }
@@ -103,14 +103,18 @@ import {FileService} from "../../shared/services/file.service";
                     font-weight: bold;
                     white-space: nowrap;
                     text-overflow: ellipsis;
+                    font-family: variablesScss.$font-family-text;
                   }
 
                   .workshop-address {
-                    font-size: $normal-font-size;
+                    font-size: variablesScss.$normal-font-size;
                   }
 
                   .btn-normal {
-                    margin: calc($half-margin / 4);
+                    margin: calc((#{variablesScss.$half-margin}) / 4);
+                    color: variablesScss.$black;
+                    @include variablesScss.text-shadow (0px, variablesScss.$black);
+                    letter-spacing: 2px;
                   }
                 }
               }

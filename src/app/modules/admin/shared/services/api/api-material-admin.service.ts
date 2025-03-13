@@ -14,6 +14,10 @@ export class ApiMaterialAdminService {
 
   private http = inject(HttpClient)
 
+  getMaterialBySlug(materialSlug: MaterialDto['slug']): Observable<MaterialDto> {
+    return this.http.get<MaterialDto>(VITALITTE_PROJECT.back.url + "/materials/" + materialSlug)
+  }
+
   getMaterialsPaginatedBySearchValue(paginationWithSearchValue: PaginationWithSearchValue): Observable<Page<MaterialDto>>{
     return this.http.post<Page<MaterialDto>>(VITALITTE_PROJECT.back.url + "/materials/paginated", paginationWithSearchValue)
   }

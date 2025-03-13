@@ -75,19 +75,19 @@
                  autocomplete="off"
                  class="pointer"
                  (keyup)="apiBanService.searchAddress($event)"
-                 (focus)="apiBanService.toggleDropdown(true)"
+                 (focus)="apiBanService.toggleDropdown()"
                  [value]="newWorkshopForm.get('address')!.value ? newWorkshopForm.get('address')!.value : ''"/>
-          <div class="arrow-icon flex center">
+          <div class="arrow-icon flex center" (click)="apiBanService.toggleDropdown()">
             @if (apiBanService.isDropdownBanOpen) {
-              <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
+              <i class="fa-solid fa-circle-chevron-down pointer"></i>
             } @else {
-              <i class="fa-solid fa-circle-chevron-up pointer" (click)="apiBanService.toggleDropdown(false)"></i>
+              <i class="fa-solid fa-circle-chevron-up pointer"></i>
             }
           </div>
         </div>
         <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.addressList && apiBanService.addressList.length > 0}">
           @for (address of apiBanService.addressList; track address) {
-            <li (click)="onAddressClicked(address.properties.label); apiBanService.toggleDropdown(false) ">
+            <li (click)="onAddressClicked(address.properties.label); apiBanService.toggleDropdown() ">
               {{ address.properties.label | titlecase }}
             </li>
           }
@@ -141,8 +141,7 @@
         @if (fileService.picture) {
           <img [src]="fileService.getDataForImageSrc(fileService.picture)" alt="Photo à choisir pour la publication en cours de carnet">
         }
-        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
-      </div>
+        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture, 'picture-selected': fileService.picture}"></i>      </div>
 
       @if (formHelper.isFormSubmit && newWorkshopForm.controls['pictureDto'].invalid) {
         <div>

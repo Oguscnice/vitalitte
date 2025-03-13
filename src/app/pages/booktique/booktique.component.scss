@@ -1,11 +1,11 @@
-@import "../../scss/variables.scss";
+@use "../../scss/variables.scss" as variablesScss;
 
 .booktique-page {
 
   .cards-choice {
     width: 100%;
     max-width: 600px;
-    margin: $triple-padding 0;
+    margin: variablesScss.$triple-padding 0;
   }
 }
 
@@ -14,21 +14,21 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .cards-choice{
-    max-width: $max-width-768px;
+    max-width: variablesScss.$max-width-768px;
   }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .cards-choice {
-    max-width: $max-width-992px;
+    max-width: variablesScss.$max-width-992px;
   }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   .cards-choice {
-    max-width: $max-width-1400px;
+    max-width: variablesScss.$max-width-1400px;
   }
 }
 
@@ -48,7 +48,7 @@
   gap: 12px;
   border-radius: 8px;
   cursor: pointer;
-  color: $white;
+  color: variablesScss.$white;
 }
 
 .card::before {
@@ -60,7 +60,7 @@
   width: 200px;
   height: 190px;
   border-radius: 10px;
-  background: linear-gradient(-45deg, $lilac-dark 0%, $lilac-light 100% );
+  background: linear-gradient(-45deg, variablesScss.$lilac-dark 0%, variablesScss.$lilac-light 100% );
   z-index: -10;
   pointer-events: none;
   transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -71,15 +71,15 @@
   z-index: -1;
   position: absolute;
   inset: 0;
-  background: linear-gradient(-45deg, $lilac-dark 0%, $lilac-light 100% );
+  background: linear-gradient(-45deg, variablesScss.$lilac-dark 0%, variablesScss.$lilac-light 100% );
   transform: translate3d(0, 0, 0) scale(0.95);
   filter: blur(20px);
 }
 
 .heading {
-  font-size: $triple-font-size;
+  font-size: variablesScss.$triple-font-size;
   font-weight: 700;
-  font-family: $font-family-title-h1;
+  font-family: variablesScss.$font-family-title-h1;
   letter-spacing: 3px;
 }
 
@@ -88,7 +88,7 @@
 }
 
 .card p:last-child {
-  color: $lilac-light;
+  color: variablesScss.$lilac-light;
   font-weight: 600;
   width: 100%;
   text-align: left;

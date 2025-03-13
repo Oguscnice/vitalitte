@@ -73,20 +73,20 @@
                autocomplete="off"
                class="pointer"
                (keyup)="searchAddress($event)"
-               (focus)="apiBanService.toggleDropdown(true)"
+               (focus)="apiBanService.toggleDropdown()"
                [value]="editWorkshopForm.get('address')!.value ? editWorkshopForm.get('address')!.value : ''"
               />
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center"  (click)="apiBanService.toggleDropdown()">
           @if (apiBanService.isDropdownBanOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="apiBanService.toggleDropdown(false)"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
       <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.addressList && apiBanService.addressList.length > 0}">
         @for (adress of apiBanService.addressList; track adress) {
-          <li (click)="onAddressClicked(adress.properties.label); apiBanService.toggleDropdown(false)">
+          <li (click)="onAddressClicked(adress.properties.label); apiBanService.toggleDropdown()">
             {{ adress.properties.label | titlecase }}
           </li>
         }

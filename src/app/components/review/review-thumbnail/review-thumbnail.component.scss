@@ -1,20 +1,20 @@
-@import "../../../scss/variables.scss";
+@use "../../../scss/variables.scss" as variablesScss;
 
 .review-container {
-  @include outline-picture;
+  @include variablesScss.outline-picture;
   width: 100%;
   height: max-content;
-  margin-bottom: $half-margin;
+  margin-bottom: variablesScss.$half-margin;
 
   .review-user-stars {
-    border: 1px solid $lilac-light;
+    border: 1px solid variablesScss.$lilac-light;
     border-radius: 8px 8px 0 0;
     width: 100%;
-    background-color: $lilac-light-opacity-low;
+    background-color: variablesScss.$lilac-light-opacity-low;
 
     .review-customer,
     .stars-rating {
-      margin: calc($half-margin/2) $half-margin;
+      margin: calc(#{variablesScss.$half-margin} / 2);
       .star-container {
         i {
           cursor: auto;
@@ -24,8 +24,8 @@
   }
 
   .review-content {
-    margin: calc($half-margin/2) $half-margin;
-    @include hiddenTextByLineNumber(3);
+    margin: calc(#{variablesScss.$half-margin} / 2);
+    @include variablesScss.hiddenTextByLineNumber(3);
   }
 
   .full-content {

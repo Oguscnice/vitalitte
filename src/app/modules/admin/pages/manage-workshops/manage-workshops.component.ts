@@ -15,7 +15,7 @@ import {AdminWorkshopSignalService} from "../../shared/services/admin-workshop-s
               <app-post-workshop/>
               <app-edit-delete-workshop/>
               `,
-  styles: [` @import "../../scss/admin-general.scss"; `]
+  styles: [` @use "../../scss/admin-general.scss"; `]
 })
 export class ManageWorkshopsComponent extends BaseComponent {
 }

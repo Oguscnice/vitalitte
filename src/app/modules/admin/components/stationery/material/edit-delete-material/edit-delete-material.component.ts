@@ -3,7 +3,6 @@ import { MaterialDto } from '../../../../../../shared/interfaces/Material';
 import { NgClass, TitleCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AddEuroCurrencyPipe } from '../../../../../../shared/services/pipes/add-euro-currency.pipe';
-import { ModalComponent } from '../../../../../../components/modal/modal.component';
 import {DataSignalService} from "../../../../../../shared/services/data-signal.service";
 import {AdminMaterialSignalService} from "../../../../shared/services/admin-material-signal.service";
 import {
@@ -14,17 +13,17 @@ import {ModalSignalService} from "../../../../../../shared/services/modal-signal
 import {
   ChangeSizePaginationAndValueSearchComponent
 } from "../../../../../../components/change-size-pagination-and-value-search/change-size-pagination-and-value-search.component";
-import {PaginationSignalService} from "../../../../../../shared/services/pagination-signal.service";
 import {FileService} from "../../../../../../shared/services/file.service";
-import {WorkshopDto} from "../../../../../../shared/interfaces/Workshop";
 
 @Component({
   selector: 'app-edit-delete-material',
-  standalone: true,
-  imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent, ChangePageButtonsPagination, ChangeSizePaginationAndValueSearchComponent ],
+
+  imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ChangePageButtonsPagination, ChangeSizePaginationAndValueSearchComponent ],
   templateUrl: './edit-delete-material.component.html',
   styles: [`
-    @import "../../../../scss/admin-general";
+    @use "../../../../scss/admin-general.scss";
+    @use "../../../../scss/admin-table.scss";
+    @use "../../../../scss/admin-toggle.scss";
 
     .material-name {
       max-width: 40vw;

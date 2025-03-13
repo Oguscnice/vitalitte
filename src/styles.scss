@@ -1,4 +1,4 @@
-@import "../src/app/scss/variables.scss";
+@use "../src/app/scss/variables.scss" as variablesScss;
 
 html,
 body,
@@ -112,12 +112,12 @@ body {
 }
 
 editor {
-  z-index: $z-index;
+  z-index: variablesScss.$z-index;
 }
 
 ol,
 ul {
-  z-index: $z-index + 1;
+  z-index: variablesScss.$z-index + 1;
   list-style: none;
 }
 
@@ -187,13 +187,13 @@ table {
 }
 
 h1 {
-  font-family: "Holipop", sans-serif;
+  font-family: variablesScss.$font-family-title-h1;
   font-weight: bolder;
 }
 
 h2,
 h3 {
-  font-family: "Listian", sans-serif;
+  font-family: variablesScss.$font-family-title-h2-h3;
   font-weight: bolder;
 }
 
@@ -206,37 +206,38 @@ h3 {
 }
 
 h1 {
-  font-size: $max-font-size;
-  color: $white;
+  font-size: variablesScss.$max-font-size;
+  color: variablesScss.$white;
   letter-spacing: 0.4rem;
 }
 
 h2 {
-  font-size: $fourth-font-size;
-  color: $lilac;
+  font-size: variablesScss.$fourth-font-size;
+  color: variablesScss.$orange-dark;
   letter-spacing: 0.3rem;
-  margin: $normal-margin 0;
+  margin: variablesScss.$normal-margin 0;
 }
 
 h3 {
-  font-size: $triple-font-size;
+  font-size: variablesScss.$triple-font-size;
   letter-spacing: 0.2rem;
-  margin: $double-padding 0;
+  margin: variablesScss.$double-padding 0;
 }
 
 h4 {
-  font-size: $double-font-size;
+  font-size: variablesScss.$double-font-size;
 }
 
 h5 {
-  font-size: $double-font-size;
+  font-size: variablesScss.$double-font-size;
 }
 
 p {
-  font-family: $font-family-text;
-  font-size: $double-font-size;
+  font-family: variablesScss.$font-family-text;
+  font-size: variablesScss.$double-font-size;
   text-align: center;
   line-height: 1.4em;
+  letter-spacing: 2px;
 }
 
 img {
@@ -250,7 +251,7 @@ h1 {
 }
 
 .filter-color {
-  background-color: rgba($brown, 0.2);
+  background-color: rgba(variablesScss.$brown, 0.2);
 }
 
 .visible-linear {
@@ -264,8 +265,8 @@ h1 {
 //pour la rotation des "+" aux formulaire de création
 i {
   transition: all 0.4s linear;
-  color: $lilac;
-  font-size: $double-font-size;
+  color: variablesScss.$lilac;
+  font-size: variablesScss.$double-font-size;
 }
 
 .rotated45 {
@@ -285,14 +286,14 @@ i {
 }
 
 hr {
-  border: 4px solid $lilac-light-opacity-low;
+  border: 4px solid variablesScss.$lilac-light-opacity-low;
   border-radius: 5px;
-  box-shadow: 4px 4px 4px $lilac-dark-transparent;
+  box-shadow: 4px 4px 4px variablesScss.$lilac-dark-transparent;
   width: 80%;
 }
 
 .bg-dark {
-  background-color: $lilac-light-opacity-low;
+  background-color: variablesScss.$lilac-light-opacity-low;
 }
 
 .no-scroll {
@@ -330,13 +331,13 @@ hr {
     // div à l'interieur pour respecter les dimensions max
     .first-choice-content,
     .second-choice-content {
-      width: $max-width-mobile;
+      width: variablesScss.$max-width-mobile;
     }
   }
 
   //.first-choice + *,
   //.second-choice + * {
-  //  width: $max-width-mobile;
+  //  width: variablesScss.$max-width-mobile;
   //}
 
   .first-choice {
@@ -367,42 +368,42 @@ hr {
       position: absolute;
       width: 10px;
       overflow-x: hidden;
-      z-index: $z-index + 1;
+      z-index: variablesScss.$z-index + 1;
     }
 
     .full-star {
       position: absolute;
-      z-index: $z-index;
+      z-index: variablesScss.$z-index;
     }
 
     .star-colored {
-      color: $orange;
+      color: variablesScss.$orange;
     }
   }
 }
 
 @keyframes appearLinear {
   0% {
-    z-index: $z-index + 10;
+    z-index: variablesScss.$z-index + 10;
     opacity: 0;
   }
   100% {
-    z-index: $z-index + 10;
+    z-index: variablesScss.$z-index + 10;
     opacity: 1;
   }
 }
 
 @keyframes disappearLinear {
   0% {
-    z-index: $z-index + 10;
+    z-index: variablesScss.$z-index + 10;
     opacity: 1;
   }
   99%{
-    z-index: $z-index + 10;
+    z-index: variablesScss.$z-index + 10;
     opacity: 0;
   }
   100% {
-    z-index: $z-index - 1;
+    z-index: variablesScss.$z-index - 1;
   }
 }
 
@@ -436,9 +437,9 @@ router-outlet + * {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: $max-width-mobile;
+  width: variablesScss.$max-width-mobile;
   //hauteur minimum de toute la page, moins celle du header et footer, auquelle on ajoute leurs bordures de 1px
-  min-height: calc(100vh - (var(--height-header) + (var(--height-footer) + $normal-margin)));
+  min-height: calc(100vh - (var(--height-header) + (var(--height-footer) + #{variablesScss.$normal-margin})));
   margin : var(--height-header) auto 0 auto;
 }
 
@@ -446,14 +447,14 @@ router-outlet + * {
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   router-outlet + * {
-    width: $max-width-768px;
+    width: variablesScss.$max-width-768px;
   }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   router-outlet + * {
-    width: $max-width-992px;
+    width: variablesScss.$max-width-992px;
   }
 
   .desktop-only {
@@ -465,26 +466,25 @@ router-outlet + * {
   }
 
   p {
-    font-size: $normal-font-size;
+    font-size: variablesScss.$normal-font-size;
     text-align: left;
     line-height: 1.4;
-    letter-spacing: 0.2px;
   }
 
   h4 {
-    font-size: $normal-font-size;
+    font-size: variablesScss.$normal-font-size;
   }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   router-outlet + * {
-    width: $max-width-1400px;
+    width: variablesScss.$max-width-1400px;
   }
 }
 
 body {
-  //font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: variablesScss.$font-family-text sans-serif;
 }
 
 /* --------- Width % --------- */

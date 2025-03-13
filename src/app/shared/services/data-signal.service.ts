@@ -47,7 +47,6 @@ export class DataSignalService extends BaseComponent {
     $privatePublicationsSpotlighted: signal<PublicationDto[]>([]),
     $privateProductDtoBySlug: new BehaviorSubject<ProductDto | null>(null),
     $privateWorkshopBySlug: new BehaviorSubject<WorkshopDto | null>(null),
-    $privateMaterialBySlug: new BehaviorSubject<MaterialDto | null>(null),
     $privatePublicationBySlug: new BehaviorSubject<PublicationDto | null>(null),
     $privateIsExpiredGiftCard: signal<boolean>(true),
     $privateDeliveryOptions: signal<DeliveryOptionDto[]>([]),
@@ -61,7 +60,6 @@ export class DataSignalService extends BaseComponent {
   public readonly $materials: Signal<MaterialDto[]> = this.state.$privateMaterialList.asReadonly();
   public readonly $productDtoBySlug: Observable<ProductDto | null> = this.state.$privateProductDtoBySlug.asObservable();
   public readonly $workshopBySlug: Observable<WorkshopDto | null> = this.state.$privateWorkshopBySlug.asObservable();
-  public readonly $materialBySlug: Observable<MaterialDto | null> = this.state.$privateMaterialBySlug.asObservable();
   public readonly $publicationBySlug: Observable<PublicationDto | null> = this.state.$privatePublicationBySlug.asObservable();
   public readonly $workshopsDateToCome: Signal<WorkshopDto[]> = this.state.$privateWorkshopsDateToCome.asReadonly();
   public readonly $workshopsPastDate: Signal<WorkshopDto[]> = this.state.$privateWorkshopsPastDate.asReadonly();
@@ -120,10 +118,6 @@ export class DataSignalService extends BaseComponent {
     this.state.$privateMaterialList.set(materials);
   }
 
-  setMaterialBySlug(material: MaterialDto | null): void {
-    this.state.$privateMaterialBySlug.next(material);
-  }
-
   getAllMaterialsTypes(): void{
     this.subscriptions.push(
       this.apiRequests.getAllMaterialsTypes().subscribe({
@@ -137,15 +131,6 @@ export class DataSignalService extends BaseComponent {
     this.subscriptions.push(
       this.apiRequests.getAllMaterials().subscribe({
         next: (materials: MaterialDto[]): void => this.setMaterialList(materials),
-        error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getMaterialBySlug(materialSlug: MaterialDto['slug']): void {
-    this.subscriptions.push(
-      this.apiRequests.getMaterialBySlug(materialSlug).subscribe({
-        next: (material: MaterialDto): void => this.setMaterialBySlug(material),
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )

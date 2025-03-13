@@ -1,15 +1,12 @@
 import {Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FileUploadService } from '../../shared/services/file-upload.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
 import { priceValidator } from '../../shared/validators/priceValidators';
-import { urlValidator } from '../../shared/validators/urlValidators';
 import { ApiBanService } from '../../shared/services/api/api-ban.service';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../shared/variables/Other';
 import { futureDateValidator } from '../../shared/validators/pastDate';
 import {DataSignalService} from "../../../../shared/services/data-signal.service";
-import {Subscription} from "rxjs";
 import {FormHelperService} from "../../shared/services/form-helper.service";
 import { AdminWorkshopSignalService } from '../../shared/services/admin-workshop-signal.service';
 import {FileService} from "../../../../shared/services/file.service";
@@ -19,7 +16,14 @@ import {BaseComponent} from "../../../../base.component";
   standalone: false,
   selector: 'app-edit-workshop',
   templateUrl: './edit-workshop.component.html',
-  styles: [` @import "../../scss/admin-general.scss"; `]
+  styles: [`
+    @use "../../scss/admin-general.scss";
+    @use "../../scss/admin-form.scss";
+    @use "../../scss/admin-button.scss";
+    @use "../../../../scss/forms.scss";
+    @use "../../../../scss/dropdowns.scss";
+    @use "../../../../scss/buttons.scss";
+  `]
 })
 
 export class EditWorkshopComponent extends BaseComponent implements OnInit {

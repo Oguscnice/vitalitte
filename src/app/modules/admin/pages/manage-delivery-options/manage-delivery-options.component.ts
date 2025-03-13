@@ -9,7 +9,7 @@ import {ReturnAdminHomeComponent} from "../../components/return-admin-home/retur
 
 @Component({
   selector: 'app-manage-delivery-options',
-  standalone: true,
+
   imports: [PostDeliveryOptionComponent, EditDeleteDeliveryOptionComponent, ReturnAdminHomeComponent],
   template: `
     <app-return-admin-home/>
@@ -17,7 +17,7 @@ import {ReturnAdminHomeComponent} from "../../components/return-admin-home/retur
     <app-post-delivery-option/>
     <app-edit-delete-delivery-option/>
   `,
-  styles: [` @import "../../scss/admin-general.scss"; `]
+  styles: [` @use "../../scss/admin-general.scss"; `]
 })
 export class ManageDeliveryOptionsComponent {
 

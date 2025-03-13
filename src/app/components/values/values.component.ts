@@ -2,32 +2,33 @@ import { Component } from '@angular/core';
 import { Value } from 'src/app/shared/interfaces/Value';
 
 @Component({
-  standalone: true,
-  imports: [ ],
+  imports: [],
   selector: 'app-values',
-  template: `<div class="values-container flex">
-              @for (value of valuesList; track value) {
-                <div class="value-icon-and-name flex column center">
-                  @if (value.source === 'fonts.google') {
-                    <span class="material-symbols-outlined flex center">
+  template: `
+    <div class="values-container flex width100 space-between">
+      @for (value of valuesList; track value) {
+        <div class="value-icon-and-name flex column center">
+          @if (value.source === 'fonts.google') {
+            <span class="material-symbols-outlined flex center">
                         {{ value.icon }}
                     </span>
-                  }
-                  @if (value.source === 'fontawesome') {
-                    <i class="{{ value.icon }} flex center"></i>
-                  }
-                  <p>{{ value.name }}</p>
-                </div>
-              }
-            </div>
-            `,
+          }
+          @if (value.source === 'fontawesome') {
+            <i class="{{ value.icon }} flex center"></i>
+          }
+          <p>{{ value.name }}</p>
+        </div>
+      }
+    </div>`,
   styleUrls: ['./values.component.scss'],
+  standalone: true
 })
 export class ValuesComponent {
   valuesList: Value[] = [
     { name: 'Ecofriendly',
       icon: 'compost',
-      source: 'fonts.google' },
+      source: 'fonts.google'
+    },
     {
       name: 'Handmade',
       icon: 'fa-solid fa-hand-sparkles',

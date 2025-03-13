@@ -1,14 +1,14 @@
-@import "../../../scss/variables";
-@import "../../../scss/buttons";
+@use "../../../scss/variables" as variablesScss;
+@use "../../../scss/buttons";
 
 h3 {
   font-weight: bold;
 }
 
 h4 {
-  font-size: $triple-font-size;
+  font-size: variablesScss.$triple-font-size;
   letter-spacing: 0.2rem;
-  margin: $double-padding 0;
+  margin: variablesScss.$double-padding 0;
   text-align: center;
 }
 
@@ -18,5 +18,5 @@ p {
 
 .strong-list {
   font-weight: bold;
-  color: $lilac-dark;
+  color: variablesScss.$lilac-dark;
 }

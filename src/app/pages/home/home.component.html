@@ -4,6 +4,8 @@
 
 <app-h1 [titleChild]="'Nous sommes tous reliés !'" [backgroundImageChild]="backgroundImageParentHome"/>
 
+<app-values/>
+
 <section>
   <h2 class="pointer" routerLink="produits/type//carnets">Carnets Artisanaux</h2>
   <p>
@@ -15,9 +17,27 @@
   <app-images-preview [picturesArray]="handmadeProductsPictures"/>
 </section>
 
-<app-values/>
-<section>
+<div class="image-and-filter-color img-full-width">
+  <img class="pointer" src="./assets/images/category-les-illustres.jpg" alt="Photo de l'artiste"/>
+  <div class="filter-color"></div>
+</div>
 
+<section>
+  <h2>Illustrations</h2>
+    <p>
+      Pour vous organiser, vous détendre, égayer votre quotidien, ou simplement
+      garder une trace de vos moments inoubliables, vous trouverez à l'atelier
+      votre prochain agenda, album photos, bullet journal, carnet d’aquarelle,
+      de croquis, de notes, ou de partition.
+    </p>
+  <app-images-preview [picturesArray]="handmadeProductsPictures"/>
+</section>
+<div class="image-and-filter-color img-full-width">
+  <img class="pointer" src="./assets/images/category-les-illustres.jpg" alt="Photo de l'artiste"/>
+  <div class="filter-color"></div>
+</div>
+
+<section>
   <h2 class="pointer" routerLink="/ateliers">Ateliers</h2>
   <p>
     Bienvenue dans notre atelier artisanal où la créativité rencontre
@@ -29,32 +49,29 @@
   <app-images-preview [picturesArray]="workshopPictures"/>
 </section>
 
-<div class="image-and-filter-color image-biography"
-      routerLink="/qui-suis-je">
-
+<div class="image-and-filter-color img-full-width pointer" routerLink="/qui-suis-je">
     <img class="pointer" [src]="backgroundImageBio" alt="Photo de l'artiste"/>
     <div class="filter-color"></div>
-
 </div>
 
-<section class="booktique-section flex">
-  <div class="booktique-title-and-text flex column" #booktiqueSectionMonitored>
-    <h2>Booktique</h2>
-    <p>
-      Explorez notre boutique exquise, où chaque objet raconte une histoire.
-      Découvrez des trésors uniques, conçus avec passion, qui éveilleront vos
-      sens et éblouiront votre quotidien.
-    </p>
-  </div>
-  <div class="image-and-filter-color flex">
-    <img src="../../../assets/images/figma/booktique.jpg"
-         alt="Image d'une boutique d'artiste"
-         #imgMonitored/>
-    <div class="filter-color pointer" routerLink="/booktique"></div>
-  </div>
-</section>
+<!--<section class="booktique-section flex">-->
+<!--  <div class="booktique-title-and-text flex column" #booktiqueSectionMonitored>-->
+<!--    <h2>Booktique</h2>-->
+<!--    <p>-->
+<!--      Explorez notre boutique exquise, où chaque objet raconte une histoire.-->
+<!--      Découvrez des trésors uniques, conçus avec passion, qui éveilleront vos-->
+<!--      sens et éblouiront votre quotidien.-->
+<!--    </p>-->
+<!--  </div>-->
+<!--  <div class="image-and-filter-color flex">-->
+<!--    <img src="../../../assets/images/figma/booktique.jpg"-->
+<!--         alt="Image d'une boutique d'artiste"-->
+<!--         #imgMonitored/>-->
+<!--    <div class="filter-color pointer" routerLink="/booktique"></div>-->
+<!--  </div>-->
+<!--</section>-->
 
-<button class="btn-normal" routerLink="/booktique">Accéder à la Booktique</button>
+<!--<button class="btn-normal" routerLink="/booktique">Accéder à la Booktique</button>-->
 
 @if (randomReviews$().length > 0) {
   <section class="flex column center">

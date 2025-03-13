@@ -31,10 +31,6 @@ export class ApiRequestsService {
     return this.http.get<MaterialDto[]>(VITALITTE_PROJECT.back.url + "/materials")
   }
 
-  getMaterialBySlug(materialSlug: MaterialDto['slug']): Observable<MaterialDto> {
-    return this.http.get<MaterialDto>(VITALITTE_PROJECT.back.url + "/materials/" + materialSlug)
-  }
-
   getAllMaterialsTypes(): Observable<string[]>{
     return this.http.get<string[]>(VITALITTE_PROJECT.back.url + "/material-types")
   }

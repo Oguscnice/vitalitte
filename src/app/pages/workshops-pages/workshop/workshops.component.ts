@@ -9,11 +9,11 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
   selector: 'app-workshops',
   templateUrl: './workshops.component.html',
   styles: [`
-            @import "../../../scss/variables.scss";
-            @import "../../../scss/buttons.scss";
+            @use "../../../scss/variables.scss" as variablesScss;
+            @use "../../../scss/buttons.scss";
 
             .dropdown-container {
-              margin-bottom: $half-margin;
+              margin-bottom: variablesScss.$half-margin;
               .input-and-arrow {
                 .arrow-icon {
                   margin-top : 0px;
@@ -22,7 +22,7 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
             }
 
             .choice-page {
-              margin-top: $normal-margin;
+              margin-top: variablesScss.$normal-margin;
               width: 320px;
             }
 

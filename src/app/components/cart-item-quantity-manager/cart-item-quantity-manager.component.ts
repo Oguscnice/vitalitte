@@ -10,11 +10,11 @@ import {KeyShoppingCart, ShoppingCartItem} from "../../shared/interfaces/Shoppin
 
 @Component({
   selector: 'app-cart-item-quantity-manager',
-  standalone: true,
+
   imports: [ NgClass],
   templateUrl: './cart-item-quantity-manager.component.html',
   styles: [`
-    @import "../../scss/variables.scss";
+    @use "../../scss/variables.scss" as variablesScss;
 
     .cart-manager {
       max-width: 240px;
@@ -22,11 +22,11 @@ import {KeyShoppingCart, ShoppingCartItem} from "../../shared/interfaces/Shoppin
         display: inline-block;
       }
       .manage-icon {
-        color: $lilac;
-        background-color: $white;
-        font-size: $fourth-font-size;
+        color: variablesScss.$lilac;
+        background-color: variablesScss.$white;
+        font-size: variablesScss.$fourth-font-size;
         border-radius: 100%;
-        box-shadow: 0 4px 8px $orange-dark;
+        box-shadow: 0 4px 8px variablesScss.$orange-dark;
       }
       div {
         p {
@@ -34,8 +34,8 @@ import {KeyShoppingCart, ShoppingCartItem} from "../../shared/interfaces/Shoppin
         }
         .fa-cart-shopping {
           transition: transform 0.2s;
-          font-size: $fourth-font-size;
-          @include text-shadow(2px, $lilac-light-opacity-low)
+          font-size: variablesScss.$fourth-font-size;
+          @include variablesScss.text-shadow(2px, variablesScss.$lilac-light-opacity-low)
         }
       }
     }
@@ -53,11 +53,11 @@ import {KeyShoppingCart, ShoppingCartItem} from "../../shared/interfaces/Shoppin
     @media screen and (min-width: 768px) {
       .cart-manager {
         .manage-icon {
-          font-size: $double-font-size;
+          font-size: variablesScss.$double-font-size;
         }
         div {
           .fa-cart-shopping {
-            font-size: $triple-font-size;
+            font-size: variablesScss.$triple-font-size;
           }
         }
       }
@@ -69,11 +69,11 @@ import {KeyShoppingCart, ShoppingCartItem} from "../../shared/interfaces/Shoppin
       .cart-manager {
         width: 80%;
         .manage-icon {
-          font-size: $double-font-size;
+          font-size: variablesScss.$double-font-size;
         }
         div {
           .fa-cart-shopping {
-            font-size: $double-font-size;
+            font-size: variablesScss.$double-font-size;
           }
         }
       }

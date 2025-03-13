@@ -1,46 +1,57 @@
-@import "../../scss/variables.scss";
-@import "../../scss/buttons.scss";
-@import "../../../styles.scss";
+@use "../../scss/variables.scss" as variablesScss;
+@use "../../scss/buttons.scss";
 
-.contact-page {
-  section {
-    flex-direction: column;
-    iframe {
-      margin-top: $triple-padding;
-      @include outline-picture;
-      height: 400px;
-      width: 80vw;
-      max-width: 500px;
+section {
+  flex-direction: column;
+  .infos {
+    * {
+      justify-content: center;
+    }
+    .mobile-only {
+      display: flex;
+    }
+    .desktop-only {
+      display: none;
+    }
+    a {
+      text-decoration: none;
+      color: variablesScss.$black;
+      font-family: Znikomit, sans-serif;
+      font-size: 1.8rem;
+      text-align: center;
+      line-height: 1.4em;
+      letter-spacing: 2px;
     }
   }
-
-}
-
-// Breackpoint list
-// Mobiles vers Tablettes :
-@media screen and (min-width: 768px) {
+  iframe {
+    margin-top: variablesScss.$triple-padding;
+    @include variablesScss.outline-picture;
+    height: 400px;
+    width: 80vw;
+    max-width: 500px;
+  }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
-  .contact-page{
-    div{
-      a{
-        color: $black;
+  section {
+    width: 100vw;
+    max-width: variablesScss.$max-width-768px;
+    flex-direction: row;
+    .infos {
+      * {
+        justify-content: flex-start;
+      }
+      .mobile-only {
+        display: none;
+      }
+      .desktop-only {
+        display: flex;
       }
     }
-    section {
-      width: 100vw;
-      max-width: $max-width-768px;
-      flex-direction: row;
-      iframe{
-        max-height: 320px;
-        max-width: 320px;
-      }
+    iframe {
+      max-height: 320px;
+      max-width: 320px;
     }
   }
-}
-
-// Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1400px) {
 }

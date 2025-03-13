@@ -8,14 +8,14 @@ import {AuthService} from "../../shared/services/auth.service";
   selector: 'app-login',
   templateUrl: './login.component.html',
   styles: [`
-    @import "../../scss/variables.scss";
-    @import "../../scss/forms.scss";
-    @import "../../scss/dropdowns.scss";
-    @import "../../scss/buttons.scss";
+    @use "../../scss/variables.scss" as variablesScss;
+    @use "../../scss/forms.scss";
+    @use "../../scss/dropdowns.scss";
+    @use "../../scss/buttons.scss";
 
     h1 {
-      margin-top: $normal-margin;
-      color: $lilac-dark;
+      margin-top: variablesScss.$normal-margin;
+      color: variablesScss.$lilac-dark;
     }
 
     form {

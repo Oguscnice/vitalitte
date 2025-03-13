@@ -1,30 +1,31 @@
-@import "../../scss/variables.scss";
-@import "../../scss/buttons.scss";
-@import "../../../styles.scss";
+@use "../../scss/variables.scss" as variablesScss;
+@use "../../scss/buttons.scss";
+@use "../../../styles.scss";
 
-$product-picture-size: calc(100vw - ($fourth-padding * 2));
+$product-picture-size: calc(100vw - (#{variablesScss.$fourth-padding} * 2));
 
 .product-list {
   h5 {
-    font-size: $triple-font-size;
-    padding-bottom: $triple-padding;
+    font-size: variablesScss.$triple-font-size;
+    padding-bottom: variablesScss.$triple-padding;
+    font-family: variablesScss.$font-family-title-h2-h3;
   }
   p {
-    padding: $double-padding 0;
+    padding: variablesScss.$double-padding 0;
     text-align: left;
-    font-size: $normal-font-size;
+    font-size: variablesScss.$normal-font-size;
     max-width: $product-picture-size;
   }
   .image-and-filter-color {
     height: $product-picture-size;
     width: $product-picture-size;
     img {
-      @include outline-picture;
+      @include variablesScss.outline-picture;
       min-height: $product-picture-size;
       min-width: $product-picture-size;
     }
     .filter-color {
-      z-index: $z-index + 1;
+      z-index: variablesScss.$z-index + 1;
       border-radius: 8px;
       top: calc( 0px - $product-picture-size - 4px);
       min-height: calc($product-picture-size + 2px + 2px);
@@ -32,12 +33,17 @@ $product-picture-size: calc(100vw - ($fourth-padding * 2));
     }
   }
   .product-introduction {
-    padding-top: $double-padding;
+    padding-top: variablesScss.$double-padding;
     max-height: 160px;
-    @include hiddenTextByLineNumber(5);
+    @include variablesScss.hiddenTextByLineNumber(5);
+    margin-bottom: calc(2 * #{variablesScss.$normal-margin});
+
+    p {
+      font-family: variablesScss.$font-family-text;
+    }
   }
   hr {
-    margin: $triple-padding 0;
+    margin: calc(2 * #{variablesScss.$normal-margin}) 0;
   }
 }
 

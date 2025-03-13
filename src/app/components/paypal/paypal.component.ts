@@ -10,7 +10,6 @@ import {BaseComponent} from "../../base.component";
 import {LoaderComponent} from "../loader/loader.component";
 
 @Component({
-  standalone: true,
   imports: [NgxPayPalModule, LoaderComponent],
   selector: 'app-paypal',
   template: `<ngx-paypal [config]="payPalConfig"></ngx-paypal>

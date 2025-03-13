@@ -46,8 +46,7 @@
         @if (fileService.picture) {
           <img [src]="fileService.getDataForImageSrc(fileService.picture)" alt="Photo à choisir pour le produit en cours de création">
         }
-        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
-      </div>
+        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture, 'picture-selected': fileService.picture}"></i>      </div>
 
     @if (formHelper.isFormSubmit && newProductForm.controls['pictureDto'].invalid) {
       <div>
@@ -71,11 +70,11 @@
                 (click)="toggleDropdown('Category')"
                 [value]="formHelper.getDtoNameByFormControlValue(newProductForm.get('categoryDto')!.value!)"
                 readonly/>
-          <div class="arrow-icon flex center">
+          <div class="arrow-icon flex center" (click)="toggleDropdown('Category')">
             @if (isCategoryDropdownOpen) {
-              <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Category')"></i>
+              <i class="fa-solid fa-circle-chevron-down pointer"></i>
             } @else {
-              <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Category')"></i>
+              <i class="fa-solid fa-circle-chevron-up pointer"></i>
             }
           </div>
         </div>
@@ -109,11 +108,11 @@
                 (click)="toggleDropdown('Collection')"
                 [value]="formHelper.getDtoNameByFormControlValue(newProductForm.get('collectionDto')!.value!)"
                 readonly/>
-          <div class="arrow-icon flex center">
+          <div class="arrow-icon flex center" (click)="toggleDropdown('Collection')">
             @if (isCollectionDropdownOpen) {
-              <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Collection')"></i>
+              <i class="fa-solid fa-circle-chevron-down pointer"></i>
             } @else {
-              <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Collection')"></i>
+              <i class="fa-solid fa-circle-chevron-up pointer"></i>
             }
           </div>
         </div>
@@ -146,11 +145,11 @@
                 value="Selectionnez un (des) matériel(aux)"
                 (click)="toggleDropdown('Materials')"
                 readonly/>
-          <div class="arrow-icon flex center">
+          <div class="arrow-icon flex center" (click)="toggleDropdown('Materials')">
             @if (isMaterialsDropdownOpen) {
-              <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Materials')"></i>
+              <i class="fa-solid fa-circle-chevron-down pointer"></i>
             } @else {
-              <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Materials')"></i>
+              <i class="fa-solid fa-circle-chevron-up pointer"></i>
             }
           </div>
         </div>
@@ -161,8 +160,9 @@
             </li>
           }
         </ul>
-        <table>
-          <thead>
+        @if (currentMaterials && currentMaterials.length > 0) {
+          <table class="width100">
+            <thead>
             <tr>
               <td>
                 <p>Nom</p>
@@ -177,22 +177,15 @@
                 <p>Supp.</p>
               </td>
             </tr>
-          </thead>
-          <tbody>
-            @if (!currentMaterials || currentMaterials.length < 1) {
-              <tr>
-                <td>
-                  <p>Aucun matériel sélectionné</p>
-                </td>
-              </tr>
-            } @else {
+            </thead>
+            <tbody>
               @for (currentMaterial of currentMaterials; track currentMaterial) {
                 <tr>
                   <td>
                     <p class="flex text-left"> {{ currentMaterial.name | titlecase }} </p>
                   </td>
                   <td>
-                    <p> {{ currentMaterial.price | customCurrency }} €</p>
+                    <p class="width100"> {{ currentMaterial.price | customCurrency }}</p>
                   </td>
                   <td>
                     <p> {{ currentMaterial.materialType | titlecase }} </p>
@@ -202,10 +195,12 @@
                   </td>
                 </tr>
               }
-            }
-          </tbody>
-        </table>
-        <p>Total : {{ totalPriceMaterials() }}€</p>
+            </tbody>
+          </table>
+        } @else {
+          <p>Aucun matériel sélectionné</p>
+        }
+        <p>Total : {{ totalPriceMaterials() | customCurrency }}</p>
       </div>
 
       @if (formHelper.isFormSubmit && myForm.submitted && newProductForm.controls['materialsDto'].invalid) {
@@ -302,15 +297,11 @@
         <img class="pointer"
              src="{{ fileService.imageProductDefault.url }}"
              alt="Photo secondaire à choisir pour le produit"/>
-        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
-      </div>
+        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture, 'picture-selected': fileService.picture}"></i>      </div>
 
       <table>
         <thead>
           <tr>
-            <td>
-              <p>URL</p>
-            </td>
             <td>
               <p>Image</p>
             </td>
@@ -323,9 +314,6 @@
           @if (fileService.secondaryPictures && fileService.secondaryPictures.length > 0) {
             @for (secondaryPicture of fileService.secondaryPictures; track secondaryPicture) {
               <tr>
-                <td>
-                  <p class="flex text-left"> {{ secondaryPicture }} </p>
-                </td>
                 <td>
                   <img src="{{ fileService.getDataForImageSrc(secondaryPicture) }}" alt="image secondaire du produit {{ newProductForm.get('name')!.value }} en cours de selection">
                 </td>
@@ -346,7 +334,7 @@
     </fieldset>
   </form>
 
-  <button class="btn-submit-admin"
+  <button class="btn-submit-admin flex center"
           (click)="submitForm.click()">
     Créer
   </button>

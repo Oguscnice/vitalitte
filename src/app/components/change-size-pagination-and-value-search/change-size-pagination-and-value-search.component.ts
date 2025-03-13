@@ -4,8 +4,7 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
 
 @Component({
   selector: 'app-change-size-pagination-and-value-search',
-  standalone: true,
-  imports: [ NgClass ],
+  imports: [NgClass],
   template: `
     <div class="inputs flex space-around">
       @if (!isInputSearchHidden) {
@@ -24,17 +23,17 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
                      [value]="pageSize$()"
                      (click)="toggleSizeDropdown()"
                      readonly/>
-              <div class="arrow-icon flex center">
+              <div class="arrow-icon flex center" (click)="toggleSizeDropdown()">
                 @if (isSizeDropdownOpen) {
-                  <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleSizeDropdown()"></i>
+                  <i class="fa-solid fa-circle-chevron-down pointer"></i>
                 } @else {
-                  <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleSizeDropdown()"></i>
+                  <i class="fa-solid fa-circle-chevron-up pointer"></i>
                 }
               </div>
             </div>
             <ul class="items-list" [ngClass]="{'dropdown-visible': isSizeDropdownOpen}">
-              @for (number of [10,20,50]; track $index) {
-                <li (click)="this.onChangePageSize(number); toggleSizeDropdown() "> {{ number }} </li>
+              @for (number of [10, 20, 50]; track $index) {
+                <li (click)="this.onChangePageSize(number); toggleSizeDropdown() "> {{ number }}</li>
               }
             </ul>
           </div>
@@ -42,21 +41,22 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
       }
 
     </div>
-    @if (counterItem$() && counterItem$() > 1 ) {
+    @if (counterItem$() && counterItem$() > 1) {
       <small class="width100 flex center"> {{ counterItem$() }} éléments au total. </small>
-    } @else if (counterItem$() && counterItem$() === 1 ) {
+    } @else if (counterItem$() && counterItem$() === 1) {
       <small class="width100 flex center"> {{ counterItem$() }} élément au total. </small>
     } @else {
       <small class="width100 flex center"> Aucun élément dans nos données. </small>
     }
   `,
+  standalone: true,
   styles: [`
-    @import "../../scss/variables.scss";
-    @import "../../scss/dropdowns.scss";
-    @import "../../scss/forms.scss";
+    @use "../../scss/variables.scss" as variablesScss;
+    @use "../../scss/dropdowns.scss";
+    @use "../../scss/forms.scss";
 
     .inputs {
-      margin-top : $half-margin;
+      margin-top: variablesScss.$half-margin;
       width: 100%;
 
       .one-input {
@@ -66,12 +66,18 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
 
     .dropdown-container {
       width: 80px;
+
       .input-and-arrow {
         width: 80px;
       }
+
       .items-list {
         width: 80px;
       }
+    }
+
+    small {
+      margin-top: variablesScss.$normal-padding;
     }
   `]
 })

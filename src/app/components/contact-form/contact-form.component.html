@@ -103,20 +103,20 @@
                placeholder="Choississez le thème de votre demande..."
                autocomplete="off"
                class="pointer"
-               (focus)="toggleDropdown(true)"
+               (focus)="toggleDropdown()"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown()">
           @if (isDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false)"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true)"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
 
       <ul class="items-list" [ngClass]="{'dropdown-visible': isDropdownOpen}">
         @for (theme of themeList; track theme) {
-          <li (click)="changeThemeValue(theme); toggleDropdown(false) ">
+          <li (click)="changeThemeValue(theme); toggleDropdown() ">
             {{ theme }}
           </li>
         }

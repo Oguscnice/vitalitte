@@ -11,7 +11,7 @@ import {FileService} from "../../../../../shared/services/file.service";
 
 @Component({
   selector: 'app-post-category',
-  standalone: true,
+
   imports: [
     ReactiveFormsModule,
     NgClass,
@@ -20,7 +20,8 @@ import {FileService} from "../../../../../shared/services/file.service";
   ],
   templateUrl: './post-category.component.html',
   styles: [`
-    @import "../../../scss/admin-general.scss";
+    @use "../../../../../scss/forms.scss";
+    @use "../../../scss/admin-general.scss";
 
     input {
       max-width: 320px;

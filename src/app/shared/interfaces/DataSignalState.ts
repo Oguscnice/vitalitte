@@ -18,7 +18,6 @@ export interface DataSignalState {
   $privateMaterialTypeList: WritableSignal<string[]>;
   $privateMaterialList: WritableSignal<MaterialDto[]>;
   $privateWorkshopBySlug: BehaviorSubject<WorkshopDto | null>;
-  $privateMaterialBySlug: BehaviorSubject<MaterialDto | null>;
   $privatePublicationBySlug: BehaviorSubject<PublicationDto | null>;
   $privateWorkshopsDateToCome: WritableSignal<WorkshopDto[]>;
   $privateWorkshopsPastDate: WritableSignal<WorkshopDto[]>;

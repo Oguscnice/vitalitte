@@ -13,7 +13,12 @@ import {DeliveryOptionDto} from "../../../../../shared/interfaces/DeliveryOption
   standalone: true,
   imports: [NgClass, CustomCurrencyPipe, ReactiveFormsModule],
   templateUrl: './edit-delete-delivery-option.component.html',
-  styles:  [`@import "../../../scss/admin-general.scss";`]
+  styles: [`
+    @use "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-table.scss";
+    @use "../../../scss/admin-toggle.scss";
+    @use "../../../../../scss/table.scss";
+  `]
 })
 export class EditDeleteDeliveryOptionComponent implements OnInit {
 

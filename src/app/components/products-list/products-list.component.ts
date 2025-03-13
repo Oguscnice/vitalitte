@@ -5,8 +5,7 @@ import {DataSignalService} from "../../shared/services/data-signal.service";
 import {FileService} from "../../shared/services/file.service";
 
 @Component({
-  standalone: true,
-  imports: [ TitleCasePipe, RouterLink ],
+  imports: [TitleCasePipe, RouterLink],
   selector: 'app-products-list',
   template: `
     @for (product of products$(); track product; let index = $index) {
@@ -18,12 +17,10 @@ import {FileService} from "../../shared/services/file.service";
           <div class="filter-color"></div>
         </div>
         <div class="product-introduction" [innerHTML]="product.introduction"></div>
-        @if (index < products$().length - 1) {
-          <hr>
-        }
       </div>
     }
   `,
+  standalone: true,
   styleUrls: ['./products-list.component.scss']
 })
 export class ProductsListComponent {

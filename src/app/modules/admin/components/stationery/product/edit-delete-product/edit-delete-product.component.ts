@@ -7,11 +7,15 @@ import { DataSignalService } from '../../../../../../shared/services/data-signal
 import {PaginationSignalService} from "../../../../../../shared/services/pagination-signal.service";
 
 @Component({
-  standalone: true,
   imports: [ NgClass, RouterLink ],
   selector: 'app-edit-delete-product',
   templateUrl: './edit-delete-product.component.html',
-  styles: [` @import "../../../../scss/admin-general"; `]
+  styles: [`
+    @use "../../../../scss/admin-general.scss";
+    @use "../../../../scss/admin-toggle.scss";
+    @use "../../../../scss/admin-table.scss";
+    @use "../../../../../../scss/table.scss";
+  `]
 })
 export class EditDeleteProductComponent implements OnInit {
 

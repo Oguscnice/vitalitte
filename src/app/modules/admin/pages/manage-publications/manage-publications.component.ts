@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
               <app-post-publication/>
               <app-edit-delete-publication/>
   `,
-  styles: [` @import "../../scss/admin-general.scss"; `]
+  styles: [` @use "../../scss/admin-general.scss"; `]
 })
 export class ManagePublicationsComponent {
 

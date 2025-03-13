@@ -1,35 +1,35 @@
-@import "../scss/variables.scss";
+@use "../scss/variables.scss" as variablesScss;
 
 .btn-normal {
-  @include outline-picture;
-  background-color: $lilac-light;
-  margin: $half-margin;
-  padding: $double-padding;
-  font-family: $font-family-text;
-  font-size: $double-font-size;
+  @include variablesScss.outline-picture;
+  background-color: variablesScss.$lilac-light;
+  margin: variablesScss.$half-margin;
+  padding: variablesScss.$double-padding;
+  font-family: variablesScss.$font-family-text;
+  font-size: variablesScss.$double-font-size;
   font-weight: bold;
   text-align: center;
-  box-shadow: 8px 8px 4px rgba($lilac-light, 0.8);
-  color: $white;
-  @include text-shadow (0.4px, $black);
+  box-shadow: 8px 8px 4px rgba(variablesScss.$lilac-light, 0.8);
+  color: variablesScss.$white;
+  @include variablesScss.text-shadow (0.4px, variablesScss.$black);
   cursor: pointer;
   min-height: 40px;
   min-width: 40px;
 }
 
 .btn-grey {
-  background-color: $grey;
-  box-shadow: 8px 8px 4px rgba($grey, 0.8);
-  border: 2px solid $grey;
+  background-color: variablesScss.$grey;
+  box-shadow: 8px 8px 4px rgba(variablesScss.$grey, 0.8);
+  border: 2px solid variablesScss.$grey;
   cursor: not-allowed;
 }
 
 .btn-filter {
   border-radius: 8px;
-  margin: calc($half-margin / 2);
-  padding: $double-padding;
-  font-family: $font-family-text;
-  font-size: $double-font-size;
+  margin: calc(#{variablesScss.$half-margin} / 2);
+  padding: variablesScss.$double-padding;
+  font-family: variablesScss.$font-family-text;
+  font-size: variablesScss.$double-font-size;
   text-align: center;
   cursor: pointer;
   min-height: 40px;
@@ -38,23 +38,23 @@
 }
 
 .btn-filter-inactive {
-  border-color: $lilac-dark-transparent;
-  background-color: $lilac-light-opacity-low;
-  color: $lilac-dark;
-  box-shadow: 4px 4px 2px rgba($lilac-light, 0.4);
+  border-color: variablesScss.$lilac-dark-transparent;
+  background-color: variablesScss.$lilac-light-opacity-low;
+  color: variablesScss.$lilac-dark;
+  box-shadow: 4px 4px 2px rgba(variablesScss.$lilac-light, 0.4);
 }
 
 .btn-filter-active {
-  border-color: $lilac-dark;
-  background-color: $lilac;
-  color: $white;
-  box-shadow: 8px 8px 4px rgba($lilac, 0.4);
+  border-color: variablesScss.$lilac-dark;
+  background-color: variablesScss.$lilac;
+  color: variablesScss.$white;
+  box-shadow: 8px 8px 4px rgba(variablesScss.$lilac, 0.4);
 }
 
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .btn-normal {
-    font-size: $normal-font-size;
+    font-size: variablesScss.$normal-font-size;
   }
 }

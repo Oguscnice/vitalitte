@@ -5,7 +5,7 @@ import {PaypalComponent} from "../paypal/paypal.component";
 import {DataSignalService} from "../../shared/services/data-signal.service";
 import {FormHelperService} from "../../modules/admin/shared/services/form-helper.service";
 import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
-import {AsyncPipe, NgClass, TitleCasePipe} from "@angular/common";
+import {NgClass, TitleCasePipe} from "@angular/common";
 import {ApiBanService} from "../../modules/admin/shared/services/api/api-ban.service";
 import {BaseComponent} from "../../base.component";
 import {phoneValidator} from "../../shared/validators/PhoneValidator";
@@ -18,14 +18,13 @@ import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-checkout-form',
-  standalone: true,
+
   imports: [
     CustomCurrencyPipe,
     PaypalComponent,
     ReactiveFormsModule,
     NgClass,
-    TitleCasePipe,
-    AsyncPipe
+    TitleCasePipe
   ],
   templateUrl: './checkout-form.component.html',
   styleUrl: './checkout-form.component.scss'

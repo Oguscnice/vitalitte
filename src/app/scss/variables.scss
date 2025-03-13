@@ -12,21 +12,25 @@
 // Définition du chemin vers le dossier des polices
 $font-path: '/fonts/';
 
-// Import de la police
-@font-face {
-  font-family: 'Holipop';
-  src: url('#{$font-path}holipop/Holipop.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
+$font-family-title-h1: 'ZnikomitNo25', sans-serif;
+$font-family-title-h2-h3: 'Znikomit', sans-serif;
+$font-family-text: 'Znikomit', sans-serif;
 
 // Import de la police
-@font-face {
-  font-family: 'Listian';
-  src: url('#{$font-path}listian/Listian-Reguler.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
+//@font-face {
+//  font-family: 'Holipop';
+//  src: url('#{$font-path}holipop/Holipop.otf') format('opentype');
+//  font-weight: normal;
+//  font-style: normal;
+//}
+//
+//// Import de la police
+//@font-face {
+//  font-family: 'Listian';
+//  src: url('#{$font-path}listian/Listian-Reguler.otf') format('opentype');
+//  font-weight: normal;
+//  font-style: normal;
+//}
 
 // ----- max-width -----
 $max-width-mobile: 80%;
@@ -43,14 +47,14 @@ $lilac-light: rgb(217, 117, 250);
 $lilac-dark: rgb(140, 76, 161);
 $lilac-dark-transparent: rgba($lilac-dark, 0.5);
 $lilac-light-opacity-low: #f67cfa42;
-$orange : rgba(255, 165, 0);
-$orange-light : rgb(255, 186, 84);
-$orange-dark : rgb(211, 140, 0);
-$orange-dark-transparent : rgba($orange-dark, 0.5);
-$orange-light-opacity-low : rgba($orange-light, 0.5);
-$brown : brown;
-$red : red;
-$green : green;
+$orange: rgba(255, 165, 0);
+$orange-light: rgb(255, 186, 84);
+$orange-dark: rgb(211, 140, 0);
+$orange-dark-transparent: rgba($orange-dark, 0.5);
+$orange-light-opacity-low: rgba($orange-light, 0.5);
+$brown: brown;
+$red: red;
+$green: green;
 
 // ----- padding -----
 $normal-padding: 8px;
@@ -66,7 +70,7 @@ $normal-margin: 40px;
 $double-margin: 2 * $normal-margin;
 $triple-margin: 3 * $normal-margin;
 $fourth-margin: 4 * $normal-margin;
-// $double-half-margin: calc($normal-margin / 4);
+//$double-half-margin: calc($normal-margin / 4);
 $half-margin: calc($normal-margin / 2);
 
 // ----- border radius -----
@@ -75,7 +79,7 @@ $half_openBorderRadius: 4px;
 $double-border-radius: 16px;
 
 // ----- border radiusfont sizeadius : 8px;
-$normal-font-size: 1rem;
+$normal-font-size: 1.2rem;
 $double-font-size: 1.5 * $normal-font-size;
 $triple-font-size: 2 * $normal-font-size;
 $fourth-font-size: 3 * $normal-font-size;
@@ -89,10 +93,6 @@ $desktop-h1-component: 480px;
 // ----- height-headband-yellow-black;
 $height-headband: 16px;
 
-$font-family-title-h1: "Holipop", sans-serif;
-$font-family-title-h2-h3: "Listian", sans-serif;
-$font-family-text: "Helvetica", sans-serif;
-
 $z-index: 1;
 
 @mixin outline-picture {
@@ -104,7 +104,7 @@ $z-index: 1;
 
 @mixin one-third-picture {
   width: calc(100vw - (2 * $fourth-padding));
-  height: calc((100vw - (2 * $fourth-padding)) / 3);
+  height: calc(100vw - (2 * $fourth-padding) / 3);
 }
 
 @mixin text-shadow($height, $color) {

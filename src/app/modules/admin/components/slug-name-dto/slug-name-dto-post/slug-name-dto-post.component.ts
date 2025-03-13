@@ -5,7 +5,6 @@ import { BaseComponent } from 'src/app/base.component';
 import { AdminCollectionSignalService } from '../../../shared/services/admin-collection-signal.service';
 
 @Component({
-  standalone: true,
   imports: [ NgClass, ReactiveFormsModule ],
   selector: 'app-slug-name-dto-post',
   template: `
@@ -50,7 +49,9 @@ import { AdminCollectionSignalService } from '../../../shared/services/admin-col
               }
             `,
   styles: [`
-    @import "../../../scss/admin-general.scss";
+    @use "../../../../../scss/forms.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../scss/admin-general.scss";
 
     input {
       max-width: 320px;

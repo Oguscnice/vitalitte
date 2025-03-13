@@ -1,8 +1,8 @@
 <app-h1 [titleChild]="'Actualités'"
         [backgroundImageChild]="backgroundImageParentHome"></app-h1>
 
-<h3 class="flex center">Actus du moment</h3>
 @if (publicationsSpotlighted$() && publicationsSpotlighted$().length > 0) {
+  <h3 class="flex center">Actus du moment</h3>
   <div class="publications flex column center">
     <div class="flex wrap space-between publications-section">
       @for (publication of publicationsSpotlighted$(); track publication) {
@@ -10,8 +10,6 @@
       }
     </div>
   </div>
-} @else {
-  <h4 class="flex center">Pas d'actualité mise en valeur</h4>
 }
 
 <h3 class="flex center">Toutes nos actualités</h3>

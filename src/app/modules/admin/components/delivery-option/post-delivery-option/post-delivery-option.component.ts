@@ -15,7 +15,13 @@ import {CreateDeliveryOption} from "../../../shared/interfaces/CreateDeliveryOpt
   ],
   templateUrl: './post-delivery-option.component.html',
   styles: [`
-    @import "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-toggle.scss";
+    @use "../../../scss/admin-form.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../../../scss/table.scss";
+    @use "../../../../../scss/forms.scss";
+    @use "../../../../../scss/buttons.scss";
   `]
 })
 export class PostDeliveryOptionComponent {

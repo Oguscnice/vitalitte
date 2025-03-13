@@ -6,18 +6,18 @@ import {BaseComponent} from "../../base.component";
 
 @Component({
   selector: 'app-signup',
-  standalone: true,
+
   imports: [ ReactiveFormsModule ],
   templateUrl: './signup.component.html',
   styles: [`
-    @import "../../scss/variables.scss";
-    @import "../../scss/forms.scss";
-    @import "../../scss/dropdowns.scss";
-    @import "../../scss/buttons.scss";
+    @use "../../scss/variables.scss" as variablesScss;
+    @use "../../scss/forms.scss";
+    @use "../../scss/dropdowns.scss";
+    @use "../../scss/buttons.scss";
 
     h1 {
-      margin: $normal-margin 0;
-      color: $lilac-dark;
+      margin: variablesScss.$normal-margin 0;
+      color: variablesScss.$lilac-dark;
     }
 
     form {
@@ -37,9 +37,9 @@ import {BaseComponent} from "../../base.component";
     }
 
     small {
-      margin-top: $half-padding;
+      margin-top: variablesScss.$half-padding;
       span {
-        padding: 0 $half-padding;
+        padding: 0 variablesScss.$half-padding;
         color: black ;
       }
     }

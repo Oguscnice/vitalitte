@@ -12,7 +12,7 @@ import {CounterZeroIfEmpty} from "../../../../../shared/services/pipes/counter-z
 
 @Component({
   selector: 'app-edit-delete-category',
-  standalone: true,
+
   imports: [
     NgClass,
     ReactiveFormsModule,

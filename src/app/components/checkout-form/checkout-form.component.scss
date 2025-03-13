@@ -1,7 +1,7 @@
-@import "../../scss/variables.scss";
-@import "../../scss/forms.scss";
-@import "../../scss/dropdowns.scss";
-@import "../../scss/buttons.scss";
+@use "../../scss/variables.scss" as variablesScss;
+@use "../../scss/forms.scss";
+@use "../../scss/dropdowns.scss";
+@use "../../scss/buttons.scss";
 
 form {
   flex-direction: column;
@@ -12,9 +12,9 @@ form {
     .gift-card-input-and-button {
       button {
         min-width: 20%;
-        margin-top : $half-margin;
-        padding: 0 $normal-padding;
-        font-size: $normal-font-size;
+        margin-top : variablesScss.$half-margin;
+        padding: 0 variablesScss.$normal-padding;
+        font-size: variablesScss.$normal-font-size;
       }
     }
     .discount-details {
@@ -27,21 +27,21 @@ form {
 .total-resume {
   text-align: right;
   font-weight: bold;
-  padding: $double-padding $normal-padding 0 $normal-padding;
+  padding: variablesScss.$double-padding variablesScss.$normal-padding 0 variablesScss.$normal-padding;
 }
 
 .total-price {
   width: 100%;
   text-align: right;
   font-weight: bolder;
-  font-size: $triple-font-size;
-  padding-top: $triple-padding ;
+  font-size: variablesScss.$triple-font-size;
+  padding-top: variablesScss.$triple-padding ;
 }
 
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .total-price {
-    max-width: $max-width-768px;
+    max-width: variablesScss.$max-width-768px;
   }
 }

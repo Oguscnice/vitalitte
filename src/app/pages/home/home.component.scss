@@ -1,6 +1,5 @@
-@import "../../scss/variables.scss";
-@import "../../scss/buttons.scss";
-@import "../../../styles.scss";
+@use "../../scss/variables.scss" as variablesScss;
+@use "../../scss/buttons.scss";
 
 :root {
   --height-img-monitored: 0px;
@@ -10,75 +9,75 @@
 section {
   width: 100%;
   p {
-    padding: 0 $fourth-padding;
+    padding: 0 variablesScss.$fourth-padding;
   }
 }
 
-.image-biography {
-  @include outline-picture;
+.img-full-width {
+  @include variablesScss.outline-picture;
   width: 100vw;
   height: 32vh;
   overflow: hidden;
   img {
     height: 32vh;
     width: 100vw;
-    z-index: $z-index;
+    z-index: variablesScss.$z-index;
     object-position: top;
   }
   h2 {
     position : relative;
     height: 32vh;
-    color: $white;
+    color: variablesScss.$white;
     top: -32vh;
-    z-index: $z-index + 2;
+    z-index: variablesScss.$z-index + 2;
     margin: 0px;
   }
   .filter-color {
-    z-index: $z-index + 1;
+    z-index: variablesScss.$z-index + 1;
     height: 100vh;
     top: calc(-64vh - 4px);
   }
 }
 
-.booktique-section {
-  width: 100%;
-  .booktique-title-and-text {
-    width: calc(100vw * (2 / 3));
-    p {
-      padding: 0 $fourth-padding;
-    }
-  }
-  .image-and-filter-color {
-    padding-top: $fourth-padding;
-    width: calc(100vw * (1 / 3));
-    height: 100%;
-    img {
-      z-index: $z-index;
-      @include outline-picture;
-      height: 40vw;
-      max-height: 175px;
-    }
-    .filter-color {
-      z-index: $z-index + 1;
-      border-radius: 8px;
-      left: calc(0px - (var(--width-img-monitored) + 2px));
-      width: var(--width-img-monitored);
-      min-width: var(--width-img-monitored);
-      height: var(--height-img-monitored);
-    }
-  }
-}
+//.booktique-section {
+//  width: 100%;
+//  .booktique-title-and-text {
+//    width: calc(100vw * (2 / 3));
+//    p {
+//      padding: 0 variablesScss.$fourth-padding;
+//    }
+//  }
+//  .image-and-filter-color {
+//    padding-top: variablesScss.$fourth-padding;
+//    width: calc(100vw * (1 / 3));
+//    height: 100%;
+//    img {
+//      z-index: variablesScss.$z-index;
+//      @include variablesScss.outline-picture;
+//      height: 40vw;
+//      max-height: 175px;
+//    }
+//    .filter-color {
+//      z-index: variablesScss.$z-index + 1;
+//      border-radius: 8px;
+//      left: calc(0px - (var(--width-img-monitored) + 2px));
+//      width: var(--width-img-monitored);
+//      min-width: var(--width-img-monitored);
+//      height: var(--height-img-monitored);
+//    }
+//  }
+//}
 
 .review-and-arrows {
   width: 100%;
   i {
-    font-size: $fourth-font-size;
+    font-size: variablesScss.$fourth-font-size;
   }
   .fa-circle-arrow-left {
-    margin-right: $normal-margin;
+    margin-right: variablesScss.$normal-margin;
   }
   .fa-circle-arrow-right {
-    margin-left: $normal-margin;
+    margin-left: variablesScss.$normal-margin;
   }
 }
 
@@ -93,31 +92,27 @@ section {
       justify-content: space-between;
     }
   }
-  .booktique-section {
-    align-items: center;
-  }
+  //.booktique-section {
+  //  align-items: center;
+  //}
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
-  .booktique-section {
-    .image-and-filter-color {
-      max-width: 100%;
-      img {
-        max-height: 160px;
-        max-width: 100%;
-      }
-    }
-  }
+  //.booktique-section {
+  //  .image-and-filter-color {
+  //    max-width: 100%;
+  //    img {
+  //      max-height: 160px;
+  //      max-width: 100%;
+  //    }
+  //  }
+  //}
 
   .review-and-arrows {
     max-width: 560px;
     i {
-      font-size: $triple-font-size;
+      font-size: variablesScss.$triple-font-size;
     }
   }
-}
-
-// Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1400px) {
 }

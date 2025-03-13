@@ -12,15 +12,15 @@ import { BaseComponent } from 'src/app/base.component';
               </div>
             `,
   styles: [`
-            @import "../../scss/variables.scss";
-            @import "../../scss/buttons.scss";
-            @import "../../../styles.scss";
+            @use "../../scss/variables.scss" as variablesScss;
+            @use "../../scss/buttons.scss";
+            @use "../../../styles.scss";
 
             .form-send-page{
-              height: calc(100vh - (var(--height-header) + var(--height-footer) + $double-padding) + 2px);
+              height: calc(100vh - (var(--height-header) + var(--height-footer) + #{variablesScss.$double-padding}) + 2px);
               div{
                 p{
-                  padding: $fourth-padding;
+                  padding: variablesScss.$fourth-padding;
                 }
               }
             }

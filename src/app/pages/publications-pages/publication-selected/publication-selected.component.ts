@@ -11,11 +11,11 @@ import {FileService} from "../../../shared/services/file.service";
   templateUrl: './publication-selected.component.html',
   styles: [`
 
-    @import "../../../scss/variables.scss";
+    @use "../../../scss/variables.scss" as variablesScss;
 
     .actuality-date {
-      font-size: $normal-font-size;
-      margin-bottom: $normal-margin;
+      font-size: variablesScss.$normal-font-size;
+      margin-bottom: variablesScss.$normal-margin;
     }
 
   `]

@@ -41,11 +41,11 @@
                  class="pointer"
                  (focus)="toggleDropdown('Category')"
                  readonly/>
-          <div class="arrow-icon flex center">
+          <div class="arrow-icon flex center" (click)="toggleDropdown('Category')">
             @if (isCategoryDropdownOpen) {
-              <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Category')"></i>
+              <i class="fa-solid fa-circle-chevron-down pointer"></i>
             } @else {
-              <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Category')"></i>
+              <i class="fa-solid fa-circle-chevron-up pointer"></i>
             }
           </div>
         </div>
@@ -126,8 +126,7 @@
         @if (fileService.picture) {
           <img [src]="fileService.getDataForImageSrc(fileService.picture)" alt="Photo à choisir pour le matériel en cours de carnet">
         }
-        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
-      </div>
+        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture, 'picture-selected': fileService.picture}"></i>      </div>
 
       @if (formHelper.isFormSubmit && newMaterialForm.controls['pictureDto'].invalid) {
         <div>

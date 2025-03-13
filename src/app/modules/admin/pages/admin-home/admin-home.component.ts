@@ -15,12 +15,13 @@ import { NAVBAR_ADMIN } from '../../shared/variables/Navbar';
                 }
               </div>`,
   styles: [`
-            @import "../../scss/admin-general.scss";
+            @use "../../scss/admin-button.scss";
+            @use "../../../../scss/variables.scss" as variablesScss;
 
             // .admin-home-page{
               h1 {
-                color: $lilac-dark;
-                margin-top: $normal-margin;
+                color: variablesScss.$lilac-dark;
+                margin-top: variablesScss.$normal-margin;
               }
               h2 {
                 max-width: 80vw;

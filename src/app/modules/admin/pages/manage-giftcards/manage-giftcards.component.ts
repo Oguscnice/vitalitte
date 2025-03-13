@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
                 <app-post-giftCard/>
                 <app-edit-delete-giftCard/>
                 `,
-  styles: [` @import "../../scss/admin-general.scss"; `]
+  styles: [` @use "../../scss/admin-general.scss"; `]
 })
 export class ManageGiftCardsComponent {
 }

@@ -6,11 +6,17 @@ import {ReactiveFormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-edit-delete-giftCard',
-  standalone: true,
+
   imports: [NgClass, DatePipe, DecimalPipe, ReactiveFormsModule],
   templateUrl: 'edit-delete-giftCard.component.html',
   styles: [`
-    @import "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-table.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../scss/admin-toggle.scss";
+    @use "../../../../../scss/forms.scss";
+    @use "../../../../../scss/dropdowns.scss";
+    @use "../../../../../scss/buttons.scss";
 
     .toggle-switch {
       .toggle-label {

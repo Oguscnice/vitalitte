@@ -18,7 +18,19 @@ import {FileDto} from "../../../../../../shared/interfaces/FileDto";
   standalone: false,
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
-  styles: [` @import "../../../../scss/admin-general"; `]
+  styles: [`
+    @use "../../../../scss/admin-form.scss";
+    @use "../../../../scss/admin-table.scss";
+    @use "../../../../scss/admin-button.scss";
+    @use "../../../../../../scss/forms.scss";
+    @use "../../../../../../scss/dropdowns.scss";
+    @use "../../../../../../scss/table.scss";
+    @use "../../../../../../scss/variables.scss" as variablesScss;
+
+    button {
+      margin-top: variablesScss.$normal-margin;
+    }
+  `]
 })
 export class EditProductComponent extends BaseComponent implements OnInit {
 

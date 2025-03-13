@@ -1,20 +1,20 @@
-@import "../../scss/variables.scss";
+@use "../../scss/variables.scss" as variablesScss;
 
 .carousel {
-  width: $max-width-mobile;
+  width: variablesScss.$max-width-mobile;
 
   img {
-    width: $max-width-mobile;
+    width: variablesScss.$max-width-mobile;
     aspect-ratio: 1 / 1;
   }
   .buttons-image {
     height: 120px;
 
     .img-circle {
-      width: calc(var(--width-img-by-counter-image) - $normal-margin);
+      width: calc(var(--width-img-by-counter-image) - (#{variablesScss.$normal-margin}));
       max-width: 100px;
       aspect-ratio: 1 / 1;
-      background-color: $lilac-light;
+      background-color: variablesScss.$lilac-light;
       border-radius: 50%;
       transition: all 0.4s ease-in-out;
       filter: grayscale(100%);
@@ -31,9 +31,9 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .carousel {
-    width: $max-width-768px;
+    width: variablesScss.$max-width-768px;
     img {
-      width: $max-width-768px;
+      width: variablesScss.$max-width-768px;
     }
   }
 }
@@ -41,9 +41,9 @@
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .carousel {
-    width: $max-width-992px;
+    width: variablesScss.$max-width-992px;
     img {
-      width: $max-width-992px;
+      width: variablesScss.$max-width-992px;
     }
   }
 }
@@ -51,9 +51,9 @@
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   .carousel {
-    width: $max-width-1400px;
+    width: variablesScss.$max-width-1400px;
     img {
-      width: $max-width-1400px;
+      width: variablesScss.$max-width-1400px;
     }
   }
 }

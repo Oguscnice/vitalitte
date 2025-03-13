@@ -20,16 +20,25 @@ import {FileService} from "../../../../../../shared/services/file.service";
 import {FileDto} from "../../../../../../shared/interfaces/FileDto";
 import {BaseComponent} from "../../../../../../base.component";
 import {AnguilleSignalService} from "../../../../../../shared/services/anguille-signal.service";
+import {AddEuroCurrencyPipe} from "../../../../../../shared/services/pipes/add-euro-currency.pipe";
 
 @Component({
-  standalone: true,
   imports: [NgClass, ReactiveFormsModule, TitleCasePipe, EditorModule, CounterZeroIfEmpty, EnumProductTypeFormatPipe, CustomCurrencyPipe],
   selector: 'app-post-product',
   templateUrl: './post-product.component.html',
   styles: [`
-    @import "../../../../scss/admin-general.scss";
-    @import "../../../../../../scss/forms.scss";
-    @import "../../../../../../scss/dropdowns.scss";
+    @use "../../../../scss/admin-general.scss";
+    @use "../../../../scss/admin-table.scss";
+    @use "../../../../scss/admin-button.scss";
+    @use "../../../../../../scss/buttons.scss";
+    @use "../../../../../../scss/forms.scss";
+    @use "../../../../../../scss/table.scss";
+    @use "../../../../../../scss/dropdowns.scss";
+    @use "../../../../../../scss/variables.scss" as variablesScss;
+
+    button {
+      margin: variablesScss.$normal-margin auto 0 auto;
+    }
   `]
 })
 export class PostProductComponent extends BaseComponent implements OnInit {
@@ -76,6 +85,7 @@ export class PostProductComponent extends BaseComponent implements OnInit {
     this.dataSignalService.getAllCollections();
     this.dataSignalService.getAllMaterials();
     this.dataSignalService.getAllMaterialsTypes();
+    this.formHelper.isFormVisible = false;
     this.patchImageDefault();
     this.findProductTypeUrl();
   }

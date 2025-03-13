@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 
 @Component({
-  standalone: true,
   imports: [ UpperCasePipe, RouterLink ],
   selector: 'app-news-headband',
   template: `

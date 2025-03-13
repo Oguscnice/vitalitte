@@ -5,7 +5,7 @@ import {ReviewDto} from "../../../shared/interfaces/Review";
 
 @Component({
   selector: 'app-review-thumbnail',
-  standalone: true,
+
   imports: [
     TitleCasePipe,
     SlicePipe,

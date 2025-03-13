@@ -1,36 +1,36 @@
-@import "../../../scss/variables";
-@import "../../../scss/buttons";
-@import "../../../scss/dropdowns";
-@import "../../../scss/forms";
+@use "../../../scss/variables" as variablesScss;
+@use "../../../scss/buttons" as buttons;
+@use "../../../scss/dropdowns" as dropdowns;
+@use "../../../scss/forms" as forms;
 
 $customization-picture-size : 120px;
 
 section {
 
   h4 {
-    font-size: $triple-font-size;
-    padding: $fourth-padding 0;
+    font-size: variablesScss.$triple-font-size;
+    padding: variablesScss.$fourth-padding 0;
   }
 
   .similar-title {
-    font-family: $font-family-title-h1;
-    font-size: $fourth-font-size;
-    padding: $fourth-padding 0;
+    font-family: variablesScss.$font-family-title-h1;
+    font-size: variablesScss.$fourth-font-size;
+    padding: variablesScss.$fourth-padding 0;
     letter-spacing: 4px;
   }
 
   .categories-buttons {
     align-items: flex-start;
-    margin-bottom: $fourth-padding;
+    margin-bottom: variablesScss.$fourth-padding;
 
     .category-img-title {
       width: $customization-picture-size;
-      margin: 0 $normal-padding;
+      margin: 0 variablesScss.$normal-padding;
 
       .img-circle {
         width: 100%;
         aspect-ratio: 1 / 1;
-        background-color: $lilac-light;
+        background-color: variablesScss.$lilac-light;
         border-radius: 50%;
         transition: all 0.4s ease-in-out;
         filter: grayscale(100%);
@@ -46,23 +46,27 @@ section {
     }
   }
 
+  .category-description {
+    font-family: variablesScss.$font-family-text;
+  }
+
   .customization {
 
     .custom-card {
-      padding-bottom : $fourth-padding;
+      padding-bottom : variablesScss.$fourth-padding;
 
       .image-and-filter-color{
         height: calc($customization-picture-size * 2);
         width: $customization-picture-size;
 
         img {
-          @include outline-picture;
+          @include variablesScss.outline-picture;
           min-height: calc($customization-picture-size * 2);
           min-width: $customization-picture-size;
         }
 
         .filter-color {
-          z-index: $z-index + 1;
+          z-index: variablesScss.$z-index + 1;
           border-radius: 8px;
           top: calc(0px - ($customization-picture-size * 2 ) - 4px);
           min-height: calc($customization-picture-size * 2);
@@ -71,7 +75,7 @@ section {
       }
 
       .title-description {
-        padding-left: $fourth-padding;
+        padding-left: variablesScss.$fourth-padding;
 
         h4 {
           height : 20%;
@@ -96,6 +100,6 @@ section {
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   section {
-    max-width: $max-width-768px;
+    max-width: variablesScss.$max-width-768px;
   }
 }

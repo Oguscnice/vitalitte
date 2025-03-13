@@ -16,11 +16,15 @@ import {
 import {FileService} from "../../../../../shared/services/file.service";
 
 @Component({
-  standalone: true,
   imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ChangePageButtonsPagination, ChangeSizePaginationAndValueSearchComponent],
   selector: 'app-edit-delete-workshop',
   templateUrl: './edit-delete-workshop.component.html',
-  styles: [ `@import "../../../scss/admin-general.scss"; `]
+  styles: [ `
+    @use "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-table.scss";
+    @use "../../../scss/admin-toggle.scss";
+    @use "../../../../../scss/table.scss";
+  `]
 })
 export class EditDeleteWorkshopComponent extends BaseComponent implements OnInit {
 
