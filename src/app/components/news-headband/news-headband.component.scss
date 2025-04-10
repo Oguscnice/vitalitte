@@ -1,5 +1,5 @@
-@import "../../scss/variables.scss";
-@import "../../scss/buttons.scss";
+@use "../../scss/variables.scss" as variablesScss;
+@use "../../scss/buttons.scss";
 
 :root {
   --news-container-width: 0px;
@@ -10,27 +10,27 @@
   flex-direction: column;
 
   .fixed-text {
-    padding: 0 $normal-padding;
-    background-color: $lilac;
-    color: $white;
-    font-size: $double-font-size;
+    padding: 0 variablesScss.$normal-padding;
+    background-color: variablesScss.$lilac-dark;
+    color: variablesScss.$white;
+    font-size: variablesScss.$double-font-size;
     text-align: center;
-    z-index: $z-index + 1;
+    z-index: variablesScss.$z-index + 1;
   }
 
   .rolling-news {
     position: relative;
 
     .section-rolling-news {
-      border-left: 4px solid $lilac;
+      border-left: 4px solid variablesScss.$lilac;
       min-width: 100vw;
       animation: 20s slide infinite linear;
       p {
-        border-left: 1px solid $lilac;
-        padding: 0 $normal-padding;
+        border-left: 1px solid variablesScss.$lilac;
+        padding: 0 variablesScss.$normal-padding;
         font-weight: bold;
         span {
-          padding-left: $normal-padding;
+          padding-left: variablesScss.$normal-padding;
           font-weight: normal;
         }
       }

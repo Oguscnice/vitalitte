@@ -1,15 +1,11 @@
 import { NgClass } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AnguilleComponent } from 'src/app/components/anguille/anguille.component';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { BaseComponent } from 'src/app/base.component';
 import { AdminCollectionSignalService } from '../../../shared/services/admin-collection-signal.service';
-import { AdminCategorySignalService } from '../../../shared/services/admin-category-signal.service';
 
 @Component({
-  standalone: true,
-  imports: [ NgClass, ReactiveFormsModule, AnguilleComponent, ModalComponent ],
+  imports: [ NgClass, ReactiveFormsModule ],
   selector: 'app-slug-name-dto-post',
   template: `
               <div class="title-functionality flex center">
@@ -36,7 +32,8 @@ import { AdminCategorySignalService } from '../../../shared/services/admin-categ
                       <div>
                         @if (newItemForm.controls.name.errors?.['required']) {
                           <small>Le nom de {{ type }} est obligatoire.</small>
-                        } @else if (newItemForm.controls.name.errors?.['maxlength']) {
+                        }
+                        @if (newItemForm.controls.name.errors?.['maxlength']) {
                           <small>Le nom de {{ type }} ne doit pas dépasser 255 charactères.</small>
                         }
                       </div>
@@ -52,7 +49,9 @@ import { AdminCategorySignalService } from '../../../shared/services/admin-categ
               }
             `,
   styles: [`
-    @import "../../../scss/admin-general.scss";
+    @use "../../../../../scss/forms.scss";
+    @use "../../../scss/admin-button.scss";
+    @use "../../../scss/admin-general.scss";
 
     input {
       max-width: 320px;
@@ -61,9 +60,8 @@ import { AdminCategorySignalService } from '../../../shared/services/admin-categ
 })
 export class SlugNameDtoPostComponent extends BaseComponent {
 
-  private formBuilder: FormBuilder = inject(FormBuilder);
-  private adminCollectionSignal: AdminCollectionSignalService = inject(AdminCollectionSignalService);
-  private adminCategorySignal: AdminCategorySignalService = inject(AdminCategorySignalService);
+  private formBuilder = inject(FormBuilder);
+  private adminCollectionSignal = inject(AdminCollectionSignalService);
 
   @Input( { required : true }) type! : 'Catégorie' | 'Collection';
 
@@ -77,9 +75,7 @@ export class SlugNameDtoPostComponent extends BaseComponent {
   submitNewItemForm(): void {
     this.isFormSubmit = true
     if (this.newItemForm.valid) {
-      if (this.type === 'Catégorie') {
-        this.adminCategorySignal.postCategory(this.newItemForm.value.name!)
-      } else if (this.type === 'Collection') {
+      if (this.type === 'Collection') {
         this.adminCollectionSignal.postCollection(this.newItemForm.value.name!)
       }
       this.resetAllValues();

@@ -1,12 +1,8 @@
-import { DecimalPipe } from '@angular/common';
 import {Component, inject, OnInit, Signal} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from 'src/app/base.component';
 import { H1Component } from 'src/app/components/h1/h1.component';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { PaypalComponent } from 'src/app/components/paypal/paypal.component';
-import { AnguilleComponent } from 'src/app/components/anguille/anguille.component';
 import { CreateInscription } from 'src/app/shared/interfaces/Inscription';
 import { WorkshopDto } from 'src/app/shared/interfaces/Workshop';
 import { phoneValidator } from 'src/app/shared/validators/PhoneValidator';
@@ -15,31 +11,37 @@ import {FormHelperService} from "../../../modules/admin/shared/services/form-hel
 import {DataSignalService} from "../../../shared/services/data-signal.service";
 import {WorkshopDisponibilities} from "../../../modules/admin/shared/interfaces/Workshop";
 import {CustomCurrencyPipe} from "../../../shared/services/pipes/custom-currency.pipe";
+import {FileService} from "../../../shared/services/file.service";
 
 @Component({
-  standalone: true,
-  imports: [H1Component, ReactiveFormsModule, AnguilleComponent, ModalComponent, PaypalComponent, DecimalPipe, CustomCurrencyPipe],
+  imports: [H1Component, ReactiveFormsModule, CustomCurrencyPipe],
   selector: 'app-workshop-selected',
   templateUrl: './workshop-selected.component.html',
   styles: [`
-            @import "../../../scss/variables.scss";
-            @import "../../../scss/forms.scss";
+            @use "../../../scss/variables.scss" as variablesScss;
+            @use "../../../scss/forms.scss";
+            @use "../../../scss/buttons.scss";
 
             .workshop-content,
-            .workshop-resgistrations-free,
+            .workshop-registrations-free,
             .btn-normal,
             .total-price,
             .price-per-person {
-              margin-top: $normal-margin;
+              margin-top: variablesScss.$normal-margin;
             }
 
-            .workshop-resgistrations-free {
+            .workshop-content {
+              font-family: variablesScss.$font-family-text;
+              letter-spacing: 1px;
+            }
+
+            .workshop-registrations-free {
               font-weight: bold;
             }
 
             .price-per-person {
-              margin-top : $normal-margin;
-              margin-right: $half-margin;
+              margin-top : variablesScss.$normal-margin;
+              margin-right: variablesScss.$half-margin;
             }
 
           `]
@@ -50,6 +52,7 @@ export class WorkshopSelectedComponent extends BaseComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private formHelper = inject(FormHelperService);
   private route = inject(ActivatedRoute);
+  fileService = inject(FileService);
   readonly maxInscriptions = 5;
 
   currentWorkshop!: WorkshopDto | null;

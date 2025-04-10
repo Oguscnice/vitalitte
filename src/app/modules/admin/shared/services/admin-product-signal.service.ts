@@ -8,6 +8,7 @@ import { AdminProductSignalState } from '../interfaces/AdminProductSignalState';
 import { AnguilleSignalService } from '../../../../shared/services/anguille-signal.service';
 import { ModalSignalService } from '../../../../shared/services/modal-signal.service';
 import { Router } from '@angular/router';
+import {BehaviorSubject, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +23,18 @@ export class AdminProductSignalService extends BaseComponent {
 
   private readonly state: AdminProductSignalState = {
     $privateProductToDelete: signal<ProductDto | null>(null),
+    $privateProductDtoBySlug: new BehaviorSubject<ProductDto | null>(null),
   } as const;
 
   public readonly $productToDelete = this.state.$privateProductToDelete.asReadonly();
+  public readonly $productDtoBySlug: Observable<ProductDto | null> = this.state.$privateProductDtoBySlug.asObservable();
 
   setProductToDelete(value: ProductDto | null): void {
     this.state.$privateProductToDelete.set(value);
+  }
+
+  setProductDtoBySlug(productDto: ProductDto | null): void {
+    this.state.$privateProductDtoBySlug.next(productDto);
   }
 
   post(newProduct : CreateProduct): void {
@@ -38,6 +45,15 @@ export class AdminProductSignalService extends BaseComponent {
           this.dataSignalService.getAllProductsByCategoryAndCollection();
         },
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  getProductBySlug(productSlug: ProductDto['slug']): void {
+    this.subscriptions.push(
+      this.apiProductAdmin.getProductBySlug(productSlug).subscribe({
+        next: (productDto) => this.setProductDtoBySlug(productDto),
+        error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }

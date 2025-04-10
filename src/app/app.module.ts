@@ -10,7 +10,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { Page404Component } from './pages/page404/page404.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { httpInterceptorProviders } from './shared/interceptors';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ProductsComponent } from './pages/products-pages/products/products.component';
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
@@ -20,8 +20,7 @@ import { ValuesComponent } from './components/values/values.component';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
-import { ProductsPreparedComponent } from './pages/products-pages/products-prepared/products-prepared.component';
+import { FormSendComponent } from './pages/form-send/form-send.component';
 import { ProductSelectedComponent } from './pages/products-pages/product-selected/product-selected.component';
 import { ProductsListComponent } from './components/products-list/products-list.component';
 import { CreateProductComponent } from './pages/products-pages/create-product/create-product.component';
@@ -56,70 +55,63 @@ import {
 import {ReviewThumbnailComponent} from "./components/review/review-thumbnail/review-thumbnail.component";
 import {PostReviewFormComponent} from "./components/review/post-review-form/post-review-form.component";
 import {EnumProductTypeFormatPipe} from "./shared/services/pipes/enum-product-type-format.pipe";
+import {CarouselProductComponent} from "./components/carousel-product/carousel-product.component";
 
-
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    LoginComponent,
-    Page404Component,
-    ProductsComponent,
-    BiographyComponent,
-    BooktiqueComponent,
-    ContactComponent,
-    FormulaireEnvoyeComponent,
-    ProductsPreparedComponent,
-    ProductSelectedComponent,
-    CreateProductComponent,
-    WorkshopsComponent,
-    PublicationsComponent,
-    PublicationSelectedComponent,
-    CheckoutComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    RouterLink,
-    TitleCasePipe,
-
-    HeaderComponent,
-    NewsHeadbandComponent,
-    H1Component,
-    FooterComponent,
-    UpArrowComponent,
-    ImagesPreviewComponent,
-    ValuesComponent,
-    ShoppingProductsListComponent,
-    ChoicesPersonalizedCreationComponent,
-    PaypalComponent,
-    ContactFormComponent,
-    ProductsListComponent,
-    PublicationThumbnailComponent,
-    WorkshopThumbnailComponent,
-    ModalComponent,
-    AnguilleComponent,
-    ChangeSizePaginationAndValueSearchComponent,
-    ChangePageButtonsPagination,
-    CustomCurrencyPipe,
-    ReactiveFormsModule,
-    CheckoutFormComponent,
-    CartItemQuantityManagerComponent,
-    ReviewThumbnailComponent,
-    PostReviewFormComponent,
-    EnumProductTypeFormatPipe
-  ],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ],
-  providers: [
-    CurrencyPipe,
-    DecimalPipe,
-    AuthGuard,
-    httpInterceptorProviders
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        LoginComponent,
+        Page404Component,
+        ProductsComponent,
+        BiographyComponent,
+        BooktiqueComponent,
+        ContactComponent,
+        FormSendComponent,
+        ProductSelectedComponent,
+        CreateProductComponent,
+        WorkshopsComponent,
+        PublicationsComponent,
+        PublicationSelectedComponent,
+        CheckoutComponent
+    ],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        RouterLink,
+        TitleCasePipe,
+        HeaderComponent,
+        NewsHeadbandComponent,
+        H1Component,
+        FooterComponent,
+        UpArrowComponent,
+        ImagesPreviewComponent,
+        ValuesComponent,
+        ShoppingProductsListComponent,
+        ChoicesPersonalizedCreationComponent,
+        PaypalComponent,
+        ContactFormComponent,
+        ProductsListComponent,
+        PublicationThumbnailComponent,
+        WorkshopThumbnailComponent,
+        ModalComponent,
+        AnguilleComponent,
+        ChangeSizePaginationAndValueSearchComponent,
+        ChangePageButtonsPagination,
+        CustomCurrencyPipe,
+        ReactiveFormsModule,
+        CheckoutFormComponent,
+        CartItemQuantityManagerComponent,
+        ReviewThumbnailComponent,
+        PostReviewFormComponent,
+        EnumProductTypeFormatPipe,
+        CarouselProductComponent], providers: [
+        CurrencyPipe,
+        DecimalPipe,
+        AuthGuard,
+        httpInterceptorProviders,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {}

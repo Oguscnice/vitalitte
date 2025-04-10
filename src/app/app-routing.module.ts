@@ -7,8 +7,7 @@ import { ProductsComponent } from './pages/products-pages/products/products.comp
 import { BiographyComponent } from './pages/biography/biography.component';
 import { BooktiqueComponent } from './pages/booktique/booktique.component';
 import { ContactComponent } from './pages/contact/contact.component';
-import { FormulaireEnvoyeComponent } from './pages/formulaire-envoye/formulaire-envoye.component';
-import { ProductsPreparedComponent } from './pages/products-pages/products-prepared/products-prepared.component';
+import { FormSendComponent } from './pages/form-send/form-send.component';
 import { ProductSelectedComponent } from './pages/products-pages/product-selected/product-selected.component';
 import { CreateProductComponent } from './pages/products-pages/create-product/create-product.component';
 import { WorkshopsComponent } from './pages/workshops-pages/workshop/workshops.component';
@@ -16,32 +15,34 @@ import { PublicationsComponent } from './pages/publications-pages/publications/p
 import { PublicationSelectedComponent } from './pages/publications-pages/publication-selected/publication-selected.component';
 import { WorkshopSelectedComponent } from './pages/workshops-pages/workshop-selected/workshop-selected.component';
 import {CheckoutComponent} from "./pages/checkout/checkout.component";
+import {SignupComponent} from "./pages/signup/signup.component";
+import {UserGuard} from "./shared/guards/user.guard";
 
 const routes: Routes = [
   {
     path: 'admin',
     loadChildren: () =>
-      import('./modules/admin/admin.module').then((m) => m.AdminModule),
+      import('./modules/admin/admin.module').then((m) => m.AdminModule)
   },
   {
     path: 'user',
     loadChildren: () =>
       import('./modules/user/user.module').then((m) => m.UserModule),
+    canActivate: [UserGuard]
   },
-
-  // { path: 'connexion', component: LoginComponent },
+  { path: 'connexion', component: LoginComponent },
+  { path: 'inscription', component: SignupComponent },
   { path: 'qui-suis-je', component: BiographyComponent },
   { path: 'booktique', component: BooktiqueComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'actualites', component: PublicationsComponent },
   { path: 'actualites/:publicationSlug', component : PublicationSelectedComponent},
+  { path: 'actualites', component: PublicationsComponent },
   { path: 'page-404', component: Page404Component },
-  { path: 'imaginer-mon-carnet', component: CreateProductComponent },
-  { path: 'ateliers', component : WorkshopsComponent},
+  { path: 'imaginer', component: CreateProductComponent },
   { path: 'ateliers/:workshopSlug', component : WorkshopSelectedComponent},
-  { path: 'formulaire-envoye', component : FormulaireEnvoyeComponent},
+  { path: 'ateliers', component : WorkshopsComponent},
+  { path: 'formulaire-envoye', component : FormSendComponent},
   { path: 'panier', component: CheckoutComponent },
-  { path: 'produits/tous-les-modeles/:productType', component: ProductsPreparedComponent },
   { path: 'produits/type/:productType', component: ProductsComponent },
   { path: 'produits/:productSlug', component: ProductSelectedComponent },
   { path: '', component: HomeComponent },

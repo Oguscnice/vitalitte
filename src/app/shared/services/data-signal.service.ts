@@ -17,8 +17,8 @@ import {ShoppingCartService} from "./shopping-cart.service";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {ModalSignalService} from "./modal-signal.service";
 import {ObjectUtilsService} from "./object-utils.service";
-import {CategoryDtoAndCollectionDto} from "../interfaces/CategoryDtoAndCollectionDto";
 import {CreateReview, ReviewDto} from "../interfaces/Review";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,7 @@ export class DataSignalService extends BaseComponent {
   private paginationSignal = inject(PaginationSignalService);
   private shoppingCart = inject(ShoppingCartService);
   private objectUtils = inject(ObjectUtilsService);
+  private router = inject(Router)
 
   private readonly state: DataSignalState = {
     $privateCategoryList: signal<CategoryDto[]>([]),
@@ -46,7 +47,6 @@ export class DataSignalService extends BaseComponent {
     $privatePublicationsSpotlighted: signal<PublicationDto[]>([]),
     $privateProductDtoBySlug: new BehaviorSubject<ProductDto | null>(null),
     $privateWorkshopBySlug: new BehaviorSubject<WorkshopDto | null>(null),
-    $privateMaterialBySlug: new BehaviorSubject<MaterialDto | null>(null),
     $privatePublicationBySlug: new BehaviorSubject<PublicationDto | null>(null),
     $privateIsExpiredGiftCard: signal<boolean>(true),
     $privateDeliveryOptions: signal<DeliveryOptionDto[]>([]),
@@ -60,7 +60,6 @@ export class DataSignalService extends BaseComponent {
   public readonly $materials: Signal<MaterialDto[]> = this.state.$privateMaterialList.asReadonly();
   public readonly $productDtoBySlug: Observable<ProductDto | null> = this.state.$privateProductDtoBySlug.asObservable();
   public readonly $workshopBySlug: Observable<WorkshopDto | null> = this.state.$privateWorkshopBySlug.asObservable();
-  public readonly $materialBySlug: Observable<MaterialDto | null> = this.state.$privateMaterialBySlug.asObservable();
   public readonly $publicationBySlug: Observable<PublicationDto | null> = this.state.$privatePublicationBySlug.asObservable();
   public readonly $workshopsDateToCome: Signal<WorkshopDto[]> = this.state.$privateWorkshopsDateToCome.asReadonly();
   public readonly $workshopsPastDate: Signal<WorkshopDto[]> = this.state.$privateWorkshopsPastDate.asReadonly();
@@ -76,13 +75,16 @@ export class DataSignalService extends BaseComponent {
 
   setCategoryList(categories: CategoryDto[]): void {
     this.state.$privateCategoryList.set(categories);
+
+    // Utile pour la page products.html
+    document.documentElement.style.setProperty('--width-img-by-counter-image', `calc(100% / ${this.$categories().length})`);
   }
 
   getAllCategories(): void {
     this.subscriptions.push(
       this.apiRequests.getAllCategories().subscribe({
-        next: (categories: CategoryDto[]): void => this.setCategoryList(categories),
-        error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
+        next: (categories) => this.setCategoryList(categories),
+        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }
@@ -116,10 +118,6 @@ export class DataSignalService extends BaseComponent {
     this.state.$privateMaterialList.set(materials);
   }
 
-  setMaterialBySlug(material: MaterialDto | null): void {
-    this.state.$privateMaterialBySlug.next(material);
-  }
-
   getAllMaterialsTypes(): void{
     this.subscriptions.push(
       this.apiRequests.getAllMaterialsTypes().subscribe({
@@ -133,15 +131,6 @@ export class DataSignalService extends BaseComponent {
     this.subscriptions.push(
       this.apiRequests.getAllMaterials().subscribe({
         next: (materials: MaterialDto[]): void => this.setMaterialList(materials),
-        error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
-      })
-    )
-  }
-
-  getMaterialBySlug(materialSlug: MaterialDto['slug']): void {
-    this.subscriptions.push(
-      this.apiRequests.getMaterialBySlug(materialSlug).subscribe({
-        next: (material: MaterialDto): void => this.setMaterialBySlug(material),
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
@@ -163,7 +152,7 @@ export class DataSignalService extends BaseComponent {
     this.subscriptions.push(
       this.apiRequests.getProductsByCategoryAndCollection(this.paginationSignal.$productType(), this.paginationSignal.$categoryDtoAndCollectionDto()).subscribe({
         next: (productsDto: ProductDto[]) => {
-          const RANDOM_PRODUCTS_DTO = productsDto.sort(() =>Math.random() - 0.5).slice(0, 3);
+          const RANDOM_PRODUCTS_DTO = productsDto.sort(() => Math.random() - 0.5).slice(0, 3);
           this.setProductsDtoList(RANDOM_PRODUCTS_DTO);
         },
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
@@ -187,6 +176,32 @@ export class DataSignalService extends BaseComponent {
         error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
+  }
+
+  getProductTypes(): Observable<ProductDto['productType'][]> {
+    return this.apiRequests.getProductTypes().pipe(
+      catchError((err) => {
+        this.anguilleSignal.changeMessage(err.error.message);
+        return of([]); // Retourne un tableau vide ou une valeur par défaut en cas d'erreur
+      })
+    );
+  }
+
+  checkIfProductTypeExists(productType: string): Observable<boolean> {
+    return this.getProductTypes().pipe(
+      map((productTypes) => {
+        const EXISTS = productTypes.some((type) => type.toLowerCase() === productType.toLowerCase());
+        if (!EXISTS) {
+          this.router.navigate(['/page-404']);
+        }
+        return EXISTS
+      }),
+      catchError((err) => {
+        console.error(err);
+        this.router.navigate(['/page-404']);
+        return of(false); // En cas d'erreur, retourner false
+      })
+    );
   }
 
   //-------------------
@@ -320,11 +335,17 @@ export class DataSignalService extends BaseComponent {
   //-----GIFT-CARD-----
   //-------------------
 
-  checkGiftCard(code: string): void {
+  checkGiftCard(code: string, email: string): void {
     this.subscriptions.push(
-      this.apiRequests.checkGiftCard(code).subscribe({
+      this.apiRequests.checkGiftCard(code, email).subscribe({
         next: (giftCard) => {
-          this.shoppingCart.setGiftCardActive(giftCard)
+          if (!giftCard.percentage) {
+            if (this.shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) < giftCard.rising) {
+              this.modalSignal.showModal("La carte cadeau est trop élevée par rapport au montant du panier.", false)
+              return;
+            }
+          }
+          this.shoppingCart.setGiftCardActive(giftCard);
           this.anguilleSignal.changeMessage("Carte cadeau appliquée avec succès.")
         },
         error: (err) => {
@@ -334,6 +355,20 @@ export class DataSignalService extends BaseComponent {
       })
     )
   }
+
+  verifyIfGiftCardIsAlreadyUsed(code: string, email: string): Observable<boolean> {
+    return this.apiRequests.verifyIfGiftCardIsAlreadyUsed(code, email).pipe(
+      map((res: boolean) => {
+          return res;
+        },
+      catchError((err) => {
+        this.anguilleSignal.changeMessage(err.error.message);
+        this.shoppingCart.setGiftCardActive(null);
+        return of(false); // on retourne 'false' en cas d'erreur
+      })
+    ))
+  }
+
 
   private truncateString(value : string, length : number): string {
     return value.length > length ? value.slice(0, length) + "..." : value
@@ -464,6 +499,15 @@ export class DataSignalService extends BaseComponent {
           this.paginationSignal.setPageInfo(page);
           this.setReviews(page.content);
         },
+        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  getRandomReviews(): void {
+    this.subscriptions.push(
+      this.apiRequests.getRandomReviews().subscribe({
+        next: (reviews) => this.setReviews(reviews),
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )

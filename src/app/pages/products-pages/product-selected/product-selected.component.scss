@@ -1,10 +1,15 @@
-@import "src/app/scss/variables.scss";
-@import "src/app/scss/buttons.scss";
+@use "../../../scss/variables.scss" as variablesScss;
+@use "../../../scss/buttons.scss";
+
+app-cart-item-quantity-manager {
+  width: 100%;
+}
 
 .product-btns-choices {
+  margin: variablesScss.$normal-margin 0;
   .btn-filter-active {
     i {
-      color: $orange-light;
+      color: variablesScss.$orange-light;
     }
   }
 }
@@ -18,18 +23,23 @@
           flex-direction: row;
           width: 100%;
           h3 {
-            margin: 0;
+            margin: variablesScss.$half-margin 0;
           }
           p {
             margin-left: 4px;
           }
         }
         .material-description {
+          margin-top: variablesScss.$half-margin;
           width: 100%;
+          h4 {
+            font-weight: bold;
+            font-size: variablesScss.$triple-font-size;
+          }
           img {
             max-width: 100%;
             height: 400px;
-            object-fit: contain;
+            background-color: red;
           }
         }
       }
@@ -43,7 +53,7 @@
             margin-left: 8px;
           }
           .star-active {
-            color: $orange;
+            color: variablesScss.$orange;
           }
         }
       }
@@ -62,8 +72,30 @@
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
+  .two-choices-pages {
+    .second-choice-container {
+      .second-choice-content {
+        .reviews {
+          app-review-thumbnail {
+            max-width: 40%;
+          }
+        }
+      }
+    }
+  }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
+  .two-choices-pages {
+    .second-choice-container {
+      .second-choice-content {
+        .reviews {
+          app-review-thumbnail {
+            max-width: 28%;
+          }
+        }
+      }
+    }
+  }
 }

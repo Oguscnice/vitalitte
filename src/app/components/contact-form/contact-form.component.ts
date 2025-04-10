@@ -4,7 +4,6 @@ import { LoaderComponent } from '../loader/loader.component';
 import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
-  standalone: true,
   imports: [ ReactiveFormsModule, LoaderComponent, NgClass, NgStyle ],
   selector: 'app-contact-form',
   templateUrl: './contact-form.component.html',
@@ -30,8 +29,8 @@ export class ContactFormComponent {
     "Autre sujet"
   ]
 
-  toggleDropdown(value: boolean): void {
-    this.isDropdownOpen = value;
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   changeLastnameValue(event: KeyboardEvent): void {

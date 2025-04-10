@@ -1,11 +1,11 @@
 <div class="title-functionality flex center">
   <h4>Créer un nouvel Atelier</h4>
   <i class="fa-solid fa-circle-plus"
-     (click)="isFormVisible = !isFormVisible"
-     [ngClass]="{'rotated45': isFormVisible}"></i>
+     (click)="formHelper.isFormVisible = !formHelper.isFormVisible"
+     [ngClass]="{'rotated45': formHelper.isFormVisible}"></i>
 </div>
 
-@if (isFormVisible) {
+@if (formHelper.isFormVisible) {
   <form (ngSubmit)="(newWorkshopForm.valid)"
         [formGroup]="newWorkshopForm"
         #myForm="ngForm">
@@ -17,11 +17,12 @@
             placeholder="Titre..."
             formControlName="title"
             autocomplete="off"/>
-      @if (isFormSubmit && myForm.submitted && newWorkshopForm.controls['title'].invalid) {
+      @if (formHelper.isFormSubmit && myForm.submitted && newWorkshopForm.controls['title'].invalid) {
         <div>
           @if (newWorkshopForm.controls.title.errors?.['required']) {
             <small>Le titre de l'atelier est obligatoire.</small>
-          } @else if (newWorkshopForm.controls.title.errors?.['maxlength']) {
+          }
+          @if (newWorkshopForm.controls.title.errors?.['maxlength']) {
             <small>Le titre de l'atelier ne doit pas dépasser 255 charactères.</small>
           }
         </div>
@@ -36,12 +37,13 @@
               formControlName="description"
               autocomplete="off">
       </editor>
-      <p [style.color]=" this.newWorkshopForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ this.newWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
-      @if (isFormSubmit && newWorkshopForm.controls['description'].invalid) {
+      <p [style.color]="newWorkshopForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ newWorkshopForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+      @if (formHelper.isFormSubmit && newWorkshopForm.controls['description'].invalid) {
         <div>
           @if (newWorkshopForm.controls.description.errors?.['required']) {
             <small>La description de l'atelier est requise.</small>
-          } @else if (newWorkshopForm.controls.description.errors?.['maxlength']) {
+          }
+          @if (newWorkshopForm.controls.description.errors?.['maxlength']) {
             <small>La description de l'atelier ne doit pas dépasser 65.534 charactères.</small>
           }
         </div>
@@ -53,7 +55,7 @@
       <input type="datetime-local"
              id="date"
              formControlName="date">
-      @if (isFormSubmit && myForm.submitted && newWorkshopForm.controls['date'].invalid) {
+      @if (formHelper.isFormSubmit && myForm.submitted && newWorkshopForm.controls['date'].invalid) {
         <div>
           @if (newWorkshopForm.controls.date.errors?.['required']) {
             <small>La date et heure sont obligatoires.</small>
@@ -73,25 +75,25 @@
                  autocomplete="off"
                  class="pointer"
                  (keyup)="apiBanService.searchAddress($event)"
-                 (focus)="apiBanService.toggleDropdown(true)"
-                 [value]="this.newWorkshopForm.get('address')!.value ? this.newWorkshopForm.get('address')!.value : ''"/>
-          <div class="arrow-icon flex center">
+                 (focus)="apiBanService.toggleDropdown()"
+                 [value]="newWorkshopForm.get('address')!.value ? newWorkshopForm.get('address')!.value : ''"/>
+          <div class="arrow-icon flex center" (click)="apiBanService.toggleDropdown()">
             @if (apiBanService.isDropdownBanOpen) {
-              <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
+              <i class="fa-solid fa-circle-chevron-down pointer"></i>
             } @else {
-              <i class="fa-solid fa-circle-chevron-up pointer" (click)="apiBanService.toggleDropdown(false)"></i>
+              <i class="fa-solid fa-circle-chevron-up pointer"></i>
             }
           </div>
         </div>
         <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.addressList && apiBanService.addressList.length > 0}">
           @for (address of apiBanService.addressList; track address) {
-            <li (click)="onAddressClicked(address.properties.label); apiBanService.toggleDropdown(false) ">
+            <li (click)="onAddressClicked(address.properties.label); apiBanService.toggleDropdown() ">
               {{ address.properties.label | titlecase }}
             </li>
           }
         </ul>
       </div>
-      @if (isFormSubmit && myForm.submitted && newWorkshopForm.controls['address'].invalid) {
+      @if (formHelper.isFormSubmit && myForm.submitted && newWorkshopForm.controls['address'].invalid) {
         <div>
           @if (newWorkshopForm.controls.address.errors?.['required']) {
             <small>L'adresse est obligatoire.</small>
@@ -106,13 +108,15 @@
              id="price"
              formControlName="price"
              placeholder="€"/>
-      @if (isFormSubmit && newWorkshopForm.controls['price'].invalid) {
+      @if (formHelper.isFormSubmit && newWorkshopForm.controls['price'].invalid) {
         <div>
           @if (newWorkshopForm.controls.price.errors?.['required']) {
             <small>Le prix doit être indiqué (même 0€).</small>
-          } @else if (newWorkshopForm.controls.price.errors?.['invalidPriceFormat']) {
+          }
+          @if (newWorkshopForm.controls.price.errors?.['invalidPriceFormat']) {
             <small>Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
-          } @else if (newWorkshopForm.controls.price.errors?.['invalidPrice']) {
+          }
+          @if (newWorkshopForm.controls.price.errors?.['invalidPrice']) {
             <small>Le prix ne peut pas être inférieur à 0€.</small>
           }
         </div>
@@ -124,8 +128,8 @@
       <input class="display-none"
              type="file"
              accept="image/png, image/jpeg, image/bmp, image/gif"
-             (change)="onFileSelected($event, newWorkshopForm)"
-             #fileUpload/>
+             (change)="fileService.onFileChange($event, 'picture')"
+             #inputFile/>
       <input type="text"
              class="display-none"
              id="picture"
@@ -133,17 +137,16 @@
 
       <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
 
-      <img class="pointer"
-           (click)="fileUpload.click()"
-           [src]="newWorkshopForm.get('pictureThumbnail')!.value"
-           alt="Photo à choisir pour le carnet"/>
+      <div class="image-blur-icon" (click)="inputFile.click()">
+        @if (fileService.picture) {
+          <img [src]="fileService.getDataForImageSrc(fileService.picture)" alt="Photo à choisir pour la publication en cours de carnet">
+        }
+        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture, 'picture-selected': fileService.picture}"></i>      </div>
 
-      @if (isFormSubmit && newWorkshopForm.controls['picture'].invalid) {
+      @if (formHelper.isFormSubmit && newWorkshopForm.controls['pictureDto'].invalid) {
         <div>
-          @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
-            <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
-          } @else if (newWorkshopForm.controls.price.errors?.['invalidUrl']) {
-            <small>L'image doit être au format d'une URL (commencer par => http:// ou https://).</small>
+          @if (newWorkshopForm.controls.pictureDto.errors?.['required']) {
+            <small>L'image est obligatoire.</small>
           }
         </div>
       }
@@ -157,7 +160,7 @@
              placeholder="Indiquez un chiffre/nombre."/>
       <small>Laisser ' 0 ' pour un nombre de places illimtés</small>
 
-      @if (isFormSubmit && newWorkshopForm.controls['registrations'].invalid) {
+      @if (formHelper.isFormSubmit && newWorkshopForm.controls['registrations'].invalid) {
         <div>
           @if (newWorkshopForm.controls.registrations.errors?.['required']) {
             <small>Le nombre de place doit être indiqué (même si ' 0 ' pour un nombre de places illimtés).</small>

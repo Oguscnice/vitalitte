@@ -16,7 +16,7 @@ import {PaginationSignalService} from "../../../../shared/services/pagination-si
 @Injectable({
   providedIn: 'root'
 })
-export class AdminMaterialSignalService extends  BaseComponent {
+export class AdminMaterialSignalService extends BaseComponent {
 
   private dataSignal: DataSignalService = inject(DataSignalService);
   private apiMaterialAdmin: ApiMaterialAdminService = inject(ApiMaterialAdminService);
@@ -28,13 +28,19 @@ export class AdminMaterialSignalService extends  BaseComponent {
   private readonly state: AdminMaterialSignalState = {
     $privateMaterialToDelete: signal<MaterialDto | null>(null),
     $privateCounterMaterials: new BehaviorSubject<number>(0),
+    $privateMaterialBySlug: new BehaviorSubject<MaterialDto | null>(null),
   } as const;
 
   public readonly $materialToDelete: Signal<MaterialDto | null> = this.state.$privateMaterialToDelete.asReadonly();
   public readonly $counter: Observable<number> = this.state.$privateCounterMaterials.asObservable();
+  public readonly $materialBySlug: Observable<MaterialDto | null> = this.state.$privateMaterialBySlug.asObservable();
 
   setMaterialToDelete(value: MaterialDto | null): void {
     this.state.$privateMaterialToDelete.set(value);
+  }
+
+  setMaterialBySlug(material: MaterialDto | null): void {
+    this.state.$privateMaterialBySlug.next(material);
   }
 
   setCounterMaterials(counter: number): void {
@@ -49,6 +55,15 @@ export class AdminMaterialSignalService extends  BaseComponent {
           this.dataSignal.getAllMaterials();
         },
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+      })
+    )
+  }
+
+  getMaterialBySlug(materialSlug: MaterialDto['slug']): void {
+    this.subscriptions.push(
+      this.apiMaterialAdmin.getMaterialBySlug(materialSlug).subscribe({
+        next: (material: MaterialDto): void => this.setMaterialBySlug(material),
+        error: (err): void => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }
@@ -73,12 +88,12 @@ export class AdminMaterialSignalService extends  BaseComponent {
 
           this.subscriptions.push(
             this.modalSignal.showModal(MESSAGE, false).subscribe({
-              next: () => this.router.navigate(['/admin/gestion-des-materiaux']),
-              error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+              next: () => this.router.navigate(['/admin/gestion/materiaux']),
+              error: (err) => this.anguilleSignal.changeMessage(err.error.message)
             })
           )
         },
-        error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
+        error: (err) => this.anguilleSignal.changeMessage(err.error.message)
       })
     )
   }

@@ -1,12 +1,11 @@
-import { NgClass, UpperCasePipe, NgFor } from '@angular/common';
-import { Component, ElementRef, HostListener, Input, ViewChild, } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild,} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 
 @Component({
-  standalone: true,
-  imports: [ NgClass, UpperCasePipe, NgFor, RouterLink ],
+  imports: [ UpperCasePipe, RouterLink ],
   selector: 'app-news-headband',
   template: `
               <div class="news-headband flex">
@@ -27,7 +26,7 @@ import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 `,
   styleUrls: ['./news-headband.component.scss']
 })
-export class NewsHeadbandComponent {
+export class NewsHeadbandComponent implements  AfterViewInit {
 
   @Input() publicationsSpotlighted! : PublicationDto[];
 
@@ -49,5 +48,4 @@ export class NewsHeadbandComponent {
     document.documentElement.style.setProperty('--news-container-width',
     this.newsContainer.nativeElement.offsetWidth + 'px')
   }
-
 }

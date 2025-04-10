@@ -6,8 +6,8 @@
 </div>
 
 @if(isFormVisible) {
-  <form (ngSubmit)="(newGiftcardForm.valid)"
-        [formGroup]="newGiftcardForm"
+  <form (ngSubmit)="(newGiftCardForm.valid)"
+        [formGroup]="newGiftCardForm"
         #myForm="ngForm">
     <fieldset class="flex column">
       <label for="code">Code :</label>
@@ -17,11 +17,12 @@
             formControlName="code"
             autocomplete="off"/>
 
-      @if(isFormSubmit && myForm.submitted && newGiftcardForm.controls['code'].invalid) {
+      @if(isFormSubmit && myForm.submitted && newGiftCardForm.controls['code'].invalid) {
         <div>
-          @if(newGiftcardForm.controls.code.errors?.['required']) {
+          @if(newGiftCardForm.controls.code.errors?.['required']) {
             <small>Le code est obligatoire.</small>
-          } @else if(newGiftcardForm.controls.code.errors?.['maxlength']) {
+          }
+          @if (newGiftCardForm.controls.code.errors?.['maxlength']) {
             <small>Le code ne doit pas dépasser 50 charactères.</small>
           }
         </div>
@@ -37,11 +38,27 @@
           <input class="toggle-input"
                 type="checkbox"
                  formControlName="isPercentage"
-                [checked]="newGiftcardForm.get('isPercentage')!.value"
+                [checked]="newGiftCardForm.get('isPercentage')!.value"
                 (click)="changePercentageBoolean()">
           <label class="toggle-label"></label>
         </div>
         <p>( % ) Pourcentage</p>
+      </div>
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="isSingleUse">Usage Unique ?</label>
+      <div class="flex">
+        <p>Non</p>
+        <div class="toggle-switch" (click)="changeSingleUseBoolean()">
+          <input class="toggle-input"
+                 type="checkbox"
+                 formControlName="isSingleUse"
+                 [checked]="newGiftCardForm.get('isSingleUse')!.value"
+                 (click)="changeSingleUseBoolean()">
+          <label class="toggle-label"></label>
+        </div>
+        <p>Oui</p>
       </div>
     </fieldset>
 
@@ -51,13 +68,15 @@
             id="rising"
             formControlName="rising"
             placeholder="0"/>
-      @if (isFormSubmit && newGiftcardForm.controls['rising'].invalid) {
+      @if (isFormSubmit && newGiftCardForm.controls['rising'].invalid) {
       <div>
-        @if(newGiftcardForm.controls.rising.errors?.['required']) {
+        @if(newGiftCardForm.controls.rising.errors?.['required']) {
           <small>Le {{ isPercent() ? 'Pourcentage' : 'Montant' }} est obligatoire.</small>
-        } @else if (newGiftcardForm.controls.rising.errors?.['invalidPriceFormat']) {
+        }
+        @if (newGiftCardForm.controls.rising.errors?.['invalidPriceFormat']) {
           <small>Le {{ isPercent() ? 'Pourcentage' : 'Montant' }} doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
-        } @else if (newGiftcardForm.controls.rising.errors?.['invalidPrice']) {
+        }
+        @if (newGiftCardForm.controls.rising.errors?.['invalidPrice']) {
           <small>Le {{ isPercent() ? 'Pourcentage' : 'Montant' }} ne peut pas être inférieur à 0€.</small>
         }
       </div>
@@ -70,11 +89,12 @@
       <input type="date"
             id="expiryDate"
             formControlName="expiryDate">
-      @if(isFormSubmit && myForm.submitted && newGiftcardForm.controls['expiryDate'].invalid) {
+      @if(isFormSubmit && myForm.submitted && newGiftCardForm.controls['expiryDate'].invalid) {
         <div>
-          @if(newGiftcardForm.controls.expiryDate.errors?.['required']) {
+          @if(newGiftCardForm.controls.expiryDate.errors?.['required']) {
             <small>La date est obligatoire.</small>
-          } @else if(newGiftcardForm.controls.expiryDate.errors?.['pastDate']) {
+          }
+          @if(newGiftCardForm.controls.expiryDate.errors?.['pastDate']) {
             <small>La date ne peut pas être une date passée.</small>
           }
         </div>

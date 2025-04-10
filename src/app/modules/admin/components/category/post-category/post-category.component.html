@@ -1,0 +1,85 @@
+<div class="title-functionality flex center">
+  <h4>Créer une Catégorie :</h4>
+  <i class="fa-solid fa-circle-plus"
+     (click)="formHelper.isFormVisible = !formHelper.isFormVisible"
+     [ngClass]="{'rotated45': formHelper.isFormVisible}"></i>
+</div>
+
+@if (formHelper.isFormVisible) {
+  <form (ngSubmit)="(newCategoryForm.valid)"
+        [formGroup]="newCategoryForm"
+        enctype="multipart/form-data"
+        #myForm="ngForm">
+
+    <fieldset class="flex column">
+      <label for="name">Nom :</label>
+      <input type="text"
+             id="name"
+             placeholder="Nom..."
+             formControlName="name"
+             autocomplete="off"/>
+
+      @if (formHelper.isFormSubmit && myForm.submitted && newCategoryForm.controls['name'].invalid) {
+        <div>
+          @if (newCategoryForm.controls.name.errors?.['required']) {
+            <small>Le nom de Catégorie est obligatoire.</small>
+          }
+          @if (newCategoryForm.controls.name.errors?.['maxlength']) {
+            <small>Le nom de Catégorie ne doit pas dépasser 255 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="pictureDto">Image :</label>
+      <input type="file"
+             id="pictureDto"
+             formControlName="pictureDto"
+             accept="{{fileService.getAllTypeAccepted()}}"
+             (change)="fileService.onFileChange($event, 'picture')"
+             #inputFile/>
+
+      <div class="image-blur-icon" (click)="inputFile.click()">
+        @if (fileService.picture) {
+          <img src="{{ fileService.getDataForImageSrc(fileService.picture) }}" alt="Logo de la catégorie en cours de création">
+        }
+        <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture, 'picture-selected': fileService.picture}"></i>
+      </div>
+
+      @if (formHelper.isFormSubmit && myForm.submitted && newCategoryForm.controls['pictureDto'].invalid) {
+        <div>
+          @if (newCategoryForm.controls.pictureDto.errors?.['required']) {
+            <small>Une image principale est obligatoire.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <fieldset class="flex column">
+      <label for="description">Description complète : </label>
+      <editor
+        [init]="toolBarConfig"
+        id="description"
+        formControlName="description">
+      </editor>
+      <p [style.color]="newCategoryForm.get('description')!.value && newCategoryForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ newCategoryForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+
+      @if (formHelper.isFormSubmit && newCategoryForm.controls['description'].invalid) {
+        <div>
+          @if (newCategoryForm.controls.description.errors?.['required']) {
+            <small>La description est requise.</small>
+          } @else if (newCategoryForm.controls.description.errors?.['maxlength']) {
+            <small>La description ne doit pas dépasser 65.534 charactères.</small>
+          }
+        </div>
+      }
+    </fieldset>
+
+    <button class="btn-submit-admin"
+            type="submit"
+            (click)="submitNewCategoryForm()">
+      Créer
+    </button>
+  </form>
+}

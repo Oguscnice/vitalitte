@@ -25,7 +25,7 @@ export class CheckoutComponent extends BaseComponent implements OnInit {
     this.getCountersWorkshopsRegistrationsReserved();
   }
 
-  protected override ngOnDestroy() {
+  override ngOnDestroy() {
     super.ngOnDestroy();
     this.shoppingCartService.setGiftCardActive(null);
   }

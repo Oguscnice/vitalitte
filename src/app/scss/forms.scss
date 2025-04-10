@@ -1,22 +1,30 @@
-@import "../scss/variables.scss";
+@use "../scss/variables.scss" as variablesScss;
 
-input {
-  @include inputStyleBorder;
+$image-icon-size: 160px;
+
+input,
+textarea {
+  @include variablesScss.inputStyleBorder;
   border-radius: 4px;
   padding: .15rem .5rem;
   height: 40px;
-  font-size: $double-font-size;
+  font-size: variablesScss.$double-font-size;
+}
+
+textarea {
+  height: 320px;
+  resize: none;
 }
 
 input:focus {
   // Styles spécifiques pour les inputs lorsqu'ils sont focus
-  border-bottom: 2px solid $lilac-light;
+  border-bottom: 2px solid variablesScss.$lilac-light;
   border-radius: 4px 4px 2px 2px;
 }
 
 input:hover {
   // Styles spécifiques pour les inputs lorsqu'ils sont hover
-  outline: 1px solid $lilac-dark;
+  outline: 1px solid variablesScss.$lilac-dark;
 }
 
 // retire les flèches de l'input NUMBER
@@ -29,15 +37,14 @@ input[type="number"] {
 		-webkit-appearance: none;
 		margin:0;
 	}
-	/* Opéra*/
-	&::-o-inner-spin-button {
-		-o-appearance: none;
-		margin: 0;
-	}
+}
+
+input[type="file"] {
+  display: none;
 }
 
 small {
-  font-size: $normal-font-size;
+  font-size: variablesScss.$normal-font-size;
 }
 
 form {
@@ -46,7 +53,7 @@ form {
   align-items: center;
   justify-content: center;
   width: 88%;
-  margin: $normal-margin auto 0 auto;
+  margin: variablesScss.$normal-margin auto 0 auto;
 
   fieldset {
     border: none;
@@ -54,57 +61,101 @@ form {
     width: 100%;
 
     label {
-      font-size: $triple-font-size;
+      font-size: variablesScss.$triple-font-size;
     }
 
     select,
     input {
-      margin-top : $half-margin;
+      margin-top : variablesScss.$half-margin;
       width: 100%;
     }
 
     img {
       max-width: 180px;
       max-height: 180px;
-      margin : 0 auto;
-      margin-top : $normal-margin;
+      margin: variablesScss.$normal-margin auto 0 auto;
       border-radius: 8px;
-      border : 1px solid $lilac;
+      border : 1px solid variablesScss.$lilac;
+    }
+
+    .image-blur-icon {
+      cursor: pointer;
+      height: $image-icon-size;
+      width: $image-icon-size;
+      border-radius: 50%;
+      background-color: darkgrey;
+      position: relative;
+      overflow: hidden;
+      // même marge que les inputs
+      margin-top : variablesScss.$half-margin;
+
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin-top: 0;
+      }
+
+      i {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        font-size: calc($image-icon-size/2);
+        color: variablesScss.$white;
+      }
+
+      .small-icon {
+        font-size: calc($image-icon-size/2);
+      }
+
+      .picture-selected {
+        opacity: 0.6;
+      }
     }
 
     editor {
-      margin-top : $normal-margin;
+      margin-top : variablesScss.$normal-margin;
       border-radius: 8px;
-      border : 1px solid $lilac-light;
+      border : 1px solid variablesScss.$lilac-light;
     }
 
     small {
-      color: $black;
+      margin-top: variablesScss.$normal-padding;
+      color: variablesScss.$black;
+    }
+
+    .dropdown-container {
+      .input-and-arrow {
+        .arrow-icon {
+          margin-top: variablesScss.$half-margin;
+        }
+      }
     }
 
     div {
       small {
-        color: $red;
+        margin-top: variablesScss.$normal-padding;
+        color: variablesScss.$red;
       }
     }
   }
 
   .tags-available {
-    margin-top : $normal-margin;
+    margin-top : variablesScss.$normal-margin;
     width: 100%;
     gap: 8px;
   }
 
   button[type="submit"] {
-    margin : $double-margin 0;
+    margin : variablesScss.$double-margin 0;
   }
 }
 
 .input-invalid {
-  color: $red;
+  color: variablesScss.$red;
   font-weight: bold;
   &::placeholder {
-    color: $red;
+    color: variablesScss.$red;
     font-weight: bold;
   }
 }
@@ -112,13 +163,13 @@ form {
 .bubble {
   position: absolute;
   top: -120px;
-  background-color: $white;
-  border: 2px solid $lilac;
+  background-color: variablesScss.$white;
+  border: 2px solid variablesScss.$lilac;
   padding: 16px;
   border-radius: 5px;
-  box-shadow: 4px 4px 8px $lilac-dark;
+  box-shadow: 4px 4px 8px variablesScss.$lilac-dark;
   z-index: 5;
-  font-size: $triple-font-size;
+  font-size: variablesScss.$triple-font-size;
 }
 
 // Breackpoint list

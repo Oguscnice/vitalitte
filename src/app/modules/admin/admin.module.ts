@@ -28,12 +28,12 @@ import { EditDeleteWorkshopComponent } from './components/workshop/edit-delete-w
 import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component';
 import { PostPublicationComponent } from './components/publication/post-publication/post-publication.component';
 import { EditDeletePublicationComponent } from './components/publication/edit-delete-publication/edit-delete-publication.component';
-import { UserListGiftcardsUsedComponent } from './pages/user-list-giftcards-used/user-list-giftcards-used.component';
 import { EditProductComponent } from './pages/stationery/product/edit-product/edit-product.component';
 import {ManageGiftCardsComponent} from "./pages/manage-giftcards/manage-giftcards.component";
 import {EditDeleteGiftCardComponent} from "./components/giftcard/edit-delete-giftcard/edit-delete-giftcard.component";
 import {PostGiftCardComponent} from "./components/giftcard/post-giftcard/post-giftcard.component";
 import {EnumProductTypeFormatPipe} from "../../shared/services/pipes/enum-product-type-format.pipe";
+import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pipe";
 
 @NgModule({
   declarations: [
@@ -49,37 +49,37 @@ import {EnumProductTypeFormatPipe} from "../../shared/services/pipes/enum-produc
     ManageCategoriesCollectionsComponent,
     ManageWorkshopsComponent
   ],
-    imports: [
-        CommonModule,
-        AdminRoutingModule,
-        NgClass,
-        TitleCasePipe,
-        DecimalPipe,
-        EditorModule,
-        CounterZeroIfEmpty,
-        ModalComponent,
-        ReactiveFormsModule,
-        EditorModule,
-        AnguilleComponent,
-        ModalComponent,
-        ManageCategoriesComponent,
-        ManageCollectionsComponent,
-        ReturnAdminHomeComponent,
-        EditDeleteMaterialComponent,
-        AddEuroCurrencyPipe,
-        PostMaterialComponent,
-        CounterZeroIfEmpty,
-        PostProductComponent,
-        EditDeleteProductComponent,
-        PostWorkshopComponent,
-        EditDeleteWorkshopComponent,
-        PostPublicationComponent,
-        EditDeletePublicationComponent,
-        PostGiftCardComponent,
-        EditDeleteGiftCardComponent,
-        UserListGiftcardsUsedComponent,
-        EnumProductTypeFormatPipe,
-    ],
+	imports: [
+		CommonModule,
+		AdminRoutingModule,
+		NgClass,
+		TitleCasePipe,
+		DecimalPipe,
+		EditorModule,
+		CounterZeroIfEmpty,
+		ModalComponent,
+		ReactiveFormsModule,
+		EditorModule,
+		AnguilleComponent,
+		ModalComponent,
+		ManageCategoriesComponent,
+		ManageCollectionsComponent,
+		ReturnAdminHomeComponent,
+		EditDeleteMaterialComponent,
+		AddEuroCurrencyPipe,
+		PostMaterialComponent,
+		CounterZeroIfEmpty,
+		PostProductComponent,
+		EditDeleteProductComponent,
+		PostWorkshopComponent,
+		EditDeleteWorkshopComponent,
+		PostPublicationComponent,
+		EditDeletePublicationComponent,
+		PostGiftCardComponent,
+		EditDeleteGiftCardComponent,
+		EnumProductTypeFormatPipe,
+		CustomCurrencyPipe,
+	],
   providers: [
     { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }
   ]

@@ -1,13 +1,10 @@
 <app-h1 [titleChild]="(productDto ? productDto.name : '').toUpperCase()"
-        [backgroundImageChild]="productDto ? productDto.picture : 'https://i.ibb.co/PtWCfpG/carnet01.jpg'"
-        xmlns="http://www.w3.org/1999/html"/>
+        [backgroundImageChild]="productDto ? fileService.getDataForImageSrc(productDto.pictureDto) : VITALITTE_PROJECT.front.urlImgDefault.product"/>
 
 @if (productDto) {
   @if (productDto.name) {
     <h2 class="flex center"> {{ productDto.productType | enumProductTypeFormat:'singular' | titlecase }} : {{ productDto.name | titlecase }} </h2>
   }
-
-  <app-cart-item-quantity-manager [product]="{item:productDto, quantity:shoppingCart$.counterQuantity(productDto, 'products')}"/>
 
   <div class="product-btns-choices flex row width100 space-around">
     <button class="btn-filter"
@@ -25,6 +22,11 @@
                        'second-choice-visible': userChoice === 'reviews'}">
 
     <div class="first-choice-container flex center column" #presentation>
+
+      @if (productDto.secondaryPicturesDto && productDto.secondaryPicturesDto.length > 0) {
+        <app-carousel-product [product]="productDto"/>
+      }
+
       <div class="first-choice-content">
         @if (productDto.introduction) {
           <div [innerHTML]="productDto.introduction"></div>
@@ -45,10 +47,13 @@
                 </p>
               }
             </div>
+
+
+
             @if (materialSelected) {
               <div class="material-description flex column">
                 <h4> {{ materialSelected.name | titlecase }} </h4>
-                <img src="{{ materialSelected.pictureThumbnail }}"
+                <img src="{{ fileService.getDataForImageSrc(materialSelected.pictureDto) }}"
                      alt="image du matériel {{ materialSelected.name }} pour la composition du {{ productDto.productType | enumProductTypeFormat:'singular' }} {{ productDto.name }}">
                 <div class="flex column width100 text-left" [innerHTML]="materialSelected.description"></div>
               </div>
@@ -56,6 +61,9 @@
           </div>
         }
       </div>
+
+      <app-cart-item-quantity-manager class="flex center width100" [product]="{item:productDto, quantity:shoppingCart$.counterQuantity(productDto, 'products')}"/>
+
     </div>
 
     <div class="second-choice-container flex column center" #reviewsSection>
@@ -75,13 +83,16 @@
 
           <app-change-size-pagination-and-value-search [isInputSearchHidden]="true" (onValueSearchChange)="onValuePageChange($event)"/>
 
-          <app-review-thumbnail/>
+          <div class="reviews flex width100 wrap space-around">
+            @for (review of reviews$(); track $index) {
+              <app-review-thumbnail [review]="review"/>
+            }
+          </div>
 
           <app-change-page-buttons-pagination (onPageChange)="onValuePageChange($event)"/>
         }
-
-        <app-post-review-form/>
       </div>
+      <app-post-review-form/>
     </div>
   </section>
 }

@@ -8,6 +8,8 @@ import {MaterialDto} from "../../../shared/interfaces/Material";
 import {Subject} from "rxjs";
 import {VITALITTE_PROJECT} from "../../../shared/variables/AppConfig";
 import {PaginationSignalService} from "../../../shared/services/pagination-signal.service";
+import {ReviewDto} from "../../../shared/interfaces/Review";
+import {FileService} from "../../../shared/services/file.service";
 
 @Component({
   standalone: false,
@@ -21,6 +23,7 @@ export class ProductSelectedComponent extends BaseComponent implements OnInit, A
   private dataSignal = inject(DataSignalService)
   private paginationSignal = inject(PaginationSignalService);
   protected readonly VITALITTE_PROJECT = VITALITTE_PROJECT;
+  fileService = inject(FileService);
   shoppingCart$ = inject(ShoppingCartService);
 
   productDto: ProductDto | null = null;
@@ -43,8 +46,6 @@ export class ProductSelectedComponent extends BaseComponent implements OnInit, A
   ngOnInit(): void {
     this.findProductBySlug();
     this.subscribeToProductBySlugSignal();
-    this.paginationSignal.setReviewStatus('Accepté');
-    this.dataSignal.getAllReviewsByStatus();
   }
 
   ngAfterViewChecked(): void {
@@ -62,6 +63,7 @@ export class ProductSelectedComponent extends BaseComponent implements OnInit, A
           this.productDto = product;
           if (product) {
             this.paginationSignal.setReviewProductDto(this.productDto);
+            this.paginationSignal.setReviewStatus('Accepté');
             this.dataSignal.getAllReviewsByStatus();
           }
         })

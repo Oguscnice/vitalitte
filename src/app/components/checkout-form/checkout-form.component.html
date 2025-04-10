@@ -2,32 +2,46 @@
       (ngSubmit)="(newOrder.valid)"
       [formGroup]="newOrder"
       #myForm="ngForm">
-  <fieldset class="gift-card-container flex column">
-    <label>Code promo (non cumulable) :</label>
-    <div class="gift-card-input-and-button flex space-between">
-      <input type="text"
-             autocomplete="off"
-             class="pointer"
-             [value]="inputValueGiftCard"
-             (keyup)="onKeyUpGiftCard($event)"/>
-      <button type="button"
-              class="btn-normal"
-              (click)="checkGiftCard()">
-        Appliquer
-      </button>
-    </div>
-    @if (giftCardActive$()) {
-      <div class="flex">
-        <p class="discount-details"> Code promo activé : {{ giftCardActive$()!.code }}</p>
-        <i class="fa-solid fa-trash-can pointer" (click)="shoppingCart.setGiftCardActive(null)"></i>
+
+    <fieldset class="gift-card-container flex column">
+      <label>Code promo (non cumulable) :</label>
+      <div class="gift-card-input-and-button flex space-between">
+        @if (newOrder.controls.email_address.invalid) {
+          <input type="text"
+                 autocomplete="off"
+                 class="disabled"
+                 value="Disponible après avoir renseigné votre email."
+                 readonly/>
+          <button type="button"
+                  class="btn-normal btn-grey">
+            Appliquer
+          </button>
+        } @else {
+          <input type="text"
+                 autocomplete="off"
+                 class="pointer"
+                 [value]="inputValueGiftCard"
+                 (keyup)="onKeyUpGiftCard($event)"/>
+          <button type="button"
+                  class="btn-normal"
+                  (click)="checkGiftCard()">
+            Appliquer
+          </button>
+        }
       </div>
-      @if (giftCardActive$()!.percentage) {
-        <p class="discount-details"> Réduction de {{ giftCardActive$()!.rising }}% soit : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) - shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) | customCurrency }} de réduction !</p>
-      } @else {
-        <p class="discount-details"> Réduction de {{ giftCardActive$()!.rising | customCurrency }}</p>
+      @if (giftCardActive$()) {
+        <div class="flex">
+          <p class="discount-details"> Code promo activé : {{ giftCardActive$()!.code }}</p>
+          <i class="fa-solid fa-trash-can pointer" (click)="shoppingCart.setGiftCardActive(null)"></i>
+        </div>
+        @if (giftCardActive$()!.percentage) {
+          <p class="discount-details"> Réduction de {{ giftCardActive$()!.rising }}% soit : {{ shoppingCart.getTotalPriceWithGiftCardAndDelivery(false, false) - shoppingCart.getTotalPriceWithGiftCardAndDelivery(true, false) | customCurrency }} de réduction !</p>
+        } @else {
+          <p class="discount-details"> Réduction de {{ giftCardActive$()!.rising | customCurrency }}</p>
+        }
       }
-    }
-  </fieldset>
+    </fieldset>
+
   @if (shoppingCart.$userShoppingCart().products.length > 0) {
     <fieldset class="delivery-options flex column">
       <label>Livraison</label>
@@ -42,11 +56,11 @@
                    [value]="getDeliveryOptionValueForm()"
                    (click)="toggleDropdown(!isDeliveryDropdownOpen, 'Delivery')"
                    readonly/>
-            <div class="arrow-icon flex center">
+            <div class="arrow-icon flex center" (click)="toggleDropdown(!isDeliveryDropdownOpen, 'Delivery')">
               @if (isDeliveryDropdownOpen) {
-                <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(false, 'Delivery')"></i>
+                <i class="fa-solid fa-circle-chevron-down pointer"></i>
               } @else {
-                <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(true, 'Delivery')"></i>
+                <i class="fa-solid fa-circle-chevron-up pointer"></i>
               }
             </div>
           </div>
@@ -90,7 +104,8 @@
       <div>
         @if (newOrder.controls.name.controls.surname.errors?.['required']) {
           <small>Le nom est obligatoire.</small>
-        } @else if (newOrder.controls.name.controls.surname.errors?.['maxlength']) {
+        }
+        @if (newOrder.controls.name.controls.surname.errors?.['maxlength']) {
           <small>Le nom ne doit pas dépasser 255 charactères.</small>
         }
       </div>
@@ -109,7 +124,8 @@
       <div>
         @if (newOrder.controls.name.controls.given_name.errors?.['required']) {
           <small>Le prénom est obligatoire.</small>
-        } @else if (newOrder.controls.name.controls.given_name.errors?.['maxlength']) {
+        }
+        @if (newOrder.controls.name.controls.given_name.errors?.['maxlength']) {
           <small>Le prénom ne doit pas dépasser 255 charactères.</small>
         }
       </div>
@@ -128,9 +144,11 @@
       <div>
         @if (newOrder.controls.email_address.errors?.['required']) {
           <small>L'adresse email est obligatoire.</small>
-        } @else if (newOrder.controls.email_address.errors?.['maxlength']) {
+        }
+        @if (newOrder.controls.email_address.errors?.['maxlength']) {
           <small>L'adresse email ne doit pas dépasser 255 charactères.</small>
-        } @else if (newOrder.controls.email_address.errors?.['email']) {
+        }
+        @if (newOrder.controls.email_address.errors?.['email']) {
           <small>L'adresse email ne respecte pas le format d'un email.</small>
         }
       </div>
@@ -148,19 +166,19 @@
                autocomplete="off"
                class="pointer"
                (keyup)="apiBanService.searchAddress($event)"
-               (focus)="apiBanService.toggleDropdown(true)"
+               (focus)="apiBanService.toggleDropdown()"
                [value]="userAddress"/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="apiBanService.toggleDropdown()">
           @if (apiBanService.isDropdownBanOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="apiBanService.toggleDropdown(true)"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="apiBanService.toggleDropdown(false)"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
       <ul class="items-list" [ngClass]="{'dropdown-visible': apiBanService.isDropdownBanOpen && apiBanService.addressList && apiBanService.addressList.length > 0}">
         @for (address of apiBanService.addressList; track address) {
-          <li (click)="onAddressClicked(address); apiBanService.toggleDropdown(false) ">
+          <li (click)="onAddressClicked(address); apiBanService.toggleDropdown() ">
             {{ address.properties.label | titlecase }}
           </li>
         }
@@ -204,7 +222,8 @@
       <div>
         @if (newOrder.controls.national_number.errors?.['required']) {
           <small>Le téléphone est obligatoire.</small>
-        } @else if (newOrder.controls.national_number.errors?.['invalidPhone']) {
+        }
+        @if (newOrder.controls.national_number.errors?.['invalidPhone']) {
           <small>Le téléphone doit être composé de 10 chiffres commençant par '0' (ex : 06 12 34 56 78) ou 12 charactères commençant par '+' (ex : +33 6 12 34 56 78).</small>
         }
       </div>
@@ -223,11 +242,11 @@
                [value]="countrySelected.name"
                (click)="toggleDropdown(!isCountryCodeDropdownOpen,'CountryCode')"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown(!isCountryCodeDropdownOpen, 'CountryCode')">
           @if (isCountryCodeDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown(true, 'CountryCode')"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown(false, 'CountryCode')"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>

@@ -3,4 +3,5 @@ export interface CreateGiftCard {
   rising : number,
   expiryDate : Date,
   percentage : boolean
+  singleUse: boolean
 }

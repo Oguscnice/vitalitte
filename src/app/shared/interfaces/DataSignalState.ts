@@ -14,11 +14,10 @@ export interface DataSignalState {
   $privateCategoryList: WritableSignal<CategoryDto[]>;
   $privateCollectionList: WritableSignal<CollectionDto[]>;
   $privateProductDtoList: WritableSignal<ProductDto[]>;
+  $privateProductDtoBySlug: BehaviorSubject<ProductDto | null>;
   $privateMaterialTypeList: WritableSignal<string[]>;
   $privateMaterialList: WritableSignal<MaterialDto[]>;
-  $privateProductDtoBySlug: BehaviorSubject<ProductDto | null>;
   $privateWorkshopBySlug: BehaviorSubject<WorkshopDto | null>;
-  $privateMaterialBySlug: BehaviorSubject<MaterialDto | null>;
   $privatePublicationBySlug: BehaviorSubject<PublicationDto | null>;
   $privateWorkshopsDateToCome: WritableSignal<WorkshopDto[]>;
   $privateWorkshopsPastDate: WritableSignal<WorkshopDto[]>;

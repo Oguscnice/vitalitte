@@ -1,0 +1,96 @@
+<div class="title-functionality flex center">
+  <h4 class="flex center">Gérer les Catégories</h4>
+  <i class="fa-solid fa-arrow-down" (click)="formHelper.isTableVisible = !formHelper.isTableVisible" [ngClass]="{'rotated180': formHelper.isTableVisible}"></i>
+</div>
+@if (formHelper.isTableVisible) {
+  <div class="categories flex center space-around wrap">
+    @if (editCategoryForm.get('slug')!.value) {
+      <form (ngSubmit)="(editCategoryForm.valid)"
+            [formGroup]="editCategoryForm"
+            #myForm="ngForm"
+            id="editCategory"
+            class="category-thumbnail">
+        <div class="category-image-and-actions-name flex">
+          <fieldset class="flex column">
+            <label for="pictureDto" class="display-none">Image :</label>
+            <input type="file"
+                   id="pictureDto"
+                   formControlName="pictureDto"
+                   accept="{{fileService.getAllTypeAccepted()}}"
+                   (change)="fileService.onFileChange($event, 'picture', fileService.picture?.slug)"
+                   #inputFile/>
+            <div class="image-blur-icon" (click)="inputFile.click()">
+              @if (fileService.picture) {
+                <img src="{{fileService.getDataForImageSrc(fileService.picture)}}" alt="Logo de la catégorie {{fileService.picture.fileName}}">
+              }
+              <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture, 'picture-selected': fileService.picture}"></i>            </div>
+
+            @if (formHelper.isFormSubmit && myForm.submitted && editCategoryForm.controls['pictureDto'].invalid) {
+              <div>
+                @if (editCategoryForm.controls.pictureDto.errors?.['required']) {
+                  <small>Une image principale est obligatoire.</small>
+                }
+              </div>
+            }
+          </fieldset>
+          <div class="category-actions-name flex column space-between center">
+            <div class="category-actions flex center space-between">
+              <i class="fa-solid fa-circle-xmark pointer" (click)="cancelEditCategory()"></i>
+              <p class="pointer" (click)="cancelEditCategory()">Annuler l'édition</p>
+            </div>
+            <fieldset class="flex column">
+              <label for="name" class="display-none">Nom :</label>
+              <input type="text"
+                     id="name"
+                     placeholder="Nom..."
+                     formControlName="name"
+                     autocomplete="off"/>
+              @if (formHelper.isFormSubmit && myForm.submitted && editCategoryForm.controls['name'].invalid) {
+                <div>
+                  @if (editCategoryForm.controls.name.errors?.['required']) {
+                    <small>Le nom de la catégorie est obligatoire.</small>
+                  }
+                  @if (editCategoryForm.controls.name.errors?.['maxlength']) {
+                    <small>Le nom de la catégorie ne doit pas dépasser 255 charactères.</small>
+                  }
+                </div>
+              }
+            </fieldset>
+          </div>
+        </div>
+        <fieldset class="flex column category-description">
+          <label for="description">Description : </label>
+          <editor [init]="toolBarConfig"
+                  id="description"
+                  formControlName="description">
+          </editor>
+          <p [style.color]="editCategoryForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ editCategoryForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+        </fieldset>
+        <button class="btn-submit-admin"
+                type="submit"
+                (click)="submitEditCategoryForm()">
+          OK
+        </button>
+      </form>
+    }
+    @for (category of categories$(); track category; let index = $index) {
+      <div class="category-thumbnail">
+        <div class="category-image-and-actions-name flex">
+          @if (category.pictureDto) {
+            <img src="{{fileService.getDataForImageSrc(category.pictureDto)}}" alt="Logo de la catégorie {{category.name}}">
+          } @else {
+            <div class="image-blur-icon"></div>
+          }
+          <div class="category-actions-name flex column space-between center">
+            <div class="category-actions flex space-between">
+              <i class="fa-solid fa-edit" (click)="editCategory(category)"></i>
+              <i class="fa-solid fa-trash" (click)="confirmationModalForDeleteCategory(category)"></i>
+            </div>
+            <p class="category-name flex text-left">{{category.name}}</p>
+          </div>
+        </div>
+        <div class="category-description" [innerHTML]="category.description"></div>
+      </div>
+    }
+  </div>
+}

@@ -1,12 +1,12 @@
 <div class="title-functionality flex center">
   <h4 class="flex center">Gérer les Cartes Cadeaux</h4>
   <i class="fa-solid fa-arrow-down"
-     (click)="isTableVisible = !isTableVisible"
-     [ngClass]="{'rotated180': isTableVisible}">
+     (click)="formHelper.isTableVisible = !formHelper.isTableVisible"
+     [ngClass]="{'rotated180': formHelper.isTableVisible}">
   </i>
 </div>
 
-@if (deliveryOptions() && deliveryOptions().length > 0 && isTableVisible) {
+@if (deliveryOptions() && deliveryOptions().length > 0 && formHelper.isTableVisible) {
   <table>
     <thead>
     <tr>
@@ -80,7 +80,7 @@
             @if (editDeliveryOptionForm.get('slug')!.value !== deliveryOption.slug) {
               <i class="fa-solid fa-pencil pointer flex center" (click)="edit(deliveryOption)"></i>
             } @else {
-              <i class="fa-solid fa-circle-xmark pointer flex center"  (click)="resetAllValues()"></i>
+              <i class="fa-solid fa-circle-xmark pointer flex center"  (click)="formHelper.resetAllValues(editDeliveryOptionForm)"></i>
             }
           </td>
           <td>
@@ -90,14 +90,14 @@
       }
     </tbody>
   </table>
-} @else if ((!deliveryOptions() || deliveryOptions().length < 1) && isTableVisible) {
+} @else if ((!deliveryOptions() || deliveryOptions().length < 1) && formHelper.isTableVisible) {
   <h5>Aucune Option de Livraison existante</h5>
 }
 
 @if (editDeliveryOptionForm.get('slug')!.value) {
   <button id="editDeliveryOption"
           class="btn-normal"
-          (click)="resetAllValues()">
+          (click)="formHelper.resetAllValues(editDeliveryOptionForm)">
     Annuler l'édition
   </button>
   <form (ngSubmit)="(editDeliveryOptionForm.valid)"
@@ -111,11 +111,12 @@
              formControlName="name"
              autocomplete="off"/>
 
-      @if (isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['name'].invalid) {
+      @if (formHelper.isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['name'].invalid) {
         <div>
           @if (editDeliveryOptionForm.controls.name.errors?.['required']) {
             <small>Le libellé est obligatoire.</small>
-          } @else if (editDeliveryOptionForm.controls.name.errors?.['maxlength']) {
+          }
+          @if (editDeliveryOptionForm.controls.name.errors?.['maxlength']) {
             <small>Le libellé ne doit pas dépasser 255 charactères.</small>
           }
         </div>
@@ -128,13 +129,15 @@
              id="price"
              formControlName="price"
              placeholder="0"/>
-      @if (isFormSubmit && editDeliveryOptionForm.controls['price'].invalid) {
+      @if (formHelper.isFormSubmit && editDeliveryOptionForm.controls['price'].invalid) {
         <div>
           @if (editDeliveryOptionForm.controls.price.errors?.['required']) {
             <small>Le prix est obligatoire.</small>
-          } @else if (editDeliveryOptionForm.controls.price.errors?.['invalidPriceFormat']) {
+          }
+          @if (editDeliveryOptionForm.controls.price.errors?.['invalidPriceFormat']) {
             <small>Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
-          } @else if (editDeliveryOptionForm.controls.price.errors?.['invalidPrice']) {
+          }
+          @if (editDeliveryOptionForm.controls.price.errors?.['invalidPrice']) {
             <small>Le prix ne peut pas être inférieur à 0€.</small>
           }
         </div>
@@ -149,11 +152,12 @@
              formControlName="estimatedDeliveryTime"
              autocomplete="off"/>
 
-      @if (isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['estimatedDeliveryTime'].invalid) {
+      @if (formHelper.isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['estimatedDeliveryTime'].invalid) {
         <div>
           @if (editDeliveryOptionForm.controls.estimatedDeliveryTime.errors?.['required']) {
             <small>Le temps de livraison estimé est obligatoire.</small>
-          } @else if (editDeliveryOptionForm.controls.estimatedDeliveryTime.errors?.['maxlength']) {
+          }
+          @if (editDeliveryOptionForm.controls.estimatedDeliveryTime.errors?.['maxlength']) {
             <small>Le temps de livraison estimé ne doit pas dépasser 255 charactères.</small>
           }
         </div>
@@ -168,11 +172,12 @@
              formControlName="carrier"
              autocomplete="off"/>
 
-      @if (isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['carrier'].invalid) {
+      @if (formHelper.isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['carrier'].invalid) {
         <div>
           @if (editDeliveryOptionForm.controls.carrier.errors?.['required']) {
             <small>Le livreur est obligatoire.</small>
-          } @else if (editDeliveryOptionForm.controls.carrier.errors?.['maxlength']) {
+          }
+          @if (editDeliveryOptionForm.controls.carrier.errors?.['maxlength']) {
             <small>Le livreur ne doit pas dépasser 255 charactères.</small>
           }
         </div>
@@ -188,7 +193,7 @@
              formControlName="description"
              autocomplete="off"/>
 
-      @if (isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['description'].invalid) {
+      @if (formHelper.isFormSubmit && myForm.submitted && editDeliveryOptionForm.controls['description'].invalid) {
         <div>
           @if (editDeliveryOptionForm.controls.description.errors?.['maxlength']) {
             <small>La description ne doit pas dépasser 500 charactères.</small>

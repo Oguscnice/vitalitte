@@ -1,4 +1,4 @@
-@import "../../scss/variables.scss";
+@use "../../scss/variables.scss" as variablesScss;
 
 table {
   thead,
@@ -8,8 +8,8 @@ table {
       .quantity-column,
       .label-column,
       .price-column {
-        padding: $normal-padding;
-        font-size: $double-font-size;
+        padding: variablesScss.$normal-padding;
+        font-size: variablesScss.$double-font-size;
       }
 
       .quantity-column,
@@ -18,7 +18,7 @@ table {
         text-align: center;
         div {
           p {
-            padding: 0 $normal-padding;
+            padding: 0 variablesScss.$normal-padding;
           }
           i.pulse-remove {
             animation: exitCart 0.2s ease-in-out;
@@ -38,15 +38,15 @@ table {
       .total-by-type-column {
         text-align: right;
         font-weight: bold;
-        padding: $double-padding $normal-padding;
+        padding: variablesScss.$double-padding variablesScss.$normal-padding;
       }
     }
   }
   thead {
     tr {
       th {
-        color: $white;
-        background-color: $lilac-dark-transparent;
+        color: variablesScss.$white;
+        background-color: variablesScss.$lilac-dark-transparent;
         letter-spacing: 2px;
       }
     }
@@ -61,7 +61,7 @@ app-checkout-form {
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   table {
-    max-width: $max-width-768px;
+    max-width: variablesScss.$max-width-768px;
   }
 }
 

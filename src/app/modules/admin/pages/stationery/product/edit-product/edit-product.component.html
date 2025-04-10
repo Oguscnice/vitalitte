@@ -10,7 +10,7 @@
            formControlName="name"
            autocomplete="off"/>
 
-    @if (isFormSubmit && myForm.submitted && editProductForm.controls['name'].invalid) {
+    @if (formHelper.isFormSubmit && myForm.submitted && editProductForm.controls['name'].invalid) {
       <div>
         @if (editProductForm.controls.name.errors?.['required']) {
           <small>Le nom est obligatoire.</small>
@@ -22,30 +22,30 @@
   </fieldset>
 
   <fieldset class="flex column">
-    <label for="picture">Image Principale : </label>
+    <label for="pictureDto">Image Principale : </label>
     <input class="display-none"
            type="file"
-           accept="image/png, image/jpeg, image/bmp, image/gif"
-           (change)="onFileSelected($event, 'editProductForm')"
-           #fileUpload/>
+           accept="{{fileService.getAllTypeAccepted()}}"
+           (change)="fileService.onFileChange($event, 'picture')"
+           #inputFile/>
     <input type="text"
-           id="picture"
-           formControlName="picture"
+           id="pictureDto"
+           formControlName="pictureDto"
            class="display-none"/>
 
-    <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+    <small>Cliquez sur l'image pour en télécharger une. Privilégier un format PNG.</small>
 
-    <img class="pointer"
-         (click)="fileUpload.click()"
-         src="{{ editProductForm.get('pictureThumbnail')!.value }}"
-         alt="Photo à choisir pour le matériel"/>
+    <div class="image-blur-icon" (click)="inputFile.click()">
+      @if (fileService.picture) {
+        <img [src]="fileService.getDataForImageSrc(fileService.picture)" alt="Photo à choisir pour le produit en cours de modification">
+      }
+      <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
+    </div>
 
-    @if (isFormSubmit && editProductForm.controls['picture'].invalid) {
+    @if (formHelper.isFormSubmit && editProductForm.controls['pictureDto'].invalid) {
       <div>
-        @if (fileUploadService.fileSize > fileUploadService.SIZE_MAX) {
-          <small>Votre fichier dépasse les {{ fileUploadService.SIZE_MAX / 1048576 }} Méga-octects.</small>
-        } @else if (editProductForm.controls.picture.errors?.['invalidUrl']) {
-          <small>L'image doit être une URL (commencer par => http:// ou https:// ou www.).</small>
+        @if (editProductForm.controls.pictureDto.errors?.['required']) {
+          <small>L'image est boligatoire.</small>
         }
       </div>
     }
@@ -64,11 +64,11 @@
                (focus)="toggleDropdown('Category')"
                [value]="formHelper.getDtoNameByFormControlValue(editProductForm.get('categoryDto')!.value!)"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown('Category')">
           @if (isCategoryDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Category')"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Category')"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
@@ -81,7 +81,7 @@
       </ul>
     </div>
 
-    @if (isFormSubmit && myForm.submitted && editProductForm.controls['categoryDto'].invalid ) {
+    @if (formHelper.isFormSubmit && myForm.submitted && editProductForm.controls['categoryDto'].invalid ) {
       <div>
         @if (editProductForm.controls.categoryDto.errors?.['required']) {
           <small>La catégorie est obligatoire.</small>
@@ -103,11 +103,11 @@
                (focus)="toggleDropdown('Collection')"
                [value]="formHelper.getDtoNameByFormControlValue(editProductForm.get('collectionDto')!.value!)"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown('Collection')">
           @if (isCollectionDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Collection')"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Collection')"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
@@ -120,7 +120,7 @@
       </ul>
     </div>
 
-    @if (isFormSubmit && myForm.submitted && editProductForm.controls['collectionDto'].invalid) {
+    @if (formHelper.isFormSubmit && myForm.submitted && editProductForm.controls['collectionDto'].invalid) {
       <div>
         @if (editProductForm.controls.collectionDto.errors?.['required']) {
           <small>La collection est obligatoire.</small>
@@ -141,11 +141,11 @@
                class="pointer"
                (click)="toggleDropdown('Materials')"
                readonly/>
-        <div class="arrow-icon flex center">
+        <div class="arrow-icon flex center" (click)="toggleDropdown('Materials')">
           @if (isMaterialsDropdownOpen) {
-            <i class="fa-solid fa-circle-chevron-down pointer" (click)="toggleDropdown('Materials')"></i>
+            <i class="fa-solid fa-circle-chevron-down pointer"></i>
           } @else {
-            <i class="fa-solid fa-circle-chevron-up pointer" (click)="toggleDropdown('Materials')"></i>
+            <i class="fa-solid fa-circle-chevron-up pointer"></i>
           }
         </div>
       </div>
@@ -189,7 +189,7 @@
                   <p class="flex text-left"> {{ material.name | titlecase }} </p>
                 </td>
                 <td>
-                  <p> {{ material.price | number :'0.2' }} €</p>
+                  <p> {{ material.price | customCurrency }}</p>
                 </td>
                 <td>
                   <p> {{ material.materialType | titlecase }} </p>
@@ -202,10 +202,10 @@
           }
         </tbody>
       </table>
-      <p>Total : {{ totalPriceMaterials() }}€</p>
+      <p>Total : {{ totalPriceMaterials() | customCurrency }}</p>
     </div>
 
-    @if (isFormSubmit && myForm.submitted && editProductForm.controls['materialsDto'].invalid) {
+    @if (formHelper.isFormSubmit && myForm.submitted && editProductForm.controls['materialsDto'].invalid) {
       <div>
         @if (editProductForm.controls.materialsDto.errors?.['required']) {
           <small>Au moins un matériel est obligatoire.</small>
@@ -221,7 +221,7 @@
           formControlName="price"
           placeholder="0"/>
 
-    @if (isFormSubmit && editProductForm.controls['price'].invalid) {
+    @if (formHelper.isFormSubmit && editProductForm.controls['price'].invalid) {
       <div>
         @if (editProductForm.controls.price.errors?.['invalidPriceFormat']) {
           <small>Le prix doit avoir 2 chiffres après la virgule ' 9,99 '.</small>
@@ -238,9 +238,9 @@
             id="introduction"
             formControlName="introduction">
     </editor>
-    <p [style.color]=" this.editProductForm.get('introduction')!.value!.length > 65534 ? 'red': ''">{{ this.editProductForm.get('introduction')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+    <p [style.color]="editProductForm.get('introduction')!.value!.length > 65534 ? 'red': ''">{{ editProductForm.get('introduction')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
 
-    @if (isFormSubmit && editProductForm.controls['introduction'].invalid) {
+    @if (formHelper.isFormSubmit && editProductForm.controls['introduction'].invalid) {
       <div>
         @if (editProductForm.controls.introduction.errors?.['required']) {
           <small>L'introduction est requise.</small>
@@ -257,9 +257,9 @@
             id="description"
             formControlName="description">
     </editor>
-    <p [style.color]=" this.editProductForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ this.editProductForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
+    <p [style.color]="editProductForm.get('description')!.value!.length > 65534 ? 'red': ''">{{ editProductForm.get('description')!.value | counterZeroIfEmpty }} caractères / 65.534 </p>
 
-    @if (isFormSubmit && editProductForm.controls['description'].invalid) {
+    @if (formHelper.isFormSubmit && editProductForm.controls['description'].invalid) {
       <div>
         @if (editProductForm.controls.description.errors?.['required']) {
           <small>La description est requise.</small>
@@ -286,20 +286,21 @@
   <input class="display-none"
       type="file"
       accept="image/png, image/jpeg, image/bmp, image/gif"
-      (change)="onFileSelected($event, 'newSecondaryPictureForm')"
-      #fileUploadSecondaryPicture/>
-  <small>Cliquez sur l'image pour en télécharger une, ou ajoutez une URL.</small>
+      (change)="fileService.onFileChange($event, 'secondaryPicture')"
+      #fileInputSecondaryPicture/>
 
-  <img class="pointer"
-    (click)="fileUploadSecondaryPicture.click()"
-    src="{{ fileUploadService.imageProductDefaultThumbnail }}"
-    alt="Photo à choisir pour le matériel"/>
+    <small>Cliquez sur l'image pour en télécharger une. Privilégier un format PNG.</small>
+
+    <div class="image-blur-icon" (click)="fileInputSecondaryPicture.click()">
+      <img class="pointer"
+           src="{{ fileService.imageProductDefault.url }}"
+           alt="Photo secondaire à choisir pour le produit"/>
+      <i class="fa-solid fa-file-arrow-down flex center" [ngClass]="{'small-icon': fileService.picture}"></i>
+    </div>
+
     <table>
       <thead>
         <tr>
-          <td>
-            <p>URL</p>
-          </td>
           <td>
             <p>Image</p>
           </td>
@@ -309,21 +310,18 @@
         </tr>
       </thead>
       <tbody>
-        @if (currentSecondaryPictures) {
-          @for (secondaryPicture of currentSecondaryPictures; track secondaryPicture) {
+        @if (fileService.secondaryPictures && fileService.secondaryPictures.length > 0) {
+          @for (secondaryPicture of fileService.secondaryPictures; track secondaryPicture) {
             <tr>
               <td>
-                <p class="flex text-left"> {{ secondaryPicture.picture }} </p>
-              </td>
-              <td>
-                <img src="{{ secondaryPicture.pictureThumbnail }}" alt="image secondaire en cours de selection">
+                <img src="{{ fileService.getDataForImageSrc(secondaryPicture) }}" alt="image secondaire du produit {{ editProductForm.get('name')!.value }} en cours de selection">
               </td>
               <td>
                 <i (click)="addOrDeleteSecondaryPicture(secondaryPicture)" class="fa-solid fa-trash-can pointer flex center"></i>
               </td>
             </tr>
           }
-        } @else if (!currentSecondaryPictures) {
+        } @else if (!fileService.secondaryPictures) {
           <tr>
             <td>
               <p>Aucune image secondaire ajoutée</p>

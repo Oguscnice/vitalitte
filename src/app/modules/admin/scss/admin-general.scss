@@ -1,27 +1,18 @@
-@import "../scss/admin-button.scss";
-@import "../scss/admin-form.scss";
-@import "../scss/admin-table.scss";
-@import "../scss/admin-toggle.scss";
+@use "../../../scss/variables.scss" as variablesScss;
 
 .title-functionality {
-  margin-top: $half-margin;
+  margin-top: variablesScss.$half-margin;
   h4 {
     padding: 0;
-    margin-right: $normal-margin;
+    margin-right: variablesScss.$half-margin;
   }
   i {
-    color: $lilac;
-    font-size: $triple-font-size;
+    color: variablesScss.$lilac;
+    font-size: variablesScss.$triple-font-size;
   }
 }
 
-// Breackpoint list
-// Mobiles vers Tablettes :
-@media screen and (min-width: 768px) {
-}
-// Tablettes vers ordinateurs portables :
-@media screen and (min-width: 992px) {
-}
-// Ordinateurs portables vers ordinateurs de bureau :
-@media screen and (min-width: 1235px) {
+.btns-admin-home {
+  display: flex;
+  flex-direction: column;
 }

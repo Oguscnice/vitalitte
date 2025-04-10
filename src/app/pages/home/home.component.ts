@@ -1,7 +1,6 @@
 import { AddDataSqlService } from '../../shared/services/add-data-sql.service';
-import {Component, ElementRef, ViewChild, inject, OnInit, Signal, AfterViewInit} from '@angular/core';
+import {Component, ElementRef, ViewChild, inject, OnInit, AfterViewInit} from '@angular/core';
 import { ImagesPreview } from 'src/app/shared/interfaces/ImagesPreview';
-import { PublicationDto } from 'src/app/shared/interfaces/Publication';
 import {DataSignalService} from "../../shared/services/data-signal.service";
 
 @Component({
@@ -13,9 +12,12 @@ import {DataSignalService} from "../../shared/services/data-signal.service";
 export class HomeComponent implements OnInit, AfterViewInit {
 
   private dataSignal = inject(DataSignalService);
+  reviews$= this.dataSignal.$reviews;
+  indexReview: number = 0;
   private addData = inject(AddDataSqlService);
 
-  publicationsSpotlighted: Signal<PublicationDto[]> = this.dataSignal.$publicationsSpotlighted;
+  publicationsSpotlighted$ = this.dataSignal.$publicationsSpotlighted;
+  randomReviews$ = this.dataSignal.$reviews;
   backgroundImageParentHome: string =
     '../../../assets/images/figma/school-work.jpg';
   backgroundImageBio: string = '../../../assets/images/loryane.jpg';
@@ -53,6 +55,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataSignal.getPublicationsSpotlighted();
+    this.dataSignal.getRandomReviews();
     // this.addData.createAll();
   }
 
@@ -70,5 +73,29 @@ export class HomeComponent implements OnInit, AfterViewInit {
         imgElement.width + 'px'
       );
     };
+  }
+
+  changeReviewDisplay(action: 'minus' | 'more') {
+    if (action === 'minus') {
+      this.displayPreviousReview();
+    } else if (action === 'more') {
+      this.displayNextReview();
+    }
+  }
+
+  private displayPreviousReview(): void {
+    if (this.indexReview > 0) {
+      this.indexReview--;
+    } else {
+      this.indexReview = this.reviews$().length - 1;
+    }
+  }
+
+  private displayNextReview(): void {
+    if (this.indexReview < this.reviews$().length - 1) {
+      this.indexReview++;
+    } else {
+      this.indexReview = 0;
+    }
   }
 }

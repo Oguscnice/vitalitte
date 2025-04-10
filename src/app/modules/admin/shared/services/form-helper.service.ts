@@ -2,14 +2,17 @@ import { CategoryDto } from '../../../../shared/interfaces/Category';
 import { Injectable } from '@angular/core';
 import { CollectionDto } from '../../../../shared/interfaces/Collection';
 import { FormGroup } from '@angular/forms';
-import { SecondaryPictureDto } from '../../../../shared/interfaces/SecondaryPicture';
 import { MaterialDto } from '../../../../shared/interfaces/Material';
-import {ProductDto} from "../../../../shared/interfaces/Product";
+import {FileDto} from "../../../../shared/interfaces/FileDto";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormHelperService {
+
+  isTableVisible: boolean = true;
+  isFormVisible: boolean = false;
+  isFormSubmit: boolean = false;
 
   jsonParse<T>(value: string | null): T | null {
     return value ? JSON.parse(value) : null;
@@ -33,21 +36,25 @@ export class FormHelperService {
     return DTO_NAME ? DTO_NAME.name : '';
   }
 
-  formatFormToProductDto<T>(form: FormGroup): T {
+  formatFormWithMainPicture<T>(form: FormGroup, picture: FileDto): T {
+    return {
+      ...form.value,
+      pictureDto: picture
+    }
+  }
+
+  formatFormToProductDto<T>(form: FormGroup, pictureDto: FileDto, secondaryPicturesDto: FileDto[]): T {
     const CATEGORY_DTO: CategoryDto = this.jsonParse(form.get('categoryDto')!.value) as CategoryDto;
     const COLLECTION_DTO: CollectionDto = this.jsonParse(form.get('collectionDto')!.value) as CollectionDto;
     const MATERIALS_DTO: MaterialDto[] = this.jsonParse(form.get('materialsDto')!.value) as MaterialDto[];
-    let SECONDARY_PICTURES_DTO: SecondaryPictureDto[] = [];
-    if (form.get('secondaryPicturesDto')!.value) {
-      SECONDARY_PICTURES_DTO = this.jsonParse(form.get('secondaryPicturesDto')!.value) as SecondaryPictureDto[];
-    }
 
     return {
       ...form.value,
+      pictureDto: pictureDto,
       materialsDto: MATERIALS_DTO,
       categoryDto: CATEGORY_DTO,
       collectionDto : COLLECTION_DTO,
-      secondaryPicturesDto: SECONDARY_PICTURES_DTO
+      secondaryPicturesDto: secondaryPicturesDto ?? []
     }
   }
 
@@ -63,9 +70,10 @@ export class FormHelperService {
   formatFormToDto<T>(form: FormGroup): T {
     return { ...form.value }
   }
-}
 
-export type AllPosibilities = | CategoryDto
-                              | CollectionDto
-                              | SecondaryPictureDto[]
-                              | MaterialDto[]
+  resetAllValues(form: FormGroup): void {
+    this.isFormSubmit = false;
+    this.isFormVisible = false;
+    form.reset();
+  }
+}

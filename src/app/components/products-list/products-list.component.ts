@@ -1,29 +1,32 @@
 import { TitleCasePipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ProductDto } from '../../shared/interfaces/Product';
+import {DataSignalService} from "../../shared/services/data-signal.service";
+import {FileService} from "../../shared/services/file.service";
 
 @Component({
-  standalone: true,
-  imports: [ TitleCasePipe, RouterLink ],
+  imports: [TitleCasePipe, RouterLink],
   selector: 'app-products-list',
   template: `
-    @for (product of productsListChild; track product) {
-      <div class="products-list flex column center">
+    @for (product of products$(); track product; let index = $index) {
+      <div class="product-list flex column center">
         <h5> {{ product.name | titlecase }} </h5>
         <div class="image-and-filter-color flex column pointer"
              [routerLink]="['/produits', product.slug]">
-          <img src="{{ product.picture }}" alt="Photo d'un carnet"/>
+          <img src="{{ fileService.getDataForImageSrc(product.pictureDto) }}" alt="Photo d'un carnet"/>
           <div class="filter-color"></div>
         </div>
-        <div [innerHTML]="product.introduction"></div>
+        <div class="product-introduction" [innerHTML]="product.introduction"></div>
       </div>
     }
   `,
+  standalone: true,
   styleUrls: ['./products-list.component.scss']
 })
 export class ProductsListComponent {
 
-  @Input() productsListChild! : ProductDto[]
+  private dataSignal = inject(DataSignalService);
+  fileService = inject(FileService);
+  products$ = this.dataSignal.$productsDto;
 
 }

@@ -18,7 +18,6 @@ export class EnumProductTypeFormatPipe implements PipeTransform {
     try {
       return formatProductType(formattedValue, format);
     } catch (error) {
-      console.error(error);
       return value; // Retourner la valeur d'origine en cas d'erreur
     }
   }

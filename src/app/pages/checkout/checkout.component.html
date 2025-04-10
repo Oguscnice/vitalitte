@@ -10,7 +10,7 @@
     <table>
       <thead>
         <tr>
-          <th class="label-column"> Carnet </th>
+          <th class="label-column"> Produits </th>
           <th class="price-column"> Prix </th>
           <th class="quantity-column"> Nb. </th>
           <th class="price-column"> Total </th>
@@ -20,7 +20,7 @@
       <tbody>
         @for (product of shoppingCart$().products; track product; let index = $index) {
           <tr [ngClass]="index % 2 ? 'bg-dark' : ''">
-            <td class="label-column"> {{ product.item.name }} </td>
+            <td class="label-column"> {{ product.item.productType | enumProductTypeFormat:'singular' | titlecase }} : {{ product.item.name }} </td>
             <td class="price-column line-nowrap flex column">
               <p [ngClass]="{'strike-through' : shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage}"> {{ product.item.price | customCurrency }} </p>
               @if (shoppingCartService.$userGiftCardActive() && shoppingCartService.$userGiftCardActive()!.percentage) {

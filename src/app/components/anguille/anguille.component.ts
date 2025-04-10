@@ -13,26 +13,26 @@ import { AnguilleSignalService } from '../../shared/services/anguille-signal.ser
                 </p>
               }
               </div>`,
-  styles: [`@import "../../scss/variables.scss";
-            @import "../../scss/buttons.scss";
+  styles: [`@use "../../scss/variables.scss" as variablesScss;
+            @use "../../scss/buttons.scss";
 
             .messages-anguille {
               position: fixed;
-              top : calc($normal-margin + var(--height-header));
-              right: -80vw;
-              width: 160vw;
+              top : calc(var(--height-header) + #{variablesScss.$normal-margin});
+              right: -300px;
+              width: 600px;
               z-index : 999;
 
               p {
                 position: relative;
-                max-width: 80vw;
-                background-color: $lilac-light;
-                padding : $fourth-padding;
-                margin-bottom: $half-margin;
+                max-width: 300px;
+                background-color: variablesScss.$lilac-light;
+                padding : variablesScss.$triple-padding;
+                margin-bottom: variablesScss.$half-margin;
                 transition: right 1s linear;
                 word-break: normal;
                 overflow-y: hidden;
-                @include outline-picture;
+                @include variablesScss.outline-picture;
               }
               .hors-roche {
                 animation: slideInFromRight 1s ease-out forwards;
@@ -44,7 +44,7 @@ import { AnguilleSignalService } from '../../shared/services/anguille-signal.ser
 
             @keyframes slideInFromRight {
               0% {
-                right : -80vw;
+                right : -300px;
                 height: max-content;
               }
               100% {
@@ -57,12 +57,12 @@ import { AnguilleSignalService } from '../../shared/services/anguille-signal.ser
               0% {
                 height: max-content;
                 right : 0vw;
-                padding : $fourth-padding;
-                margin-bottom: $half-margin;
+                padding : variablesScss.$fourth-padding;
+                margin-bottom: variablesScss.$half-margin;
               }
               100% {
                 height: 0px;
-                right : -80vw;
+                right : -300vw;
                 padding : 0px;
                 margin-bottom: 0px;
               }

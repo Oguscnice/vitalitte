@@ -17,6 +17,10 @@ export class ApiProductAdminService {
     return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products")
   }
 
+  getProductBySlug(productSlug : ProductDto['slug']): Observable<ProductDto> {
+    return this.http.get<ProductDto>(VITALITTE_PROJECT.back.url + "/products/edit/" + productSlug)
+  }
+
   post(product : CreateProduct): Observable<ResponseEntity>{
     return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/products", product)
   }
@@ -31,5 +35,9 @@ export class ApiProductAdminService {
 
   delete(productSlug : ProductDto['slug']): Observable<ResponseEntity>{
     return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/products/" + productSlug)
+  }
+
+  getProductTypes(): Observable<ProductDto['productType'][]> {
+    return this.http.get<ProductDto['productType'][]>(VITALITTE_PROJECT.back.url + "/product-types")
   }
 }

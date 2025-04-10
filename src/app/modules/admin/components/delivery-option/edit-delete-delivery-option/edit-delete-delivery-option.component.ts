@@ -1,11 +1,9 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {AdminDeliveryOptionSignalService} from "../../../shared/services/admin-delivery-option-signal.service";
 import {NgClass} from "@angular/common";
-import {RouterLink} from "@angular/router";
 import {CustomCurrencyPipe} from "../../../../../shared/services/pipes/custom-currency.pipe";
 import {ModalSignalService} from "../../../../../shared/services/modal-signal.service";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {urlValidator} from "../../../shared/validators/urlValidators";
 import {FormHelperService} from "../../../shared/services/form-helper.service";
 import {priceValidator} from "../../../shared/validators/priceValidators";
 import {DeliveryOptionDto} from "../../../../../shared/interfaces/DeliveryOptionDto";
@@ -13,19 +11,22 @@ import {DeliveryOptionDto} from "../../../../../shared/interfaces/DeliveryOption
 @Component({
   selector: 'app-edit-delete-delivery-option',
   standalone: true,
-  imports: [NgClass, RouterLink, CustomCurrencyPipe, ReactiveFormsModule],
+  imports: [NgClass, CustomCurrencyPipe, ReactiveFormsModule],
   templateUrl: './edit-delete-delivery-option.component.html',
-  styles:  [`@import "../../../scss/admin-general.scss";`]
+  styles: [`
+    @use "../../../scss/admin-general.scss";
+    @use "../../../scss/admin-table.scss";
+    @use "../../../scss/admin-toggle.scss";
+    @use "../../../../../scss/table.scss";
+  `]
 })
 export class EditDeleteDeliveryOptionComponent implements OnInit {
 
   private formBuilder = inject(FormBuilder);
-  private formHelper = inject(FormHelperService);
+  formHelper = inject(FormHelperService);
   modalSignal = inject(ModalSignalService);
   adminDeliveryOptionSignal = inject(AdminDeliveryOptionSignalService);
   deliveryOptions = this.adminDeliveryOptionSignal.$deliveryOptions;
-  isTableVisible: boolean = true;
-  isFormSubmit: boolean = false;
 
   editDeliveryOptionForm = this.formBuilder.group({
     slug: ['', [Validators.required]],
@@ -57,16 +58,11 @@ export class EditDeleteDeliveryOptionComponent implements OnInit {
   }
 
   submitEditDeliveryOptionForm(): void {
-    this.isFormSubmit = true;
+    this.formHelper.isFormSubmit = true;
     if (this.editDeliveryOptionForm.valid) {
       const EDITED_DELIVERY_OPTION: DeliveryOptionDto = this.formHelper.formatFormToDto<DeliveryOptionDto>(this.editDeliveryOptionForm);
       this.adminDeliveryOptionSignal.put(EDITED_DELIVERY_OPTION);
-      this.resetAllValues();
+      this.formHelper.resetAllValues(this.editDeliveryOptionForm);
     }
-  }
-
-  resetAllValues(): void {
-    this.isFormSubmit = false;
-    this.editDeliveryOptionForm.reset();
   }
 }

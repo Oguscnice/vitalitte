@@ -59,17 +59,17 @@ export class AdminGiftCardSignalService extends BaseComponent {
 
     this.subscriptions.push(
       this.modalSignal.showModal(MESSAGE, true).subscribe({
-        next: (userChoice: boolean): void => userChoice ? this.delete() : this.setGiftCardToDelete(null),
+        next: (userChoice) => userChoice ? this.delete() : this.setGiftCardToDelete(null),
         error: (err) => (this.anguilleSignal.changeMessage(err.error.message))
       })
     )
   }
 
-  delete(): void {
+  private delete(): void {
     this.subscriptions.push(
       this.apiGiftcardService.delete(this.$giftCardToDelete()!.code).subscribe({
         next: (res) => {
-          this.changeMessage(res.message);
+          this.anguilleSignal.changeMessage(res.message);
           this.getAllGiftCards();
           this.setGiftCardToDelete(null);
         },

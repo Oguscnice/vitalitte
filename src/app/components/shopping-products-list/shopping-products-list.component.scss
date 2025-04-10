@@ -1,4 +1,4 @@
-@import "../../scss/variables.scss";
+@use "../../scss/variables.scss" as variablesScss;
 
 .shopping-products-list {
   width: 100%;
@@ -31,11 +31,11 @@
         height: 260px;
         width: 260px;
         object-fit: cover;
-        @include outline-picture();
+        @include variablesScss.outline-picture;
       }
 
       .product-description {
-        padding: 0 $double-padding;
+        padding: 0 variablesScss.$double-padding;
 
         h4 {
           font-weight: bold;
@@ -52,7 +52,7 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .shopping-products-list {
-    max-width: $max-width-768px;
+    max-width: variablesScss.$max-width-768px;
     .product-container {
       .product-description {
         .product-introduction {
@@ -74,7 +74,7 @@
 
 @media screen and (min-width: 992px) {
   .shopping-products-list {
-    max-width: $max-width-992px;
+    max-width: variablesScss.$max-width-992px;
     .categories-and-collections {
       flex-direction: row;
       .categories,

@@ -9,7 +9,7 @@ import {Component} from '@angular/core';
               <app-post-material/>
               <app-edit-delete-material/>
               `,
-  styles: [` @import "../../../../scss/admin-general"; `]
+  styles: [` @use "../../../../scss/admin-general"; `]
 })
 export class ManageMaterialsComponent {
 }

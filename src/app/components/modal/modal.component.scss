@@ -1,10 +1,12 @@
-@import "../../modules/admin/scss/admin-general.scss";
+@use "../../scss/variables.scss" as variablesScss;
+@use "../../scss/buttons.scss";
+@use "../../modules/admin/scss/admin-button.scss";
 
 .modal-confirmation-page {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: $lilac-light-opacity-low;
+  background-color: variablesScss.$lilac-light-opacity-low;
   backdrop-filter: blur(5px);
   width: 100vw;
   height: 100vh;
@@ -12,28 +14,28 @@
   opacity: 0;
 
   .content-text-and-buttons {
-    background-color: $white;
+    background-color: variablesScss.$white;
     width: 80vw;
     height: max-content;
     max-height: 88vh;
     border-radius: 10px;
-    border: 2px solid $lilac-dark;
+    border: 2px solid variablesScss.$lilac-dark;
     padding: 20px;
-    box-shadow: 4px 4px 8px $lilac-dark;
+    box-shadow: 4px 4px 8px variablesScss.$lilac-dark;
     p {
-      padding: $fourth-padding 0;
-      font-size: $triple-font-size;
-      color: $lilac-dark;
+      padding: variablesScss.$fourth-padding 0;
+      font-size: variablesScss.$triple-font-size;
+      color: variablesScss.$lilac-dark;
       overflow-y: auto;
     }
 
     .btn-medium-admin{
-      font-size: $triple-font-size;
+      font-size: variablesScss.$triple-font-size;
       width: 100%;
     }
   }
   .two-buttons{
-    gap: $normal-margin;
+    gap: variablesScss.$normal-margin;
   }
 }
 
@@ -51,7 +53,7 @@
 @media screen and (min-width: 768px) {
   .modal-confirmation-page {
     .content-text-and-buttons {
-      max-width: $max-width-768px;
+      max-width: variablesScss.$max-width-768px;
     }
   }
 }
@@ -59,7 +61,7 @@
 @media screen and (min-width: 992px) {
   .modal-confirmation-page {
     .content-text-and-buttons {
-      max-width: $max-width-992px;
+      max-width: variablesScss.$max-width-992px;
     }
   }
 }

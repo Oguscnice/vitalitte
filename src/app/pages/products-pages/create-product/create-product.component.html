@@ -1,131 +1,62 @@
-<div class="create-product-page flex column center">
+<app-h1 [titleChild]="'Imaginer vous même !'" [backgroundImageChild]="backgroundImageParentHome"/>
 
-  <app-h1 [titleChild]="'Imaginer mon carnet'" [backgroundImageChild]="backgroundImageParentHome"/>
+<h2>Bienvenue dans l'atelier de création !</h2>
+<p>Ici, nous vous offrons la possibilité de concevoir vos articles de papeterie sur mesure,
+  en harmonie avec la nature. Que ce soit un carnet unique, un marque-page personnalisé,
+  ou une carte postale qui reflète vos valeurs, chaque pièce que vous concevez respecte
+  notre engagement pour l'environnement et les savoir-faire artisanaux.</p>
 
-  <form action="https://formsubmit.io/send/guillaume.cometto@gmail.com"
-        method="POST"
-        class="flex column"
-        id="contactform">
+<h3>Un geste pour vous, un geste pour la planète</h3>
+<p>Chez Vitalitté, nous croyons en une papeterie différente.
+  Nos matériaux sont soigneusement sélectionnés pour leur faible impact écologique :
+  du papier recyclé à l'encre végétale, chaque détail compte.
+  En créant votre propre produit, vous contribuez à soutenir des pratiques durables
+  tout en exprimant votre créativité.</p>
 
-    <fieldset>
-      <mat-form-field>
-        <mat-label>Type de couverture...</mat-label>
-        <mat-select name="cover" id="cover">
-          <mat-option
-            (click)="changeCoverValue('Cuir')"
-            value="Cuir"
-            >Cuir (5 euros)</mat-option
-          >
-          <mat-option
-            (click)="changeCoverValue('Carton')"
-            value="Carton"
-            >Carton</mat-option
-          >
-          <mat-option (click)="changeCoverValue('Papier')"
-          value="Papier"
-            >Papier</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+<h4>Comment ça marche ?</h4>
+<ul class="width100">
+  <li>
+    <p><span class="strong-list">Choisissez le type de produit</span> – Que souhaitez-vous créer aujourd'hui ?
+      Un carnet de notes personnalisé, un marque-page original, ou une carte postale pour une occasion spéciale ?</p>
+  </li>
+  <li>
+    <p><span class="strong-list">Personnalisez à votre goût</span> – Trouvez vos matériaux, couleurs et finitions.
+      Vous pouvez ajouter des motifs, des textes, ou même des illustrations.</p>
+  </li>
+  <li>
+    <p><span class="strong-list">Finalisez votre création</span> – Une fois satisfait(e) de votre design,
+      il ne vous reste plus qu'à nous contacter et nous nous occuperons de fabriquer votre pièce unique, à la main, avec amour et respect de l'environnement.</p>
+  </li>
+</ul>
 
-      @if (isFormClicked && hasErrors) {
-        <div class="errors">
-          @if (!coverValue) {
-            <small>Le thème est <strong>obligatoire</strong>.</small>
-          }
-        </div>
-      }
-    </fieldset>
+<h4>Un projet unique, une approche personnalisée</h4>
+<p>Chaque création est une <span class="strong-list">pièce unique</span>. Que vous souhaitiez un carnet à la reliure complexe,
+un marque-page aux finitions minutieuses, ou une carte postale à illustration personnalisée,
+nous comprenons que chaque projet a ses spécificités.</p>
 
-    <fieldset>
-      <mat-form-field>
-        <mat-label>Type de reliure...</mat-label>
-        <mat-select name="booBinding" id="booBinding">
-          <mat-option
-            (click)="changeBookBindingValue('Chinoise')"
-            value="Chinoise"
-            >Chinoise</mat-option
-          >
-          <mat-option
-            (click)="changeBookBindingValue('Egyptienne')"
-            value="Egyptienne"
-            >Egyptienne</mat-option
-          >
-          <mat-option (click)="changeBookBindingValue('Classique')"
-            >Classique</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+<p>En fonction de la complexité de votre design, des matériaux choisis et des
+  techniques nécessaires, la faisabilité et le temps de réalisation peuvent varier.
+  Afin de vous offrir une expérience sur-mesure et un produit qui correspond
+  parfaitement à vos attentes, nous vous invitons à nous contacter.</p>
 
-      @if (isFormClicked && hasErrors) {
-        <div class="errors">
-          @if (!bookBindingValue) {
-            <small>La couverture est <strong>obligatoire</strong>.</small>
-          }
-        </div>
-      }
-    </fieldset>
-
-    <fieldset>
-      <mat-form-field>
-        <mat-label>Papier...</mat-label>
-        <mat-select name="paper" id="booBipapernding">
-          <mat-option
-            (click)="changePaperValue('Papier Recyclé')"
-            value="Papier Recyclé"
-            >Papier Recyclé</mat-option
-          >
-          <mat-option
-            (click)="changePaperValue('Papier Classique')"
-            value="Papier Classique"
-            >Papier Classique</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-
-      @if (isFormClicked && hasErrors) {
-        <div class="errors">
-          @if (!paperValue) {
-            <small>Le papier est <strong>obligatoire</strong>.</small>
-          }
-        </div>
-      }
-    </fieldset>
-
-    <fieldset>
-      <mat-form-field >
-        <mat-label>Titre... (facultatif)</mat-label>
-        <input
-          matInput
-          type="text"
-          name="title"
-          id="title"
-          (keyup)="changeTitleValue($event)"
-        />
-      </mat-form-field>
-
-      @if (isFormClicked && hasErrors) {
-        <div class="errors">
-          @if (titleValue && titleValue.length > 255) {
-            <small>Le nom ne doit pas comporter plus de<strong>255 caractères</strong>.</small>
-          } @else if (titleValue && titleValue.length <= 2) {
-            <small>Le nom doit comporter plus de<strong>2 caractères</strong>.</small>
-          } @else if (!titleValue) {
-            <small>Le nom est<strong>obligatoire</strong>.</small>
-          }
-        </div>
-      }
-    </fieldset>
-  </form>
-
-  <div class="preview-picture flex">
-    <img class="binding-src" src="../../../assets/images/figma/nopeLibre/{{bookBindingValue}}.jpg" alt="">
-    <div class="flex column">
-      <p class="cover-src" [style.background-image]="'url(../../../assets/images/figma/nopeLibre/' + coverValue + '.jpg)'">
-        {{titleValue}}
-    </p>
-    <img class="paper-src" src="../../../assets/images/figma/nopeLibre/{{paperValue}}.jpg" alt="">
-    </div>
-  </div>
-
-</div>
+<h4 class="flex center">Pourquoi nous contacter ?</h4>
+<ul class="width100">
+  <li>
+    <p><span class="strong-list">Chaque détail compte</span> dans la création de votre article. En discutant directement
+    avec notre équipe, vous pourrez :</p>
+  </li>
+  <li>
+    <p><span class="strong-list">Évaluer la faisabilité de votre projet</span>, en tenant compte des techniques artisanales disponibles.</p>
+  </li>
+  <li>
+    <p><span class="strong-list">Obtenir des conseils</span> sur les meilleures options écoresponsables pour votre design.</p>
+  </li>
+  <li>
+    <p><span class="strong-list">Recevoir un devis précis et personnalisé</span>, basé sur la complexité et les matériaux que vous souhaitez.</p>
+  </li>
+  <li>
+    <p class="width100"><span class="strong-list">Ensemble</span>, nous trouverons la solution idéale
+      pour que votre création reflète vos envies tout en respectant notre engagement
+      pour une fabrication responsable et de qualité.</p>
+  </li>
+</ul>

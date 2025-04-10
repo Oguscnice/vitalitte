@@ -1,0 +1,85 @@
+@use "../../../../../scss/variables.scss" as variablesScss;
+@use "../../../scss/admin-general.scss";
+@use "../../../../../scss/forms.scss";
+@use "../../../scss/admin-button.scss";
+
+.categories {
+  margin: variablesScss.$normal-margin auto 0 auto;
+  gap: variablesScss.$normal-margin;
+  .category-thumbnail {
+    @include variablesScss.outline-picture;
+    padding : variablesScss.$normal-padding;
+    width: 100%;
+    .category-image-and-actions-name {
+      img {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+      }
+      .category-actions-name {
+        width: 100%;
+        height: calc(160px / 2);
+        .category-actions {
+          width: 50%;
+          p {
+            margin-left: variablesScss.$normal-padding;
+          }
+        }
+        .category-name {
+          align-items: center;
+          margin: variablesScss.$normal-padding;
+          font-weight: bold;
+        }
+        fieldset {
+          input {
+            margin-top: 0;
+            margin-left: variablesScss.$normal-padding;
+            width: calc(100% - (2 * #{variablesScss.$normal-padding}));
+          }
+        }
+      }
+    }
+    .category-description {
+      margin: variablesScss.$normal-padding;
+      @include variablesScss.hiddenTextByLineNumber(6);
+      editor {
+        margin-top: 0;
+      }
+    }
+    button {
+      margin: variablesScss.$normal-padding 0;
+    }
+    fieldset {
+      width: auto;
+    }
+  }
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  .categories {
+    .category-thumbnail {
+      .category-image-and-actions-name {
+        img {
+          width: 80px;
+          height: 80px;
+        }
+        .category-actions-name {
+          height: calc(80px / 2);
+        }
+      }
+
+      fieldset {
+        .image-blur-icon {
+          cursor: pointer;
+          height: 80px;
+          width: 80px;
+        }
+        i {
+          font-size: calc(80px/2);
+        }
+      }
+    }
+  }
+}

@@ -1,11 +1,11 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {DataSignalService} from "../../../shared/services/data-signal.service";
+import {Component, Input} from '@angular/core';
 import {NgClass, SlicePipe, TitleCasePipe, UpperCasePipe} from "@angular/common";
 import {VITALITTE_PROJECT} from "../../../shared/variables/AppConfig";
+import {ReviewDto} from "../../../shared/interfaces/Review";
 
 @Component({
   selector: 'app-review-thumbnail',
-  standalone: true,
+
   imports: [
     TitleCasePipe,
     SlicePipe,
@@ -17,13 +17,12 @@ import {VITALITTE_PROJECT} from "../../../shared/variables/AppConfig";
 })
 export class ReviewThumbnailComponent {
 
-  private dataSignal = inject(DataSignalService);
-  reviews = this.dataSignal.$reviews;
-  indexSelected: number | null = null;
+  @Input() review!: ReviewDto;
+  reviewSelected: null | ReviewDto = null;
 
   protected readonly VITALITTE_PROJECT = VITALITTE_PROJECT;
 
-  onReviewSelected(index: number): void {
-    this.indexSelected = index === this.indexSelected ? null : index;
+  onReviewSelected(reviewDto: ReviewDto): void {
+    this.reviewSelected = reviewDto.content === this.reviewSelected?.content ? null : reviewDto;
   }
 }

@@ -15,8 +15,8 @@ export class ApiBanService extends BaseComponent {
   public isDropdownBanOpen : boolean = false;
   public addressList!: any;
 
-  toggleDropdown(boolean : boolean): void {
-    this.isDropdownBanOpen = boolean
+  toggleDropdown(): void {
+    this.isDropdownBanOpen = !this.isDropdownBanOpen;
   }
 
   searchAddress(event: KeyboardEvent): void {

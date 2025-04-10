@@ -2,25 +2,24 @@ import { NgClass } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 
 @Component({
-  standalone: true,
   imports: [ NgClass ],
   selector: 'app-up-arrow',
   template: `<i class="fa-regular fa-circle-up up-arrow"
                 (click)="scrollToTop(400)"
                 [ngClass]="arrowVisible ? 'visible-linear' : 'invisible-linear'"></i>`,
   styles: [`
-            @import "../../scss/variables.scss";
-            @import "../../../styles.scss";
+            @use "../../scss/variables.scss" as variablesScss;
+            @use "../../../styles.scss";
 
             .up-arrow {
               position: fixed;
               bottom: 16px;
               right: 16px;
-              color: $lilac;
-              font-size: $max-font-size;
-              z-index: $z-index - 1;
+              color: variablesScss.$lilac;
+              font-size: variablesScss.$max-font-size;
+              z-index: variablesScss.$z-index - 1;
               opacity: 0;
-              background-color: $white;
+              background-color: variablesScss.$white;
               border-radius: 50%;
               transition: opacity;
             }

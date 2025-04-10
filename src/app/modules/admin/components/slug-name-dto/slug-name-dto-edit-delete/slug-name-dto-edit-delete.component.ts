@@ -2,17 +2,13 @@ import { NgClass } from '@angular/common';
 import {Component, Input, Signal, inject, OnInit} from '@angular/core';
 import { SlugNameDto } from '../../../shared/interfaces/SlugNameDto';
 import { FormBuilder, Validators } from '@angular/forms';
-import { CategoryDto } from 'src/app/shared/interfaces/Category';
 import { CollectionDto } from 'src/app/shared/interfaces/Collection';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { AdminCollectionSignalService } from '../../../shared/services/admin-collection-signal.service';
-import { AdminCategorySignalService } from '../../../shared/services/admin-category-signal.service';
 import { DataSignalService } from 'src/app/shared/services/data-signal.service';
 import {FormHelperService} from "../../../shared/services/form-helper.service";
 
 @Component({
-  standalone: true,
-  imports: [ NgClass, ModalComponent ],
+  imports: [ NgClass ],
   selector: 'app-slug-name-dto-edit-delete',
   template: ` <div class="title-functionality flex center">
                 <h4 class="flex center">Gérer les {{ type }}</h4>
@@ -79,19 +75,22 @@ import {FormHelperService} from "../../../shared/services/form-helper.service";
                 </table>
               }
               `,
-  styles: [` @import "../../../scss/admin-general.scss"; `]
+  styles: [`
+    @use "../../../../../scss/forms.scss";
+    @use "../../../scss/admin-table.scss";
+    @use "../../../scss/admin-general.scss";
+  `]
 })
 export class SlugNameDtoEditDeleteComponent implements OnInit {
 
-  private formBuilder: FormBuilder = inject(FormBuilder);
-  private formHelper: FormHelperService = inject(FormHelperService);
-  private dataSignal: DataSignalService = inject(DataSignalService);
-  private adminCollectionSignal: AdminCollectionSignalService = inject(AdminCollectionSignalService);
-  private adminCategorySignal: AdminCategorySignalService = inject(AdminCategorySignalService);
+  private formBuilder = inject(FormBuilder);
+  private formHelper = inject(FormHelperService);
+  private dataSignal = inject(DataSignalService);
+  private adminCollectionSignal = inject(AdminCollectionSignalService);
 
-  @Input() type! : 'Catégories' | 'Collections';
+  @Input() type! : 'Collections';
 
-  items!: Signal<CategoryDto[]> | Signal<CollectionDto[]>;
+  items!: Signal<CollectionDto[]>;
 
   isTableVisible: boolean = true;
   isFormSubmit: boolean = false;
@@ -102,10 +101,11 @@ export class SlugNameDtoEditDeleteComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.type === 'Catégories') {
-      this.dataSignal.getAllCategories();
-      this.items = this.dataSignal.$categories;
-    } else if (this.type === 'Collections') {
+    // if (this.type === 'Catégories') {
+    //   this.dataSignal.getAllCategories();
+    //   this.items = this.dataSignal.$categories;
+    // }
+    if (this.type === 'Collections') {
       this.dataSignal.getAllCollections();
       this.items = this.dataSignal.$collections;
     }
@@ -130,9 +130,10 @@ export class SlugNameDtoEditDeleteComponent implements OnInit {
     this.isFormSubmit = true;
 
     if (this.itemForm.valid) {
-      if (this.type === 'Catégories') {
-        this.adminCategorySignal.putCategory(this.formHelper.formatFormToDto<CategoryDto>(this.itemForm));
-      } else if (this.type === 'Collections') {
+      // if (this.type === 'Catégories') {
+      //   this.adminCategorySignal.putCategory(this.formHelper.formatFormToDto<CategoryDto>(this.itemForm));
+      // }
+      if (this.type === 'Collections') {
         this.adminCollectionSignal.putCollection(this.formHelper.formatFormToDto<CollectionDto>(this.itemForm));
       }
       this.itemForm.reset();
@@ -141,9 +142,10 @@ export class SlugNameDtoEditDeleteComponent implements OnInit {
   }
 
   delete(item: SlugNameDto): void {
-    if (this.type === 'Catégories') {
-      this.adminCategorySignal.confirmationModalForDeleteCategory(item);
-    } else if (this.type === 'Collections') {
+    // if (this.type === 'Catégories') {
+    //   this.adminCategorySignal.confirmationModalForDeleteCategory(item);
+    // }
+    if (this.type === 'Collections') {
       this.adminCollectionSignal.confirmationModalForDeleteCollection(item);
     }
   }

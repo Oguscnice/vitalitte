@@ -1,4 +1,4 @@
-<div class="cart-manager flex center space-around">
+<div class="cart-manager flex center space-around width100">
   <i class="fa-solid fa-circle-minus manage-icon pointer"
      (click)="shoppingCart.counterQuantity(product.item, type) > (0 + (isInscription() ? 1 : 0)) ? decrease() : false"
      [ngClass]="{

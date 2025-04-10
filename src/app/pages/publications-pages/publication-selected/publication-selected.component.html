@@ -1,6 +1,5 @@
-
 @if (publicationSelected) {
-  <app-h1 [titleChild]="''" [backgroundImageChild]="publicationSelected.picture"/>
+  <app-h1 [titleChild]="''" [backgroundImageChild]="fileService.getDataForImageSrc(publicationSelected.pictureDto)"/>
   <h2>{{ publicationSelected.title }}</h2>
   <p class="actuality-date">Actualité créée le {{ publicationSelected.createdAt | date:'dd/MM/yyyy à hh:mm'}}</p>
   <div [innerHTML]="publicationSelected.description"></div>

@@ -1,40 +1,54 @@
 import { MaterialDto } from '../../../../../../shared/interfaces/Material';
-import {Component, Signal, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { CategoryDto } from '../../../../../../shared/interfaces/Category';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { FileUploadService } from '../../../../shared/services/file-upload.service';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { CreateProduct } from '../../../../shared/interfaces/CreateProduct';
 import { priceValidator } from '../../../../shared/validators/priceValidators';
-import { urlValidator } from '../../../../shared/validators/urlValidators';
 import { CollectionDto } from '../../../../../../shared/interfaces/Collection';
-import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CounterZeroIfEmpty } from '../../../../../../shared/services/pipes/counter-zero-if-empty.pipe';
 import { TOOLS_BAR_CONFIG_EDITOR } from '../../../../shared/variables/Other';
 import { DataSignalService } from '../../../../../../shared/services/data-signal.service';
-import { SecondaryPictureDto } from '../../../../../../shared/interfaces/SecondaryPicture';
 import { AdminProductSignalService } from '../../../../shared/services/admin-product-signal.service';
 import { FormHelperService } from '../../../../shared/services/form-helper.service';
-import { FileInfo } from '../../../../shared/interfaces/FileInfo';
 import {ProductDto} from "../../../../../../shared/interfaces/Product";
 import {ActivatedRoute} from "@angular/router";
 import {EnumProductTypeFormatPipe} from "../../../../../../shared/services/pipes/enum-product-type-format.pipe";
 import {CustomCurrencyPipe} from "../../../../../../shared/services/pipes/custom-currency.pipe";
+import {FileService} from "../../../../../../shared/services/file.service";
+import {FileDto} from "../../../../../../shared/interfaces/FileDto";
+import {BaseComponent} from "../../../../../../base.component";
+import {AnguilleSignalService} from "../../../../../../shared/services/anguille-signal.service";
+import {AddEuroCurrencyPipe} from "../../../../../../shared/services/pipes/add-euro-currency.pipe";
 
 @Component({
-  standalone: true,
-  imports: [NgClass, ReactiveFormsModule, TitleCasePipe, DecimalPipe, EditorModule, CounterZeroIfEmpty, EnumProductTypeFormatPipe, CustomCurrencyPipe],
+  imports: [NgClass, ReactiveFormsModule, TitleCasePipe, EditorModule, CounterZeroIfEmpty, EnumProductTypeFormatPipe, CustomCurrencyPipe],
   selector: 'app-post-product',
   templateUrl: './post-product.component.html',
-  styles: [` @import "../../../../scss/admin-general"; `]
+  styles: [`
+    @use "../../../../scss/admin-general.scss";
+    @use "../../../../scss/admin-table.scss";
+    @use "../../../../scss/admin-button.scss";
+    @use "../../../../../../scss/buttons.scss";
+    @use "../../../../../../scss/forms.scss";
+    @use "../../../../../../scss/table.scss";
+    @use "../../../../../../scss/dropdowns.scss";
+    @use "../../../../../../scss/variables.scss" as variablesScss;
+
+    button {
+      margin: variablesScss.$normal-margin auto 0 auto;
+    }
+  `]
 })
-export class PostProductComponent implements OnInit {
+export class PostProductComponent extends BaseComponent implements OnInit {
 
   private formBuilder = inject(FormBuilder);
   private dataSignalService = inject(DataSignalService);
   private adminProductSignal = inject(AdminProductSignalService);
   private route = inject(ActivatedRoute);
-  fileUploadService = inject(FileUploadService);
+  private anguilleSignal = inject(AnguilleSignalService);
+  fileService = inject(FileService);
   formHelper = inject(FormHelperService);
 
   toolBarConfig = TOOLS_BAR_CONFIG_EDITOR
@@ -44,19 +58,14 @@ export class PostProductComponent implements OnInit {
   collectionsDto$ = this.dataSignalService.$collections;
   productType!: ProductDto['productType'];
   currentMaterials: MaterialDto[] | null = [];
-  currentSecondaryPictures: SecondaryPictureDto[] | null = [];
 
   isCategoryDropdownOpen: boolean = false;
   isCollectionDropdownOpen: boolean = false;
   isMaterialsDropdownOpen: boolean = false;
 
-  isFormVisible: boolean = false;
-  isFormSubmit: boolean = false;
-
   newProductForm = this.formBuilder.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
-    picture: ['', [Validators.required, urlValidator()]],
-    pictureThumbnail: ['', [Validators.required, urlValidator()]],
+    pictureDto: ['', [Validators.required]],
     introduction: ['', [Validators.required, Validators.maxLength(65534)]],
     price: ['', [priceValidator()]],
     description: ['', [Validators.required, Validators.maxLength(65534)]],
@@ -68,8 +77,7 @@ export class PostProductComponent implements OnInit {
   });
 
   newSecondaryPictureForm = this.formBuilder.group({
-    picture: [''],
-    pictureThumbnail: [''],
+    pictureDto: [null],
   });
 
   ngOnInit(): void {
@@ -77,8 +85,18 @@ export class PostProductComponent implements OnInit {
     this.dataSignalService.getAllCollections();
     this.dataSignalService.getAllMaterials();
     this.dataSignalService.getAllMaterialsTypes();
-    this.fileUploadService.patchImage(this.newProductForm, this.fileUploadService.imageProductDefault, this.fileUploadService.imageProductDefaultThumbnail);
+    this.formHelper.isFormVisible = false;
+    this.patchImageDefault();
     this.findProductTypeUrl();
+  }
+
+  private patchImageDefault(): void {
+    this.subscriptions.push(
+      this.fileService.patchImage(this.fileService.imageProductDefault).subscribe({
+        next: (fileDto) => this.newProductForm.get('pictureDto')!.setValue(fileDto.fileName),
+        error: (err) => this.anguilleSignal.changeMessage("Erreur lors de la récupération de l'image par défaut"),
+      })
+    )
   }
 
   private findProductTypeUrl(): void {
@@ -114,35 +132,9 @@ export class PostProductComponent implements OnInit {
     this.newProductForm.get('materialsDto')!.setValue(this.formHelper.jsonStringify<MaterialDto[]>(currentMaterials));
   }
 
-  addOrDeleteSecondaryPicture(secondaryPicture: SecondaryPictureDto): void {
-
-    let currentSecondaryPictures: SecondaryPictureDto[] | null = this.formHelper.jsonParse<SecondaryPictureDto[]>(this.newProductForm.get('secondaryPicturesDto')!.value) as SecondaryPictureDto[];
-
-    if (!currentSecondaryPictures) {
-      currentSecondaryPictures = [];
-    }
-
-    if (!currentSecondaryPictures.some(url => url.picture === secondaryPicture.picture)) {
-      currentSecondaryPictures.push(secondaryPicture)
-    } else {
-      currentSecondaryPictures = currentSecondaryPictures.filter(item => item.picture !== secondaryPicture.picture);
-    }
-
-    this.currentSecondaryPictures = currentSecondaryPictures.length < 1 ? null : currentSecondaryPictures
-    this.newProductForm.get('secondaryPicturesDto')!.setValue(this.formHelper.jsonStringify(currentSecondaryPictures));
-  }
-
-  onFileSelected(event: Event, form: 'newProductForm' | 'newSecondaryPictureForm'): void {
-  const FORM_GROUP: FormGroup = this[form];
-  this.fileUploadService.onFileSelected(event, FORM_GROUP).subscribe({
-    next: (fileInfo: FileInfo | null) => {
-      if (form === 'newSecondaryPictureForm' && fileInfo) {
-        this.addOrDeleteSecondaryPicture(FORM_GROUP.value as SecondaryPictureDto);
-        FORM_GROUP.reset();
-      }
-    },
-    error: (err) => (console.log(err.error.message))
-    });
+  addOrDeleteSecondaryPicture(secondaryPicture: FileDto): void {
+    this.fileService.addOrDeleteSecondaryPicture(secondaryPicture)
+    this.newProductForm.get('secondaryPicturesDto')!.setValue(this.formHelper.jsonStringify(this.fileService.secondaryPictures));
   }
 
   onValueSelected(control: string, value: CategoryDto | CollectionDto): void {
@@ -165,21 +157,13 @@ export class PostProductComponent implements OnInit {
 
   submitNewProductForm(): void {
 
-    this.isFormSubmit = true
+    this.formHelper.isFormSubmit = true
 
     if (this.newProductForm.valid) {
-      const CREATED_PRODUCT : CreateProduct = this.formHelper.formatFormToProductDto<CreateProduct>(this.newProductForm);
+      const CREATED_PRODUCT: CreateProduct = this.formHelper.formatFormToProductDto<CreateProduct>(this.newProductForm, this.fileService.picture!, this.fileService.secondaryPictures!);
       this.adminProductSignal.post(CREATED_PRODUCT);
-      this.resetAllValues();
+      this.formHelper.resetAllValues(this.newProductForm);
+      this.findProductTypeUrl();
     }
-  }
-
-  resetAllValues(): void {
-    this.isFormSubmit = false;
-    this.isFormVisible = false;
-    this.currentSecondaryPictures = [];
-    this.newProductForm.reset();
-    this.findProductTypeUrl();
-    this.fileUploadService.patchImage(this.newProductForm, this.fileUploadService.imageProductDefault, this.fileUploadService.imageProductDefaultThumbnail);
   }
 }

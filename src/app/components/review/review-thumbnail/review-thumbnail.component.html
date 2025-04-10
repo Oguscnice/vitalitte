@@ -1,21 +1,17 @@
-<div class="reviews flex width100 wrap space-around">
-  @for (review of reviews(); track $index) {
-    <div class="review-container flex column width100">
-      <div class="review-user-stars flex center space-between">
-        <p class="review-customer flex"> {{ review.firstname | titlecase }} {{ review.lastname | slice:0:1 | uppercase }}. </p>
-        <div class="stars-rating flex">
-          @for (star of VITALITTE_PROJECT.front.rating; track star) {
-            <div class="star-container">
-              <i class="fa fa-star half-star"
-                 [ngClass]="{'star-colored': review.rating >= (star - 0.5) }"></i>
-              <i class="fa fa-star full-star" [ngClass]="{'star-colored': review.rating >= (star) }"></i>
-            </div>
-          }
-        </div>
+  <div class="review-container flex column width100">
+    <div class="review-user-stars flex center space-between">
+      <p class="review-customer flex"> {{ review.firstname | titlecase }} {{ review.lastname | slice:0:1 | uppercase }}. </p>
+      <div class="stars-rating flex">
+        @for (star of VITALITTE_PROJECT.front.rating; track star) {
+          <div class="star-container">
+            <i class="fa fa-star half-star"
+               [ngClass]="{'star-colored': review.rating >= (star - 0.5) }"></i>
+            <i class="fa fa-star full-star" [ngClass]="{'star-colored': review.rating >= (star) }"></i>
+          </div>
+        }
       </div>
-      <p class="review-content flex text-left"
-         (click)="onReviewSelected($index)"
-         [ngClass]="{'full-content': indexSelected === $index}"> {{ review.content }} </p>
     </div>
-  }
-</div>
+    <p class="review-content flex text-left"
+       (click)="onReviewSelected(review)"
+       [ngClass]="{'full-content': reviewSelected === review}"> {{ review.content }} </p>
+  </div>

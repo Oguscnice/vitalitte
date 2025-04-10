@@ -1,4 +1,5 @@
 import {WorkshopDto} from "../../../../shared/interfaces/Workshop";
+import {FileDto} from "../../../../shared/interfaces/FileDto";
 
 export interface CreateWorkshop {
   title : string,
@@ -6,8 +7,7 @@ export interface CreateWorkshop {
   date : Date,
   address : string,
   price : number,
-  picture : string,
-  pictureThumbnail : string,
+  pictureDto: FileDto
   registrations : number
 }
 

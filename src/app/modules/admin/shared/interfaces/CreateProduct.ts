@@ -1,16 +1,15 @@
 import { CategoryDto } from "../../../../shared/interfaces/Category";
 import { CollectionDto } from "../../../../shared/interfaces/Collection";
 import { MaterialDto } from "../../../../shared/interfaces/Material";
-import { SecondaryPictureDto } from "../../../../shared/interfaces/SecondaryPicture";
+import {FileDto} from "../../../../shared/interfaces/FileDto";
 
 export interface CreateProduct {
   name: string,
-  picture: string,
-  pictureThumbnail: string,
+  pictureDto: FileDto,
   price: number,
   description: string,
   introduction: string,
-  secondaryPicturesDto: SecondaryPictureDto[],
+  secondaryPicturesDto: FileDto[],
   materialsDto: MaterialDto[],
   categoryDto: CategoryDto,
   collectionDto: CollectionDto,

@@ -3,7 +3,6 @@ import { MaterialDto } from '../../../../../../shared/interfaces/Material';
 import { NgClass, TitleCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AddEuroCurrencyPipe } from '../../../../../../shared/services/pipes/add-euro-currency.pipe';
-import { ModalComponent } from '../../../../../../components/modal/modal.component';
 import {DataSignalService} from "../../../../../../shared/services/data-signal.service";
 import {AdminMaterialSignalService} from "../../../../shared/services/admin-material-signal.service";
 import {
@@ -14,15 +13,17 @@ import {ModalSignalService} from "../../../../../../shared/services/modal-signal
 import {
   ChangeSizePaginationAndValueSearchComponent
 } from "../../../../../../components/change-size-pagination-and-value-search/change-size-pagination-and-value-search.component";
-import {PaginationSignalService} from "../../../../../../shared/services/pagination-signal.service";
+import {FileService} from "../../../../../../shared/services/file.service";
 
 @Component({
   selector: 'app-edit-delete-material',
-  standalone: true,
-  imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ModalComponent, ChangePageButtonsPagination, ChangeSizePaginationAndValueSearchComponent ],
+
+  imports: [ NgClass, TitleCasePipe, RouterLink, AddEuroCurrencyPipe, ChangePageButtonsPagination, ChangeSizePaginationAndValueSearchComponent ],
   templateUrl: './edit-delete-material.component.html',
   styles: [`
-    @import "../../../../scss/admin-general";
+    @use "../../../../scss/admin-general.scss";
+    @use "../../../../scss/admin-table.scss";
+    @use "../../../../scss/admin-toggle.scss";
 
     .material-name {
       max-width: 40vw;
@@ -34,7 +35,8 @@ export class EditDeleteMaterialComponent extends BaseComponent implements OnInit
 
   private dataSignal = inject(DataSignalService);
   private adminMaterialSignal = inject(AdminMaterialSignalService);
-  modalSignal : ModalSignalService = inject(ModalSignalService);
+  private modalSignal = inject(ModalSignalService);
+  fileService = inject(FileService);
 
   materials$ = this.dataSignal.$materials;
 
@@ -46,6 +48,10 @@ export class EditDeleteMaterialComponent extends BaseComponent implements OnInit
 
   onValuePageChange(event : string): void {
     this.adminMaterialSignal.getPaginatedWithSearchValue();
+  }
+
+  openModalWithDescription(materialDescription : MaterialDto['description']): void {
+    this.modalSignal.showModal(materialDescription, false);
   }
 
   changeAvailability = (material : MaterialDto) => this.adminMaterialSignal.changeAvailabilityMaterial(material);

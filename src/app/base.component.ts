@@ -2,9 +2,10 @@ import { Component } from "@angular/core";
 import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'app-base',
-  template: ``,
-  styles: [``]
+    selector: 'app-base',
+    template: ``,
+    styles: [``],
+    standalone: false
 })
 
 export class BaseComponent {

@@ -1,4 +1,3 @@
-import { GoogleReviews, Review } from '../interfaces/GoogleReviews';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -32,10 +31,6 @@ export class ApiRequestsService {
     return this.http.get<MaterialDto[]>(VITALITTE_PROJECT.back.url + "/materials")
   }
 
-  getMaterialBySlug(materialSlug: MaterialDto['slug']): Observable<MaterialDto> {
-    return this.http.get<MaterialDto>(VITALITTE_PROJECT.back.url + "/materials/" + materialSlug)
-  }
-
   getAllMaterialsTypes(): Observable<string[]>{
     return this.http.get<string[]>(VITALITTE_PROJECT.back.url + "/material-types")
   }
@@ -62,6 +57,10 @@ export class ApiRequestsService {
 
   getProductsByCategoryAndCollection(productType: ProductDto['productType'], categoryAndCollection: CategoryDtoAndCollectionDto): Observable<ProductDto[]> {
     return this.http.post<ProductDto[]>(VITALITTE_PROJECT.back.url + `/products/type-${productType}/filter/category-collection`, categoryAndCollection)
+  }
+
+  getProductTypes(): Observable<ProductDto['productType'][]> {
+    return this.http.get<ProductDto['productType'][]>(VITALITTE_PROJECT.back.url + "/product-types/has-product")
   }
 
   //-------------------
@@ -148,8 +147,12 @@ export class ApiRequestsService {
   //-----GiftCards-----
   //-------------------
 
-  checkGiftCard(code : string): Observable<GiftCardDto> {
-    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + "/giftCards/user/" + code)
+  checkGiftCard(code: string, email: string): Observable<GiftCardDto> {
+    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + `/giftCards/user/${code}/${email}`);
+  }
+
+   verifyIfGiftCardIsAlreadyUsed(code: string, email: string): Observable<boolean> {
+    return this.http.get<boolean>(VITALITTE_PROJECT.back.url + `/giftCards/is-already-used/${code}/${email}`);
   }
 
   //-------------------
@@ -170,6 +173,10 @@ export class ApiRequestsService {
 
   getReviewsByStatus(paginationReviewsFiltered: PaginationReviewsFiltered): Observable<Page<ReviewDto>> {
     return this.http.post<Page<ReviewDto>>(VITALITTE_PROJECT.back.url + "/reviews/paginated", paginationReviewsFiltered)
+  }
+
+  getRandomReviews(): Observable<ReviewDto[]> {
+    return this.http.get<ReviewDto[]>(VITALITTE_PROJECT.back.url + "/reviews/random")
   }
 
   // //-------------------

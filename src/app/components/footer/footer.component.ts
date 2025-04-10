@@ -2,7 +2,6 @@ import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@an
 import { Subject } from 'rxjs';
 
 @Component({
-  standalone: true,
   imports: [],
   selector: 'app-footer',
   template: `<footer class="flex center" #footer>
@@ -13,25 +12,25 @@ import { Subject } from 'rxjs';
                 </div>
             </footer>`,
   styles: [`
-            @import "../../scss/variables.scss";
-            @import "../../../styles.scss";
+            @use "../../scss/variables.scss" as variablesScss;
+            @use "../../../styles.scss";
 
             :root {
               --height-footer: 0px;
             }
 
             footer {
-              margin-top: $normal-margin;
+              margin-top: variablesScss.$normal-margin;
               height: 60px;
-              background-color: $lilac;
+              background-color: variablesScss.$lilac;
               width: 100vw;
 
               .footer-container {
                 width: 100%;
 
                 i {
-                  color: $white;
-                  font-size: $triple-font-size;
+                  color: variablesScss.$white;
+                  font-size: variablesScss.$triple-font-size;
                 }
               }
             }
@@ -39,7 +38,7 @@ import { Subject } from 'rxjs';
             @media screen and (min-width: 768px) {
               footer {
                 .footer-container {
-                  max-width: $max-width-768px;
+                  max-width: variablesScss.$max-width-768px;
                 }
               }
             }
@@ -47,7 +46,7 @@ import { Subject } from 'rxjs';
             @media screen and (min-width: 992px) {
               footer {
                 .footer-container {
-                  max-width: $max-width-992px;
+                  max-width: variablesScss.$max-width-992px;
                 }
               }
             }
@@ -56,7 +55,7 @@ import { Subject } from 'rxjs';
             @media screen and (min-width: 1400px) {
               footer {
                 .footer-container {
-                  max-width: $max-width-1400px;
+                  max-width: variablesScss.$max-width-1400px;
                 }
               }
             }
