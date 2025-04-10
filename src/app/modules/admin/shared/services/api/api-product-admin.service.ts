@@ -17,6 +17,10 @@ export class ApiProductAdminService {
     return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products")
   }
 
+  getProductBySlug(productSlug : ProductDto['slug']): Observable<ProductDto> {
+    return this.http.get<ProductDto>(VITALITTE_PROJECT.back.url + "/products/edit/" + productSlug)
+  }
+
   post(product : CreateProduct): Observable<ResponseEntity>{
     return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/products", product)
   }

@@ -80,7 +80,7 @@ export class EditProductComponent extends BaseComponent implements OnInit {
 
   private subscribeToProductBySlugSignal(): void {
     this.subscriptions.push(
-      this.dataSignal.$productDtoBySlug.subscribe(
+      this.adminProductSignal.$productDtoBySlug.subscribe(
       (productDto) => {
         if (productDto) {
           this.patchFormValue(productDto);
@@ -90,7 +90,7 @@ export class EditProductComponent extends BaseComponent implements OnInit {
   }
 
   findProductSlugInUrl(): void {
-    this.route.params.subscribe((params) => this.dataSignal.getProductBySlug(params['productSlug']));
+    this.route.params.subscribe((params) => this.adminProductSignal.getProductBySlug(params['productSlug']));
   }
 
   patchFormValue(productDto : ProductDto): void {
