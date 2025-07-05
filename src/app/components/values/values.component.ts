@@ -5,7 +5,8 @@ import { Value } from 'src/app/shared/interfaces/Value';
   imports: [],
   selector: 'app-values',
   template: `
-    <div class="values-container flex width100 space-between">
+    <h3>Valeurs de l'entreprise</h3>
+    <div class="values-container flex space-between full-width bg-lilac-light">
       @for (value of valuesList; track value) {
         <div class="value-icon-and-name flex column center">
           @if (value.source === 'fonts.google') {

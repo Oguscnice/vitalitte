@@ -41,10 +41,8 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
       }
 
     </div>
-    @if (counterItem$() && counterItem$() > 1) {
-      <small class="width100 flex center"> {{ counterItem$() }} éléments au total. </small>
-    } @else if (counterItem$() && counterItem$() === 1) {
-      <small class="width100 flex center"> {{ counterItem$() }} élément au total. </small>
+    @if (counterItem$() && counterItem$() > 0) {
+      <small class="width100 flex center"> {{ counterItem$() }} élément{{ counterItem$() > 1 ? 's' : '' }} au total. </small>
     } @else {
       <small class="width100 flex center"> Aucun élément dans nos données. </small>
     }
@@ -56,11 +54,22 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
     @use "../../scss/forms.scss";
 
     .inputs {
+      flex-direction: column;
       margin-top: variablesScss.$half-margin;
       width: 100%;
 
       .one-input {
         width: 100%;
+      }
+
+      .input-search p,
+      .input-size p {
+        margin-right: variablesScss.$half-margin;
+      }
+
+      .input-size {
+        margin-top: variablesScss.$half-margin;
+        margin-left: variablesScss.$half-margin;
       }
     }
 
@@ -78,6 +87,17 @@ import {PaginationSignalService} from "../../shared/services/pagination-signal.s
 
     small {
       margin-top: variablesScss.$normal-padding;
+    }
+
+    // Breackpoint list
+    // Mobiles vers Tablettes :
+    @media screen and (min-width: 768px) {
+      .inputs {
+        flex-direction: row;
+        .input-size {
+          margin-top: 0px;
+        }
+      }
     }
   `]
 })

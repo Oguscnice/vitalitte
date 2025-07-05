@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {FileDto, ImageDefault} from "../interfaces/FileDto";
 import {from, map, Observable, switchMap} from "rxjs";
-import {VITALITTE_PROJECT} from "../variables/AppConfig";
+import {UTAIDA_PROJECT} from "../variables/AppConfig";
 import {FormGroup} from "@angular/forms";
 
 @Injectable({
@@ -13,21 +13,21 @@ export class FileService {
   picture: FileDto | null = null;
   secondaryPictures: FileDto[] | null = null;
   readonly imageMaterialDefault: ImageDefault = {
-    url: VITALITTE_PROJECT.front.urlImgDefault.material,
+    url: UTAIDA_PROJECT.front.urlImgDefault.material,
     fileName: 'atelier.jpg'
   };
   readonly imageProductDefault: ImageDefault = {
-    url: VITALITTE_PROJECT.front.urlImgDefault.product,
+    url: UTAIDA_PROJECT.front.urlImgDefault.product,
     fileName: 'carnet01.jpg'
   };
 
   readonly imageWorkshopDefault: ImageDefault = {
-    url: VITALITTE_PROJECT.front.urlImgDefault.workshop,
+    url: UTAIDA_PROJECT.front.urlImgDefault.workshop,
     fileName: 'atelier01.jpg'
   };
 
   readonly imagePublicationDefault: ImageDefault = {
-    url: VITALITTE_PROJECT.front.urlImgDefault.publication,
+    url: UTAIDA_PROJECT.front.urlImgDefault.publication,
     fileName: 'publication.jpg'
   };
 

@@ -1,0 +1,55 @@
+@use "../../scss/variables" as variablesScss;
+
+div {
+  background-color: variablesScss.$orange-light;
+
+  h1 {
+    margin: variablesScss.$double-margin 0;
+  }
+
+  h3, p {
+    text-align: left;
+    width: 100%;
+  }
+
+  p {
+    font-size: variablesScss.$normal-font-size;
+  }
+
+  p + p {
+    margin-top: variablesScss.$half-margin;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: variablesScss.$double-padding;
+    display: flex;
+    justify-items: left;
+
+    li {
+      // identique au balise <p> du styles.scss
+      font-family: variablesScss.$font-family-text;
+      font-size: variablesScss.$normal-font-size;
+      line-height: 1.4em;
+      letter-spacing: 2px;
+
+      strong {
+        font-weight: bolder;
+      }
+    }
+  }
+}
+
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+  div {
+    ul {
+      li {
+        // identique au balise <p> du styles.scss
+        font-size: variablesScss.$normal-font-size;
+        text-align: left;
+        line-height: 1.4;
+      }
+    }
+  }
+}

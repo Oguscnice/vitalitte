@@ -24,6 +24,7 @@ import {FileService} from "../../shared/services/file.service";
       @include variablesScss.outline-picture;
       overflow: hidden;
       height: 160px;
+      background-color: variablesScss.$white;
 
 
       img {
@@ -36,7 +37,6 @@ import {FileService} from "../../shared/services/file.service";
         padding: variablesScss.$double-padding;
 
         h4 {
-          height: 80%;
           text-align: center;
           font-weight: bolder;
           height: 20%;
@@ -46,6 +46,9 @@ import {FileService} from "../../shared/services/file.service";
         .actuality-text {
           height: 80%;
           padding-top: variablesScss.$double-padding;
+          //p {
+          //  font-size: variablesScss.$double-font-size;
+          //}
         }
       }
     }

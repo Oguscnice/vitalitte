@@ -109,6 +109,7 @@ html {
 body {
   overflow-x: hidden;
   line-height: 1.2;
+  background-color: variablesScss.$orange-light;
 }
 
 editor {
@@ -234,10 +235,24 @@ h5 {
 
 p {
   font-family: variablesScss.$font-family-text;
-  font-size: variablesScss.$double-font-size;
-  text-align: center;
+  font-size: variablesScss.$normal-font-size;
   line-height: 1.4em;
   letter-spacing: 2px;
+}
+
+.full-width {
+  width: 100vw;
+  * {
+    max-width: var(--max-width);
+  }
+}
+
+.max-width {
+  max-width: var(--max-width);
+}
+
+.color-black {
+  color: variablesScss.$black;
 }
 
 img {
@@ -292,6 +307,14 @@ hr {
   width: 80%;
 }
 
+.bg-orange-light {
+  background-color: variablesScss.$orange-light;
+}
+
+.bg-lilac-light {
+  background-color: variablesScss.$lilac-light;
+}
+
 .bg-dark {
   background-color: variablesScss.$lilac-light-opacity-low;
 }
@@ -331,7 +354,7 @@ hr {
     // div à l'interieur pour respecter les dimensions max
     .first-choice-content,
     .second-choice-content {
-      width: variablesScss.$max-width-mobile;
+      width: var(--max-width);
     }
   }
 
@@ -437,24 +460,26 @@ router-outlet + * {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: variablesScss.$max-width-mobile;
-  //hauteur minimum de toute la page, moins celle du header et footer, auquelle on ajoute leurs bordures de 1px
+  width: var(--max-width);
+  // hauteur minimum de toute la page, moins celle du header et footer, auquelle on ajoute leurs bordures de 1px
   min-height: calc(100vh - (var(--height-header) + (var(--height-footer) + #{variablesScss.$normal-margin})));
   margin : var(--height-header) auto 0 auto;
+  // pour avoir un espace avant le footer
+  padding-bottom: variablesScss.$normal-margin;
 }
 
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   router-outlet + * {
-    width: variablesScss.$max-width-768px;
+    width: var(--max-width);
   }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   router-outlet + * {
-    width: variablesScss.$max-width-992px;
+    width: var(--max-width);
   }
 
   .desktop-only {
@@ -479,7 +504,7 @@ router-outlet + * {
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   router-outlet + * {
-    width: variablesScss.$max-width-1400px;
+    width: var(--max-width);
   }
 }
 

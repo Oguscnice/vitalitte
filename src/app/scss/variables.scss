@@ -7,6 +7,8 @@
   --height-img-monitored: 0px;
   --width-img-monitored: 0px;
   --width-img-by-counter-image: 0%;
+  --max-width: 80%;
+  --product-picture-size: 28vw;
 }
 
 // Définition du chemin vers le dossier des polices
@@ -32,24 +34,18 @@ $font-family-text: 'Znikomit', sans-serif;
 //  font-style: normal;
 //}
 
-// ----- max-width -----
-$max-width-mobile: 80%;
-$max-width-768px: 650px;
-$max-width-992px: 800px;
-$max-width-1400px: 1000px;
-
 // ----- color -----
 $white: #ffffff;
 $black: #000000;
 $grey: grey;
-$lilac: rgb(240, 213, 255);
-$lilac-light: rgb(217, 117, 250);
-$lilac-dark: rgb(140, 76, 161);
+$lilac: rgb(217, 117, 250);
+$lilac-light: rgb(240, 213, 255);
+$lilac-dark: rgb(203, 126, 232);
 $lilac-dark-transparent: rgba($lilac-dark, 0.5);
 $lilac-light-opacity-low: #f67cfa42;
-$orange: rgba(255, 165, 0);
-$orange-light: rgb(255, 186, 84);
-$orange-dark: rgb(211, 140, 0);
+$orange: rgb(250, 188, 111);
+$orange-light: rgb(250, 200, 137);
+$orange-dark: rgb(251, 199, 138);
 $orange-dark-transparent: rgba($orange-dark, 0.5);
 $orange-light-opacity-low: rgba($orange-light, 0.5);
 $brown: brown;
@@ -130,4 +126,27 @@ $z-index: 1;
   display: -webkit-box;
   -webkit-line-clamp: $lineNumber; /* Le nombre de lignes que vous souhaitez afficher */
   -webkit-box-orient: vertical;
+}
+
+// Breackpoint list
+// Mobiles vers Tablettes :
+@media screen and (min-width: 768px) {
+  :root {
+    --max-width: 650px;
+    --product-picture-size: 220px;
+  }
+}
+
+// Tablettes vers ordinateurs portables :
+@media screen and (min-width: 992px) {
+  :root {
+    --max-width: 800px;
+  }
+}
+
+// Ordinateurs portables vers ordinateurs de bureau :
+@media screen and (min-width: 1400px) {
+  :root {
+    --max-width: 1200px;
+  }
 }

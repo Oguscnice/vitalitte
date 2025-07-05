@@ -10,7 +10,7 @@ import {ApiBanService} from "../../modules/admin/shared/services/api/api-ban.ser
 import {BaseComponent} from "../../base.component";
 import {phoneValidator} from "../../shared/validators/PhoneValidator";
 import {IPayer} from "ngx-paypal/lib/models/paypal-models";
-import {VITALITTE_PROJECT} from "../../shared/variables/AppConfig";
+import {UTAIDA_PROJECT} from "../../shared/variables/AppConfig";
 import {DeliveryOptionDto} from "../../shared/interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../../shared/interfaces/GiftCard";
 import {AnguilleSignalService} from "../../shared/services/anguille-signal.service";
@@ -40,7 +40,7 @@ export class CheckoutFormComponent extends BaseComponent implements OnInit {
   apiBanService = inject(ApiBanService);
 
   protected readonly COUNTRIES = COUNTRIES;
-  protected readonly VITALITTE_PROJECT = VITALITTE_PROJECT;
+  protected readonly VITALITTE_PROJECT = UTAIDA_PROJECT;
   userAddress: string = "";
   deliveryOptions = this.dataSignal.$deliveryOptionAvailable;
   deliveryOptionSelected$: Signal<DeliveryOptionDto | null> = this.shoppingCart.$userDeliveryOption;

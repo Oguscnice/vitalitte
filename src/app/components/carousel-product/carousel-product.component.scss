@@ -1,10 +1,10 @@
 @use "../../scss/variables.scss" as variablesScss;
 
 .carousel {
-  width: variablesScss.$max-width-mobile;
+  width: var(--max-width);
 
   img {
-    width: variablesScss.$max-width-mobile;
+    width: var(--max-width);
     aspect-ratio: 1 / 1;
   }
   .buttons-image {
@@ -31,9 +31,9 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .carousel {
-    width: variablesScss.$max-width-768px;
+    width: var(--max-width);
     img {
-      width: variablesScss.$max-width-768px;
+      width: var(--max-width);
     }
   }
 }
@@ -41,9 +41,9 @@
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .carousel {
-    width: variablesScss.$max-width-992px;
+    width: var(--max-width);
     img {
-      width: variablesScss.$max-width-992px;
+      width: var(--max-width);
     }
   }
 }
@@ -51,9 +51,9 @@
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   .carousel {
-    width: variablesScss.$max-width-1400px;
+    width: var(--max-width);
     img {
-      width: variablesScss.$max-width-1400px;
+      width: var(--max-width);
     }
   }
 }

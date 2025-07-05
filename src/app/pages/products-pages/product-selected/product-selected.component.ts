@@ -6,7 +6,7 @@ import {ShoppingCartService} from "../../../shared/services/shopping-cart.servic
 import {DataSignalService} from "../../../shared/services/data-signal.service";
 import {MaterialDto} from "../../../shared/interfaces/Material";
 import {Subject} from "rxjs";
-import {VITALITTE_PROJECT} from "../../../shared/variables/AppConfig";
+import {UTAIDA_PROJECT} from "../../../shared/variables/AppConfig";
 import {PaginationSignalService} from "../../../shared/services/pagination-signal.service";
 import {ReviewDto} from "../../../shared/interfaces/Review";
 import {FileService} from "../../../shared/services/file.service";
@@ -22,7 +22,7 @@ export class ProductSelectedComponent extends BaseComponent implements OnInit, A
   private route = inject(ActivatedRoute);
   private dataSignal = inject(DataSignalService)
   private paginationSignal = inject(PaginationSignalService);
-  protected readonly VITALITTE_PROJECT = VITALITTE_PROJECT;
+  protected readonly VITALITTE_PROJECT = UTAIDA_PROJECT;
   fileService = inject(FileService);
   shoppingCart$ = inject(ShoppingCartService);
 

@@ -12,7 +12,7 @@ import { PublicationDto } from '../interfaces/Publication';
 import {Page, PaginationReviewsFiltered, PaginationWithSearchValue} from '../interfaces/Page';
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../interfaces/GiftCard";
-import {VITALITTE_PROJECT} from "../variables/AppConfig";
+import {UTAIDA_PROJECT} from "../variables/AppConfig";
 import {CategoryDtoAndCollectionDto} from "../interfaces/CategoryDtoAndCollectionDto";
 import {CreateReview, ReviewDto} from "../interfaces/Review";
 
@@ -28,11 +28,11 @@ export class ApiRequestsService {
   //-------------------
 
   getAllMaterials(): Observable<MaterialDto[]> {
-    return this.http.get<MaterialDto[]>(VITALITTE_PROJECT.back.url + "/materials")
+    return this.http.get<MaterialDto[]>(UTAIDA_PROJECT.back.url + "/materials")
   }
 
   getAllMaterialsTypes(): Observable<string[]>{
-    return this.http.get<string[]>(VITALITTE_PROJECT.back.url + "/material-types")
+    return this.http.get<string[]>(UTAIDA_PROJECT.back.url + "/material-types")
   }
 
   //-------------------
@@ -40,27 +40,27 @@ export class ApiRequestsService {
   //-------------------
 
   getAllProducts(): Observable<ProductDto[]> {
-    return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products")
+    return this.http.get<ProductDto[]>(UTAIDA_PROJECT.back.url + "/products")
   }
 
   getProductBySlug(productSlug : ProductDto['slug']): Observable<ProductDto> {
-    return this.http.get<ProductDto>(VITALITTE_PROJECT.back.url + "/products/" + productSlug)
+    return this.http.get<ProductDto>(UTAIDA_PROJECT.back.url + "/products/" + productSlug)
   }
 
   getProductsByCategorySlug(categorySlug: CategoryDto['slug']): Observable<ProductDto[]> {
-    return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products/category/" + categorySlug)
+    return this.http.get<ProductDto[]>(UTAIDA_PROJECT.back.url + "/products/category/" + categorySlug)
   }
 
   getProductsByCollectionSlug(collectionSlug: CollectionDto['slug']): Observable<ProductDto[]> {
-    return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products/collection/" + collectionSlug)
+    return this.http.get<ProductDto[]>(UTAIDA_PROJECT.back.url + "/products/collection/" + collectionSlug)
   }
 
   getProductsByCategoryAndCollection(productType: ProductDto['productType'], categoryAndCollection: CategoryDtoAndCollectionDto): Observable<ProductDto[]> {
-    return this.http.post<ProductDto[]>(VITALITTE_PROJECT.back.url + `/products/type-${productType}/filter/category-collection`, categoryAndCollection)
+    return this.http.post<ProductDto[]>(UTAIDA_PROJECT.back.url + `/products/type-${productType}/filter/category-collection`, categoryAndCollection)
   }
 
   getProductTypes(): Observable<ProductDto['productType'][]> {
-    return this.http.get<ProductDto['productType'][]>(VITALITTE_PROJECT.back.url + "/product-types/has-product")
+    return this.http.get<ProductDto['productType'][]>(UTAIDA_PROJECT.back.url + "/product-types/has-product")
   }
 
   //-------------------
@@ -68,7 +68,7 @@ export class ApiRequestsService {
   //-------------------
 
   getAllCategories(): Observable<CategoryDto[]> {
-    return this.http.get<CategoryDto[]>(VITALITTE_PROJECT.back.url + "/categories")
+    return this.http.get<CategoryDto[]>(UTAIDA_PROJECT.back.url + "/categories")
   }
 
   //-------------------
@@ -76,7 +76,7 @@ export class ApiRequestsService {
   //-------------------
 
   getAllCollections(): Observable<CollectionDto[]> {
-    return this.http.get<CollectionDto[]>(VITALITTE_PROJECT.back.url + "/collections")
+    return this.http.get<CollectionDto[]>(UTAIDA_PROJECT.back.url + "/collections")
   }
 
   //-------------------
@@ -84,23 +84,23 @@ export class ApiRequestsService {
   //-------------------
 
   getWorkshopsIsAvailable(value : boolean): Observable<WorkshopDto[]> {
-    return this.http.get<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/is-available/" + value.toString())
+    return this.http.get<WorkshopDto[]>(UTAIDA_PROJECT.back.url + "/workshops/is-available/" + value.toString())
   }
 
   getWorkshopsByDateToCome(): Observable<WorkshopDto[]> {
-    return this.http.get<WorkshopDto[]>(VITALITTE_PROJECT.back.url + "/workshops/date-to-come")
+    return this.http.get<WorkshopDto[]>(UTAIDA_PROJECT.back.url + "/workshops/date-to-come")
   }
 
   getWorkshopsByPastDate(pagination : PaginationWithSearchValue): Observable<Page<WorkshopDto>> {
-    return this.http.post<Page<WorkshopDto>>(VITALITTE_PROJECT.back.url + "/workshops/past-date/paginated", pagination)
+    return this.http.post<Page<WorkshopDto>>(UTAIDA_PROJECT.back.url + "/workshops/past-date/paginated", pagination)
   }
 
   getCounterWorkshopInscriptions(workshopSlug : WorkshopDto['slug']): Observable<number> {
-    return this.http.get<number>(VITALITTE_PROJECT.back.url + "/inscriptions/count-by-workshop/" + workshopSlug)
+    return this.http.get<number>(UTAIDA_PROJECT.back.url + "/inscriptions/count-by-workshop/" + workshopSlug)
   }
 
   getWorkshopBySlug(workshopSlug : WorkshopDto['slug']): Observable<WorkshopDto> {
-    return this.http.get<WorkshopDto>(VITALITTE_PROJECT.back.url + "/workshops/" + workshopSlug)
+    return this.http.get<WorkshopDto>(UTAIDA_PROJECT.back.url + "/workshops/" + workshopSlug)
   }
 
   //-------------------
@@ -108,23 +108,23 @@ export class ApiRequestsService {
   //-------------------
 
   postInscription(inscription : CreateInscription): Observable<InscriptionDto> {
-    return this.http.post<InscriptionDto>(VITALITTE_PROJECT.back.url + "/inscriptions", inscription)
+    return this.http.post<InscriptionDto>(UTAIDA_PROJECT.back.url + "/inscriptions", inscription)
   }
 
   changeQuantityInscription(addOrRemove: 'add-participant' | 'remove-participant',inscription : InscriptionDto): Observable<ResponseEntity> {
-    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/inscriptions/" + addOrRemove, inscription)
+    return this.http.put<ResponseEntity>(UTAIDA_PROJECT.back.url + "/inscriptions/" + addOrRemove, inscription)
   }
 
   confirmInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<ResponseEntity> {
-    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/inscriptions/confirm", inscriptionSlug)
+    return this.http.put<ResponseEntity>(UTAIDA_PROJECT.back.url + "/inscriptions/confirm", inscriptionSlug)
   }
 
   getInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<InscriptionDto> {
-    return this.http.get<InscriptionDto>(VITALITTE_PROJECT.back.url + "/inscriptions/" + inscriptionSlug)
+    return this.http.get<InscriptionDto>(UTAIDA_PROJECT.back.url + "/inscriptions/" + inscriptionSlug)
   }
 
   deleteInscriptionBySlug(inscriptionSlug : InscriptionDto['slug']): Observable<ResponseEntity>{
-    return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/inscriptions/" + inscriptionSlug)
+    return this.http.delete<ResponseEntity>(UTAIDA_PROJECT.back.url + "/inscriptions/" + inscriptionSlug)
   }
 
   //-------------------
@@ -132,15 +132,15 @@ export class ApiRequestsService {
   //-------------------
 
   getPublicationsSpotlighted(value : string): Observable<PublicationDto[]> {
-    return this.http.get<PublicationDto[]>(VITALITTE_PROJECT.back.url + "/publications/isSpotlighted/" + value)
+    return this.http.get<PublicationDto[]>(UTAIDA_PROJECT.back.url + "/publications/isSpotlighted/" + value)
   }
 
   getPublicationBySlug(publicationSlug : PublicationDto['slug']): Observable<PublicationDto> {
-    return this.http.get<PublicationDto>(VITALITTE_PROJECT.back.url + "/publications/" + publicationSlug)
+    return this.http.get<PublicationDto>(UTAIDA_PROJECT.back.url + "/publications/" + publicationSlug)
   }
 
   getPublicationPaginated(paginationWithSearchValue: PaginationWithSearchValue): Observable<Page<PublicationDto>> {
-    return this.http.post<Page<PublicationDto>>(VITALITTE_PROJECT.back.url + "/publications/paginated", paginationWithSearchValue)
+    return this.http.post<Page<PublicationDto>>(UTAIDA_PROJECT.back.url + "/publications/paginated", paginationWithSearchValue)
   }
 
   //-------------------
@@ -148,11 +148,11 @@ export class ApiRequestsService {
   //-------------------
 
   checkGiftCard(code: string, email: string): Observable<GiftCardDto> {
-    return this.http.get<GiftCardDto>(VITALITTE_PROJECT.back.url + `/giftCards/user/${code}/${email}`);
+    return this.http.get<GiftCardDto>(UTAIDA_PROJECT.back.url + `/giftCards/user/${code}/${email}`);
   }
 
    verifyIfGiftCardIsAlreadyUsed(code: string, email: string): Observable<boolean> {
-    return this.http.get<boolean>(VITALITTE_PROJECT.back.url + `/giftCards/is-already-used/${code}/${email}`);
+    return this.http.get<boolean>(UTAIDA_PROJECT.back.url + `/giftCards/is-already-used/${code}/${email}`);
   }
 
   //-------------------
@@ -160,7 +160,7 @@ export class ApiRequestsService {
   //-------------------
 
   getDeliveryOptionAvailable(): Observable<DeliveryOptionDto[]> {
-    return this.http.get<DeliveryOptionDto[]>(VITALITTE_PROJECT.back.url + "/delivery-option/is-available")
+    return this.http.get<DeliveryOptionDto[]>(UTAIDA_PROJECT.back.url + "/delivery-option/is-available")
   }
 
   //-------------------
@@ -168,15 +168,15 @@ export class ApiRequestsService {
   //-------------------
 
   postReview(review: CreateReview): Observable<ResponseEntity> {
-    return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/reviews", review)
+    return this.http.post<ResponseEntity>(UTAIDA_PROJECT.back.url + "/reviews", review)
   }
 
   getReviewsByStatus(paginationReviewsFiltered: PaginationReviewsFiltered): Observable<Page<ReviewDto>> {
-    return this.http.post<Page<ReviewDto>>(VITALITTE_PROJECT.back.url + "/reviews/paginated", paginationReviewsFiltered)
+    return this.http.post<Page<ReviewDto>>(UTAIDA_PROJECT.back.url + "/reviews/paginated", paginationReviewsFiltered)
   }
 
   getRandomReviews(): Observable<ReviewDto[]> {
-    return this.http.get<ReviewDto[]>(VITALITTE_PROJECT.back.url + "/reviews/random")
+    return this.http.get<ReviewDto[]>(UTAIDA_PROJECT.back.url + "/reviews/random")
   }
 
   // //-------------------

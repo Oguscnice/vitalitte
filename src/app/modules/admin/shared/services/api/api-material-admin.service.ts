@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MaterialDto } from '../../../../../shared/interfaces/Material';
 import { ResponseEntity } from '../../../../../shared/interfaces/ResponseEntity';
-import { VITALITTE_PROJECT } from '../../../../../shared/variables/AppConfig';
+import { UTAIDA_PROJECT } from '../../../../../shared/variables/AppConfig';
 import { CreateMaterial } from '../../interfaces/CreateMaterial';
 import {Page, PaginationWithSearchValue} from "../../../../../shared/interfaces/Page";
 
@@ -15,30 +15,30 @@ export class ApiMaterialAdminService {
   private http = inject(HttpClient)
 
   getMaterialBySlug(materialSlug: MaterialDto['slug']): Observable<MaterialDto> {
-    return this.http.get<MaterialDto>(VITALITTE_PROJECT.back.url + "/materials/" + materialSlug)
+    return this.http.get<MaterialDto>(UTAIDA_PROJECT.back.url + "/materials/" + materialSlug)
   }
 
   getMaterialsPaginatedBySearchValue(paginationWithSearchValue: PaginationWithSearchValue): Observable<Page<MaterialDto>>{
-    return this.http.post<Page<MaterialDto>>(VITALITTE_PROJECT.back.url + "/materials/paginated", paginationWithSearchValue)
+    return this.http.post<Page<MaterialDto>>(UTAIDA_PROJECT.back.url + "/materials/paginated", paginationWithSearchValue)
   }
 
   post(material : CreateMaterial): Observable<ResponseEntity>{
-    return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/materials", material)
+    return this.http.post<ResponseEntity>(UTAIDA_PROJECT.back.url + "/materials", material)
   }
 
   put(material : MaterialDto): Observable<ResponseEntity>{
-    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/materials/" + material.slug, material)
+    return this.http.put<ResponseEntity>(UTAIDA_PROJECT.back.url + "/materials/" + material.slug, material)
   }
 
   changeAvailability(material : MaterialDto): Observable<ResponseEntity>{
-    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/materials/availability", material)
+    return this.http.put<ResponseEntity>(UTAIDA_PROJECT.back.url + "/materials/availability", material)
   }
 
   changeAvailabilityForCustomization(material : MaterialDto): Observable<ResponseEntity>{
-    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/materials/availability-for-customization", material)
+    return this.http.put<ResponseEntity>(UTAIDA_PROJECT.back.url + "/materials/availability-for-customization", material)
   }
 
   delete(materialSlug : MaterialDto['slug']): Observable<ResponseEntity>{
-    return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/materials/" + materialSlug)
+    return this.http.delete<ResponseEntity>(UTAIDA_PROJECT.back.url + "/materials/" + materialSlug)
   }
 }

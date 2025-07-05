@@ -2,7 +2,7 @@ import {Component, inject, Input, OnInit, Signal} from '@angular/core';
 import { IPayPalConfig, ICreateOrderRequest, NgxPayPalModule } from 'ngx-paypal';
 import {ShoppingCartService} from "../../shared/services/shopping-cart.service";
 import {ModalSignalService} from "../../shared/services/modal-signal.service";
-import {VITALITTE_PROJECT} from "../../shared/variables/AppConfig";
+import {UTAIDA_PROJECT} from "../../shared/variables/AppConfig";
 import {IPayer} from "ngx-paypal/lib/models/paypal-models";
 import {DeliveryOptionDto} from "../../shared/interfaces/DeliveryOptionDto";
 import {GiftCardDto} from "../../shared/interfaces/GiftCard";
@@ -55,7 +55,7 @@ export class PaypalComponent extends BaseComponent implements OnInit {
 
     this.payPalConfig = {
           currency: 'EUR',
-          clientId: VITALITTE_PROJECT.front.paypal.clientId,
+          clientId: UTAIDA_PROJECT.front.paypal.clientId,
           createOrderOnClient: (data) => < ICreateOrderRequest > {
               intent: 'CAPTURE',
               purchase_units: [{

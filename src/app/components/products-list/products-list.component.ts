@@ -9,13 +9,13 @@ import {FileService} from "../../shared/services/file.service";
   selector: 'app-products-list',
   template: `
     @for (product of products$(); track product; let index = $index) {
-      <div class="product-list flex column center">
-        <h5> {{ product.name | titlecase }} </h5>
+      <div class="product-list flex column">
         <div class="image-and-filter-color flex column pointer"
              [routerLink]="['/produits', product.slug]">
           <img src="{{ fileService.getDataForImageSrc(product.pictureDto) }}" alt="Photo d'un carnet"/>
           <div class="filter-color"></div>
         </div>
+        <h5> {{ product.name | titlecase }} </h5>
         <div class="product-introduction" [innerHTML]="product.introduction"></div>
       </div>
     }

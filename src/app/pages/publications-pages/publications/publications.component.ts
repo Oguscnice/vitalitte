@@ -9,10 +9,17 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
   styles: [`
             @use "../../../scss/variables.scss" as variablesScss;
 
+            section {
+              p {
+                margin-top: variablesScss.$half-margin;
+              }
+            }
+
             .publications {
 
               .publications-section {
                 flex-direction: column;
+                width: 100%;
 
                 app-publication-thumbnail {
                   width: 100%;

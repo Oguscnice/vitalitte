@@ -1,18 +1,29 @@
-<nav class="flex space-between center" #navBar>
-  <img src="../../../assets/images/logo.png"
-       alt="Logo du site VitaLitté"
-       class="pointer desktop-only"/>
-  <img src="../../../assets/images/icon-thumbnail.png"
-       alt="Logo du site VitaLitté"
-       class="pointer mobile-only"
-       [routerLink]="'/'"/>
-  <h3 class="flex pointer" [routerLink]="'/'">
-    Utaida
-  </h3>
+<nav class="flex column center width100" #navBar>
+  <div class="flex space-between width100 max-width center">
+    <input type="checkbox" id="checkbox" #menuCheckbox (click)="changeMenuBurgerVisibility()" />
+    <label for="checkbox" class="toggle">
+      <div class="bars" id="bar1"></div>
+      <div class="bars" id="bar2"></div>
+      <div class="bars" id="bar3"></div>
+      <div class="bars" id="bar4"></div>
+    </label>
+    <div class="desktop-only"></div>
 
-  @if (!env.production) {
-    <p> <em>Env. Front : {{ environment | titlecase }}</em></p>
-  }
+    <img src="../../../assets/images/icon-thumbnail.png"
+         alt="Logo du site VitaLitté"
+         class="pointer desktop-only"
+         routerLink="/"/>
+    <img src="../../../assets/images/icon-thumbnail.png"
+         alt="Logo du site VitaLitté"
+         class="pointer mobile-only"
+         routerLink="/"/>
+
+    <div class="shopping-cart-counter"
+         [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'">
+      <i class="fa-solid fa-basket-shopping pointer" (click)="changeModalShoppingCartVisibility(!isShoppingCartListOpen)"></i>
+      <p class="flex center pointer" (click)="changeModalShoppingCartVisibility(!isShoppingCartListOpen)"> {{ shoppingCart.counterTotalShoppingCart() }} </p>
+    </div>
+  </div>
 
   <ul
     class="flex center space-around"
@@ -25,9 +36,7 @@
     @for (item of navbarUser; track item; let index = $index) {
       <li [routerLink]="item.submenu ? null : item.routerLink"
           class="flex center column pointer"
-          [ngClass]="{
-            'active': isActualPage(item.routerLink),
-            'separator': index !== navbarUser.length - 1 }"
+          [ngClass]="{'active': isActualPage(item.routerLink)}"
           (click)="item.submenu ?
                     openSubmenu(item) :
                     closeMenuBurger($event) ">
@@ -36,6 +45,11 @@
             'active': isActualPage(item.routerLink),
             'submenu-close' : item.submenu && item.submenu.isOpen }">
           {{ item.name }}
+          @if (item.submenu && item.submenu.isOpen) {
+            <i class="fa-solid fa-chevron-down"></i>
+          } @else if (item.submenu && !item.submenu.isOpen) {
+            <i class="fa-solid fa-chevron-up"></i>
+          }
         </p>
         @if (item.submenu) {
           <div class="flex center space-around submenu"
@@ -50,26 +64,14 @@
               }
           </div>
         }
-
       </li>
     }
 
   </ul>
 
-  <input type="checkbox" id="checkbox" #menuCheckbox (click)="changeMenuBurgerVisibility()" />
-  <label for="checkbox" class="toggle">
-    <div class="bars" id="bar1"></div>
-    <div class="bars" id="bar2"></div>
-    <div class="bars" id="bar3"></div>
-    <div class="bars" id="bar4"></div>
-  </label>
-
-  <div class="shopping-cart-counter pointer"
-       [ngClass]="shoppingCart.counterTotalShoppingCart() > 0 ? 'visible-linear' : 'invisible-linear'"
-       (click)="changeModalShoppingCartVisibility(!isShoppingCartListOpen)">
-    <i class="fa-solid fa-cart-shopping"></i>
-    <p class="flex center"> {{ shoppingCart.counterTotalShoppingCart() }} </p>
-  </div>
+<!--  @if (!env.production) {-->
+<!--    <p> <em>Env. Front : {{ environment | titlecase }}</em></p>-->
+<!--  }-->
 
   @if (isShoppingCartListOpen) {
     <app-modal-shopping-cart-list (click)="isShoppingCartListOpen = !isShoppingCartListOpen"/>

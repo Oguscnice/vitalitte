@@ -22,7 +22,7 @@ import {DataSignalService} from "../../shared/services/data-signal.service";
 import {toTitleCase} from "../../shared/function/string-to-title-case";
 
 @Component({
-  imports: [RouterLink, NgClass, ModalShoppingCartListComponent, TitleCasePipe],
+  imports: [RouterLink, NgClass, ModalShoppingCartListComponent],
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

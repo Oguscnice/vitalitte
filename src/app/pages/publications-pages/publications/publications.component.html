@@ -1,5 +1,18 @@
-<app-h1 [titleChild]="'Actualités'"
+<app-h1 [titleChild]="'Actualités / Articles de blog'"
         [backgroundImageChild]="backgroundImageParentHome"></app-h1>
+
+<section>
+  <p>
+    Cet espace est consacré aux actualités de l'entreprise que ce soit un nouveau produit,
+    un évènement d'atelier biblio créatif, la participation à un marché, un salon, un vernissage,
+    les nouveautés en illustrations... Ainsi qu'à des articles rédigés avec amour par l'illustratrice
+    qui souhaite partager avec vous des informations sur les arts plastiques, la reliure,
+    la bibliothérapie créative, les livres ou encore des réflexions agrémentées de citations à méditer.
+  </p>
+  <p>
+    Bonne lecture !
+  </p>
+</section>
 
 @if (publicationsSpotlighted$() && publicationsSpotlighted$().length > 0) {
   <h3 class="flex center">Actus du moment</h3>
@@ -12,11 +25,11 @@
   </div>
 }
 
-<h3 class="flex center">Toutes nos actualités</h3>
-
-<app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
 
 @if (publications$() && publications$().length > 0) {
+  <h3 class="flex center">Toutes nos actualités</h3>
+
+  <app-change-size-pagination-and-value-search (onValueSearchChange)="onValuePageChange($event)"/>
 
   <div class="publications flex column center">
     <div class="flex wrap space-between publications-section">

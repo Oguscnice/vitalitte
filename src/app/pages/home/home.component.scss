@@ -7,10 +7,16 @@
 }
 
 section {
-  width: 100%;
+  h2 {
+    color: variablesScss.$black;
+  }
   p {
     padding: 0 variablesScss.$fourth-padding;
   }
+}
+
+.welcome {
+  padding-bottom: variablesScss.$normal-margin;
 }
 
 .img-full-width {
@@ -22,7 +28,7 @@ section {
     height: 32vh;
     width: 100vw;
     z-index: variablesScss.$z-index;
-    object-position: top;
+    object-position: center;
   }
   h2 {
     position : relative;
@@ -71,6 +77,8 @@ section {
 .review-and-arrows {
   width: 100%;
   i {
+    border-radius: 50%;
+    background-color: variablesScss.$white;
     font-size: variablesScss.$fourth-font-size;
   }
   .fa-circle-arrow-left {

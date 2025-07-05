@@ -100,6 +100,6 @@ section {
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   section {
-    max-width: variablesScss.$max-width-768px;
+    max-width: var(--max-width);
   }
 }

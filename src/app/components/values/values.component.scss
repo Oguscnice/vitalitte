@@ -1,9 +1,11 @@
 @use "../../scss/variables.scss" as variablesScss;
 
+h3 {
+  margin: variablesScss.$normal-margin 0;
+}
+
 .values-container {
-  justify-content: space-around;
-  margin: variablesScss.$double-margin 0;
-  max-width: variablesScss.$max-width-mobile;
+  margin-bottom: variablesScss.$normal-margin;
 
   .value-icon-and-name {
     i,
@@ -14,6 +16,7 @@
       border-radius: 50%;
       color: variablesScss.$lilac;
       box-shadow: 0 4px 6px variablesScss.$lilac-dark;
+      background-color: variablesScss.$white;
     }
     span {
       font-size: calc(1.4 * #{variablesScss.$fourth-font-size});
@@ -34,8 +37,8 @@
 @media screen and (min-width: 768px) {
   .values-container {
     justify-content: space-between;
-    width: 100vw;
-    max-width: variablesScss.$max-width-768px;
+    max-width: var(--max-width);
+
     .value-icon-and-name {
       i,
       span {
@@ -53,7 +56,6 @@
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .values-container {
-    max-width: variablesScss.$max-width-992px;
     .value-icon-and-name {
       i,
       span {

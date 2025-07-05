@@ -2,42 +2,44 @@
 @use "../../scss/buttons.scss";
 @use "../../../styles.scss";
 
-$product-picture-size: calc(100vw - (#{variablesScss.$fourth-padding} * 2));
-
 .product-list {
+  margin-top: variablesScss.$fourth-padding;
+  width: var(--product-picture-size);
   h5 {
+    width: 100%;
+    text-align: left;
     font-size: variablesScss.$triple-font-size;
-    padding-bottom: variablesScss.$triple-padding;
+    margin: variablesScss.$half-margin 0;
     font-family: variablesScss.$font-family-title-h2-h3;
   }
   p {
-    padding: variablesScss.$double-padding 0;
     text-align: left;
     font-size: variablesScss.$normal-font-size;
-    max-width: $product-picture-size;
   }
   .image-and-filter-color {
-    height: $product-picture-size;
-    width: $product-picture-size;
+    height: var(--product-picture-size);
+    width: var(--product-picture-size);
     img {
       @include variablesScss.outline-picture;
-      min-height: $product-picture-size;
-      min-width: $product-picture-size;
+      min-height: var(--product-picture-size);
+      min-width: var(--product-picture-size);
     }
     .filter-color {
       z-index: variablesScss.$z-index + 1;
       border-radius: 8px;
-      top: calc( 0px - $product-picture-size - 4px);
-      min-height: calc($product-picture-size + 2px + 2px);
-      width: calc($product-picture-size + 2px + 2px);
+      top: calc( 0px - var(--product-picture-size) - 4px);
+      min-height: calc(var(--product-picture-size) + 2px + 2px);
+      width: calc(var(--product-picture-size) + 2px + 2px);
     }
   }
   .product-introduction {
-    padding-top: variablesScss.$double-padding;
     max-height: 160px;
     @include variablesScss.hiddenTextByLineNumber(5);
-    margin-bottom: calc(2 * #{variablesScss.$normal-margin});
-
+    // Copie des valeurs de balise p du styles.sccs car il y a des cas où le text n'est pas dans une balise <p>
+    font-family: variablesScss.$font-family-text;
+    font-size: variablesScss.$normal-font-size;
+    line-height: 1.4em;
+    letter-spacing: 2px;
     p {
       font-family: variablesScss.$font-family-text;
     }
@@ -50,29 +52,6 @@ $product-picture-size: calc(100vw - (#{variablesScss.$fourth-padding} * 2));
 // Breackpoint list
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
-
-  $product-picture-size: 650px;
-
-  .product-list {
-    max-width: $product-picture-size;
-    h5 {
-      width: 100%;
-      text-align: left;
-    }
-    .image-and-filter-color {
-      max-width: $product-picture-size;
-      max-height: $product-picture-size;
-      img {
-        min-width: $product-picture-size;
-        min-height: $product-picture-size;
-      }
-      .filter-color {
-        top: calc( -650px - 4px);
-        min-height: calc($product-picture-size + 2px + 2px);
-        width: calc($product-picture-size + 2px + 2px);
-      }
-    }
-  }
 }
 
 // Tablettes vers ordinateurs portables :

@@ -17,6 +17,12 @@ import { WorkshopSelectedComponent } from './pages/workshops-pages/workshop-sele
 import {CheckoutComponent} from "./pages/checkout/checkout.component";
 import {SignupComponent} from "./pages/signup/signup.component";
 import {UserGuard} from "./shared/guards/user.guard";
+import {TermsAndConditionsComponent} from "./pages/policies/terms-and-conditions/terms-and-conditions.component";
+import {PrivacyPolicyComponent} from "./pages/policies/privacy-policy/privacy-policy.component";
+import {LegalNoticeComponent} from "./pages/policies/legal-notice/legal-notice.component";
+import {TermsOfServiceComponent} from "./pages/policies/terms-of-service/terms-of-service.component";
+import {RefundPolicyComponent} from "./pages/policies/refund-policy/refund-policy.component";
+import {ShippingPolicyComponent} from "./pages/policies/shipping-policy/shipping-policy.component";
 
 const routes: Routes = [
   {
@@ -45,6 +51,12 @@ const routes: Routes = [
   { path: 'panier', component: CheckoutComponent },
   { path: 'produits/type/:productType', component: ProductsComponent },
   { path: 'produits/:productSlug', component: ProductSelectedComponent },
+  { path: 'conditions-generales-vente', component: TermsAndConditionsComponent },
+  { path: 'politique-confidentialite', component: PrivacyPolicyComponent },
+  { path: 'mentions-legales', component: LegalNoticeComponent },
+  { path: 'conditions-utilisation', component: TermsOfServiceComponent },
+  { path: 'politique-remboursement', component: RefundPolicyComponent },
+  { path: 'politique-expedition', component: ShippingPolicyComponent },
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: 'page-404' },
 ];

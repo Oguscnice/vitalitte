@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import {VITALITTE_PROJECT} from "../variables/AppConfig";
+import {UTAIDA_PROJECT} from "../variables/AppConfig";
 import {BaseComponent} from "../../base.component";
 import {Login} from "../interfaces/auth/Login";
 import {AnguilleSignalService} from "./anguille-signal.service";
@@ -21,7 +21,7 @@ export class AuthService extends BaseComponent {
   private anguilleSignal = inject(AnguilleSignalService);
 
   canRegister():  Observable<boolean> {
-    return this.http.get<boolean>(VITALITTE_PROJECT.back.url + '/auth/can-register');
+    return this.http.get<boolean>(UTAIDA_PROJECT.back.url + '/auth/can-register');
   }
 
   register(form: FormGroup): void {
@@ -37,7 +37,7 @@ export class AuthService extends BaseComponent {
   }
 
   private signup(form: FormGroup): Observable<ResponseEntity> {
-    return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + '/auth/signup', form.value);
+    return this.http.post<ResponseEntity>(UTAIDA_PROJECT.back.url + '/auth/signup', form.value);
   }
 
   login(form: FormGroup): void {
@@ -53,7 +53,7 @@ export class AuthService extends BaseComponent {
   }
 
   private signin(loginUserValue: Login): Observable<UserInfos> {
-    return this.http.post<UserInfos>(VITALITTE_PROJECT.back.url + '/auth/signin', loginUserValue);
+    return this.http.post<UserInfos>(UTAIDA_PROJECT.back.url + '/auth/signin', loginUserValue);
   }
 
   logout(): void {

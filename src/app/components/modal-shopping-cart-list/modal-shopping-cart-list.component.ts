@@ -37,12 +37,15 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
           width: 100%;
           text-align: right;
         }
+
         h4 {
           text-align: left;
         }
+
         h4, h5 {
           font-size: variablesScss.$triple-font-size;
         }
+
         h6 {
           font-weight: bold;
           font-size: variablesScss.$double-font-size;
@@ -50,6 +53,7 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
 
         .shopping-cart-type-list {
           width: 100%;
+
           .shopping-cart-type-title-quantity-price {
             .shopping-cart-item-title,
             .shopping-cart-item-quantity,
@@ -58,13 +62,16 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
               padding: variablesScss.$normal-padding 0 variablesScss.$normal-padding variablesScss.$normal-padding;
               white-space: nowrap;
             }
+
             .shopping-cart-item-title {
               padding-left: 0;
             }
+
             .shopping-cart-item-title {
               width: 100%;
               text-align: left;
               overflow-x: hidden;
+
               p {
                 width: 100%;
                 text-align: left;
@@ -80,7 +87,7 @@ import {CustomCurrencyPipe} from "../../shared/services/pipes/custom-currency.pi
     @media screen and (min-width: 768px) {
       .shopping-cart-list-modal {
         .shopping-cart-list {
-          max-width: variablesScss.$max-width-768px;
+          max-width: var(--max-width);
         }
       }
     }

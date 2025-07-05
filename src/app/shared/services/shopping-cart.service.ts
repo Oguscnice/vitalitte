@@ -8,7 +8,7 @@ import {AnguilleSignalService} from "./anguille-signal.service";
 import {GiftCardDto} from "../interfaces/GiftCard";
 import {DeliveryOptionDto} from "../interfaces/DeliveryOptionDto";
 import {InscriptionDto} from "../interfaces/Inscription";
-import {VITALITTE_PROJECT} from "../variables/AppConfig";
+import {UTAIDA_PROJECT} from "../variables/AppConfig";
 import {BehaviorSubject, Observable} from "rxjs";
 import {ModalSignalService} from "./modal-signal.service";
 import {formatProductType} from "../function/product-type-format";
@@ -157,7 +157,7 @@ export class ShoppingCartService extends BaseComponent {
 
   isDeliveryFree(): boolean {
     const TOTAL_PRICE = this.getTotalPriceWithGiftCardAndDelivery(true,false);
-    return TOTAL_PRICE > VITALITTE_PROJECT.front.shipping.free;
+    return TOTAL_PRICE > UTAIDA_PROJECT.front.shipping.free;
   }
 
   applyDiscount(originalPrice: number): number {

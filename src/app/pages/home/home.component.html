@@ -4,7 +4,25 @@
 
 <app-h1 [titleChild]="'Nous sommes tous reliés !'" [backgroundImageChild]="backgroundImageParentHome"/>
 
-<app-values/>
+<section class="welcome full-width flex column center">
+  <h2 class="color-black">Bienvenue à Utaida !</h2>
+  <p>
+    Un lieu où vous pourrez trouver des objets illustrés pour vos envies de création, de partage, d'expression et de contemplation.
+    L’illustratrice vous propose des carnets entièrement faits main illustrés avec amour, des cartes postales, des posters et d'autres supports à venir.
+    Vous trouverez votre bonheur si vous voulez écrire, dessiner, peindre, recenser vos photos, vos voyages, écrire à vos proches, orner votre maison avec des
+    illustrations...
+    Que ce soit pour vous ou pour faire un cadeau, que vous aimiez l'art, les livres ou faire plaisir, vous êtes au bon endroit ! <br>
+    Pour ceux qui souhaitent partager avec d'autres personnes leur amour des mots, des livres et des arts, des ateliers biblio-créatifs sont proposés également.
+    Bonne visite !
+  </p>
+</section>
+
+<app-values class="full-width flex column center bg-lilac-light"/>
+
+<div class="image-and-filter-color img-full-width">
+  <img class="pointer" src="./assets/images/category-les-illustres.jpg" alt="Photo de l'artiste"/>
+  <div class="filter-color"></div>
+</div>
 
 <section>
   <h2 class="pointer" routerLink="produits/type//carnets">Carnets Artisanaux</h2>
@@ -32,8 +50,9 @@
     </p>
   <app-images-preview [picturesArray]="handmadeProductsPictures"/>
 </section>
-<div class="image-and-filter-color img-full-width">
-  <img class="pointer" src="./assets/images/category-les-illustres.jpg" alt="Photo de l'artiste"/>
+
+<div class="image-and-filter-color img-full-width pointer" routerLink="/qui-suis-je">
+  <img class="pointer" [src]="backgroundImageBio" alt="Photo de l'artiste"/>
   <div class="filter-color"></div>
 </div>
 
@@ -48,11 +67,6 @@
   </p>
   <app-images-preview [picturesArray]="workshopPictures"/>
 </section>
-
-<div class="image-and-filter-color img-full-width pointer" routerLink="/qui-suis-je">
-    <img class="pointer" [src]="backgroundImageBio" alt="Photo de l'artiste"/>
-    <div class="filter-color"></div>
-</div>
 
 <!--<section class="booktique-section flex">-->
 <!--  <div class="booktique-title-and-text flex column" #booktiqueSectionMonitored>-->
@@ -77,9 +91,9 @@
   <section class="flex column center">
     <h2>Avis</h2>
     <div class="review-and-arrows flex center">
-      <i class="fa-solid fa-circle-arrow-left" (click)="changeReviewDisplay('minus')"></i>
+      <i class="fa-solid fa-circle-arrow-left pointer" (click)="changeReviewDisplay('minus')"></i>
       <app-review-thumbnail [review]="reviews$()[indexReview]"/>
-      <i class="fa-solid fa-circle-arrow-right" (click)="changeReviewDisplay('more')"></i>
+      <i class="fa-solid fa-circle-arrow-right pointer" (click)="changeReviewDisplay('more')"></i>
     </div>
   </section>
 }

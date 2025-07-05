@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {VITALITTE_PROJECT} from "../../../shared/variables/AppConfig";
+import {UTAIDA_PROJECT} from "../../../shared/variables/AppConfig";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ratingValidator} from "../../../modules/admin/shared/validators/ratingValidator";
 import {NgClass} from "@angular/common";
@@ -31,7 +31,7 @@ import {ProductDto} from "../../../shared/interfaces/Product";
 })
 export class PostReviewFormComponent extends BaseComponent implements OnInit {
 
-  protected readonly VITALITTE_PROJECT = VITALITTE_PROJECT;
+  protected readonly VITALITTE_PROJECT = UTAIDA_PROJECT;
   private formBuilder = inject(FormBuilder);
   private dataSignal = inject(DataSignalService);
   private formHelper = inject(FormHelperService);

@@ -31,9 +31,11 @@ import {BaseComponent} from "../../../../../base.component";
       color: variablesScss.$lilac-dark;
       margin-top: variablesScss.$normal-margin;
     }
+
     h2 {
-      max-width: variablesScss.$max-width-mobile;
+      max-width: var(--max-width);
     }
+
     .btns-admin-home {
       gap: 24px;
     }

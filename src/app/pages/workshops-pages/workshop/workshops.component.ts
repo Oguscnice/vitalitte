@@ -12,6 +12,15 @@ import {DataSignalService} from "../../../shared/services/data-signal.service";
             @use "../../../scss/variables.scss" as variablesScss;
             @use "../../../scss/buttons.scss";
 
+            section {
+              h2 {
+                color: variablesScss.$black;
+              }
+              p {
+                margin-top: variablesScss.$half-margin;
+              }
+            }
+
             .dropdown-container {
               margin-bottom: variablesScss.$half-margin;
               .input-and-arrow {

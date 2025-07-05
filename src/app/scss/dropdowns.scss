@@ -22,7 +22,7 @@
 .dropdown-container {
   position: relative;
   display: inline-block;
-  width: variablesScss.$max-width-mobile;
+  width: var(--max-width);
 
   .input-and-arrow {
     width: 100%;

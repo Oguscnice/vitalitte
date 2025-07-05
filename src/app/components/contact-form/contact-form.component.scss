@@ -62,7 +62,7 @@ form {
       justify-content: center;
 
       textarea {
-        max-width: variablesScss.$max-width-768px;
+        max-width: var(--max-width);
       }
     }
   }

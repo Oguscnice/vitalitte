@@ -13,6 +13,10 @@ import {FileService} from "../../../shared/services/file.service";
 
     @use "../../../scss/variables.scss" as variablesScss;
 
+    h2 {
+      color: variablesScss.$black;
+    }
+
     .actuality-date {
       font-size: variablesScss.$normal-font-size;
       margin-bottom: variablesScss.$normal-margin;

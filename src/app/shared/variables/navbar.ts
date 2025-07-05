@@ -12,7 +12,7 @@ export const NAVBAR_USER: Menu[] = [
     submenu : null
   },
   {
-    name: 'Actualités',
+    name: 'Actualités/Blog',
     routerLink: '/actualites',
     submenu : null
   },

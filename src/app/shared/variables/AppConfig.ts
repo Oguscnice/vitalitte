@@ -1,4 +1,5 @@
-export const VITALITTE_PROJECT = {
+export const UTAIDA_PROJECT = {
+  name: 'utaida',
   front: {
     paypal: {
       clientId: 'AYYE0u97Tpi9PeuAMjG1gub3z0j9o65rmMhXfbzotEK5T9QPLumA5-VyFnFgpt_oD1EVw2nO8X9n46ju'
@@ -16,5 +17,21 @@ export const VITALITTE_PROJECT = {
   },
   back: {
     url:'http://localhost:8080/api'
+  },
+  socialLinks: {
+    facebook: 'https://www.facebook.com/loryanevitalitte',
+    instagram: 'https://www.instagram.com/loryaneutaida/',
+    url: 'https://utaida.fr',
+  },
+  generalInfo: {
+    projectName: 'utaida',
+    firstname: 'loryane',
+    lastname: 'vincent',
+    email: "loryane.utaida@gmail.com",
+    address:  "130 rue de gerland",
+    zipCode: "69007",
+    city: "lyon",
+    siret: "933 924 904 000 16",
+    phone: "+33767470220"
   }
 }

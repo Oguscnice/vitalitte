@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductDto } from '../../../../../shared/interfaces/Product';
-import { VITALITTE_PROJECT } from '../../../../../shared/variables/AppConfig';
+import { UTAIDA_PROJECT } from '../../../../../shared/variables/AppConfig';
 import { CreateProduct } from '../../interfaces/CreateProduct';
 import { ResponseEntity } from '../../../../../shared/interfaces/ResponseEntity';
 
@@ -14,30 +14,30 @@ export class ApiProductAdminService {
   private http = inject(HttpClient);
 
   getAll(): Observable<ProductDto[]>{
-    return this.http.get<ProductDto[]>(VITALITTE_PROJECT.back.url + "/products")
+    return this.http.get<ProductDto[]>(UTAIDA_PROJECT.back.url + "/products")
   }
 
   getProductBySlug(productSlug : ProductDto['slug']): Observable<ProductDto> {
-    return this.http.get<ProductDto>(VITALITTE_PROJECT.back.url + "/products/edit/" + productSlug)
+    return this.http.get<ProductDto>(UTAIDA_PROJECT.back.url + "/products/edit/" + productSlug)
   }
 
   post(product : CreateProduct): Observable<ResponseEntity>{
-    return this.http.post<ResponseEntity>(VITALITTE_PROJECT.back.url + "/products", product)
+    return this.http.post<ResponseEntity>(UTAIDA_PROJECT.back.url + "/products", product)
   }
 
   put(productDto : ProductDto): Observable<ResponseEntity>{
-    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/products", productDto)
+    return this.http.put<ResponseEntity>(UTAIDA_PROJECT.back.url + "/products", productDto)
   }
 
   changeAvailability(productDto : ProductDto): Observable<ResponseEntity>{
-    return this.http.put<ResponseEntity>(VITALITTE_PROJECT.back.url + "/products/availability", productDto)
+    return this.http.put<ResponseEntity>(UTAIDA_PROJECT.back.url + "/products/availability", productDto)
   }
 
   delete(productSlug : ProductDto['slug']): Observable<ResponseEntity>{
-    return this.http.delete<ResponseEntity>(VITALITTE_PROJECT.back.url + "/products/" + productSlug)
+    return this.http.delete<ResponseEntity>(UTAIDA_PROJECT.back.url + "/products/" + productSlug)
   }
 
   getProductTypes(): Observable<ProductDto['productType'][]> {
-    return this.http.get<ProductDto['productType'][]>(VITALITTE_PROJECT.back.url + "/product-types")
+    return this.http.get<ProductDto['productType'][]>(UTAIDA_PROJECT.back.url + "/product-types")
   }
 }

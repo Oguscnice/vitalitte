@@ -14,21 +14,21 @@
 // Mobiles vers Tablettes :
 @media screen and (min-width: 768px) {
   .cards-choice{
-    max-width: variablesScss.$max-width-768px;
+    max-width: var(--max-width);
   }
 }
 
 // Tablettes vers ordinateurs portables :
 @media screen and (min-width: 992px) {
   .cards-choice {
-    max-width: variablesScss.$max-width-992px;
+    max-width: var(--max-width);
   }
 }
 
 // Ordinateurs portables vers ordinateurs de bureau :
 @media screen and (min-width: 1400px) {
   .cards-choice {
-    max-width: variablesScss.$max-width-1400px;
+    max-width: var(--max-width);
   }
 }
 
